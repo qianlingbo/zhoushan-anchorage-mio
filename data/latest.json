@@ -1,8 +1,8 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-04-24 10:02:48",
-  "publishTime": "2026年04月24日07时",
-  "publishCode": "2026042407",
+  "lastUpdated": "2026-04-24 12:57:26",
+  "publishTime": "2026年04月24日10时",
+  "publishCode": "2026042410",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "anchors": {
@@ -250,8 +250,8 @@
         }
       ],
       "Text": "天气预报：今天、明天多云到晴。后天晴到多云。27日晴转多云。28日多云到阴转阴有阵雨或雷雨。<br>预计今天最高气温19-20摄氏度，明天最低气温12-13摄氏度。<br><br>",
-      "Time": "2026042407",
-      "PreciseForecastTime": "2026年04月24日07时"
+      "Time": "2026042410",
+      "PreciseForecastTime": "2026年04月24日10时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -497,8 +497,8 @@
         }
       ],
       "Text": "天气预报：今天、明天多云到晴。后天晴到多云。27日晴转多云。28日多云到阴转阴有阵雨或雷雨。<br>预计今天最高气温18-19摄氏度，明天最低气温13-14摄氏度。<br><br>",
-      "Time": "2026042407",
-      "PreciseForecastTime": "2026年04月24日07时"
+      "Time": "2026042410",
+      "PreciseForecastTime": "2026年04月24日10时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -744,8 +744,8 @@
         }
       ],
       "Text": "天气预报：今天、明天多云到晴。后天晴到多云。27日晴转多云。28日多云到阴转阴有阵雨或雷雨。<br>预计今天最高气温19-20摄氏度，明天最低气温12-13摄氏度。<br><br>",
-      "Time": "2026042407",
-      "PreciseForecastTime": "2026年04月24日07时"
+      "Time": "2026042410",
+      "PreciseForecastTime": "2026年04月24日10时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -991,8 +991,8 @@
         }
       ],
       "Text": "天气预报：今天、明天多云到晴。后天晴到多云。27日晴转多云。28日多云到阴转阴有阵雨或雷雨。<br>预计今天最高气温18-19摄氏度，明天最低气温13-14摄氏度。<br><br>",
-      "Time": "2026042407",
-      "PreciseForecastTime": "2026年04月24日07时"
+      "Time": "2026042410",
+      "PreciseForecastTime": "2026年04月24日10时"
     }
   }
 }
