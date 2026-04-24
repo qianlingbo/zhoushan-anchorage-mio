@@ -3,10 +3,11 @@ name: 更新锚地供油指数数据
 on:
   schedule:
     # UTC 时间，北京时间 = UTC+8
-    # 北京 10:00 = UTC 02:00
-    # 北京 16:00 = UTC 08:00
-    - cron: '0 2 * * *'
-    - cron: '0 8 * * *'
+    # 北京 10:00 = UTC 09:00
+    # 北京 16:00 = UTC 16:00
+    - cron: '0 9 * * *'
+    - cron: '1 2 * * *'
+    - cron: '1 6 * * *'
   workflow_dispatch:  # 允许手动触发
 
 permissions:
