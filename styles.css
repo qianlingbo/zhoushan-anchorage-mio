@@ -37,6 +37,44 @@ body {
   margin: 0 auto;
 }
 
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 14px;
+}
+
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 10px 24px rgba(17, 32, 51, 0.06);
+}
+
+.language-button {
+  min-height: 32px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.language-button:hover {
+  color: var(--accent);
+}
+
+.language-button.is-active {
+  background: var(--accent);
+  color: #fff;
+}
+
 /* === Hero === */
 .hero {
   display: grid;
@@ -293,6 +331,12 @@ h1 {
   gap: 4px;
 }
 
+.mio-legend-order {
+  margin-left: 8px;
+  border-left: 1px solid #ddd;
+  padding-left: 12px;
+}
+
 .mio-legend-dot {
   width: 10px;
   height: 10px;
@@ -326,6 +370,18 @@ h1 {
 @media (max-width: 720px) {
   body {
     padding: 14px;
+  }
+
+  .topbar {
+    margin-bottom: 10px;
+  }
+
+  .language-switch {
+    width: 100%;
+  }
+
+  .language-button {
+    flex: 1;
   }
 
   .controls {

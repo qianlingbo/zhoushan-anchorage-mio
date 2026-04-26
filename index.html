@@ -8,49 +8,57 @@
 </head>
 <body>
   <main class="dashboard">
+    <div class="topbar">
+      <div class="language-switch" aria-label="Language">
+        <button class="language-button is-active" type="button" data-lang="zh" aria-pressed="true">中文</button>
+        <button class="language-button" type="button" data-lang="en" aria-pressed="false">ENGLISH</button>
+      </div>
+    </div>
+
     <section class="hero">
       <div>
-        <p class="eyebrow">API 数据 · 精细化预报</p>
-        <h1>舟山锚地供油指数看板</h1>
-        <p class="subtitle">
+        <p class="eyebrow" data-i18n="eyebrow">API 数据 · 精细化预报</p>
+        <h1 data-i18n="title">舟山锚地供油指数看板</h1>
+        <p class="subtitle" data-i18n="subtitle">
           条帚门锚地、虾峙门外锚地、马峙锚地、秀山东锚地的 MIO 供油指数精细化预报一览。
         </p>
         <div class="weather-text" id="weather-text"></div>
       </div>
       <div class="meta-card">
         <div>
-          <span class="meta-label">数据来源</span>
-          <a class="meta-link" href="https://www.zs121.com.cn/Portarea/Portarea" target="_blank" rel="noreferrer">
+          <span class="meta-label" data-i18n="sourceLabel">数据来源</span>
+          <a class="meta-link" href="https://www.zs121.com.cn/Portarea/Portarea" target="_blank" rel="noreferrer" data-i18n="sourceName">
             舟山海洋气象台 zs121.com.cn
           </a>
         </div>
         <div>
-          <span class="meta-label">预报发布时间</span>
+          <span class="meta-label" data-i18n="publishTimeLabel">预报发布时间</span>
           <strong id="publish-time">等待数据</strong>
         </div>
         <div>
-          <span class="meta-label">本地更新时间</span>
+          <span class="meta-label" data-i18n="localUpdateLabel">本地更新时间</span>
           <strong id="last-updated">等待数据</strong>
         </div>
       </div>
     </section>
 
-    <section class="controls" aria-label="页面状态">
+    <section class="controls" aria-label="页面状态" data-i18n-aria-label="pageStatusLabel">
       <div class="status-pill" id="status-pill">等待数据</div>
-      <button class="refresh-link" type="button" id="refresh-button">重新读取本地数据</button>
+      <button class="refresh-link" type="button" id="refresh-button" data-i18n="refreshLocalData">重新读取本地数据</button>
     </section>
 
     <section class="grid" id="anchor-grid" aria-live="polite"></section>
 
     <footer class="footer">
-      数据来源：<a href="https://www.zs121.com.cn/Portarea/Portarea" target="_blank" rel="noreferrer">舟山海洋气象台</a>
-      · MIO 评分：<span style="color:var(--mio-4)">●</span> 适宜
-      <span style="color:var(--mio-3)">●</span> 一般
-      <span style="color:var(--mio-2)">●</span> 较差
-      <span style="color:var(--mio-1)">●</span> 恶劣
+      <span data-i18n="footerSource">数据来源：</span><a href="https://www.zs121.com.cn/Portarea/Portarea" target="_blank" rel="noreferrer" data-i18n="sourceShortName">舟山海洋气象台</a>
+      <span data-i18n="footerMio"> · MIO 评分：</span><span style="color:var(--mio-4)">●</span> <span data-i18n="rating4">适宜</span>
+      <span style="color:var(--mio-3)">●</span> <span data-i18n="rating3">一般</span>
+      <span style="color:var(--mio-2)">●</span> <span data-i18n="rating2">较差</span>
+      <span style="color:var(--mio-1)">●</span> <span data-i18n="rating1">恶劣</span>
     </footer>
   </main>
 
+  <script src="./data/data.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>

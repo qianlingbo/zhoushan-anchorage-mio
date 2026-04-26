@@ -1,19 +1,139 @@
-/* 舟山锚地供油指数看板 — 渲染逻辑 */
+/* 舟山锚地供油指数看板 - 渲染逻辑 */
 (function () {
   "use strict";
 
   var DATA_URL = "./data/latest.json";
+  var LANG_STORAGE_KEY = "zhoushan-anchorage-language";
 
-  var MIO_LABELS = ["风力", "阵风", "浪高", "能见度"];
+  var currentLanguage = getInitialLanguage();
+  var currentData = null;
+  var currentError = null;
 
-  var MIO_COLORS = {
-    4: { cls: "mio-4", label: "适宜", bg: "#2f9d57" },
-    3: { cls: "mio-3", label: "一般", bg: "#f5a623" },
-    2: { cls: "mio-2", label: "较差", bg: "#f5732a" },
-    1: { cls: "mio-1", label: "恶劣", bg: "#e53e3e" },
+  var I18N = {
+    zh: {
+      documentTitle: "舟山锚地供油指数看板",
+      pageStatusLabel: "页面状态",
+      eyebrow: "API 数据 · 精细化预报",
+      title: "舟山锚地供油指数看板",
+      subtitle: "条帚门锚地、虾峙门外锚地、马峙锚地、秀山东锚地的 MIO 供油指数精细化预报一览。",
+      sourceLabel: "数据来源",
+      sourceName: "舟山海洋气象台 zs121.com.cn",
+      sourceShortName: "舟山海洋气象台",
+      publishTimeLabel: "预报发布时间",
+      localUpdateLabel: "本地更新时间",
+      loading: "等待数据",
+      refreshLocalData: "重新读取本地数据",
+      unknown: "未知",
+      loaded: "已加载",
+      weatherSummary: "天气概况：",
+      dataReadFailed: "数据读取失败",
+      readFailed: "读取失败",
+      localDataUnavailable: "本地数据暂不可用",
+      runScript: "请先运行 <code>python3 scripts/update_data.py</code> 生成数据文件。",
+      tableTime: "时段",
+      tableWindDirection: "风向",
+      tableAverageWind: "平均风速",
+      tableGust: "阵风",
+      tableWave: "浪高",
+      tableVisibility: "能见度",
+      tableMio: "MIO评分",
+      publishPrefix: "发布",
+      currentPrefix: "当前",
+      footerSource: "数据来源：",
+      footerMio: " · MIO 评分：",
+      rating4: "适宜",
+      rating3: "一般",
+      rating2: "较差",
+      rating1: "恶劣",
+      legendOrder: "● 顺序：风力 阵风 浪高 能见度",
+      ratings: {
+        4: "适宜",
+        3: "一般",
+        2: "较差",
+        1: "恶劣",
+      },
+      mioLabels: ["风力", "阵风", "浪高", "能见度"],
+    },
+    en: {
+      documentTitle: "Zhoushan Anchorage MIO Dashboard",
+      pageStatusLabel: "Page status",
+      eyebrow: "API Data · Fine-grained Forecast",
+      title: "Zhoushan Anchorage MIO Dashboard",
+      subtitle: "Fine-grained MIO bunkering forecasts for Tiaozhoumen, Outer Xiazhimen, Mazhi, and East Xiushan anchorages.",
+      sourceLabel: "Data source",
+      sourceName: "Zhoushan Marine Meteorological Observatory zs121.com.cn",
+      sourceShortName: "Zhoushan Marine Meteorological Observatory",
+      publishTimeLabel: "Forecast issued",
+      localUpdateLabel: "Local update",
+      loading: "Waiting for data",
+      refreshLocalData: "Reload local data",
+      unknown: "Unknown",
+      loaded: "Loaded",
+      weatherSummary: "Weather summary: ",
+      dataReadFailed: "Failed to read data",
+      readFailed: "Read failed",
+      localDataUnavailable: "Local data unavailable",
+      runScript: "Run <code>python3 scripts/update_data.py</code> first to generate the data file.",
+      tableTime: "Period",
+      tableWindDirection: "Wind",
+      tableAverageWind: "Avg wind",
+      tableGust: "Gust",
+      tableWave: "Wave",
+      tableVisibility: "Visibility",
+      tableMio: "MIO rating",
+      publishPrefix: "Issued",
+      currentPrefix: "Current",
+      footerSource: "Data source: ",
+      footerMio: " · MIO rating: ",
+      rating4: "Suitable",
+      rating3: "Fair",
+      rating2: "Poor",
+      rating1: "Severe",
+      legendOrder: "Order: wind, gust, wave, visibility",
+      ratings: {
+        4: "Suitable",
+        3: "Fair",
+        2: "Poor",
+        1: "Severe",
+      },
+      mioLabels: ["Wind", "Gust", "Wave", "Visibility"],
+    },
   };
 
-  /* ── Data loading ── */
+  var ANCHOR_NAMES = {
+    "条帚门锚地": "Tiaozhoumen Anchorage",
+    "虾峙门外锚地": "Outer Xiazhimen Anchorage",
+    "马峙锚地": "Mazhi Anchorage",
+    "秀山东锚地": "East Xiushan Anchorage",
+  };
+
+  var WIND_DIRECTIONS = {
+    "东风": "Easterly",
+    "东南风": "Southeasterly",
+    "南风": "Southerly",
+    "西南风": "Southwesterly",
+    "西风": "Westerly",
+    "西北风": "Northwesterly",
+    "北风": "Northerly",
+    "东北风": "Northeasterly",
+    "偏东风": "Easterly",
+    "偏南风": "Southerly",
+    "偏西风": "Westerly",
+    "偏北风": "Northerly",
+    "东到东南风": "East to southeast",
+    "南到东南风": "South to southeast",
+    "南到西南风": "South to southwest",
+    "北到东北风": "North to northeast",
+  };
+
+  var MIO_COLORS = {
+    4: { cls: "mio-4", bg: "#2f9d57" },
+    3: { cls: "mio-3", bg: "#f5a623" },
+    2: { cls: "mio-2", bg: "#f5732a" },
+    1: { cls: "mio-1", bg: "#e53e3e" },
+  };
+
+  /* Data loading */
 
   function loadData() {
     if (window.__ANCHOR_DATA__) {
@@ -26,7 +146,92 @@
       });
   }
 
-  /* ── Helpers ── */
+  /* Language */
+
+  function getInitialLanguage() {
+    try {
+      var saved = window.localStorage.getItem(LANG_STORAGE_KEY);
+      if (saved === "zh" || saved === "en") return saved;
+    } catch (err) {
+      // Ignore storage errors in restricted browser contexts.
+    }
+    return "zh";
+  }
+
+  function saveLanguage(lang) {
+    try {
+      window.localStorage.setItem(LANG_STORAGE_KEY, lang);
+    } catch (err) {
+      // Language switching still works for this page view.
+    }
+  }
+
+  function languagePack() {
+    return I18N[currentLanguage] || I18N.zh;
+  }
+
+  function t(key) {
+    var pack = languagePack();
+    return pack[key] !== undefined ? pack[key] : I18N.zh[key] || key;
+  }
+
+  function applyStaticTranslations() {
+    document.documentElement.lang = currentLanguage === "en" ? "en" : "zh-CN";
+    document.title = t("documentTitle");
+
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      el.textContent = t(el.getAttribute("data-i18n"));
+    });
+
+    document.querySelectorAll("[data-i18n-aria-label]").forEach(function (el) {
+      el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria-label")));
+    });
+  }
+
+  function updateLanguageButtons() {
+    document.querySelectorAll("[data-lang]").forEach(function (button) {
+      var active = button.getAttribute("data-lang") === currentLanguage;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+  }
+
+  function setLoadingText() {
+    var publishTime = document.getElementById("publish-time");
+    var lastUpdated = document.getElementById("last-updated");
+    var status = document.getElementById("status-pill");
+
+    if (publishTime) publishTime.textContent = t("loading");
+    if (lastUpdated) lastUpdated.textContent = t("loading");
+    if (status) status.textContent = t("loading");
+  }
+
+  function setLanguage(lang) {
+    if (lang !== "zh" && lang !== "en") return;
+    currentLanguage = lang;
+    saveLanguage(lang);
+    applyStaticTranslations();
+    updateLanguageButtons();
+
+    if (currentData) {
+      render(currentData);
+    } else if (currentError) {
+      renderError(currentError);
+    } else {
+      setLoadingText();
+    }
+  }
+
+  function setupLanguageSwitcher() {
+    document.querySelectorAll("[data-lang]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        setLanguage(button.getAttribute("data-lang"));
+      });
+    });
+    updateLanguageButtons();
+  }
+
+  /* Helpers */
 
   function parseRiskrating(str) {
     if (!str) return [0, 0, 0, 0];
@@ -34,19 +239,29 @@
   }
 
   function overallRating(ratings) {
-    return Math.min.apply(null, ratings.filter(function (v) { return v > 0; }));
+    var valid = ratings.filter(function (v) { return v > 0; });
+    return valid.length ? Math.min.apply(null, valid) : 1;
+  }
+
+  function ratingLabel(val) {
+    return languagePack().ratings[val] || I18N.zh.ratings[val] || I18N.zh.ratings[1];
   }
 
   function ratingColor(val) {
-    return MIO_COLORS[val] || MIO_COLORS[1];
+    var color = MIO_COLORS[val] || MIO_COLORS[1];
+    return {
+      cls: color.cls,
+      bg: color.bg,
+      label: ratingLabel(val),
+    };
   }
 
   /**
-   * Parse "23日08时-11时" into a comparable value to detect current slot.
+   * Parse "26日08时-11时" into a comparable value to detect current slot.
    * Returns { day: number, startHour: number, endHour: number }
    */
   function parseTimeSlot(timeStr) {
-    var m = timeStr.match(/(\d+)日(\d+)时.*?(\d+)时/);
+    var m = String(timeStr || "").match(/(\d+)日(\d+)时.*?(\d+)时/);
     if (!m) return null;
     return {
       day: parseInt(m[1], 10),
@@ -66,26 +281,142 @@
       if (slot.day === day && hour >= slot.startHour && hour < slot.endHour) {
         return i;
       }
-      // Handle overnight: e.g. "23时-02时" means endHour < startHour
       if (slot.endHour <= slot.startHour) {
         if (slot.day === day && hour >= slot.startHour) return i;
-        // next day early hours
-        var nextDay = day + 1; // simplified, won't cross month boundary in 3-day forecast
-        if (slot.day === day && hour < slot.endHour) return i;
+        if (slot.day === day - 1 && hour < slot.endHour) return i;
       }
     }
-    // If not found, highlight the first slot (nearest future)
     return 0;
   }
 
-  /* ── Rendering ── */
+  function translateAnchorName(name) {
+    if (currentLanguage === "zh") return name;
+    return ANCHOR_NAMES[name] || name;
+  }
+
+  function formatWindDirection(forecast) {
+    if (currentLanguage === "zh") return forecast.WindDirect || "";
+    return WIND_DIRECTIONS[forecast.WindDirect] || forecast.wd_en || forecast.WindDirect || "";
+  }
+
+  function ordinalDay(day) {
+    var mod100 = day % 100;
+    if (mod100 >= 11 && mod100 <= 13) return day + "th";
+    switch (day % 10) {
+      case 1:
+        return day + "st";
+      case 2:
+        return day + "nd";
+      case 3:
+        return day + "rd";
+      default:
+        return day + "th";
+    }
+  }
+
+  function padHour(hour) {
+    return String(hour).padStart(2, "0");
+  }
+
+  function formatTimeSlot(timeStr) {
+    if (currentLanguage === "zh") return timeStr || "";
+
+    var m = String(timeStr || "").match(/(\d+)日(\d+)时-(?:(\d+)日)?(\d+)时/);
+    if (!m) return timeStr || "";
+
+    var startDay = parseInt(m[1], 10);
+    var startHour = parseInt(m[2], 10);
+    var endDay = m[3] ? parseInt(m[3], 10) : startDay;
+    var endHour = parseInt(m[4], 10);
+    var endLabel = endDay === startDay ? "" : ordinalDay(endDay) + " ";
+
+    return ordinalDay(startDay) + " " + padHour(startHour) + ":00-" + endLabel + padHour(endHour) + ":00";
+  }
+
+  function formatPublishTime(value) {
+    if (!value) return t("unknown");
+    if (currentLanguage === "zh") return value;
+
+    var m = String(value).match(/(\d{4})年(\d{1,2})月(\d{1,2})日(\d{1,2})时/);
+    if (!m) return value;
+
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var month = months[parseInt(m[2], 10) - 1] || m[2];
+    return month + " " + parseInt(m[3], 10) + ", " + m[1] + " " + padHour(parseInt(m[4], 10)) + ":00";
+  }
+
+  function translateStatus(status) {
+    if (!status) return t("loaded");
+    if (currentLanguage === "zh") return status;
+
+    var map = {
+      "更新完成": "Updated",
+      "部分更新": "Partially updated",
+    };
+    return map[status] || status;
+  }
+
+  function cleanWeatherText(raw) {
+    return String(raw || "")
+      .replace(/<br\s*\/?>/gi, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function formatWeatherText(raw) {
+    var text = cleanWeatherText(raw);
+    if (!text || currentLanguage === "zh") return text;
+    return translateWeatherText(text);
+  }
+
+  function translateWeatherText(text) {
+    var known = text.match(/^天气预报：今天晴到多云。明天晴转多云。后天阴，局部有阵雨，下午起阴有阵雨，夜里雨量中等。(\d+)日阴有阵雨，雨量中等，下半夜转阴到多云。(\d+)日多云到晴。\s*预计今天最高气温([\d.-]+)摄氏度，明天最低气温([\d.-]+)摄氏度。?$/);
+    if (known) {
+      return [
+        "Forecast: Today sunny to cloudy.",
+        "Tomorrow sunny, turning cloudy.",
+        "The day after tomorrow will be overcast with isolated showers; showers continue from the afternoon, with moderate rainfall at night.",
+        "On the " + ordinalDay(parseInt(known[1], 10)) + ", overcast with showers and moderate rainfall, turning overcast to cloudy after midnight.",
+        "On the " + ordinalDay(parseInt(known[2], 10)) + ", cloudy to sunny.",
+        "Today's high is expected to be " + known[3] + " deg C; tomorrow's low " + known[4] + " deg C.",
+      ].join(" ");
+    }
+
+    return text
+      .replace(/^天气预报：/, "Forecast: ")
+      .replace(/预计今天最高气温([\d.-]+)摄氏度，明天最低气温([\d.-]+)摄氏度。?/g, "Today's high is expected to be $1 deg C; tomorrow's low $2 deg C.")
+      .replace(/今天/g, "today")
+      .replace(/明天/g, "tomorrow")
+      .replace(/后天/g, "the day after tomorrow")
+      .replace(/晴到多云/g, "sunny to cloudy")
+      .replace(/晴转多云/g, "sunny, turning cloudy")
+      .replace(/阴到多云/g, "overcast to cloudy")
+      .replace(/多云到晴/g, "cloudy to sunny")
+      .replace(/局部有阵雨/g, "isolated showers")
+      .replace(/阴有阵雨/g, "overcast with showers")
+      .replace(/阵雨/g, "showers")
+      .replace(/雨量中等/g, "moderate rainfall")
+      .replace(/下午起/g, "from the afternoon")
+      .replace(/夜里/g, "at night")
+      .replace(/下半夜转/g, "turning after midnight to")
+      .replace(/。/g, ". ");
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement("div");
+    div.appendChild(document.createTextNode(str || ""));
+    return div.innerHTML;
+  }
+
+  /* Rendering */
 
   function makeMioDots(ratings) {
+    var labels = languagePack().mioLabels;
     var html = '<div class="mio-cell">';
     for (var i = 0; i < ratings.length; i++) {
       var val = ratings[i];
       var info = ratingColor(val);
-      html += '<span class="mio-dot ' + info.cls + '" title="' + MIO_LABELS[i] + ': ' + info.label + '(' + val + ')"></span>';
+      html += '<span class="mio-dot ' + info.cls + '" title="' + escapeHtml(labels[i] + ": " + info.label + " (" + val + ")") + '"></span>';
     }
     html += "</div>";
     return html;
@@ -94,7 +425,13 @@
   function buildTable(forecasts, currentIdx) {
     var html = '<div class="forecast-table-wrap"><table class="forecast-table">';
     html += "<thead><tr>";
-    html += "<th>时段</th><th>风向</th><th>平均风速</th><th>阵风</th><th>浪高</th><th>能见度</th><th>MIO评分</th>";
+    html += "<th>" + escapeHtml(t("tableTime")) + "</th>";
+    html += "<th>" + escapeHtml(t("tableWindDirection")) + "</th>";
+    html += "<th>" + escapeHtml(t("tableAverageWind")) + "</th>";
+    html += "<th>" + escapeHtml(t("tableGust")) + "</th>";
+    html += "<th>" + escapeHtml(t("tableWave")) + "</th>";
+    html += "<th>" + escapeHtml(t("tableVisibility")) + "</th>";
+    html += "<th>" + escapeHtml(t("tableMio")) + "</th>";
     html += "</tr></thead><tbody>";
 
     var prevDay = null;
@@ -111,8 +448,8 @@
       prevDay = dayVal;
 
       html += '<tr class="' + rowClass.trim() + '">';
-      html += "<td>" + escapeHtml(f.Time) + "</td>";
-      html += "<td>" + escapeHtml(f.WindDirect) + "</td>";
+      html += "<td>" + escapeHtml(formatTimeSlot(f.Time)) + "</td>";
+      html += "<td>" + escapeHtml(formatWindDirection(f)) + "</td>";
       html += "<td>" + escapeHtml(String(f.WindSpeedAvg)) + " m/s</td>";
       html += "<td>" + escapeHtml(String(f.WindSpeed)) + " m/s</td>";
       html += "<td>" + escapeHtml(f.WindWave) + "</td>";
@@ -125,17 +462,10 @@
     return html;
   }
 
-  function escapeHtml(str) {
-    var div = document.createElement("div");
-    div.appendChild(document.createTextNode(str || ""));
-    return div.innerHTML;
-  }
-
   function buildCard(name, anchorData) {
     var forecasts = anchorData.PreciseForecast || [];
     var currentIdx = getCurrentSlotIndex(forecasts);
 
-    // Overall rating = min of current slot's ratings
     var currentRatings = forecasts.length > 0 ? parseRiskrating(forecasts[currentIdx].Riskrating) : [0];
     var overall = overallRating(currentRatings);
     var overallInfo = ratingColor(overall);
@@ -145,51 +475,52 @@
 
     var headerHtml = '<header class="anchor-header">';
     headerHtml += "<div>";
-    headerHtml += '<h2 class="anchor-name">' + escapeHtml(name) + "</h2>";
+    headerHtml += '<h2 class="anchor-name">' + escapeHtml(translateAnchorName(name)) + "</h2>";
     if (anchorData.PreciseForecastTime) {
-      headerHtml += '<p class="anchor-publish-time">发布: ' + escapeHtml(anchorData.PreciseForecastTime) + "</p>";
+      headerHtml += '<p class="anchor-publish-time">' + escapeHtml(t("publishPrefix")) + ": " + escapeHtml(formatPublishTime(anchorData.PreciseForecastTime)) + "</p>";
     }
     headerHtml += "</div>";
     headerHtml += '<span class="overall-badge" style="background:' + overallInfo.bg + '22;color:' + overallInfo.bg + '">';
     headerHtml += '<span class="dot" style="background:' + overallInfo.bg + '"></span>';
-    headerHtml += "当前 " + overallInfo.label;
+    headerHtml += escapeHtml(t("currentPrefix") + " " + overallInfo.label);
     headerHtml += "</span>";
     headerHtml += "</header>";
 
     card.innerHTML = headerHtml + buildTable(forecasts, currentIdx);
 
-    // Add MIO legend
     var legend = document.createElement("div");
     legend.className = "mio-legend";
     legend.innerHTML =
-      '<span class="mio-legend-item"><span class="mio-legend-dot" style="background:var(--mio-4)"></span>4 适宜</span>' +
-      '<span class="mio-legend-item"><span class="mio-legend-dot" style="background:var(--mio-3)"></span>3 一般</span>' +
-      '<span class="mio-legend-item"><span class="mio-legend-dot" style="background:var(--mio-2)"></span>2 较差</span>' +
-      '<span class="mio-legend-item"><span class="mio-legend-dot" style="background:var(--mio-1)"></span>1 恶劣</span>' +
-      '<span class="mio-legend-item" style="margin-left:8px;border-left:1px solid #ddd;padding-left:12px">● 顺序：风力 阵风 浪高 能见度</span>';
+      '<span class="mio-legend-item"><span class="mio-legend-dot" style="background:var(--mio-4)"></span>4 ' + escapeHtml(ratingLabel(4)) + "</span>" +
+      '<span class="mio-legend-item"><span class="mio-legend-dot" style="background:var(--mio-3)"></span>3 ' + escapeHtml(ratingLabel(3)) + "</span>" +
+      '<span class="mio-legend-item"><span class="mio-legend-dot" style="background:var(--mio-2)"></span>2 ' + escapeHtml(ratingLabel(2)) + "</span>" +
+      '<span class="mio-legend-item"><span class="mio-legend-dot" style="background:var(--mio-1)"></span>1 ' + escapeHtml(ratingLabel(1)) + "</span>" +
+      '<span class="mio-legend-item mio-legend-order">' + escapeHtml(t("legendOrder")) + "</span>";
     card.appendChild(legend);
 
     return card;
   }
 
   function render(data) {
+    currentData = data;
+    currentError = null;
+
     var grid = document.getElementById("anchor-grid");
     var publishTime = document.getElementById("publish-time");
     var lastUpdated = document.getElementById("last-updated");
     var status = document.getElementById("status-pill");
     var weatherText = document.getElementById("weather-text");
 
-    publishTime.textContent = data.publishTime || "未知";
-    lastUpdated.textContent = data.lastUpdated || "未知";
-    status.textContent = data.status || "已加载";
+    publishTime.textContent = formatPublishTime(data.publishTime);
+    lastUpdated.textContent = data.lastUpdated || t("unknown");
+    status.textContent = translateStatus(data.status);
 
-    // Show weather text from first anchor
     var anchorNames = Object.keys(data.anchors || {});
+    weatherText.textContent = "";
     if (anchorNames.length > 0) {
       var firstAnchor = data.anchors[anchorNames[0]];
       if (firstAnchor && firstAnchor.Text) {
-        var textContent = firstAnchor.Text.replace(/<br\s*\/?>/gi, " ");
-        weatherText.innerHTML = "<strong>天气概况：</strong>" + escapeHtml(textContent);
+        weatherText.innerHTML = "<strong>" + escapeHtml(t("weatherSummary")) + "</strong>" + escapeHtml(formatWeatherText(firstAnchor.Text));
       }
     }
 
@@ -203,16 +534,24 @@
   }
 
   function renderError(error) {
+    currentError = error;
+    currentData = null;
+
     var grid = document.getElementById("anchor-grid");
+    var publishTime = document.getElementById("publish-time");
     var lastUpdated = document.getElementById("last-updated");
     var status = document.getElementById("status-pill");
-    lastUpdated.textContent = "读取失败";
-    status.textContent = "本地数据暂不可用";
+    var weatherText = document.getElementById("weather-text");
+
+    publishTime.textContent = t("unknown");
+    lastUpdated.textContent = t("readFailed");
+    status.textContent = t("localDataUnavailable");
+    weatherText.textContent = "";
     grid.innerHTML =
       '<article class="anchor-card" style="grid-column:1/-1;padding:40px;text-align:center">' +
-      '<h2 style="margin:0 0 12px;font-size:20px">数据读取失败</h2>' +
+      '<h2 style="margin:0 0 12px;font-size:20px">' + escapeHtml(t("dataReadFailed")) + "</h2>" +
       '<p style="color:var(--muted)">' + escapeHtml(error.message) + "</p>" +
-      '<p style="color:var(--muted);margin-top:12px">请先运行 <code>python3 scripts/update_data.py</code> 生成数据文件。</p>' +
+      '<p style="color:var(--muted);margin-top:12px">' + t("runScript") + "</p>" +
       "</article>";
   }
 
@@ -222,13 +561,16 @@
       .catch(function (err) { renderError(err); });
   }
 
+  setupLanguageSwitcher();
+  applyStaticTranslations();
+  setLoadingText();
+
   document.getElementById("refresh-button").addEventListener("click", function () {
-    // Re-read from data.js by reloading the page, or try fetch
     if (window.__ANCHOR_DATA__) {
-      render(window.__ANCHOR_DATA__);
-    } else {
-      refresh();
+      window.location.reload();
+      return;
     }
+    refresh();
   });
 
   refresh();
