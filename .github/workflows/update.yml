@@ -1,33 +1,47 @@
-name: Auto Update Every 3 Hours
+import requests
+from bs4 import BeautifulSoup
+import json
+from datetime import datetime
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+URL = "https://www.zs121.com.cn/Portarea/Portarea"
 
-on:
-  schedule:
-    - cron: '0 */3 * * *'
-  workflow_dispatch:
+def fetch_data():
+    r = requests.get(URL, timeout=30)
+    r.encoding = "utf-8"
+    soup = BeautifulSoup(r.text, "html.parser")
 
-permissions:
-  contents: write
+    result = {
+        "update_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "anchorage": {}
+    }
 
-jobs:
-  update:
-    runs-on: ubuntu-latest
+    # 页面里每个锚地都是一个模块，class 名基本一致
+    blocks = soup.find_all("div", class_="port-item")
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    for block in blocks:
+        name_tag = block.find("div", class_="title")
+        if not name_tag:
+            continue
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
+        anchorage_name = name_tag.get_text(strip=True)
+        result["anchorage"][anchorage_name] = []
 
-      - name: Run script
-        run: python update.py
+        rows = block.find_all("tr")
 
-      - name: Auto commit
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: auto update every 3 hours
+        for row in rows[1:]:
+            cols = row.find_all("td")
+            if len(cols) >= 2:
+                time_text = cols[0].get_text(strip=True)
+                index_text = cols[1].get_text(strip=True)
+
+                result["anchorage"][anchorage_name].append({
+                    "time": time_text,
+                    "index": index_text
+                })
+
+    with open("data.json", "w", encoding="utf-8") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+
+if __name__ == "__main__":
+    fetch_data()
