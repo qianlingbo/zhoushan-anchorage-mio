@@ -1,5 +1,8 @@
 name: Auto Update Every 3 Hours
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   schedule:
     - cron: '0 */3 * * *'
@@ -24,7 +27,7 @@ jobs:
       - name: Run script
         run: python update.py
 
-      - name: Commit changes
+      - name: Auto commit
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: auto update every 3 hours
