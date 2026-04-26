@@ -29,7 +29,7 @@ html, body {
 }
 
 body {
-  padding: 28px;
+  padding: 28px 28px 110px;
 }
 
 .dashboard {
@@ -359,6 +359,46 @@ h1 {
   text-decoration: none;
 }
 
+/* === Contact Corner === */
+.contact-corner {
+  position: fixed;
+  right: 28px;
+  bottom: 24px;
+  z-index: 20;
+  display: grid;
+  gap: 8px;
+  width: min(280px, calc(100vw - 56px));
+  padding: 12px 14px;
+  border: 1px solid rgba(216, 226, 239, 0.95);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 16px 36px rgba(17, 32, 51, 0.12);
+  backdrop-filter: blur(10px);
+}
+
+.contact-line {
+  display: grid;
+  grid-template-columns: minmax(74px, auto) minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.contact-label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.contact-line strong {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+  word-break: break-word;
+}
+
 /* === Responsive === */
 @media (max-width: 1080px) {
   .hero,
@@ -399,5 +439,11 @@ h1 {
   .forecast-table th,
   .forecast-table td {
     padding: 5px 6px;
+  }
+
+  .contact-corner {
+    position: static;
+    width: 100%;
+    margin-top: 10px;
   }
 }
