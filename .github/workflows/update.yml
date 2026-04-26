@@ -1,7 +1,7 @@
 name: Auto Update Every 3 Hours
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+permissions:
+  contents: write
 
 on:
   schedule:
