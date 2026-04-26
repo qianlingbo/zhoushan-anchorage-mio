@@ -3,9 +3,8 @@
   "use strict";
 
   var DATA_URL = "./data/latest.json";
-  var LANG_STORAGE_KEY = "zhoushan-anchorage-language";
 
-  var currentLanguage = getInitialLanguage();
+  var currentLanguage = "zh";
   var currentData = null;
   var currentError = null;
 
@@ -41,10 +40,6 @@
       currentPrefix: "当前",
       footerSource: "数据来源：",
       footerMio: " · MIO 评分：",
-      contactAriaLabel: "联系信息",
-      officialAccountLabel: "公众号",
-      officialAccountName: "舟山船舶代理笔记",
-      wechatLabel: "个人微信号",
       rating4: "适宜",
       rating3: "一般",
       rating2: "较差",
@@ -89,10 +84,6 @@
       currentPrefix: "Current",
       footerSource: "Data source: ",
       footerMio: " · MIO rating: ",
-      contactAriaLabel: "Contact information",
-      officialAccountLabel: "Official Account",
-      officialAccountName: "舟山船舶代理笔记",
-      wechatLabel: "WeChat",
       rating4: "Suitable",
       rating3: "Fair",
       rating2: "Poor",
@@ -156,24 +147,6 @@
 
   /* Language */
 
-  function getInitialLanguage() {
-    try {
-      var saved = window.localStorage.getItem(LANG_STORAGE_KEY);
-      if (saved === "zh" || saved === "en") return saved;
-    } catch (err) {
-      // Ignore storage errors in restricted browser contexts.
-    }
-    return "zh";
-  }
-
-  function saveLanguage(lang) {
-    try {
-      window.localStorage.setItem(LANG_STORAGE_KEY, lang);
-    } catch (err) {
-      // Language switching still works for this page view.
-    }
-  }
-
   function languagePack() {
     return I18N[currentLanguage] || I18N.zh;
   }
@@ -217,7 +190,6 @@
   function setLanguage(lang) {
     if (lang !== "zh" && lang !== "en") return;
     currentLanguage = lang;
-    saveLanguage(lang);
     applyStaticTranslations();
     updateLanguageButtons();
 
