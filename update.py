@@ -1,8 +1,30 @@
-import datetime
+name: Auto Update Every 3 Hours
 
-now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+on:
+  schedule:
+    - cron: '0 */3 * * *'
+  workflow_dispatch:
 
-with open("auto_update_log.txt", "w", encoding="utf-8") as f:
-    f.write(f"Last auto update: {now}\n")
+jobs:
+  update:
+    runs-on: ubuntu-latest
 
-print("Updated at", now)
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Run update script
+        run: python update.py
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "auto update every 3 hours" || echo "No changes"
+          git push
