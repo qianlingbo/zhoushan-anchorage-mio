@@ -336,6 +336,7 @@
     var map = {
       "更新完成": "Updated",
       "部分更新": "Partially updated",
+      "沿用上次数据": "Using cached data",
     };
     return map[status] || status;
   }
