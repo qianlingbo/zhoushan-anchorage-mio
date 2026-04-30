@@ -1,10 +1,10 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-04-30 07:32:40",
-  "lastChecked": "2026-04-30 07:32:40",
-  "lastSuccessfulFetch": "2026-04-30 07:32:40",
-  "publishTime": "2026年04月30日07时",
-  "publishCode": "2026043007",
+  "lastUpdated": "2026-04-30 13:01:55",
+  "lastChecked": "2026-04-30 13:01:55",
+  "lastSuccessfulFetch": "2026-04-30 13:01:55",
+  "publishTime": "2026年04月30日10时",
+  "publishCode": "2026043010",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -252,9 +252,9 @@ window.__ANCHOR_DATA__ = {
           "WindDirect": "东南风"
         }
       ],
-      "Text": "天气预报：今天阴到多云，上午转多云。明天晴到多云。后天多云，夜里转阴有阵雨。3日阴有阵雨转阴到多云。4日晴到多云。<br>预计今天最高气温17-18摄氏度，明天最低气温10-11摄氏度。<br><br>",
-      "Time": "2026043007",
-      "PreciseForecastTime": "2026年04月30日07时"
+      "Text": "天气预报：今天多云。明天晴到多云。后天多云，夜里转阴有阵雨或雷雨。3日阴有阵雨转阴到多云。4日多云转晴。<br>预计今天最高气温17-18摄氏度，明天最低气温10-11摄氏度。<br><br>",
+      "Time": "2026043010",
+      "PreciseForecastTime": "2026年04月30日10时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -499,9 +499,9 @@ window.__ANCHOR_DATA__ = {
           "WindDirect": "南到东南风"
         }
       ],
-      "Text": "天气预报：今天阴到多云，上午转多云。明天晴到多云。后天多云，夜里转阴有阵雨。3日阴有阵雨转阴到多云。4日晴到多云。<br>预计今天最高气温16-17摄氏度，明天最低气温10-11摄氏度。<br><br>",
-      "Time": "2026043007",
-      "PreciseForecastTime": "2026年04月30日07时"
+      "Text": "天气预报：今天多云。明天晴到多云。后天多云，夜里转阴有阵雨或雷雨。3日阴有阵雨转阴到多云。4日多云转晴。<br>预计今天最高气温16-17摄氏度，明天最低气温10-11摄氏度。<br><br>",
+      "Time": "2026043010",
+      "PreciseForecastTime": "2026年04月30日10时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -746,9 +746,9 @@ window.__ANCHOR_DATA__ = {
           "WindDirect": "南到东南风"
         }
       ],
-      "Text": "天气预报：今天阴到多云，上午转多云。明天晴到多云。后天多云，夜里转阴有阵雨。3日阴有阵雨转阴到多云。4日晴到多云。<br>预计今天最高气温17-18摄氏度，明天最低气温9-10摄氏度。<br><br>",
-      "Time": "2026043007",
-      "PreciseForecastTime": "2026年04月30日07时"
+      "Text": "天气预报：今天多云。明天晴到多云。后天多云，夜里转阴有阵雨或雷雨。3日阴有阵雨转阴到多云。4日多云转晴。<br>预计今天最高气温17-18摄氏度，明天最低气温9-10摄氏度。<br><br>",
+      "Time": "2026043010",
+      "PreciseForecastTime": "2026年04月30日10时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -993,9 +993,9 @@ window.__ANCHOR_DATA__ = {
           "WindDirect": "南到东南风"
         }
       ],
-      "Text": "天气预报：今天阴到多云，上午转多云。明天晴到多云。后天多云，夜里转阴有阵雨。3日阴有阵雨转阴到多云。4日晴到多云。<br>预计今天最高气温17-18摄氏度，明天最低气温9-10摄氏度。<br><br>",
-      "Time": "2026043007",
-      "PreciseForecastTime": "2026年04月30日07时"
+      "Text": "天气预报：今天多云。明天晴到多云。后天多云，夜里转阴有阵雨或雷雨。3日阴有阵雨转阴到多云。4日多云转晴。<br>预计今天最高气温17-18摄氏度，明天最低气温9-10摄氏度。<br><br>",
+      "Time": "2026043010",
+      "PreciseForecastTime": "2026年04月30日10时"
     }
   }
 };
