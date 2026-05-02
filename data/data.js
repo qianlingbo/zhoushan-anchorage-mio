@@ -1,8 +1,8 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-05-02 12:46:18",
-  "lastChecked": "2026-05-02 12:46:18",
-  "lastSuccessfulFetch": "2026-05-02 12:46:18",
+  "lastUpdated": "2026-05-02 12:50:02",
+  "lastChecked": "2026-05-02 12:50:02",
+  "lastSuccessfulFetch": "2026-05-02 12:50:02",
   "updateWindow": "2026-05-02T12:00+08:00",
   "publishTime": "2026年05月02日10时",
   "publishCode": "2026050210",
