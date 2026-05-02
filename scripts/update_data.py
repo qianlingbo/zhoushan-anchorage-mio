@@ -49,6 +49,12 @@ def now_shanghai() -> str:
     return datetime.now(SHANGHAI_TZ).strftime("%Y-%m-%d %H:%M:%S")
 
 
+def current_update_window() -> str:
+    now = datetime.now(SHANGHAI_TZ)
+    start_hour = (now.hour // 3) * 3
+    return f"{now:%Y-%m-%d}T{start_hour:02d}:00+08:00"
+
+
 def load_existing_manifest() -> dict | None:
     json_path = DATA_DIR / "latest.json"
     if not json_path.exists():
@@ -115,6 +121,7 @@ def build_manifest(results: dict, errors: list[str], existing: dict | None) -> d
             manifest["status"] = "沿用上次数据"
             manifest["lastUpdated"] = checked_at
             manifest["lastChecked"] = checked_at
+            manifest["updateWindow"] = current_update_window()
             manifest["sourceUnavailable"] = True
             manifest["errors"] = errors
             return manifest
@@ -132,6 +139,7 @@ def build_manifest(results: dict, errors: list[str], existing: dict | None) -> d
         "lastUpdated": checked_at,
         "lastChecked": checked_at,
         "lastSuccessfulFetch": checked_at,
+        "updateWindow": current_update_window(),
         "publishTime": publish_time,
         "publishCode": publish_code,
         "source": "https://www.zs121.com.cn/Portarea/Portarea",
@@ -164,6 +172,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="不联网抓取，仅沿用既有数据并记录本次检查时间。",
     )
+    parser.add_argument(
+        "--skip-current-window",
+        action="store_true",
+        help="如果当前三小时窗口已经写过数据，则直接跳过。",
+    )
     return parser.parse_args()
 
 
@@ -171,6 +184,14 @@ def main() -> None:
     args = parse_args()
     ensure_dirs()
     existing = load_existing_manifest()
+
+    if args.skip_current_window and existing:
+        update_window = current_update_window()
+        if existing.get("updateWindow") == update_window:
+            print("=== 舟山锚地供油指数数据更新 ===", flush=True)
+            print(f"时间: {now_shanghai()}", flush=True)
+            print(f"当前三小时窗口 {update_window} 已更新，跳过本次检查。", flush=True)
+            return
 
     if args.cache_only:
         print("=== 舟山锚地供油指数数据更新 ===", flush=True)
