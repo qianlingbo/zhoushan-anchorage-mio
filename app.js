@@ -139,13 +139,16 @@
   /* Data loading */
 
   function loadData() {
-    if (window.__ANCHOR_DATA__) {
-      return Promise.resolve(window.__ANCHOR_DATA__);
-    }
     return fetch(DATA_URL + "?t=" + Date.now(), { cache: "no-store" })
       .then(function (r) {
         if (!r.ok) throw new Error("读取数据失败: " + r.status);
         return r.json();
+      })
+      .catch(function (err) {
+        if (window.__ANCHOR_DATA__) {
+          return window.__ANCHOR_DATA__;
+        }
+        throw err;
       });
   }
 
