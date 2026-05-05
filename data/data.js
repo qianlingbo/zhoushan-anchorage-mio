@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-05-05 07:28:46",
-  "lastChecked": "2026-05-05 07:28:46",
-  "lastSuccessfulFetch": "2026-05-05 07:28:46",
-  "updateWindow": "2026-05-05T06:00+08:00",
-  "publishTime": "2026年05月05日07时",
-  "publishCode": "2026050507",
+  "lastUpdated": "2026-05-05 12:46:03",
+  "lastChecked": "2026-05-05 12:46:03",
+  "lastSuccessfulFetch": "2026-05-05 12:46:03",
+  "updateWindow": "2026-05-05T12:00+08:00",
+  "publishTime": "2026年05月05日10时",
+  "publishCode": "2026050510",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -35,7 +35,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "SSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.4,
           "WindSpeedAvg": "7.8",
@@ -45,7 +45,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "SSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.6,
           "WindSpeedAvg": "8.0",
@@ -55,7 +55,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "SSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 9.4,
           "WindSpeedAvg": "7.1",
@@ -65,7 +65,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 8.6,
           "WindSpeedAvg": "6.5",
@@ -75,7 +75,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "ESE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 8.7,
           "WindSpeedAvg": "6.5",
@@ -85,7 +85,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 9.5,
           "WindSpeedAvg": "7.1",
@@ -95,7 +95,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 7.6,
           "WindSpeedAvg": "5.7",
@@ -105,7 +105,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 9.1,
           "WindSpeedAvg": "6.8",
@@ -115,7 +115,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.2,
           "WindSpeedAvg": "7.7",
@@ -253,9 +253,9 @@ window.__ANCHOR_DATA__ = {
           "WindDirect": "偏东风"
         }
       ],
-      "Text": "天气预报：今天、明天晴到多云。后天多云，傍晚转阴局部阵雨，夜里起阴有阵雨。8日阴有阵雨转阴到多云。9日多云转阴。<br>预计今天最高气23-24摄氏度，明天最低气温15-16摄氏度。<br><br>",
-      "Time": "2026050507",
-      "PreciseForecastTime": "2026年05月05日07时"
+      "Text": "天气预报：今天、明天晴到多云。后天多云，傍晚转阴局部阵雨，夜里起阴有阵雨。8日阴有阵雨转阴到多云。9日多云转阴。<br>预计今天最高气24-25摄氏度，明天最低气温15-16摄氏度。<br><br>",
+      "Time": "2026050510",
+      "PreciseForecastTime": "2026年05月05日10时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -272,7 +272,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "SSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 9.6,
           "WindSpeedAvg": "7.2",
@@ -282,7 +282,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "SSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.1,
           "WindSpeedAvg": "7.6",
@@ -292,7 +292,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "SSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.4,
           "WindSpeedAvg": "7.8",
@@ -302,7 +302,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "SSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 9.4,
           "WindSpeedAvg": "7.1",
@@ -312,7 +312,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 9.0,
           "WindSpeedAvg": "6.8",
@@ -322,7 +322,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "ESE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 8.4,
           "WindSpeedAvg": "6.3",
@@ -332,7 +332,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "ESE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 9.2,
           "WindSpeedAvg": "6.9",
@@ -342,7 +342,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 7.2,
           "WindSpeedAvg": "5.4",
@@ -352,7 +352,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 8.8,
           "WindSpeedAvg": "6.6",
@@ -362,7 +362,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.2,
           "WindSpeedAvg": "7.7",
@@ -500,9 +500,9 @@ window.__ANCHOR_DATA__ = {
           "WindDirect": "偏东风"
         }
       ],
-      "Text": "天气预报：今天、明天晴到多云。后天多云，傍晚转阴局部阵雨，夜里起阴有阵雨。8日阴有阵雨转阴到多云。9日多云转阴。<br>预计今天最高气温21-22摄氏度，明天最低气温15-16摄氏度。<br><br>",
-      "Time": "2026050507",
-      "PreciseForecastTime": "2026年05月05日07时"
+      "Text": "天气预报：今天、明天晴到多云。后天多云，傍晚转阴局部阵雨，夜里起阴有阵雨。8日阴有阵雨转阴到多云。9日多云转阴。<br>预计今天最高气温22-23摄氏度，明天最低气温15-16摄氏度。<br><br>",
+      "Time": "2026050510",
+      "PreciseForecastTime": "2026年05月05日10时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -747,9 +747,9 @@ window.__ANCHOR_DATA__ = {
           "WindDirect": "偏东风"
         }
       ],
-      "Text": "天气预报：今天、明天晴到多云。后天多云，傍晚转阴局部阵雨，夜里起阴有阵雨。8日阴有阵雨转阴到多云。9日多云转阴。<br>预计今天最高气23-24摄氏度，明天最低气温15-16摄氏度。<br><br>",
-      "Time": "2026050507",
-      "PreciseForecastTime": "2026年05月05日07时"
+      "Text": "天气预报：今天、明天晴到多云。后天多云，傍晚转阴局部阵雨，夜里起阴有阵雨。8日阴有阵雨转阴到多云。9日多云转阴。<br>预计今天最高气24-25摄氏度，明天最低气温15-16摄氏度。<br><br>",
+      "Time": "2026050510",
+      "PreciseForecastTime": "2026年05月05日10时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -995,8 +995,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天、明天晴到多云。后天多云，傍晚转阴局部阵雨，夜里起阴有阵雨。8日阴有阵雨转阴到多云。9日多云转阴。<br>预计今天最高气23-24摄氏度，明天最低气温15-16摄氏度。<br><br>",
-      "Time": "2026050507",
-      "PreciseForecastTime": "2026年05月05日07时"
+      "Time": "2026050510",
+      "PreciseForecastTime": "2026年05月05日10时"
     }
   }
 };
