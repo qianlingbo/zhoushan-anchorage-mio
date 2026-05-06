@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-05-06 17:58:09",
-  "lastChecked": "2026-05-06 17:58:09",
-  "lastSuccessfulFetch": "2026-05-06 17:58:09",
-  "updateWindow": "2026-05-06T15:00+08:00",
-  "publishTime": "2026年05月06日14时",
-  "publishCode": "2026050614",
+  "lastUpdated": "2026-05-06 20:16:41",
+  "lastChecked": "2026-05-06 20:16:41",
+  "lastSuccessfulFetch": "2026-05-06 20:16:41",
+  "updateWindow": "2026-05-06T18:00+08:00",
+  "publishTime": "2026年05月06日20时",
+  "publishCode": "2026050620",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -254,8 +254,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天晴到多云。明天多云，夜里转阴有阵雨。后天阴有阵雨，上午起雨渐止转阴到多云。9日多云。10日多云转晴。<br>预计明天最高气25-26摄氏度，明天最低气温15-16摄氏度。<br><br>",
-      "Time": "2026050614",
-      "PreciseForecastTime": "2026年05月06日14时"
+      "Time": "2026050620",
+      "PreciseForecastTime": "2026年05月06日20时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -501,8 +501,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天晴到多云。明天多云，夜里转阴有阵雨。后天阴有阵雨，上午起雨渐止转阴到多云。9日多云。10日多云转晴。<br>预计明天最高气温23-24摄氏度，明天最低气温15-16摄氏度。<br><br>",
-      "Time": "2026050614",
-      "PreciseForecastTime": "2026年05月06日14时"
+      "Time": "2026050620",
+      "PreciseForecastTime": "2026年05月06日20时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -748,8 +748,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天晴到多云。明天多云，傍晚转阴有阵雨。后天阴有阵雨，上午起雨渐止转阴到多云。9日多云。10日多云转晴。<br>预计明天最高气25-26摄氏度，明天最低气温15-16摄氏度。<br><br>",
-      "Time": "2026050614",
-      "PreciseForecastTime": "2026年05月06日14时"
+      "Time": "2026050620",
+      "PreciseForecastTime": "2026年05月06日20时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -995,8 +995,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天晴到多云。明天多云，夜里转阴有阵雨。后天阴有阵雨，上午起雨渐止转阴到多云。9日多云。10日多云转晴。<br>预计明天最高气24-25摄氏度，明天最低气温15-16摄氏度。<br><br>",
-      "Time": "2026050614",
-      "PreciseForecastTime": "2026年05月06日14时"
+      "Time": "2026050620",
+      "PreciseForecastTime": "2026年05月06日20时"
     }
   }
 };
