@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-05-09 12:53:02",
-  "lastChecked": "2026-05-09 12:53:02",
-  "lastSuccessfulFetch": "2026-05-09 12:53:02",
-  "updateWindow": "2026-05-09T12:00+08:00",
-  "publishTime": "2026年05月09日10时",
-  "publishCode": "2026050910",
+  "lastUpdated": "2026-05-09 15:01:01",
+  "lastChecked": "2026-05-09 15:01:01",
+  "lastSuccessfulFetch": "2026-05-09 15:01:01",
+  "updateWindow": "2026-05-09T15:00+08:00",
+  "publishTime": "2026年05月09日14时",
+  "publishCode": "2026050914",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -45,7 +45,7 @@
         {
           "wd_en": "ESE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 6.7,
           "WindSpeedAvg": "5.0",
@@ -55,7 +55,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 7.9,
           "WindSpeedAvg": "5.9",
@@ -65,7 +65,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 7.8,
           "WindSpeedAvg": "5.9",
@@ -75,7 +75,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 8.6,
           "WindSpeedAvg": "6.5",
@@ -85,7 +85,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 6.7,
           "WindSpeedAvg": "5.0",
@@ -95,7 +95,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 7.8,
           "WindSpeedAvg": "5.9",
@@ -105,7 +105,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.0,
           "WindSpeedAvg": "7.5",
@@ -115,7 +115,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.0,
           "WindSpeedAvg": "7.5",
@@ -254,8 +254,8 @@
         }
       ],
       "Text": "天气预报：今天多云，夜里起阴到多云。明天多云。后天多云转晴。12日多云。13日多云转阴。<br>预计今天最高气温23-24摄氏度，明天最低气温14-15摄氏度。<br><br>",
-      "Time": "2026050910",
-      "PreciseForecastTime": "2026年05月09日10时"
+      "Time": "2026050914",
+      "PreciseForecastTime": "2026年05月09日14时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -292,7 +292,7 @@
         {
           "wd_en": "ESE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 6.7,
           "WindSpeedAvg": "5.0",
@@ -302,7 +302,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 7.9,
           "WindSpeedAvg": "5.9",
@@ -312,7 +312,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 7.6,
           "WindSpeedAvg": "5.7",
@@ -322,7 +322,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 8.6,
           "WindSpeedAvg": "6.5",
@@ -332,7 +332,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 6.7,
           "WindSpeedAvg": "5.0",
@@ -342,7 +342,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 8.5,
           "WindSpeedAvg": "6.4",
@@ -352,7 +352,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 9.8,
           "WindSpeedAvg": "7.4",
@@ -362,7 +362,7 @@
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 9.5,
           "WindSpeedAvg": "7.1",
@@ -501,8 +501,8 @@
         }
       ],
       "Text": "天气预报：今天多云，夜里起阴到多云。明天多云。后天多云转晴。12日多云。13日多云转阴。<br>预计今天最高气温20-21摄氏度，明天最低气温15-16摄氏度。<br><br>",
-      "Time": "2026050910",
-      "PreciseForecastTime": "2026年05月09日10时"
+      "Time": "2026050914",
+      "PreciseForecastTime": "2026年05月09日14时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -748,8 +748,8 @@
         }
       ],
       "Text": "天气预报：今天多云，夜里起阴到多云。明天多云。后天多云转晴。12日多云。13日多云转阴。<br>预计今天最高气温23-24摄氏度，明天最低气温13-14摄氏度。<br><br>",
-      "Time": "2026050910",
-      "PreciseForecastTime": "2026年05月09日10时"
+      "Time": "2026050914",
+      "PreciseForecastTime": "2026年05月09日14时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -995,8 +995,8 @@
         }
       ],
       "Text": "天气预报：今天多云，夜里起阴到多云。明天多云。后天多云转晴。12日多云。13日多云转阴。<br>预计今天最高气温21-22摄氏度，明天最低气温15-16摄氏度。<br><br>",
-      "Time": "2026050910",
-      "PreciseForecastTime": "2026年05月09日10时"
+      "Time": "2026050914",
+      "PreciseForecastTime": "2026年05月09日14时"
     }
   }
 }
