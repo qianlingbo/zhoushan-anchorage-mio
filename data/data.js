@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-05-10 07:26:37",
-  "lastChecked": "2026-05-10 07:26:37",
-  "lastSuccessfulFetch": "2026-05-10 07:26:37",
-  "updateWindow": "2026-05-10T06:00+08:00",
-  "publishTime": "2026年05月10日07时",
-  "publishCode": "2026051007",
+  "lastUpdated": "2026-05-10 13:07:24",
+  "lastChecked": "2026-05-10 13:07:24",
+  "lastSuccessfulFetch": "2026-05-10 13:07:24",
+  "updateWindow": "2026-05-10T12:00+08:00",
+  "publishTime": "2026年05月10日10时",
+  "publishCode": "2026051010",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -254,8 +254,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天多云。明天多云转晴。后天多云。13日多云。14日多云到阴。<br>预计今天最高气温23-24摄氏度，明天最低气温17-18摄氏度。<br><br>",
-      "Time": "2026051007",
-      "PreciseForecastTime": "2026年05月10日07时"
+      "Time": "2026051010",
+      "PreciseForecastTime": "2026年05月10日10时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -501,8 +501,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天多云。明天多云转晴。后天多云。13日多云。14日多云到阴。<br>预计今天最高气温20-21摄氏度，明天最低气温17-18摄氏度。<br><br>",
-      "Time": "2026051007",
-      "PreciseForecastTime": "2026年05月10日07时"
+      "Time": "2026051010",
+      "PreciseForecastTime": "2026年05月10日10时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -748,8 +748,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天多云。明天多云转晴。后天多云。13日多云。14日多云到阴。<br>预计今天最高气温23-24摄氏度，明天最低气温17-18摄氏度。<br><br>",
-      "Time": "2026051007",
-      "PreciseForecastTime": "2026年05月10日07时"
+      "Time": "2026051010",
+      "PreciseForecastTime": "2026年05月10日10时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -995,8 +995,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天多云。明天多云转晴。后天多云。13日多云。14日多云到阴。<br>预计今天最高气温21-22摄氏度，明天最低气温17-18摄氏度。<br><br>",
-      "Time": "2026051007",
-      "PreciseForecastTime": "2026年05月10日07时"
+      "Time": "2026051010",
+      "PreciseForecastTime": "2026年05月10日10时"
     }
   }
 };
