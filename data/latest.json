@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-05-11 07:29:07",
-  "lastChecked": "2026-05-11 07:29:07",
-  "lastSuccessfulFetch": "2026-05-11 07:29:07",
-  "updateWindow": "2026-05-11T06:00+08:00",
-  "publishTime": "2026年05月11日06时",
-  "publishCode": "2026051106",
+  "lastUpdated": "2026-05-11 13:38:13",
+  "lastChecked": "2026-05-11 13:38:13",
+  "lastSuccessfulFetch": "2026-05-11 13:38:13",
+  "updateWindow": "2026-05-11T12:00+08:00",
+  "publishTime": "2026年05月11日10时",
+  "publishCode": "2026051110",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -84,9 +84,9 @@
         },
         {
           "wd_en": "PPS",
-          "Vis": ">1000m",
+          "Vis": "800m",
           "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "Riskrating": "4 1 4 1",
           "WindSpeed": 9.1,
           "WindSpeedAvg": "6.8",
           "Time": "12日05时-08时",
@@ -134,9 +134,9 @@
         },
         {
           "wd_en": "PPS",
-          "Vis": ">1000m",
+          "Vis": "800m",
           "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "Riskrating": "4 1 4 1",
           "WindSpeed": 9.5,
           "WindSpeedAvg": "7.1",
           "Time": "12日20时-13日02时",
@@ -144,9 +144,9 @@
         },
         {
           "wd_en": "PPS",
-          "Vis": ">1000m",
+          "Vis": "800m",
           "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "Riskrating": "4 1 4 1",
           "WindSpeed": 8.5,
           "WindSpeedAvg": "6.4",
           "Time": "13日02时-08时",
@@ -253,9 +253,9 @@
           "WindDirect": "东到东南风"
         }
       ],
-      "Text": "天气预报：今天多云。明天多云。后天晴到多云。14日、15日多云到阴。<br>预计今天最高气温25-26摄氏度，明天最低气温18-19摄氏度。明天早晨局部有雾。<br><br>",
-      "Time": "2026051106",
-      "PreciseForecastTime": "2026年05月11日06时"
+      "Text": "天气预报：今天多云。明天多云。后天晴到多云。14日、15日多云到阴。明天早晨、明天夜里到后天早晨局部有雾。<br>预计今天最高气温25-26摄氏度，明天最低气温18-19摄氏度。<br><br>",
+      "Time": "2026051110",
+      "PreciseForecastTime": "2026年05月11日10时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -331,9 +331,9 @@
         },
         {
           "wd_en": "PPS",
-          "Vis": ">1000m",
+          "Vis": "800m",
           "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "Riskrating": "4 1 4 1",
           "WindSpeed": 9.0,
           "WindSpeedAvg": "6.8",
           "Time": "12日05时-08时",
@@ -381,9 +381,9 @@
         },
         {
           "wd_en": "SSW",
-          "Vis": ">1000m",
+          "Vis": "800m",
           "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "Riskrating": "4 1 4 1",
           "WindSpeed": 9.6,
           "WindSpeedAvg": "7.2",
           "Time": "12日20时-13日02时",
@@ -391,9 +391,9 @@
         },
         {
           "wd_en": "PPS",
-          "Vis": ">1000m",
+          "Vis": "800m",
           "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "Riskrating": "4 1 4 1",
           "WindSpeed": 8.4,
           "WindSpeedAvg": "6.3",
           "Time": "13日02时-08时",
@@ -500,9 +500,9 @@
           "WindDirect": "东到东南风"
         }
       ],
-      "Text": "天气预报：今天多云。明天多云。后天晴到多云。14日、15日多云到阴。<br>预计今天最高气温23-24摄氏度，明天最低气温18-19摄氏度。明天早晨局部有雾。<br><br>",
-      "Time": "2026051106",
-      "PreciseForecastTime": "2026年05月11日06时"
+      "Text": "天气预报：今天多云。明天多云。后天晴到多云。14日、15日多云到阴。今天夜里到明天早晨、明天夜里到后天早晨局部有雾。<br>预计今天最高气温23-24摄氏度，明天最低气温18-19摄氏度。<br><br>",
+      "Time": "2026051110",
+      "PreciseForecastTime": "2026年05月11日10时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -748,8 +748,8 @@
         }
       ],
       "Text": "天气预报：今天多云。明天多云。后天晴到多云。14日、15日多云到阴。<br>预计今天最高气温25-26摄氏度，明天最低气温18-19摄氏度。<br><br>",
-      "Time": "2026051106",
-      "PreciseForecastTime": "2026年05月11日06时"
+      "Time": "2026051110",
+      "PreciseForecastTime": "2026年05月11日10时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -995,8 +995,8 @@
         }
       ],
       "Text": "天气预报：今天多云。明天多云。后天晴到多云。14日、15日多云到阴。<br>预计今天最高气温25-26摄氏度，明天最低气温18-19摄氏度。<br><br>",
-      "Time": "2026051106",
-      "PreciseForecastTime": "2026年05月11日06时"
+      "Time": "2026051110",
+      "PreciseForecastTime": "2026年05月11日10时"
     }
   }
 }
