@@ -119,8 +119,7 @@ crontab -e
 ```
 # 舟山锚地MIO数据更新 — 围绕 06/12/16/20 点检查
 PATH=/usr/local/bin:/usr/bin:/bin
-10,30,50 6,12,16,20 * * * /Users/你的用户名/zhoushan-mio/scripts/cron-update.sh
-20 7,13,17,21 * * * /Users/你的用户名/zhoushan-mio/scripts/cron-update.sh
+15,45 6,12,16,20 * * * /Users/你的用户名/zhoushan-mio/scripts/cron-update.sh
 ```
 
 3. 按 `Esc` 退出编辑模式
@@ -174,8 +173,7 @@ https://github.com/qianlingbo/zhoushan-anchorage-mio/commits/main
 
 ```
 分 时 日 月 星期几
-10,30,50 6,12,16,20 * * *  ← 06/12/16/20 点后的 10、30、50 分钟
-20 7,13,17,21 * * *        ← 07:20、13:20、17:20、21:20 延迟兜底
+15,45 6,12,16,20 * * *     ← 06/12/16/20 点后的 15、45 分钟
 30 8  *  *  *              ← 每天 08:30
 */30 * * * *               ← 每 30 分钟
 0  10 * * 1-5        ← 工作日（周一到周五）10:00
