@@ -32,12 +32,14 @@ python3 scripts/update_data.py
 
 直接双击 `index.html` 在浏览器中打开即可（支持 file:// 协议，无需本地服务器）。
 
-### 3. 定时更新（可选）
+### 3. 自动更新
 
-用 crontab 定时执行更新脚本，例如每 3 小时更新一次：
+线上站点通过 GitHub Actions 自动更新，当前配置为每小时第 7、27、47 分钟检查一次。脚本会先抓取源站数据，只有预报发布时间或四个锚地预报内容变化时才写入 `data/` 并提交，避免频繁轮询造成无意义提交。
+
+本地 crontab 作为备用方案时，建议每 20 分钟执行一次：
 
 ```bash
-0 */3 * * * cd /path/to/网站制作 && python3 scripts/update_data.py
+*/20 * * * * /path/to/zhoushan-anchorage-mio/scripts/cron-update.sh
 ```
 
 ## 数据来源

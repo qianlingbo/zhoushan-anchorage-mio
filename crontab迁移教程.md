@@ -117,10 +117,9 @@ crontab -e
 2. 粘贴以下内容（⌘V）：
 
 ```
-# 舟山锚地MIO数据更新 — 每天 10:00 和 16:00
+# 舟山锚地MIO数据更新 — 每 20 分钟检查一次
 PATH=/usr/local/bin:/usr/bin:/bin
-0 10 * * * cd /Users/你的用户名/zhoushan-mio && /usr/bin/python3 scripts/update_data.py && /usr/bin/git add data/ && /usr/bin/git diff --cached --quiet || (/usr/bin/git commit -m "🔄 更新MIO数据 $(date '+\%Y-\%m-\%d \%H:\%M')" && /usr/bin/git push) >> /tmp/mio-update.log 2>&1
-0 16 * * * cd /Users/你的用户名/zhoushan-mio && /usr/bin/python3 scripts/update_data.py && /usr/bin/git add data/ && /usr/bin/git diff --cached --quiet || (/usr/bin/git commit -m "🔄 更新MIO数据 $(date '+\%Y-\%m-\%d \%H:\%M')" && /usr/bin/git push) >> /tmp/mio-update.log 2>&1
+*/20 * * * * /Users/你的用户名/zhoushan-mio/scripts/cron-update.sh
 ```
 
 3. 按 `Esc` 退出编辑模式
@@ -157,7 +156,7 @@ crontab -l
 
 ## 验证一切正常
 
-等到下一个 10:00 或 16:00 过后，检查日志：
+等到下一个 20 分钟周期过后，检查日志：
 
 ```bash
 cat /tmp/mio-update.log
@@ -174,8 +173,7 @@ https://github.com/qianlingbo/zhoushan-anchorage-mio/commits/main
 
 ```
 分 时 日 月 星期几
-0  10 *  *  *        ← 每天 10:00
-0  16 *  *  *        ← 每天 16:00
+*/20 * *  *  *        ← 每 20 分钟
 30 8  *  *  *        ← 每天 08:30
 0  8,12,17 * * *     ← 每天 8:00、12:00、17:00
 */30 * * * *         ← 每 30 分钟

@@ -2,9 +2,9 @@ name: Update Data
 
 on:
   schedule:
-    # GitHub cron uses UTC. Two checks are queued inside each 3-hour
-    # Asia/Shanghai window; the script writes at most once per window.
-    - cron: "37,57 1,4,7,10,13,16,19,22 * * *"
+    # GitHub cron uses UTC. Poll frequently so newly published source data
+    # is picked up quickly; the script writes only when forecast content changes.
+    - cron: "7,27,47 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -37,13 +37,8 @@ jobs:
 
       - name: Update anchorage data
         run: |
-          WINDOW_ARGS=""
-          if [ "${{ github.event_name }}" = "schedule" ]; then
-            WINDOW_ARGS="--skip-current-window"
-          fi
-
           for attempt in 1 2 3; do
-            if python scripts/update_data.py --no-cache-on-failure $WINDOW_ARGS; then
+            if python scripts/update_data.py --no-cache-on-failure; then
               exit 0
             fi
 
@@ -56,7 +51,7 @@ jobs:
           done
 
           echo "Data source still unavailable; keeping cached data and recording this check."
-          python scripts/update_data.py --cache-only $WINDOW_ARGS
+          python scripts/update_data.py --cache-only --skip-current-window
 
       - name: Commit and push data changes
         run: |

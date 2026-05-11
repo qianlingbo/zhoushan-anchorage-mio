@@ -85,6 +85,15 @@ def write_manifest(manifest: dict) -> None:
     print(f"✓ 已写入 {js_path}", flush=True)
 
 
+def same_forecast(existing: dict | None, candidate: dict) -> bool:
+    """Return True when the source forecast content has not changed."""
+    if not existing:
+        return False
+
+    keys = ("publishTime", "publishCode", "anchors")
+    return all(existing.get(key) == candidate.get(key) for key in keys)
+
+
 def fetch_anchor(name: str) -> dict:
     """Fetch forecast data for a single anchorage with retry."""
     url = f"{API_BASE}?name={name}"
@@ -175,7 +184,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--skip-current-window",
         action="store_true",
-        help="如果当前三小时窗口已经写过数据，则直接跳过。",
+        help="如果当前三小时窗口已经写过数据，则直接跳过（仅用于故障缓存兜底）。",
     )
     return parser.parse_args()
 
@@ -230,6 +239,11 @@ def main() -> None:
         print("\n全部锚地抓取失败，沿用上次成功数据并记录本次检查时间。", flush=True)
 
     manifest = build_manifest(results, errors, existing)
+
+    if same_forecast(existing, manifest) and not errors:
+        print("\n源站预报内容未变化，跳过写入和提交。", flush=True)
+        return
+
     write_manifest(manifest)
 
     if errors:
