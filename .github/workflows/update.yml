@@ -2,9 +2,12 @@ name: Update Data
 
 on:
   schedule:
-    # GitHub cron uses UTC. Poll frequently so newly published source data
-    # is picked up quickly; the script writes only when forecast content changes.
-    - cron: "7,27,47 * * * *"
+    # GitHub cron uses UTC. Source data usually updates around
+    # 06:00, 12:00, 16:00, and 20:00 Asia/Shanghai.
+    # Check shortly after each expected publish time, then once more
+    # 80 minutes later as a delay fallback.
+    - cron: "10,30,50 22,4,8,12 * * *"
+    - cron: "20 23,5,9,13 * * *"
   workflow_dispatch:
 
 permissions:
