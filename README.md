@@ -34,12 +34,12 @@ python3 scripts/update_data.py
 
 ### 3. 自动更新
 
-线上站点通过 GitHub Actions 自动更新。源站通常在北京时间 06:00、12:00、16:00、20:00 左右发布新数据，所以当前配置为在这些时间后的 15、45 分钟各检查一次。脚本会先抓取源站数据，只有预报发布时间或四个锚地预报内容变化时才写入 `data/` 并提交。
+线上站点通过 GitHub Actions 自动更新。当前配置为北京时间 06:10 到 22:10 之间每小时检查一次。脚本会先抓取源站数据，只有预报发布时间或四个锚地预报内容变化时才写入 `data/` 并提交。
 
 本地 crontab 作为备用方案时，可使用同样的节奏：
 
 ```bash
-15,45 6,12,16,20 * * * /path/to/zhoushan-anchorage-mio/scripts/cron-update.sh
+10 6-22 * * * /path/to/zhoushan-anchorage-mio/scripts/cron-update.sh
 ```
 
 ## 数据来源

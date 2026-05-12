@@ -117,9 +117,9 @@ crontab -e
 2. 粘贴以下内容（⌘V）：
 
 ```
-# 舟山锚地MIO数据更新 — 围绕 06/12/16/20 点检查
+# 舟山锚地MIO数据更新 — 06:10 到 22:10 每小时检查一次
 PATH=/usr/local/bin:/usr/bin:/bin
-15,45 6,12,16,20 * * * /Users/你的用户名/zhoushan-mio/scripts/cron-update.sh
+10 6-22 * * * /Users/你的用户名/zhoushan-mio/scripts/cron-update.sh
 ```
 
 3. 按 `Esc` 退出编辑模式
@@ -173,7 +173,7 @@ https://github.com/qianlingbo/zhoushan-anchorage-mio/commits/main
 
 ```
 分 时 日 月 星期几
-15,45 6,12,16,20 * * *     ← 06/12/16/20 点后的 15、45 分钟
+10 6-22 * * *               ← 06:10 到 22:10 每小时一次
 30 8  *  *  *              ← 每天 08:30
 */30 * * * *               ← 每 30 分钟
 0  10 * * 1-5        ← 工作日（周一到周五）10:00

@@ -2,10 +2,9 @@ name: Update Data
 
 on:
   schedule:
-    # GitHub cron uses UTC. Source data usually updates around
-    # 06:00, 12:00, 16:00, and 20:00 Asia/Shanghai.
-    # Check twice after each expected publish time.
-    - cron: "15,45 22,4,8,12 * * *"
+    # GitHub cron uses UTC. Check hourly from 06:10 through 22:10
+    # Asia/Shanghai, giving the source a short buffer after each hour.
+    - cron: "10 22,23,0-14 * * *"
   workflow_dispatch:
 
 permissions:
