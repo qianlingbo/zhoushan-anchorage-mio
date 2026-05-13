@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-05-13 12:10:22",
-  "lastChecked": "2026-05-13 12:10:22",
-  "lastSuccessfulFetch": "2026-05-13 12:10:22",
-  "updateWindow": "2026-05-13T12:00+08:00",
-  "publishTime": "2026年05月13日10时",
-  "publishCode": "2026051310",
+  "lastUpdated": "2026-05-13 16:10:19",
+  "lastChecked": "2026-05-13 16:10:19",
+  "lastSuccessfulFetch": "2026-05-13 16:10:19",
+  "updateWindow": "2026-05-13T15:00+08:00",
+  "publishTime": "2026年05月13日14时",
+  "publishCode": "2026051314",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -254,8 +254,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天多云转阴。明天阴到多云，中午转阴局部阵雨。后天多云到阴。16-17日多云。<br>今天中午局部有雾，今天夜里到明天上午有雾。<br>预计今天最高气温24-25摄氏度，明天最低气温19-20摄氏度。<br><br>",
-      "Time": "2026051310",
-      "PreciseForecastTime": "2026年05月13日10时"
+      "Time": "2026051314",
+      "PreciseForecastTime": "2026年05月13日14时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -501,8 +501,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天多云转阴。明天阴到多云，中午转阴局部阵雨。后天多云到阴。16-17日多云。<br>今天夜里到明天早晨有雾。<br>预计今天最高气温23-24摄氏度，明天最低气温19-20摄氏度。<br><br>",
-      "Time": "2026051310",
-      "PreciseForecastTime": "2026年05月13日10时"
+      "Time": "2026051314",
+      "PreciseForecastTime": "2026年05月13日14时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -748,8 +748,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天多云转阴。明天阴到多云，中午转阴局部阵雨。后天多云到阴。16-17日多云。<br>今天夜里到明天上午有雾。<br>预计今天最高气温25-26摄氏度，明天最低气温19-20摄氏度。<br><br>",
-      "Time": "2026051310",
-      "PreciseForecastTime": "2026年05月13日10时"
+      "Time": "2026051314",
+      "PreciseForecastTime": "2026年05月13日14时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -995,8 +995,8 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "Text": "天气预报：今天多云转阴。明天阴到多云，中午转阴局部阵雨。后天多云到阴。16-17日多云。<br>今天夜里到明天早晨局部有雾。<br>预计今天最高气温24-25摄氏度，明天最低气温19-20摄氏度。<br><br>",
-      "Time": "2026051310",
-      "PreciseForecastTime": "2026年05月13日10时"
+      "Time": "2026051314",
+      "PreciseForecastTime": "2026年05月13日14时"
     }
   }
 };
