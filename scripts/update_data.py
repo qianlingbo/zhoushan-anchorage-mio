@@ -38,6 +38,9 @@ HEADERS = {
         "+https://www.zsagent01.com)"
     ),
     "Accept": "application/json,text/plain,*/*",
+    "Cache-Control": "no-cache",
+    "Pragma": "no-cache",
+    "Referer": "https://www.zs121.com.cn/Portarea/Portarea",
 }
 
 
@@ -96,13 +99,17 @@ def same_forecast(existing: dict | None, candidate: dict) -> bool:
 
 def fetch_anchor(name: str) -> dict:
     """Fetch forecast data for a single anchorage with retry."""
-    url = f"{API_BASE}?name={name}"
     last_error = None
 
     for attempt in range(1, MAX_RETRIES + 1):
         try:
             print(f"  [{attempt}/{MAX_RETRIES}] 请求 {name} ...", flush=True)
-            resp = requests.get(url, headers=HEADERS, timeout=(8, 20))
+            resp = requests.get(
+                API_BASE,
+                params={"name": name, "_": str(int(time.time() * 1000))},
+                headers=HEADERS,
+                timeout=(10, 25),
+            )
             resp.raise_for_status()
             payload = resp.json()
 
@@ -186,6 +193,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="如果当前三小时窗口已经写过数据，则直接跳过（仅用于故障缓存兜底）。",
     )
+    parser.add_argument(
+        "--require-all",
+        action="store_true",
+        help="任一锚地抓取失败时退出失败，不写入部分更新。",
+    )
     return parser.parse_args()
 
 
@@ -237,6 +249,10 @@ def main() -> None:
             sys.exit(1)
 
         print("\n全部锚地抓取失败，沿用上次成功数据并记录本次检查时间。", flush=True)
+
+    if errors and args.require_all:
+        print("\n存在锚地抓取失败，按要求不写入部分更新。", file=sys.stderr)
+        sys.exit(1)
 
     manifest = build_manifest(results, errors, existing)
 

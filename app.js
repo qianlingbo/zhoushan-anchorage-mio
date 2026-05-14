@@ -365,10 +365,27 @@
 
     if (!sentences.length) return "Forecast unavailable.";
 
-    return "Forecast: " + sentences.map(translateWeatherSentence).join(" ");
+    return "Forecast: " + sentences.map(function (sentence) {
+      return ensureEnglishWeather(translateWeatherSentence(sentence));
+    }).filter(Boolean).join(" ");
   }
 
   function translateWeatherSentence(sentence) {
+    var rangeCondition = translateRangeConditionSentence(sentence);
+    if (rangeCondition) return rangeCondition;
+
+    var dayList = sentence.match(/^(今天|明天|后天)、(今天|明天|后天)(.+)$/);
+    if (dayList) {
+      return dayLabel(dayList[1]) + " and " + dayLabel(dayList[2]).toLowerCase() + ", " +
+        translateWeatherClause(dayList[3]) + ".";
+    }
+
+    var dateRange = sentence.match(/^(\d{1,2})-(\d{1,2})日(.+)$/);
+    if (dateRange) {
+      return "From the " + ordinalDay(parseInt(dateRange[1], 10)) + " to the " +
+        ordinalDay(parseInt(dateRange[2], 10)) + ", " + translateWeatherClause(dateRange[3]) + ".";
+    }
+
     var temp = sentence.match(/^预计(今天|明天|后天)?最高气温([\d.-]+)摄氏度，(今天|明天|后天)?最低气温([\d.-]+)摄氏度$/);
     if (temp) {
       return dayPossessive(temp[1] || "今天") + " high is expected to be " + temp[2] + " deg C; " +
@@ -412,6 +429,86 @@
     var translated = clauses.join(", ");
     if (!translated) return prefix ? prefix + "." : "";
     return (prefix ? prefix + ", " : "") + translated + ".";
+  }
+
+  function translateRangeConditionSentence(sentence) {
+    var conditionMatch = sentence.match(/^(.+?)(局部有雾|有雾)$/);
+    if (!conditionMatch || conditionMatch[1].indexOf("到") === -1) return "";
+
+    var condition = translateWeatherClause(conditionMatch[2]);
+    var ranges = conditionMatch[1].split("、").map(function (range) {
+      return translateTimeRange(range.trim());
+    }).filter(Boolean);
+
+    if (!ranges.length) return "";
+    return capitalize(condition) + " from " + ranges.join(" and from ") + ".";
+  }
+
+  function translateTimeRange(value) {
+    var parts = String(value || "").split("到");
+    if (parts.length < 2) return "";
+    return translateTimePoint(parts[0]) + " to " + translateTimePoint(parts.slice(1).join("到"));
+  }
+
+  function translateTimePoint(value) {
+    var text = String(value || "").trim();
+    var special = {
+      "今天早晨": "this morning",
+      "今天上午": "this morning",
+      "今天中午": "noon today",
+      "今天下午": "this afternoon",
+      "今天傍晚": "this evening",
+      "今天夜里": "tonight",
+      "今天半夜": "late tonight",
+      "明天早晨": "tomorrow morning",
+      "明天上午": "tomorrow morning",
+      "明天中午": "tomorrow noon",
+      "明天下午": "tomorrow afternoon",
+      "明天傍晚": "tomorrow evening",
+      "明天夜里": "tomorrow night",
+      "明天半夜": "late tomorrow night",
+      "后天早晨": "the morning of the day after tomorrow",
+      "后天上午": "the morning of the day after tomorrow",
+      "后天中午": "noon of the day after tomorrow",
+      "后天下午": "the afternoon of the day after tomorrow",
+      "后天傍晚": "the evening of the day after tomorrow",
+      "后天夜里": "the night of the day after tomorrow",
+      "后天半夜": "late night on the day after tomorrow",
+    };
+    if (special[text]) return special[text];
+
+    var dayTime = text.match(/^(今天|明天|后天)(早晨|上午|中午|下午|傍晚|夜里|半夜)$/);
+    if (dayTime) return dayLabel(dayTime[1]).toLowerCase() + " " + timeLabel(dayTime[2]);
+
+    var dateTime = text.match(/^(\d{1,2})日(早晨|上午|中午|下午|傍晚|夜里|半夜)?$/);
+    if (dateTime) {
+      return "the " + ordinalDay(parseInt(dateTime[1], 10)) +
+        (dateTime[2] ? " " + timeLabel(dateTime[2]) : "");
+    }
+
+    return ensureEnglishWeather(translateWeatherClause(text));
+  }
+
+  function capitalize(value) {
+    value = String(value || "");
+    return value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
+  }
+
+  function hasChinese(text) {
+    return /[\u3400-\u9fff]/.test(String(text || ""));
+  }
+
+  function ensureEnglishWeather(text) {
+    if (!text) return text;
+    if (!hasChinese(text)) return text;
+
+    var cleaned = String(text)
+      .replace(/[\u3400-\u9fff]+/g, "")
+      .replace(/[，。、；：、]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    return cleaned || "Forecast details unavailable.";
   }
 
   function dayLabel(value) {
@@ -463,6 +560,7 @@
       "下午起阴有阵雨": "overcast with showers from the afternoon",
       "下午起阴有阵雨或雷雨": "overcast with showers or thunderstorms from the afternoon",
       "下午起阴有时有阵雨或雷雨": "overcast with occasional showers or thunderstorms from the afternoon",
+      "中午起局部有阵雨": "isolated showers from noon",
       "夜里阴有阵雨或雷雨": "overcast with showers or thunderstorms at night",
       "上午转多云到晴": "turning cloudy to sunny in the morning",
       "多云转阴有阵雨": "cloudy, turning overcast with showers",
@@ -480,9 +578,12 @@
     var translated = clause;
     [
       ["下午起", "from the afternoon "],
+      ["中午起", "from noon "],
       ["夜里", "at night "],
       ["上午", "in the morning "],
+      ["早晨", "morning"],
       ["下半夜", "after midnight "],
+      ["半夜", "late night"],
       ["雨止转", "rain ending and turning "],
       ["有时有阵雨或雷雨", "occasional showers or thunderstorms"],
       ["有时有阵雨", "occasional showers"],
@@ -499,10 +600,15 @@
       ["局部有阵雨", "isolated showers"],
       ["雷雨", "thunderstorms"],
       ["阵雨", "showers"],
+      ["今天", "today"],
+      ["明天", "tomorrow"],
+      ["后天", "the day after tomorrow"],
       ["多云", "cloudy"],
       ["晴", "sunny"],
       ["阴", "overcast"],
       ["转", ", turning "],
+      ["到", " to "],
+      ["、", " and "],
       ["或", " or "],
     ].forEach(function (pair) {
       translated = translated.split(pair[0]).join(pair[1]);

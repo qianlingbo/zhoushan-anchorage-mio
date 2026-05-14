@@ -27,10 +27,10 @@ fi
 log "── 开始更新 ──"
 
 # ── 5. 抓取数据 ──
-if /usr/bin/python3 scripts/update_data.py >> "$LOG_FILE" 2>&1; then
+if /usr/bin/python3 scripts/update_data.py --no-cache-on-failure --require-all >> "$LOG_FILE" 2>&1; then
   log "✅ 数据抓取成功"
 else
-  log "❌ 数据抓取失败，退出"
+  log "❌ 数据抓取失败，保留上次成功数据并退出"
   exit 1
 fi
 

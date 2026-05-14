@@ -38,7 +38,7 @@ jobs:
       - name: Update anchorage data
         run: |
           for attempt in 1 2 3; do
-            if python scripts/update_data.py --no-cache-on-failure; then
+            if python scripts/update_data.py --no-cache-on-failure --require-all; then
               exit 0
             fi
 
@@ -50,8 +50,8 @@ jobs:
             sleep 300
           done
 
-          echo "Data source still unavailable; keeping cached data and recording this check."
-          python scripts/update_data.py --cache-only --skip-current-window
+          echo "Data source still unavailable; leaving the last successful data unchanged."
+          exit 1
 
       - name: Commit and push data changes
         run: |
