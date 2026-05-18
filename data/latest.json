@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-05-18 15:49:18",
-  "lastChecked": "2026-05-18 15:49:18",
-  "lastSuccessfulFetch": "2026-05-18 15:49:18",
-  "updateWindow": "2026-05-18T15:00+08:00",
-  "publishTime": "2026年05月18日10时",
-  "publishCode": "2026051810",
+  "lastUpdated": "2026-05-18 21:30:28",
+  "lastChecked": "2026-05-18 21:30:28",
+  "lastSuccessfulFetch": "2026-05-18 21:30:28",
+  "updateWindow": "2026-05-18T21:00+08:00",
+  "publishTime": "2026年05月18日20时",
+  "publishCode": "2026051820",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天多云，夜里转阴有时有阵雨。后天阴有阵雨或雷雨。21日阴有时有阵雨或雷雨转多云到阴。22日多云到阴转阴有时有阵雨或雷雨。<br>预计明天最高气温25-26摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026051810",
-      "PreciseForecastTime": "2026年05月18日10时"
+      "Time": "2026051820",
+      "PreciseForecastTime": "2026年05月18日20时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天多云，夜里转阴有时有阵雨。后天阴有阵雨或雷雨。21日阴有时有阵雨或雷雨转多云到阴。22日多云到阴转阴有时有阵雨或雷雨。<br>预计明天最高气温24-25摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026051810",
-      "PreciseForecastTime": "2026年05月18日10时"
+      "Time": "2026051820",
+      "PreciseForecastTime": "2026年05月18日20时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天多云，夜里转阴有时有阵雨。后天阴有阵雨或雷雨。21日阴有时有阵雨或雷雨转多云到阴。22日多云到阴转阴有时有阵雨或雷雨。<br>预计明天最高气温26-27摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026051810",
-      "PreciseForecastTime": "2026年05月18日10时"
+      "Time": "2026051820",
+      "PreciseForecastTime": "2026年05月18日20时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天多云，夜里转阴有时有阵雨。后天阴有阵雨或雷雨。21日阴有时有阵雨或雷雨转多云到阴。22日多云到阴转阴有时有阵雨或雷雨。<br>预计明天最高气温26-27摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026051810",
-      "PreciseForecastTime": "2026年05月18日10时"
+      "Time": "2026051820",
+      "PreciseForecastTime": "2026年05月18日20时"
     }
   }
 }
