@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-05-27 12:45:31",
-  "lastChecked": "2026-05-27 12:45:31",
-  "lastSuccessfulFetch": "2026-05-27 12:45:31",
-  "updateWindow": "2026-05-27T12:00+08:00",
-  "publishTime": "2026年05月27日07时",
-  "publishCode": "2026052707",
+  "lastUpdated": "2026-05-27 16:47:33",
+  "lastChecked": "2026-05-27 16:47:33",
+  "lastSuccessfulFetch": "2026-05-27 16:47:33",
+  "updateWindow": "2026-05-27T15:00+08:00",
+  "publishTime": "2026年05月27日16时",
+  "publishCode": "2026052716",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -25,8 +25,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "4 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "4 4 4 4",
           "WindSpeed": 9.8,
           "WindSpeedAvg": "7.4",
           "Time": "27日11时-14时",
@@ -254,9 +254,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云到阴，夜里起阴偶有小雨。明天阴转多云。后天多云到晴。30日、31日晴到多云。<br>预计今天最高气温28-29摄氏度，明天最低气温22-23摄氏度。<br><br>",
-      "Time": "2026052707",
-      "PreciseForecastTime": "2026年05月27日07时"
+      "Text": "天气预报：今天多云，夜里起阴偶有小雨。明天阴转多云。后天多云到晴。30日、31日晴到多云。<br>预计明天最高气温28-29摄氏度，明天最低气温22-23摄氏度。<br><br>",
+      "Time": "2026052716",
+      "PreciseForecastTime": "2026年05月27日16时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -283,8 +283,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "4 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "4 4 4 4",
           "WindSpeed": 10.0,
           "WindSpeedAvg": "7.5",
           "Time": "27日14时-17时",
@@ -502,9 +502,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云到阴，夜里起阴偶有小雨。明天阴转多云。后天多云到晴。30日、31日晴到多云。<br>预计今天最高气温26-27摄氏度，明天最低气温23-24摄氏度。<br><br>",
-      "Time": "2026052707",
-      "PreciseForecastTime": "2026年05月27日07时"
+      "Text": "天气预报：今天多云，夜里起阴偶有小雨。明天阴转多云。后天多云到晴。30日、31日晴到多云。<br>预计明天最高气温26-27摄氏度，明天最低气温23-24摄氏度。<br><br>",
+      "Time": "2026052716",
+      "PreciseForecastTime": "2026年05月27日16时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,9 +750,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云到阴，夜里起阴偶有小雨。明天阴转多云。后天多云到晴。30日、31日晴到多云。<br>预计今天最高气温29-30摄氏度，明天最低气温22-23摄氏度。<br><br>",
-      "Time": "2026052707",
-      "PreciseForecastTime": "2026年05月27日07时"
+      "Text": "天气预报：今天多云，夜里起阴偶有小雨。明天阴转多云。后天多云到晴。30日、31日晴到多云。<br>预计明天最高气温28-29摄氏度，明天最低气温22-23摄氏度。<br><br>",
+      "Time": "2026052716",
+      "PreciseForecastTime": "2026年05月27日16时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -769,7 +769,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "WNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
+          "WindWave": "<0.5m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.7,
           "WindSpeedAvg": "8.0",
@@ -998,9 +998,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云到阴，夜里起阴偶有小雨。明天阴转多云。后天多云到晴。30日、31日晴到多云。<br>预计今天最高气温29-30摄氏度，明天最低气温22-23摄氏度。<br><br>",
-      "Time": "2026052707",
-      "PreciseForecastTime": "2026年05月27日07时"
+      "Text": "天气预报：今天多云，夜里起阴偶有小雨。明天阴转多云。后天多云到晴。30日、31日晴到多云。<br>预计明天最高气温28-29摄氏度，明天最低气温22-23摄氏度。<br><br>",
+      "Time": "2026052716",
+      "PreciseForecastTime": "2026年05月27日16时"
     }
   }
 };
