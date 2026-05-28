@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-05-28 07:37:09",
-  "lastChecked": "2026-05-28 07:37:09",
-  "lastSuccessfulFetch": "2026-05-28 07:37:09",
-  "updateWindow": "2026-05-28T06:00+08:00",
-  "publishTime": "2026年05月28日06时",
-  "publishCode": "2026052806",
+  "lastUpdated": "2026-05-28 12:36:09",
+  "lastChecked": "2026-05-28 12:36:09",
+  "lastSuccessfulFetch": "2026-05-28 12:36:09",
+  "updateWindow": "2026-05-28T12:00+08:00",
+  "publishTime": "2026年05月28日11时",
+  "publishCode": "2026052811",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴局部小雨，下午转多云。明天多云。后天多云到晴。31日晴到多云。6月1日多云到阴。<br>预计今天最高气温28-29摄氏度，明天最低气温22-23摄氏度。<br><br>",
-      "Time": "2026052806",
-      "PreciseForecastTime": "2026年05月28日06时"
+      "Time": "2026052811",
+      "PreciseForecastTime": "2026年05月28日11时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴局部小雨，下午转多云。明天多云。后天多云到晴。31日晴到多云。6月1日多云到阴。<br>预计今天最高气温26-27摄氏度，明天最低气温22-23摄氏度。<br><br>",
-      "Time": "2026052806",
-      "PreciseForecastTime": "2026年05月28日06时"
+      "Time": "2026052811",
+      "PreciseForecastTime": "2026年05月28日11时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴局部小雨，下午转多云。明天多云。后天多云到晴。31日晴到多云。6月1日多云到阴。<br>预计今天最高气温28-29摄氏度，明天最低气温21-22摄氏度。<br><br>",
-      "Time": "2026052806",
-      "PreciseForecastTime": "2026年05月28日06时"
+      "Time": "2026052811",
+      "PreciseForecastTime": "2026年05月28日11时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴局部小雨，下午转多云。明天多云。后天多云到晴。31日晴到多云。6月1日多云到阴。<br>预计今天最高气温28-29摄氏度，明天最低气温22-23摄氏度。<br><br>",
-      "Time": "2026052806",
-      "PreciseForecastTime": "2026年05月28日06时"
+      "Time": "2026052811",
+      "PreciseForecastTime": "2026年05月28日11时"
     }
   }
 };
