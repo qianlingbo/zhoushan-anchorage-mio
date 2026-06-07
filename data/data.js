@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-06-07 12:53:08",
-  "lastChecked": "2026-06-07 12:53:08",
-  "lastSuccessfulFetch": "2026-06-07 12:53:08",
-  "updateWindow": "2026-06-07T12:00+08:00",
-  "publishTime": "2026年06月07日10时",
-  "publishCode": "2026060710",
+  "lastUpdated": "2026-06-07 19:15:49",
+  "lastChecked": "2026-06-07 19:15:49",
+  "lastSuccessfulFetch": "2026-06-07 19:15:49",
+  "updateWindow": "2026-06-07T18:00+08:00",
+  "publishTime": "2026年06月07日14时",
+  "publishCode": "2026060714",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -15,8 +15,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "ESE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "4 4 2 2",
           "WindSpeed": 3.4,
           "WindSpeedAvg": "2.6",
           "Time": "07日08时-11时",
@@ -25,8 +25,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "ENE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "4 4 2 2",
           "WindSpeed": 7.1,
           "WindSpeedAvg": "5.3",
           "Time": "07日11时-14时",
@@ -35,8 +35,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "ENE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "4 4 2 2",
           "WindSpeed": 9.7,
           "WindSpeedAvg": "7.3",
           "Time": "07日14时-17时",
@@ -254,9 +254,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴局部小雨，下半夜转阴有时有阵雨或雷雨。明天阴有时有阵雨。后天阴局部小雨，傍晚转多云。10-11日多云。<br>预计今天最高气温27-28摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026060710",
-      "PreciseForecastTime": "2026年06月07日10时"
+      "Text": "天气预报：今天阴局部小雨，半夜转阴有时有阵雨。明天阴有时有阵雨。后天阴局部小雨，傍晚转多云。10-11日多云。<br>预计明天最高气温24-25摄氏度，明天最低气温20-21摄氏度。<br><br>",
+      "Time": "2026060714",
+      "PreciseForecastTime": "2026年06月07日14时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -273,8 +273,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "4 4 2 2",
           "WindSpeed": 6.5,
           "WindSpeedAvg": "4.9",
           "Time": "07日11时-14时",
@@ -283,8 +283,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "4 4 2 2",
           "WindSpeed": 9.6,
           "WindSpeedAvg": "7.2",
           "Time": "07日14时-17时",
@@ -502,9 +502,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴局部小雨，下半夜转阴有时有阵雨或雷雨。明天阴有时有阵雨。后天阴局部小雨，傍晚转多云。10-11日多云。<br>预计今天最高气温26-27摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026060710",
-      "PreciseForecastTime": "2026年06月07日10时"
+      "Text": "天气预报：今天阴局部小雨，半夜转阴有时有阵雨。明天阴有时有阵雨。后天阴局部小雨，傍晚转多云。10-11日多云。<br>预计明天最高气温23-24摄氏度，明天最低气温20-21摄氏度。<br><br>",
+      "Time": "2026060714",
+      "PreciseForecastTime": "2026年06月07日14时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,9 +750,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴局部小雨，下半夜转阴有时有阵雨或雷雨。明天阴有时有阵雨。后天阴局部小雨，傍晚转多云。10-11日多云。<br>预计今天最高气温27-28摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026060710",
-      "PreciseForecastTime": "2026年06月07日10时"
+      "Text": "天气预报：今天阴局部小雨，半夜转阴有时有阵雨。明天阴有时有阵雨。后天阴局部小雨，傍晚转多云。10-11日多云。<br>预计明天最高气温24-25摄氏度，明天最低气温20-21摄氏度。<br><br>",
+      "Time": "2026060714",
+      "PreciseForecastTime": "2026年06月07日14时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -998,9 +998,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴局部小雨，下半夜转阴有时有阵雨或雷雨。明天阴有时有阵雨。后天阴局部小雨，傍晚转多云。10-11日多云。<br>预计今天最高气温26-27摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026060710",
-      "PreciseForecastTime": "2026年06月07日10时"
+      "Text": "天气预报：今天阴局部小雨，下半夜转阴有时有阵雨。明天阴有时有阵雨。后天阴局部小雨，傍晚转多云。10-11日多云。<br>预计明天最高气温23-24摄氏度，明天最低气温20-21摄氏度。<br><br>",
+      "Time": "2026060714",
+      "PreciseForecastTime": "2026年06月07日14时"
     }
   }
 };
