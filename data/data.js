@@ -1,14 +1,14 @@
 window.__ANCHOR_DATA__ = {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-06-08 13:17:44",
-  "lastChecked": "2026-06-08 13:17:44",
-  "lastSuccessfulFetch": "2026-06-08 11:02:37",
-  "updateWindow": "2026-06-08T12:00+08:00",
-  "publishTime": "2026年06月08日10时",
-  "publishCode": "2026060810",
+  "status": "更新完成",
+  "lastUpdated": "2026-06-08 21:15:24",
+  "lastChecked": "2026-06-08 21:15:24",
+  "lastSuccessfulFetch": "2026-06-08 21:15:24",
+  "updateWindow": "2026-06-08T21:00+08:00",
+  "publishTime": "2026年06月08日19时",
+  "publishCode": "2026060819",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -254,9 +254,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有阵雨，局部小到中雨。明天阴局部小雨，下午转多云。后天多云。11日多云。12日多云转阴。<br>预计今天最高气温23-24摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026060810",
-      "PreciseForecastTime": "2026年06月08日10时"
+      "Text": "天气预报：今天阴有时有阵雨。明天阴局部小雨，上午雨渐止转阴到多云。后天多云。11日多云。12日多云转阴。<br>预计明天最高气温23-24摄氏度，明天最低气温18-19摄氏度。<br><br>",
+      "Time": "2026060819",
+      "PreciseForecastTime": "2026年06月08日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -502,9 +502,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有阵雨，局部小到中雨。明天阴局部小雨，下午转多云。后天多云。11日多云。12日多云转阴。<br>预计今天最高气温23-24摄氏度，明天最低气温19-20摄氏度。<br><br>",
-      "Time": "2026060810",
-      "PreciseForecastTime": "2026年06月08日10时"
+      "Text": "天气预报：今天阴有时有阵雨。明天阴局部小雨，上午雨渐止转阴到多云。后天多云。11日多云。12日多云转阴。<br>预计明天最高气温23-24摄氏度，明天最低气温18-19摄氏度。<br><br>",
+      "Time": "2026060819",
+      "PreciseForecastTime": "2026年06月08日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,9 +750,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有时有阵雨，局部小到中雨。明天阴局部小雨，下午转多云。后天多云。11日多云。12日多云转阴。<br>预计今天最高气温23-24摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026060810",
-      "PreciseForecastTime": "2026年06月08日10时"
+      "Text": "天气预报：今天阴有时有阵雨。明天阴局部小雨，上午雨渐止转阴到多云。后天多云。11日多云。12日多云转阴。<br>预计明天最高气温23-24摄氏度，明天最低气温18-19摄氏度。<br><br>",
+      "Time": "2026060819",
+      "PreciseForecastTime": "2026年06月08日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -998,12 +998,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有时有阵雨，局部小到中雨。明天阴局部小雨，下午转多云。后天多云。11日多云。12日多云转阴。<br>预计今天最高气温23-24摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026060810",
-      "PreciseForecastTime": "2026年06月08日10时"
+      "Text": "天气预报：今天阴有时有阵雨。明天阴局部小雨，上午雨渐止转阴到多云。后天多云。11日多云。12日多云转阴。<br>预计明天最高气温23-24摄氏度，明天最低气温18-19摄氏度。<br><br>",
+      "Time": "2026060819",
+      "PreciseForecastTime": "2026年06月08日19时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 };
