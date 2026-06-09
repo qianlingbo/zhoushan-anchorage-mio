@@ -3,8 +3,9 @@ name: Update Data
 on:
   schedule:
     # GitHub cron uses UTC. Asia/Shanghai main checks:
-    # 08:13, 12:13, 17:13, 20:13.
-    - cron: "13 0,4,9,12 * * *"
+    # 08:30, 12:13, 17:13, 20:13.
+    - cron: "30 0 * * *"
+    - cron: "13 4,9,12 * * *"
     # One-hour retry slots in Asia/Shanghai:
     # 09:13, 13:13, 18:13, 21:13.
     - cron: "13 1,5,10,13 * * *"
