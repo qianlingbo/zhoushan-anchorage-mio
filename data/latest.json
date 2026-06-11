@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-06-11 16:55:06",
-  "lastChecked": "2026-06-11 16:55:06",
-  "lastSuccessfulFetch": "2026-06-11 16:55:06",
-  "updateWindow": "2026-06-11T15:00+08:00",
-  "publishTime": "2026年06月11日15时",
-  "publishCode": "2026061115",
+  "lastUpdated": "2026-06-11 21:05:57",
+  "lastChecked": "2026-06-11 21:05:57",
+  "lastSuccessfulFetch": "2026-06-11 21:05:57",
+  "updateWindow": "2026-06-11T21:00+08:00",
+  "publishTime": "2026年06月11日19时",
+  "publishCode": "2026061119",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到晴。明天多云，半夜转阴局部有阵雨。后天阴有阵雨。14日阴有时有阵雨。15日阴有时有阵雨转阴到多云。<br>预计明天最高气温28-29摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026061115",
-      "PreciseForecastTime": "2026年06月11日15时"
+      "Time": "2026061119",
+      "PreciseForecastTime": "2026年06月11日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到晴。明天多云，半夜转阴局部有阵雨。后天阴有阵雨。14日阴有时有阵雨。15日阴有时有阵雨转阴到多云。<br>预计明天最高气温 26-27摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026061115",
-      "PreciseForecastTime": "2026年06月11日15时"
+      "Time": "2026061119",
+      "PreciseForecastTime": "2026年06月11日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到晴。明天多云，半夜转阴局部有阵雨。后天阴有阵雨。14日阴有时有阵雨。15日阴有时有阵雨转阴到多云。<br>预计明天最高气温28-29摄氏度，明天最低气温19-20摄氏度。<br><br>",
-      "Time": "2026061115",
-      "PreciseForecastTime": "2026年06月11日15时"
+      "Time": "2026061119",
+      "PreciseForecastTime": "2026年06月11日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到晴。明天多云，半夜转阴局部有阵雨。后天阴有阵雨。14日阴有时有阵雨。15日阴有时有阵雨转阴到多云。<br>预计明天最高气温 27-28摄氏度，明天最低气温20-21摄氏度。<br><br>",
-      "Time": "2026061115",
-      "PreciseForecastTime": "2026年06月11日15时"
+      "Time": "2026061119",
+      "PreciseForecastTime": "2026年06月11日19时"
     }
   }
 }
