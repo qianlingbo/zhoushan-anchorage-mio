@@ -119,7 +119,19 @@
     }
     .mio-legend span { display: flex; align-items: center; gap: 4px; }
     .mio-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-  </style>
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .hero-robot {
+    font-size: 64px;
+    display: inline-block;
+    animation: bounce 1.8s ease-in-out infinite;
+    filter: drop-shadow(0 4px 12px rgba(102,126,234,0.4));
+  }
+
+</style>
 </head>
 <body>
   <main class="dashboard">
@@ -127,7 +139,8 @@
 
       <a class="back-link" href="./">← 返回看板</a>
 
-      <h1>🤖 Agent Skill 安装指南</h1>
+      <div style="text-align:center"><span class="hero-robot">🤖</span></div>
+      <h1 style="text-align:center; margin-bottom:12px">Agent Skill 安装指南</h1>
       <p class="lead">
         将舟山锚地供油指数查询能力接入你的 AI Agent（如 Codex 桌面版），无需打开网页，一句话即可查询当前各锚地的 MIO 评分、风浪、能见度及天气预报。
       </p>

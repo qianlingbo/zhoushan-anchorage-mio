@@ -471,23 +471,39 @@ h1 {
 
 .skill-banner {
   position: fixed;
-  top: 16px;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--accent);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #fff;
-  padding: 8px 20px;
-  border-radius: 20px;
+  padding: 7px 18px 7px 14px;
+  border-radius: 50px;
   font-size: 13px;
   font-weight: 600;
-  box-shadow: 0 4px 16px rgba(15, 126, 214, 0.35);
-  z-index: 999;
+  box-shadow: 0 4px 18px rgba(102, 126, 234, 0.45), 0 1px 0 rgba(255,255,255,0.15) inset;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.3px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.skill-banner:hover {
+  transform: translateX(-50%) scale(1.04);
+  box-shadow: 0 6px 24px rgba(102, 126, 234, 0.6), 0 1px 0 rgba(255,255,255,0.15) inset;
+}
+.skill-banner .robot-icon {
+  font-size: 17px;
+  line-height: 1;
 }
 .skill-banner a {
   color: #fff;
   text-decoration: none;
 }
 .skill-banner a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  opacity: 0.9;
 }
 
