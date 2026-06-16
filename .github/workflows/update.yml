@@ -49,18 +49,18 @@ jobs:
             exit 0
           fi
 
-          # Retry up to 3 times with 5 min gaps
-          for attempt in 1 2 3; do
+          # Retry up to 2 times with 2 min gaps
+          for attempt in 1 2; do
             if python scripts/update_data.py --skip-current-window --require-all; then
               echo "success=true" >> "$GITHUB_OUTPUT"
               exit 0
             fi
-            if [ "$attempt" = "3" ]; then break; fi
-            echo "Data source unavailable, retrying in 5 minutes (attempt ${attempt}/3)..."
-            sleep 300
+            if [ "$attempt" = "2" ]; then break; fi
+            echo "Data source unavailable, retrying in 2 minutes (attempt ${attempt}/2)..."
+            sleep 120
           done
 
-          echo "All 3 attempts failed; writing fallback marker."
+          echo "All attempts failed; writing fallback marker."
           echo "success=false" >> "$GITHUB_OUTPUT"
 
       - name: Write fallback when source is unavailable
@@ -82,3 +82,4 @@ jobs:
           git add data/latest.json data/data.js
           git commit -m "auto update data"
           git push
+
