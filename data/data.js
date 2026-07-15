@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-07-15 19:01:47",
-  "lastChecked": "2026-07-15 19:01:47",
-  "lastSuccessfulFetch": "2026-07-15 19:01:47",
-  "updateWindow": "2026-07-15T18:00+08:00",
-  "publishTime": "2026年07月15日14时",
-  "publishCode": "2026071514",
+  "lastUpdated": "2026-07-15 22:08:47",
+  "lastChecked": "2026-07-15 22:08:47",
+  "lastSuccessfulFetch": "2026-07-15 22:08:47",
+  "updateWindow": "2026-07-15T21:00+08:00",
+  "publishTime": "2026年07月15日19时",
+  "publishCode": "2026071519",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到晴。明天多云，午后到夜里局部阵雨或雷雨。后天多云，午后到夜里局部阵雨或雷雨。18日多云转阴有阵雨。19日阴有阵雨或雷雨。<br>预计明天最高气温34-35摄氏度，明天最低气温27-28摄氏度。<br><br>",
-      "Time": "2026071514",
-      "PreciseForecastTime": "2026年07月15日14时"
+      "Time": "2026071519",
+      "PreciseForecastTime": "2026年07月15日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到晴。明天多云，午后到夜里局部阵雨或雷雨。后天多云，午后到夜里局部阵雨或雷雨。18日多云转阴有阵雨。19日阴有阵雨或雷雨。<br>预计明天最高气温32-33摄氏度，明天最低气温26-27摄氏度。<br><br>",
-      "Time": "2026071514",
-      "PreciseForecastTime": "2026年07月15日14时"
+      "Time": "2026071519",
+      "PreciseForecastTime": "2026年07月15日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到晴。明天多云，午后到夜里局部阵雨或雷雨。后天多云，午后到夜里局部阵雨或雷雨。18日多云转阴有阵雨。19日阴有阵雨或雷雨。<br>预计明天最高气温34-35摄氏度，明天最低气温27-28摄氏度。<br><br>",
-      "Time": "2026071514",
-      "PreciseForecastTime": "2026年07月15日14时"
+      "Time": "2026071519",
+      "PreciseForecastTime": "2026年07月15日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到晴。明天多云，午后到夜里局部阵雨或雷雨。后天多云，午后到夜里局部阵雨或雷雨。18日多云转阴有阵雨。19日阴有阵雨或雷雨。<br>预计明天最高气温33-34摄氏度，明天最低气温26-27摄氏度。<br><br>",
-      "Time": "2026071514",
-      "PreciseForecastTime": "2026年07月15日14时"
+      "Time": "2026071519",
+      "PreciseForecastTime": "2026年07月15日19时"
     }
   }
 };
