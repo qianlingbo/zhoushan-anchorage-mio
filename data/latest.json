@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-07-20 08:11:15",
-  "lastChecked": "2026-07-20 08:11:15",
-  "lastSuccessfulFetch": "2026-07-20 08:11:15",
-  "updateWindow": "2026-07-20T06:00+08:00",
-  "publishTime": "2026年07月20日07时",
-  "publishCode": "2026072007",
+  "lastUpdated": "2026-07-20 12:51:42",
+  "lastChecked": "2026-07-20 12:51:42",
+  "lastSuccessfulFetch": "2026-07-20 12:51:42",
+  "updateWindow": "2026-07-20T12:00+08:00",
+  "publishTime": "2026年07月20日10时",
+  "publishCode": "2026072010",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -254,9 +254,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云，午后局部阵雨或雷雨。明天多云，明天午后到夜里有时有阵雨或雷雨。后天多云，午后偶有阵雨或雷雨。23日多云到晴。24日晴到多云。<br><br>",
-      "Time": "2026072007",
-      "PreciseForecastTime": "2026年07月20日07时"
+      "Text": "天气预报：今天多云，午后到夜里局部阵雨或雷雨。明天多云，明天午后到夜里有时有阵雨或雷雨。后天多云，午后局部阵雨或雷雨。23日多云，午后局部阵雨或雷雨。24日晴到多云。<br><br>",
+      "Time": "2026072010",
+      "PreciseForecastTime": "2026年07月20日10时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -273,8 +273,8 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "3 4 1 1",
           "WindSpeed": 13.7,
           "WindSpeedAvg": "10.3",
           "Time": "20日11时-14时",
@@ -283,8 +283,8 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "2 4 2 2",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "2 4 1 1",
           "WindSpeed": 14.6,
           "WindSpeedAvg": "11.0",
           "Time": "20日14时-17时",
@@ -293,8 +293,8 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "2 4 2 2",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "2 4 1 1",
           "WindSpeed": 16.8,
           "WindSpeedAvg": "12.6",
           "Time": "20日17时-20时",
@@ -502,9 +502,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云，午后局部阵雨或雷雨。明天多云，明天午后到夜里有时有阵雨或雷雨。后天多云，午后偶有阵雨或雷雨。23日多云到晴。24日晴到多云。<br><br>",
-      "Time": "2026072007",
-      "PreciseForecastTime": "2026年07月20日07时"
+      "Text": "天气预报：今天多云，午后到夜里局部阵雨或雷雨。明天多云，明天午后到夜里有时有阵雨或雷雨。后天多云，午后局部阵雨或雷雨。23日多云，午后局部阵雨或雷雨。24日晴到多云。<br><br>",
+      "Time": "2026072010",
+      "PreciseForecastTime": "2026年07月20日10时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,9 +750,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云，午后局部阵雨或雷雨。明天多云，明天午后到夜里有时有阵雨或雷雨。后天多云，午后偶有阵雨或雷雨。23日多云到晴。24日晴到多云。<br><br>",
-      "Time": "2026072007",
-      "PreciseForecastTime": "2026年07月20日07时"
+      "Text": "天气预报：今天多云，午后到夜里局部阵雨或雷雨。明天多云，明天午后到夜里有时有阵雨或雷雨。后天多云，午后局部阵雨或雷雨。23日多云，午后局部阵雨或雷雨。24日晴到多云。<br><br>",
+      "Time": "2026072010",
+      "PreciseForecastTime": "2026年07月20日10时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -998,9 +998,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云，午后局部阵雨或雷雨。明天多云，明天午后到夜里有时有阵雨或雷雨。后天多云，午后偶有阵雨或雷雨。23日多云到晴。24日晴到多云。<br><br>",
-      "Time": "2026072007",
-      "PreciseForecastTime": "2026年07月20日07时"
+      "Text": "天气预报：今天多云，午后到夜里局部阵雨或雷雨。明天多云，明天午后到夜里有时有阵雨或雷雨。后天多云，午后局部阵雨或雷雨。23日多云，午后局部阵雨或雷雨。24日晴到多云。<br><br>",
+      "Time": "2026072010",
+      "PreciseForecastTime": "2026年07月20日10时"
     }
   }
 }
