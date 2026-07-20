@@ -1,14 +1,14 @@
 window.__ANCHOR_DATA__ = {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-07-20 16:26:10",
-  "lastChecked": "2026-07-20 16:26:10",
-  "lastSuccessfulFetch": "2026-07-20 12:51:42",
-  "updateWindow": "2026-07-20T15:00+08:00",
+  "status": "更新完成",
+  "lastUpdated": "2026-07-20 19:58:05",
+  "lastChecked": "2026-07-20 19:58:05",
+  "lastSuccessfulFetch": "2026-07-20 19:58:05",
+  "updateWindow": "2026-07-20T18:00+08:00",
   "publishTime": "2026年07月20日10时",
   "publishCode": "2026072010",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -750,7 +750,7 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云，午后到夜里局部阵雨或雷雨。明天多云，明天午后到夜里有时有阵雨或雷雨。后天多云，午后局部阵雨或雷雨。23日多云，午后局部阵雨或雷雨。24日晴到多云。<br><br>",
+      "Text": "天气预报：今天多云，午后到夜里局部阵雨或雷雨，雷雨时短时风雨较大。明天多云，明天午后到夜里有时有阵雨或雷雨。后天多云，午后局部阵雨或雷雨。23日多云，午后局部阵雨或雷雨。24日晴到多云。<br><br>",
       "Time": "2026072010",
       "PreciseForecastTime": "2026年07月20日10时"
     },
@@ -1002,8 +1002,5 @@ window.__ANCHOR_DATA__ = {
       "Time": "2026072010",
       "PreciseForecastTime": "2026年07月20日10时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 };
