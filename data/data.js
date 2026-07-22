@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-07-22 19:19:47",
-  "lastChecked": "2026-07-22 19:19:47",
-  "lastSuccessfulFetch": "2026-07-22 19:19:47",
-  "updateWindow": "2026-07-22T18:00+08:00",
-  "publishTime": "2026年07月22日16时",
-  "publishCode": "2026072216",
+  "lastUpdated": "2026-07-22 22:21:28",
+  "lastChecked": "2026-07-22 22:21:28",
+  "lastSuccessfulFetch": "2026-07-22 22:21:28",
+  "updateWindow": "2026-07-22T21:00+08:00",
+  "publishTime": "2026年07月22日20时",
+  "publishCode": "2026072220",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天多云，午后局部阵雨或雷雨。后天晴到多云。25-26日晴到多云。<br><br>",
-      "Time": "2026072216",
-      "PreciseForecastTime": "2026年07月22日16时"
+      "Time": "2026072220",
+      "PreciseForecastTime": "2026年07月22日20时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天多云，午后局部阵雨或雷雨。后天晴到多云。25-26日晴到多云。<br><br>",
-      "Time": "2026072216",
-      "PreciseForecastTime": "2026年07月22日16时"
+      "Time": "2026072220",
+      "PreciseForecastTime": "2026年07月22日20时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,9 +750,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天局部阵雨或雷雨，雷雨时有7-9级雷雨大风。明天多云，午后局部阵雨或雷雨。后天晴到多云。25-26日晴到多云。<br><br>",
-      "Time": "2026072216",
-      "PreciseForecastTime": "2026年07月22日16时"
+      "Text": "天气预报：今天局部阵雨或雷雨，雷雨时风雨较大。明天多云，午后局部阵雨或雷雨。后天晴到多云。25-26日晴到多云。<br><br>",
+      "Time": "2026072220",
+      "PreciseForecastTime": "2026年07月22日20时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -998,9 +998,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天局部阵雨或雷雨，雷雨时有8-10级雷雨大风。明天多云，午后局部阵雨或雷雨。后天晴到多云。25-26日晴到多云。<br><br>",
-      "Time": "2026072216",
-      "PreciseForecastTime": "2026年07月22日16时"
+      "Text": "天气预报：今天局部阵雨或雷雨，雷雨时风雨较大。明天多云，午后局部阵雨或雷雨。后天晴到多云。25-26日晴到多云。<br><br>",
+      "Time": "2026072220",
+      "PreciseForecastTime": "2026年07月22日20时"
     }
   }
 };
