@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-07-24 15:41:39",
-  "lastChecked": "2026-07-24 15:41:39",
-  "lastSuccessfulFetch": "2026-07-24 15:41:39",
-  "updateWindow": "2026-07-24T15:00+08:00",
-  "publishTime": "2026年07月24日14时",
-  "publishCode": "2026072414",
+  "lastUpdated": "2026-07-24 19:12:26",
+  "lastChecked": "2026-07-24 19:12:26",
+  "lastSuccessfulFetch": "2026-07-24 19:12:26",
+  "updateWindow": "2026-07-24T18:00+08:00",
+  "publishTime": "2026年07月24日16时",
+  "publishCode": "2026072416",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -254,9 +254,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天、明天晴到多云。后天多云。27-28日多云。<br><br>",
-      "Time": "2026072414",
-      "PreciseForecastTime": "2026年07月24日14时"
+      "Text": "天气预报：今天晴到多云。明天多云到晴。后天多云。27-28日多云。<br><br>",
+      "Time": "2026072416",
+      "PreciseForecastTime": "2026年07月24日16时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -502,9 +502,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天、明天晴到多云。后天多云。27-28日多云。<br><br>",
-      "Time": "2026072414",
-      "PreciseForecastTime": "2026年07月24日14时"
+      "Text": "天气预报：今天晴到多云。明天多云到晴。后天多云。27-28日多云。<br><br>",
+      "Time": "2026072416",
+      "PreciseForecastTime": "2026年07月24日16时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,9 +750,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天、明天晴到多云。后天多云。27-28日多云。<br><br>",
-      "Time": "2026072414",
-      "PreciseForecastTime": "2026年07月24日14时"
+      "Text": "天气预报：今天晴到多云。明天多云到晴。后天多云。27-28日多云。<br><br>",
+      "Time": "2026072416",
+      "PreciseForecastTime": "2026年07月24日16时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -998,9 +998,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天、明天晴到多云。后天多云。27-28日多云。<br><br>",
-      "Time": "2026072414",
-      "PreciseForecastTime": "2026年07月24日14时"
+      "Text": "天气预报：今天晴到多云。明天多云到晴。后天多云。27-28日多云。<br><br>",
+      "Time": "2026072416",
+      "PreciseForecastTime": "2026年07月24日16时"
     }
   }
 };
