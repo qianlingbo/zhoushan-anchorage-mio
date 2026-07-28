@@ -1,14 +1,14 @@
 window.__ANCHOR_DATA__ = {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-07-28 20:20:27",
-  "lastChecked": "2026-07-28 20:20:27",
-  "lastSuccessfulFetch": "2026-07-28 15:46:40",
-  "updateWindow": "2026-07-28T18:00+08:00",
-  "publishTime": "2026年07月28日15时",
-  "publishCode": "2026072815",
+  "status": "更新完成",
+  "lastUpdated": "2026-07-28 22:36:38",
+  "lastChecked": "2026-07-28 22:36:38",
+  "lastSuccessfulFetch": "2026-07-28 22:36:38",
+  "updateWindow": "2026-07-28T21:00+08:00",
+  "publishTime": "2026年07月28日19时",
+  "publishCode": "2026072819",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天阴转多云。后天晴到多云。31日晴到多云。8月1日阴到多云。<br><br>",
-      "Time": "2026072815",
-      "PreciseForecastTime": "2026年07月28日15时"
+      "Time": "2026072819",
+      "PreciseForecastTime": "2026年07月28日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天阴转多云。后天晴到多云。31日晴到多云。8月1日阴到多云。<br><br>",
-      "Time": "2026072815",
-      "PreciseForecastTime": "2026年07月28日15时"
+      "Time": "2026072819",
+      "PreciseForecastTime": "2026年07月28日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天阴转多云。后天晴到多云。31日晴到多云。8月1日阴到多云。<br><br>",
-      "Time": "2026072815",
-      "PreciseForecastTime": "2026年07月28日15时"
+      "Time": "2026072819",
+      "PreciseForecastTime": "2026年07月28日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,11 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天多云。后天晴到多云。31日晴到多云。8月1日阴到多云。<br><br>",
-      "Time": "2026072815",
-      "PreciseForecastTime": "2026年07月28日15时"
+      "Time": "2026072819",
+      "PreciseForecastTime": "2026年07月28日19时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 };
