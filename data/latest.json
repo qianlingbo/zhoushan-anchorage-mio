@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-07-30 12:18:36",
-  "lastChecked": "2026-07-30 12:18:36",
-  "lastSuccessfulFetch": "2026-07-30 12:18:36",
-  "updateWindow": "2026-07-30T12:00+08:00",
-  "publishTime": "2026年07月30日10时",
-  "publishCode": "2026073010",
+  "lastUpdated": "2026-07-30 15:42:15",
+  "lastChecked": "2026-07-30 15:42:15",
+  "lastSuccessfulFetch": "2026-07-30 15:42:15",
+  "updateWindow": "2026-07-30T15:00+08:00",
+  "publishTime": "2026年07月30日14时",
+  "publishCode": "2026073014",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。8月2日晴到多云。8月3日多云。<br><br>",
-      "Time": "2026073010",
-      "PreciseForecastTime": "2026年07月30日10时"
+      "Time": "2026073014",
+      "PreciseForecastTime": "2026年07月30日14时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。8月2日晴到多云。8月3日多云。<br><br>",
-      "Time": "2026073010",
-      "PreciseForecastTime": "2026年07月30日10时"
+      "Time": "2026073014",
+      "PreciseForecastTime": "2026年07月30日14时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。8月2日晴到多云。8月3日多云。<br><br>",
-      "Time": "2026073010",
-      "PreciseForecastTime": "2026年07月30日10时"
+      "Time": "2026073014",
+      "PreciseForecastTime": "2026年07月30日14时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。8月2日晴到多云。8月3日多云。<br><br>",
-      "Time": "2026073010",
-      "PreciseForecastTime": "2026年07月30日10时"
+      "Time": "2026073014",
+      "PreciseForecastTime": "2026年07月30日14时"
     }
   }
 }
