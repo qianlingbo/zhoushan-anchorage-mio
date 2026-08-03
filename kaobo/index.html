@@ -290,7 +290,7 @@ const TIDE_DISPLAY = {"01-01": "02:02 低潮(67cm)  →  08:37 高潮(338cm)  �
 // ============================================================
 // STATE
 // ============================================================
-let currentDate = "08-01";
+let currentDate = getTodayStr();
 let currentDock = null;
 
 // ============================================================
@@ -372,10 +372,16 @@ function nextDay() {
     render();
 }
 
+function getTodayStr() {
+    const now = new Date();
+    return `${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+}
+
 function goToday() {
-    currentDate = "08-01";
-    document.getElementById("monthSelect").value = "08";
-    updateDayOptions("08", "01");
+    currentDate = getTodayStr();
+    const [m, d] = currentDate.split("-");
+    document.getElementById("monthSelect").value = m;
+    updateDayOptions(m, d);
     render();
 }
 
