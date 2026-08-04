@@ -455,7 +455,7 @@ function render() {
         windowCards = windows.map(w => `
             <div class="window-card">
                 <div class="win-label">${w.label}</div>
-                <div class="win-time ${w.next_day ? 'next-day' : ''}">${w.berth_time_str}</div>
+                <div class="win-times">${w.times.map(t => '<span class="win-time' + (t.next_day ? ' next-day' : '') + '">' + t.time_str + '</span>').join(' ')}</div>
                 <div class="win-info">
                     <span>⏱ 引航 ${w.pilot_str}</span>
                     ${w.cond ? `<span>📋 ${w.cond}</span>` : ""}
