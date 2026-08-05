@@ -1,0 +1,12 @@
+{
+  "name": "zhoushan-berth-window",
+  "version": "2026.08.05",
+  "display_name": "舟山靠泊窗口",
+  "description": "基于 2026 定海潮汐和舟山港域码头规则，计算靠泊窗口与报告线到线时间。",
+  "package_url": "https://www.zsagent01.com/kaobo/zhoushan-berth-window.zip",
+  "install_script_url": "https://www.zsagent01.com/kaobo/install-zhoushan-berth-window.sh",
+  "install_command": "curl -fsSL https://www.zsagent01.com/kaobo/install-zhoushan-berth-window.sh | bash",
+  "skill_path": "zhoushan-berth-window/SKILL.md",
+  "entry_script": "zhoushan-berth-window/scripts/calculate_berth_windows.py",
+  "example_prompt": "Use $zhoushan-berth-window to calculate berth and report-line times for 舟山煤电 on 2026-08-04."
+}
