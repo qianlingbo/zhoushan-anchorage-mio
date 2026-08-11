@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-08-11 18:10:22",
-  "lastChecked": "2026-08-11 18:10:22",
-  "lastSuccessfulFetch": "2026-08-11 18:10:22",
-  "updateWindow": "2026-08-11T18:00+08:00",
-  "publishTime": "2026年08月11日16时",
-  "publishCode": "2026081116",
+  "lastUpdated": "2026-08-11 21:41:48",
+  "lastChecked": "2026-08-11 21:41:48",
+  "lastSuccessfulFetch": "2026-08-11 21:41:48",
+  "updateWindow": "2026-08-11T21:00+08:00",
+  "publishTime": "2026年08月11日19时",
+  "publishCode": "2026081119",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有阵雨，局部雨量中等，傍晚到明天阴有暴雨，明天夜里到后天阴有时有阵雨。14日阴有时有阵雨或雷雨。15日阴有时有阵雨或雷雨。<br><br>",
-      "Time": "2026081116",
-      "PreciseForecastTime": "2026年08月11日16时"
+      "Time": "2026081119",
+      "PreciseForecastTime": "2026年08月11日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有阵雨，局部雨量中等，傍晚到明天阴有暴雨，明天夜里到后天阴有时有阵雨。后天阴有时有阵雨。14日阴有时有阵雨或雷雨。15日阴有时有阵雨或雷雨。<br><br>",
-      "Time": "2026081116",
-      "PreciseForecastTime": "2026年08月11日16时"
+      "Time": "2026081119",
+      "PreciseForecastTime": "2026年08月11日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有阵雨，局部雨量中等，傍晚到明天阴有暴雨，明天夜里到后天阴有时有阵雨。14日阴有时有阵雨或雷雨。15日阴有时有阵雨或雷雨。<br><br>",
-      "Time": "2026081116",
-      "PreciseForecastTime": "2026年08月11日16时"
+      "Time": "2026081119",
+      "PreciseForecastTime": "2026年08月11日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有阵雨，局部雨量中等，傍晚到明天阴有暴雨，明天夜里到后天阴有时有阵雨。14日阴有时有阵雨或雷雨。15日阴有时有阵雨或雷雨。<br><br>",
-      "Time": "2026081116",
-      "PreciseForecastTime": "2026年08月11日16时"
+      "Time": "2026081119",
+      "PreciseForecastTime": "2026年08月11日19时"
     }
   }
 };
