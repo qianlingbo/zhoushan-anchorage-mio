@@ -1,14 +1,14 @@
 window.__ANCHOR_DATA__ = {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-08-11 13:37:35",
-  "lastChecked": "2026-08-11 13:37:35",
-  "lastSuccessfulFetch": "2026-08-11 07:50:12",
-  "updateWindow": "2026-08-11T12:00+08:00",
-  "publishTime": "2026年08月11日06时",
-  "publishCode": "2026081106",
+  "status": "更新完成",
+  "lastUpdated": "2026-08-11 18:10:22",
+  "lastChecked": "2026-08-11 18:10:22",
+  "lastSuccessfulFetch": "2026-08-11 18:10:22",
+  "updateWindow": "2026-08-11T18:00+08:00",
+  "publishTime": "2026年08月11日16时",
+  "publishCode": "2026081116",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -25,7 +25,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
+          "WindWave": "2.0-2.5m",
           "Riskrating": "2 4 1 1",
           "WindSpeed": 16.2,
           "WindSpeedAvg": "12.2",
@@ -45,7 +45,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
+          "WindWave": "1.5-2.0m",
           "Riskrating": "2 4 1 1",
           "WindSpeed": 15.4,
           "WindSpeedAvg": "11.6",
@@ -55,7 +55,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
+          "WindWave": "1.5-2.0m",
           "Riskrating": "2 4 1 1",
           "WindSpeed": 14.3,
           "WindSpeedAvg": "10.7",
@@ -254,9 +254,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有大雨，局部暴雨。明天阴有阵雨，雨量大雨。后天阴有时有阵雨。14日阴有时有阵雨或雷雨。15日阴有时有阵雨或雷雨。<br>【台风消息】今年第13号台风“白海豚”（热带风暴级）今天05时位于安徽省安庆市宿松县境内，就是北纬30.2度、东经116.2度，中心附近最大风力有8级，中心最低气压为992百帕，预计“白海豚”将以每小时15-20公里左右的速度向西偏北方向移动，强度缓慢减弱。受其影响，今天我市有大雨、局部暴雨，今天夜里到明天有大到暴雨；舟山沿海今天东南风9级，下午起8-9级，夜里减至8级，请注意防范。<br><br>",
-      "Time": "2026081106",
-      "PreciseForecastTime": "2026年08月11日06时"
+      "Text": "天气预报：今天阴有阵雨，局部雨量中等，傍晚到明天阴有暴雨，明天夜里到后天阴有时有阵雨。14日阴有时有阵雨或雷雨。15日阴有时有阵雨或雷雨。<br><br>",
+      "Time": "2026081116",
+      "PreciseForecastTime": "2026年08月11日16时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -273,7 +273,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
+          "WindWave": "2.5-3.0m",
           "Riskrating": "2 4 1 1",
           "WindSpeed": 16.4,
           "WindSpeedAvg": "12.3",
@@ -293,7 +293,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
+          "WindWave": "2.0-2.5m",
           "Riskrating": "2 4 1 1",
           "WindSpeed": 15.0,
           "WindSpeedAvg": "11.3",
@@ -303,7 +303,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
+          "WindWave": "2.0-2.5m",
           "Riskrating": "2 4 1 1",
           "WindSpeed": 14.1,
           "WindSpeedAvg": "10.6",
@@ -313,7 +313,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "SSE",
           "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
+          "WindWave": "1.5-2.0m",
           "Riskrating": "3 4 1 1",
           "WindSpeed": 13.0,
           "WindSpeedAvg": "9.8",
@@ -502,9 +502,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有大雨，局部暴雨。明天阴有阵雨，雨量大雨。后天阴有时有阵雨。14日阴有时有阵雨或雷雨。15日阴有时有阵雨或雷雨。<br>【台风消息】今年第13号台风“白海豚”（热带风暴级）今天05时位于安徽省安庆市宿松县境内，就是北纬30.2度、东经116.2度，中心附近最大风力有8级，中心最低气压为992百帕，预计“白海豚”将以每小时15-20公里左右的速度向西偏北方向移动，强度缓慢减弱。受其影响，今天我市有大雨、局部暴雨，今天夜里到明天有大到暴雨；舟山沿海今天东南风9级，下午起8-9级，夜里减至8级，请注意防范。<br><br>",
-      "Time": "2026081106",
-      "PreciseForecastTime": "2026年08月11日06时"
+      "Text": "天气预报：今天阴有阵雨，局部雨量中等，傍晚到明天阴有暴雨，明天夜里到后天阴有时有阵雨。后天阴有时有阵雨。14日阴有时有阵雨或雷雨。15日阴有时有阵雨或雷雨。<br><br>",
+      "Time": "2026081116",
+      "PreciseForecastTime": "2026年08月11日16时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,9 +750,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有大雨，局部暴雨。明天阴有阵雨，雨量大雨。后天阴有时有阵雨。14日阴有时有阵雨或雷雨。15日阴有时有阵雨或雷雨。<br>【台风消息】今年第13号台风“白海豚”（热带风暴级）今天05时位于安徽省安庆市宿松县境内，就是北纬30.2度、东经116.2度，中心附近最大风力有8级，中心最低气压为992百帕，预计“白海豚”将以每小时15-20公里左右的速度向西偏北方向移动，强度缓慢减弱。受其影响，今天我市有大雨、局部暴雨，今天夜里到明天有大到暴雨；舟山沿海今天东南风9级，下午起8-9级，夜里减至8级，请注意防范。<br><br>",
-      "Time": "2026081106",
-      "PreciseForecastTime": "2026年08月11日06时"
+      "Text": "天气预报：今天阴有阵雨，局部雨量中等，傍晚到明天阴有暴雨，明天夜里到后天阴有时有阵雨。14日阴有时有阵雨或雷雨。15日阴有时有阵雨或雷雨。<br><br>",
+      "Time": "2026081116",
+      "PreciseForecastTime": "2026年08月11日16时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -769,7 +769,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
+          "WindWave": "1.5-2.0m",
           "Riskrating": "2 4 1 1",
           "WindSpeed": 15.6,
           "WindSpeedAvg": "11.7",
@@ -779,7 +779,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
+          "WindWave": "1.5-2.0m",
           "Riskrating": "2 4 1 1",
           "WindSpeed": 15.1,
           "WindSpeedAvg": "11.3",
@@ -998,12 +998,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有阵雨，夜里起中到大雨。明天阴有阵雨，雨量大雨。后天阴有时有阵雨。14日阴有时有阵雨或雷雨。15日阴有时有阵雨或雷雨。<br>【台风消息】今年第13号台风“白海豚”（热带风暴级）今天05时位于安徽省安庆市宿松县境内，就是北纬30.2度、东经116.2度，中心附近最大风力有8级，中心最低气压为992百帕，预计“白海豚”将以每小时15-20公里左右的速度向西偏北方向移动，强度缓慢减弱。受其影响，今天我市有大雨、局部暴雨，今天夜里到明天有大到暴雨；舟山沿海今天东南风9级，下午起8-9级，夜里减至8级，请注意防范。<br><br>",
-      "Time": "2026081106",
-      "PreciseForecastTime": "2026年08月11日06时"
+      "Text": "天气预报：今天阴有阵雨，局部雨量中等，傍晚到明天阴有暴雨，明天夜里到后天阴有时有阵雨。14日阴有时有阵雨或雷雨。15日阴有时有阵雨或雷雨。<br><br>",
+      "Time": "2026081116",
+      "PreciseForecastTime": "2026年08月11日16时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 };
