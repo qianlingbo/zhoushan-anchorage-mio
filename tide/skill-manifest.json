@@ -1,0 +1,13 @@
+{
+  "name": "river-mud-channel-tide",
+  "version": "2026.08.12",
+  "display_name": "河泥漕通航时间",
+  "description": "根据船舶吃水、日期和2026年河泥漕潮高，计算15分钟粒度的过浅滩与过航槽时间。",
+  "compatible_agents": ["Codex", "OpenClaw", "Hermes", "Agent Skills-compatible runtimes"],
+  "package_url": "https://www.zsagent01.com/tide/river-mud-channel-tide.zip",
+  "install_script_url": "https://www.zsagent01.com/tide/install-river-mud-channel-tide.sh",
+  "install_command": "curl -fsSL https://www.zsagent01.com/tide/install-river-mud-channel-tide.sh | bash",
+  "skill_path": "river-mud-channel-tide/SKILL.md",
+  "entry_script": "river-mud-channel-tide/scripts/calculate_tide_route.py",
+  "example_prompt": "使用 $river-mud-channel-tide，计算2026-08-12、吃水18米适合过浅滩和需过航槽的时间。"
+}
