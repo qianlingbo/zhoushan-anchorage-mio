@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-08-14 18:15:56",
-  "lastChecked": "2026-08-14 18:15:56",
-  "lastSuccessfulFetch": "2026-08-14 18:15:56",
-  "updateWindow": "2026-08-14T18:00+08:00",
-  "publishTime": "2026年08月14日15时",
-  "publishCode": "2026081415",
+  "lastUpdated": "2026-08-14 21:42:19",
+  "lastChecked": "2026-08-14 21:42:19",
+  "lastSuccessfulFetch": "2026-08-14 21:42:19",
+  "updateWindow": "2026-08-14T21:00+08:00",
+  "publishTime": "2026年08月14日19时",
+  "publishCode": "2026081419",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴到多云，有时有阵雨或雷雨，雨量中等。明天阴到多云，中午转阴有阵雨或雷雨。雷雨时短时风雨较大。后天阴有时有阵雨或雷雨，雷雨时短时风雨较大，中午转阵雨。17日阴有时有阵雨。18日阴局部阵雨转阴到多云。<br><br>",
-      "Time": "2026081415",
-      "PreciseForecastTime": "2026年08月14日15时"
+      "Time": "2026081419",
+      "PreciseForecastTime": "2026年08月14日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴到多云，有时有阵雨或雷雨，夜里起雨量中等。明天阴到多云，中午转阴有阵雨或雷雨。雷雨时短时风雨较大。后天阴有时有阵雨或雷雨，雷雨时短时风雨较大，中午转阵雨。17日阴有时有阵雨。18日阴局部阵雨转阴到多云。<br><br>",
-      "Time": "2026081415",
-      "PreciseForecastTime": "2026年08月14日15时"
+      "Time": "2026081419",
+      "PreciseForecastTime": "2026年08月14日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴到多云，有时有阵雨或雷雨，雨量中等。明天阴到多云，中午转阴有阵雨或雷雨。雷雨时短时风雨较大。后天阴有时有阵雨或雷雨，雷雨时短时风雨较大，中午转阵雨。17日阴有时有阵雨。18日阴局部阵雨转阴到多云。<br><br>",
-      "Time": "2026081415",
-      "PreciseForecastTime": "2026年08月14日15时"
+      "Time": "2026081419",
+      "PreciseForecastTime": "2026年08月14日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴到多云，有时有阵雨或雷雨，雨量中等。明天阴到多云，中午转阴有阵雨或雷雨。雷雨时短时风雨较大。后天阴有时有阵雨或雷雨，雷雨时短时风雨较大，中午转阵雨。17日阴有时有阵雨。18日阴局部阵雨转阴到多云。<br><br>",
-      "Time": "2026081415",
-      "PreciseForecastTime": "2026年08月14日15时"
+      "Time": "2026081419",
+      "PreciseForecastTime": "2026年08月14日19时"
     }
   }
 };
