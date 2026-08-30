@@ -3,13 +3,10 @@
   "use strict";
 
   var DATA_URL = "./data/latest.json";
-  var GSAP_URL = "https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js";
 
   var currentLanguage = "zh";
   var currentData = null;
   var currentError = null;
-  var gsapRequested = false;
-  var introAnimated = false;
 
   var I18N = {
     zh: {
@@ -29,7 +26,6 @@
       loaded: "已加载",
       weatherSummary: "天气概况：",
       tideCurrentLink: "舟山海域潮汐潮流信息发布",
-      skillLink: "安装 Agent 技能",
       dataReadFailed: "数据读取失败",
       readFailed: "读取失败",
       localDataUnavailable: "本地数据暂不可用",
@@ -75,7 +71,6 @@
       loaded: "Loaded",
       weatherSummary: "Weather summary: ",
       tideCurrentLink: "Zhoushan sea-area tide and current information",
-      skillLink: "Install Agent skill",
       dataReadFailed: "Failed to read data",
       readFailed: "Read failed",
       localDataUnavailable: "Local data unavailable",
@@ -223,79 +218,6 @@
       });
     });
     updateLanguageButtons();
-  }
-
-  /* Motion */
-
-  function prefersReducedMotion() {
-    return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  }
-
-  function canAnimate() {
-    return Boolean(window.gsap) && !prefersReducedMotion();
-  }
-
-  function loadMotionRuntime() {
-    if (prefersReducedMotion() || gsapRequested || window.gsap) {
-      if (window.gsap) animateDashboardIntro();
-      return;
-    }
-
-    gsapRequested = true;
-    var script = document.createElement("script");
-    script.src = GSAP_URL;
-    script.async = true;
-    script.onload = function () {
-      window.gsap.defaults({ ease: "power2.out", overwrite: "auto" });
-      animateDashboardIntro();
-    };
-    document.head.appendChild(script);
-  }
-
-  function animateDashboardIntro() {
-    if (!canAnimate() || introAnimated) return;
-    if (window.performance && window.performance.now && window.performance.now() > 1800) {
-      introAnimated = true;
-      return;
-    }
-
-    introAnimated = true;
-    window.gsap.timeline({ defaults: { duration: 0.58, ease: "power3.out", overwrite: "auto" } })
-      .from(".hero > div:first-child", { autoAlpha: 0, y: 16 }, 0)
-      .from(".meta-card", { autoAlpha: 0, y: 14, scale: 0.985 }, 0.06)
-      .from(".controls", { autoAlpha: 0, y: 10, scale: 0.99 }, 0.14);
-  }
-
-  function animateCards() {
-    var cards = document.querySelectorAll(".anchor-card");
-    if (!canAnimate() || cards.length === 0) return;
-
-    window.gsap.from(cards, {
-      autoAlpha: 0,
-      y: 18,
-      scale: 0.985,
-      duration: 0.46,
-      ease: "power2.out",
-      stagger: { each: 0.045, from: "start" },
-      overwrite: "auto",
-      clearProps: "transform,opacity,visibility",
-    });
-  }
-
-  function setupMotionFeedback() {
-    document.querySelectorAll(".refresh-link, .language-button, .tide-current-link, .skill-banner a").forEach(function (el) {
-      el.addEventListener("pointerdown", function () {
-        if (!canAnimate()) return;
-        window.gsap.to(el, { scale: 0.97, duration: 0.12, ease: "power2.out", overwrite: "auto" });
-      });
-
-      ["pointerup", "pointerleave", "pointercancel"].forEach(function (eventName) {
-        el.addEventListener(eventName, function () {
-          if (!canAnimate()) return;
-          window.gsap.to(el, { scale: 1, duration: 0.22, ease: "power3.out", overwrite: "auto", clearProps: "transform" });
-        });
-      });
-    });
   }
 
   /* Helpers */
@@ -834,8 +756,6 @@
       var card = buildCard(name, data.anchors[name]);
       grid.appendChild(card);
     }
-
-    animateCards();
   }
 
   function renderError(error) {
@@ -853,13 +773,11 @@
     status.textContent = t("localDataUnavailable");
     weatherText.textContent = "";
     grid.innerHTML =
-      '<article class="anchor-card error-card">' +
-      "<h2>" + escapeHtml(t("dataReadFailed")) + "</h2>" +
-      "<p>" + escapeHtml(error.message) + "</p>" +
-      "<p>" + t("runScript") + "</p>" +
+      '<article class="anchor-card" style="grid-column:1/-1;padding:40px;text-align:center">' +
+      '<h2 style="margin:0 0 12px;font-size:20px">' + escapeHtml(t("dataReadFailed")) + "</h2>" +
+      '<p style="color:var(--muted)">' + escapeHtml(error.message) + "</p>" +
+      '<p style="color:var(--muted);margin-top:12px">' + t("runScript") + "</p>" +
       "</article>";
-
-    animateCards();
   }
 
   function refresh() {
@@ -869,10 +787,8 @@
   }
 
   setupLanguageSwitcher();
-  setupMotionFeedback();
   applyStaticTranslations();
   setLoadingText();
-  loadMotionRuntime();
 
   document.getElementById("refresh-button").addEventListener("click", function () {
     if (window.__ANCHOR_DATA__) {
