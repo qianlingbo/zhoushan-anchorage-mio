@@ -48,91 +48,35 @@
           </div>
         </section>
 
-        <section class="metrics" aria-label="当日摘要">
-          <article class="metric-card metric-accent">
-            <span class="metric-label">可通航窗口</span>
-            <strong id="window-count">03</strong><span class="metric-unit">段</span>
-            <small id="window-total">合计 05h 40m</small>
-          </article>
-          <article class="metric-card">
-            <span class="metric-label">首个窗口</span>
-            <strong class="metric-time" id="first-window">04:12</strong>
-            <small id="first-window-note">流向 · 西北 → 东南</small>
-          </article>
-          <article class="metric-card">
-            <span class="metric-label">航行友好时段</span>
-            <strong class="metric-time" id="light-window">06:21 — 18:07</strong>
-            <small>曙光始 · 暮光终（Nautical）</small>
-          </article>
-          <article class="metric-card metric-weather">
-            <span class="metric-label">C1 流速预警</span>
-            <strong><span class="warning-ring"></span><span id="flow-label">缓流</span></strong>
-            <small>目标区间：1.0 — 1.5 kn</small>
-          </article>
-        </section>
-
-        <section class="rules-section" aria-labelledby="rules-title">
-          <div class="section-heading">
-            <div><p class="eyebrow"><span>02</span> SAFETY RULES / PDF EXTRACT</p><h2 id="rules-title">通航安全规则速查</h2></div>
-            <div class="regulation-alert"><span class="alert-dot"></span>文件载明有效期已届满 · 请核验最新公告</div>
-          </div>
-          <div class="rule-grid">
-            <article class="rule-card rule-card-main">
-              <span class="rule-index">A / 灌门、龟山航门</span>
-              <h3>大吨位船舶<br /><em>只走缓流，不走夜航</em></h3>
-              <ul>
-                <li>选择流速 <b>小于 1.5 节</b> 的缓流时段</li>
-                <li>禁止追越、调头、锚泊；禁止大吨位船舶交会</li>
-                <li>夜间禁止大吨位船舶、大型拖带船组航行</li>
-              </ul>
-            </article>
-            <article class="rule-card">
-              <span class="rule-index">B / 进入前检查</span>
-              <h3>备车 · 备锚 · 备妥通信</h3>
-              <ul>
-                <li>检查通导、主推进、舵机、锚机等关键设备</li>
-                <li>确认通航等级、桥梁净空、富余水深与高度</li>
-                <li>建议申请引航、拖轮助航及交通管制</li>
-              </ul>
-            </article>
-            <article class="rule-card rule-card-weather">
-              <span class="rule-index">C / 气象禁入阈值</span>
-              <h3>能见度 / 风力<br /><em>触线即停</em></h3>
-              <div class="threshold"><span>能见度 &lt; 2000 m<br /><small>或风力 &gt; 8 级</small></span><b>≥10 万载重吨<br />或船长 ≥250 m</b></div>
-              <div class="threshold threshold-danger"><span>能见度 &lt; 1000 m<br /><small>或风力 &gt; 9 级</small></span><b>所有船舶<br />禁止驶入</b></div>
-            </article>
-          </div>
-          <div class="rule-foot"><span>依据：《舟山灌门航道、龟山航道通航安全管理规定》（浙江海事局公告第4号，2020-10-30）</span><span>大吨位：载货 &gt; 1 万 DWT · 空载 &gt; 3 万 DWT　|　大型拖带：拖带长度 &gt; 200 m</span></div>
-        </section>
-
         <section class="timeline-section">
           <div class="section-heading">
-            <div><p class="eyebrow"><span>03</span> 24-HOUR ROUTE AXIS</p><h2>全天路线时间轴</h2></div>
-            <div class="legend"><span><i class="legend-safe"></i>可通航（1 &lt; V ≤ 1.5 kn）</span><span><i class="legend-twilight"></i>航海曙暮光</span><span><i class="legend-day"></i>日照</span></div>
+            <div><p class="eyebrow"><span>02</span> 24-HOUR ROUTE AXIS</p><h2>全天路线时间轴</h2></div>
+            <div class="legend"><span><i class="legend-safe"></i>允许通过</span><span><i class="legend-blocked"></i>缓流但夜间禁行</span><span><i class="legend-twilight"></i>航海曙暮光</span><span><i class="legend-day"></i>日照</span></div>
           </div>
 
           <article class="timeline-card">
             <div class="timeline-topline"><span id="timeline-date">THU · 01 JAN 2026</span><span class="axis-caption">LOCAL TIME · CST (UTC+8)</span></div>
             <div class="timeline-wrap" id="timeline-wrap">
               <div class="timeline-labels" id="timeline-labels"></div>
-              <div class="route-track" id="route-track"><div class="track-base"></div><div class="twilight-layer" id="twilight-layer"></div><div class="safe-layer" id="safe-layer"></div><div class="ship-marker" id="ship-marker"><span>大型船舶</span><b>▰</b></div></div>
+              <div class="timeline-row light-row"><span class="row-label"><i>光</i>光照条件</span><div class="route-track light-track" id="light-track"><div class="twilight-layer" id="twilight-layer"></div></div></div>
+              <div class="timeline-row passage-row"><span class="row-label"><i>航</i>通航判定</span><div class="route-track passage-track" id="route-track"><div class="track-base"></div><div class="blocked-layer" id="blocked-layer"></div><div class="safe-layer" id="safe-layer"></div><div class="ship-marker" id="ship-marker"><span>大型船舶</span><b>◆</b></div></div></div>
               <div class="sun-markers" id="sun-markers"></div>
               <div class="axis-ticks" id="axis-ticks"></div>
             </div>
             <div class="time-callouts" id="time-callouts"></div>
-            <div class="timeline-foot"><span><b class="north-star">✦</b> 灯塔基准：马岙航道窄口处 C1 站</span><span>窗口需结合船舶吃水、风浪与 VTS 指令复核</span></div>
+            <div class="timeline-foot"><span><b class="north-star">✦</b> 允许通过 = 1 节 &lt; V ≤ 1.5 节，且位于航海曙光始至暮光终之间</span><span>窗口仍需结合船舶吃水、风浪与 VTS 指令复核</span></div>
           </article>
         </section>
 
         <section class="below-grid">
           <article class="windows-card">
-            <div class="card-heading"><div><p class="eyebrow"><span>04</span> SAFE WINDOWS</p><h2>缓流窗口清单</h2></div><a href="https://www.zsagent01.com/tide/" target="_blank" rel="noreferrer" class="external-link">zsagent01 ↗</a></div>
+            <div class="card-heading"><div class="icon-heading"><span class="route-icon route-icon-safe">航</span><div><p class="eyebrow"><span>03</span> SAFE WINDOWS</p><h2>允许通过时间</h2></div></div><a href="https://www.zsagent01.com/tide/" target="_blank" rel="noreferrer" class="external-link">潮汐工具 ↗</a></div>
             <div class="window-list" id="window-list"></div>
-            <div class="card-note"><span class="note-mark">i</span><p>区间为流速落在 <b>1 节 &lt; V ≤ 1.5 节</b> 的预测时段；窗口边界保留 10 分钟安全裕度。</p></div>
+            <div class="card-note"><span class="note-mark">i</span><p>只列出同时满足 <b>缓流条件</b> 与 <b>航海曙暮光/日照条件</b> 的交集时段。</p></div>
           </article>
 
           <article class="sun-card">
-            <div class="card-heading"><div><p class="eyebrow"><span>05</span> LIGHT CONDITIONS</p><h2>日照与航海曙暮光</h2></div><a href="https://www.timeanddate.com/sun/china/ningbo?month=1&amp;year=2026" target="_blank" rel="noreferrer" class="external-link">timeanddate ↗</a></div>
+            <div class="card-heading"><div class="icon-heading"><span class="route-icon route-icon-light">光</span><div><p class="eyebrow"><span>04</span> LIGHT CONDITIONS</p><h2>日照与航海曙暮光</h2></div></div><a href="https://www.timeanddate.com/sun/china/ningbo?month=1&amp;year=2026" target="_blank" rel="noreferrer" class="external-link">timeanddate ↗</a></div>
             <div class="sun-list">
               <div class="sun-row"><span class="sun-icon dawn">◒</span><div><b>曙光始 · sunrise start</b><small>Nautical Twilight · 太阳中心 -12°</small></div><strong id="sunrise-time">06:21</strong></div>
               <div class="sun-row"><span class="sun-icon rise">◉</span><div><b>日出</b><small>太阳上缘越过地平线</small></div><strong id="sunrise-real">06:49</strong></div>
@@ -144,12 +88,27 @@
         </section>
 
         <section class="year-section">
-          <div class="section-heading"><div><p class="eyebrow"><span>06</span> YEAR AT A GLANCE</p><h2>2026 全年窗口分布</h2></div><div class="year-summary" id="year-summary">365 天 · 1,096 个窗口</div></div>
+          <div class="section-heading"><div><p class="eyebrow"><span>05</span> YEAR AT A GLANCE</p><h2>2026 全年允许窗口</h2></div><div class="year-summary" id="year-summary">365 天 · 允许窗口统计</div></div>
           <article class="year-card">
             <div class="month-strip" id="month-strip"></div>
             <div class="year-grid" id="year-grid" aria-label="2026年全年日期窗口概览"></div>
-            <div class="year-legend"><span><i class="day-dot dot-high"></i>3 段窗口</span><span><i class="day-dot dot-mid"></i>2 段窗口</span><span><i class="day-dot dot-low"></i>1 段窗口</span><span class="legend-tip">点击任意日期载入全天路线轴</span></div>
+            <div class="year-legend"><span><i class="day-dot dot-high"></i>3 段</span><span><i class="day-dot dot-mid"></i>2 段</span><span><i class="day-dot dot-low"></i>1 段</span><span><i class="day-dot dot-none"></i>无窗口</span><span class="legend-tip">点击日期载入全天路线轴</span></div>
           </article>
+        </section>
+
+        <section class="rules-section" aria-labelledby="rules-title">
+          <div class="section-heading"><div><p class="eyebrow"><span>06</span> SAFETY RULES / PDF EXTRACT</p><h2 id="rules-title">通航安全规则速查</h2></div></div>
+          <div class="definition-grid" aria-label="船舶定义">
+            <article><span class="definition-icon">吨</span><div><b>大吨位船舶</b><p>1 万载重吨以上载有货物的船舶，或 3 万载重吨以上空载船舶。</p></div></article>
+            <article><span class="definition-icon">拖</span><div><b>大型拖带船组</b><p>拖船船尾至被拖物体后端的拖带长度超过 200 米。</p></div></article>
+            <article><span class="definition-icon">小</span><div><b>小型船舶</b><p>1000 载重吨及以下船舶。</p></div></article>
+          </div>
+          <div class="rule-grid">
+            <article class="rule-card rule-card-main"><span class="rule-index">A / 灌门、龟山航门</span><h3>只走缓流，不走夜航</h3><ul><li>选择流速 <b>小于 1.5 节</b> 的缓流时段</li><li>禁止追越、调头、锚泊；禁止大吨位船舶交会</li><li>大吨位船舶、大型拖带船组禁止夜间航行</li></ul></article>
+            <article class="rule-card"><span class="rule-index">B / 航行保障</span><h3>备车 · 备锚 · 加强瞭望</h3><ul><li>船长在驾驶台、轮机长在机舱值班</li><li>及早与过往船舶通报船舶动态</li><li>申请引航、拖轮助航及交通管制</li></ul></article>
+            <article class="rule-card rule-card-weather"><span class="rule-index">C / 气象禁入阈值</span><h3>能见度 / 风力触线即停</h3><div class="threshold"><span>能见度 &lt; 2000 m<br /><small>或风力 &gt; 8 级</small></span><b>≥10 万载重吨、船长 ≥250 m<br />及大型拖带船组禁入</b></div><div class="threshold threshold-danger"><span>能见度 &lt; 1000 m<br /><small>或风力 &gt; 9 级</small></span><b>所有船舶禁止驶入</b></div></article>
+          </div>
+          <div class="rule-foot"><span>依据：《舟山灌门航道、龟山航道通航安全管理规定》（浙江海事局公告第 4 号）</span><span>大潮汛：农历初二及前后各两天、农历十七及前后各两天</span></div>
         </section>
       </main>
 

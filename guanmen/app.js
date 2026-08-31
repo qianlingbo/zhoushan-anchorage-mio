@@ -42,18 +42,24 @@ function makeDay(date) {
   const lengths = [105 + Math.round((Math.sin(doy/29)+1)*13), 118 + Math.round((Math.cos(doy/21)+1)*12), 112 + Math.round((Math.sin(doy/37)+1)*14)];
   const directions = ['西北 → 东南','东南 → 西北','西北 → 东南'];
   const count = 1 + Math.floor(((Math.sin(doy / 18) + 1) / 2) * 3) % 3;
-  const windows = starts.map((start, i) => ({ start, end: Math.min(start + lengths[i], 1438), duration: lengths[i], direction: directions[i], peak: +(1.08 + ((Math.sin(doy*.27+i)+1)/2)*.34).toFixed(2) })).slice(0, count).filter(w => w.start < 1440 && w.end > 0);
   const sun = solarTimes(date);
-  return { iso: isoFromDate(date), date, windows, sun, doy, phase };
+  const rawWindows = starts.map((start, i) => ({ start, end: Math.min(start + lengths[i], 1438), duration: lengths[i], direction: directions[i], peak: +(1.08 + ((Math.sin(doy*.27+i)+1)/2)*.34).toFixed(2) })).slice(0, count).filter(w => w.start < 1440 && w.end > 0);
+  const windows = rawWindows.map(w => ({ ...w, start: Math.max(w.start, sun.dawn), end: Math.min(w.end, sun.dusk) })).filter(w => w.end > w.start).map(w => ({ ...w, duration: w.end - w.start }));
+  const blockedWindows = rawWindows.flatMap(w => {
+    const blocked = [];
+    if (w.start < sun.dawn) blocked.push({ ...w, end: Math.min(w.end, sun.dawn), duration: Math.min(w.end, sun.dawn) - w.start });
+    if (w.end > sun.dusk) blocked.push({ ...w, start: Math.max(w.start, sun.dusk), duration: w.end - Math.max(w.start, sun.dusk) });
+    return blocked.filter(part => part.duration > 0);
+  });
+  return { iso: isoFromDate(date), date, windows, rawWindows, blockedWindows, sun, doy, phase };
 }
 const days = Array.from({length:365}, (_,i) => makeDay(new Date(YEAR,0,i+1)));
 let selected = days[0];
 
 const els = {
   picker: document.querySelector('#date-picker'), readable: document.querySelector('#date-readable'), timelineDate: document.querySelector('#timeline-date'),
-  count: document.querySelector('#window-count'), total: document.querySelector('#window-total'), first: document.querySelector('#first-window'), firstNote: document.querySelector('#first-window-note'), light: document.querySelector('#light-window'),
   sunrise: document.querySelector('#sunrise-time'), sunriseReal: document.querySelector('#sunrise-real'), sunsetReal: document.querySelector('#sunset-real'), sunset: document.querySelector('#sunset-time'),
-  safeLayer: document.querySelector('#safe-layer'), twilightLayer: document.querySelector('#twilight-layer'), labels: document.querySelector('#timeline-labels'), ticks: document.querySelector('#axis-ticks'), markers: document.querySelector('#sun-markers'), callouts: document.querySelector('#time-callouts'), list: document.querySelector('#window-list'), ship: document.querySelector('#ship-marker'), yearGrid: document.querySelector('#year-grid'), monthStrip: document.querySelector('#month-strip'), summary: document.querySelector('#year-summary')
+  safeLayer: document.querySelector('#safe-layer'), blockedLayer: document.querySelector('#blocked-layer'), twilightLayer: document.querySelector('#twilight-layer'), labels: document.querySelector('#timeline-labels'), ticks: document.querySelector('#axis-ticks'), markers: document.querySelector('#sun-markers'), callouts: document.querySelector('#time-callouts'), list: document.querySelector('#window-list'), ship: document.querySelector('#ship-marker'), yearGrid: document.querySelector('#year-grid'), monthStrip: document.querySelector('#month-strip'), summary: document.querySelector('#year-summary')
 };
 const pct = mins => `${Math.max(0,Math.min(100, mins / 1440 * 100))}%`;
 
@@ -61,31 +67,30 @@ function renderTimeline(day) {
   const sun = day.sun;
   els.labels.innerHTML = [0,6,12,18,24].map(h => `<span style="left:${h/24*100}%">${pad(h)}:00</span>`).join('');
   els.ticks.innerHTML = Array.from({length:25}, (_,h) => `<span style="left:${h/24*100}%">${pad(h)}</span>`).join('');
-  els.twilightLayer.innerHTML = `<div class="twilight-segment" style="left:0;width:${pct(sun.dawn)}"></div><div class="day-segment" style="left:${pct(sun.sunrise)};width:${pct(sun.sunset-sun.sunrise)}"></div><div class="twilight-segment" style="left:${pct(sun.sunset)};width:${pct(sun.dusk-sun.sunset)}"></div>`;
+  els.twilightLayer.innerHTML = `<div class="night-segment" style="left:0;width:${pct(sun.dawn)}"><span>夜间禁行</span></div><div class="twilight-segment" style="left:${pct(sun.dawn)};width:${pct(sun.sunrise-sun.dawn)}"></div><div class="day-segment" style="left:${pct(sun.sunrise)};width:${pct(sun.sunset-sun.sunrise)}"><span>日照</span></div><div class="twilight-segment" style="left:${pct(sun.sunset)};width:${pct(sun.dusk-sun.sunset)}"></div><div class="night-segment" style="left:${pct(sun.dusk)};width:${pct(1440-sun.dusk)}"><span>夜间禁行</span></div>`;
   els.safeLayer.innerHTML = day.windows.map(w => `<div class="safe-segment" style="left:${pct(w.start)};width:${pct(w.duration)}" title="${fmtTime(w.start)}–${fmtTime(w.end)}"></div>`).join('');
+  els.blockedLayer.innerHTML = day.blockedWindows.map(w => `<div class="blocked-segment" style="left:${pct(w.start)};width:${pct(w.duration)}" title="${fmtTime(w.start)}–${fmtTime(w.end)} 缓流但夜间禁行"></div>`).join('');
   els.markers.innerHTML = `<span class="sun-marker" style="left:${pct(sun.dawn)}">曙光始 ${fmtTime(sun.dawn)}</span><span class="sun-marker end" style="left:${pct(sun.dusk)}">暮光终 ${fmtTime(sun.dusk)}</span>`;
-  const middle = day.windows[0].start + day.windows[0].duration / 2;
-  els.ship.style.left = pct(middle);
-  els.callouts.innerHTML = day.windows.map((w,i) => `<span class="time-callout"><b>窗口 ${pad(i+1)}</b>${fmtTime(w.start)} — ${fmtTime(w.end)}</span>`).join('');
+  if (day.windows.length) { const middle = day.windows[0].start + day.windows[0].duration / 2; els.ship.style.left = pct(middle); els.ship.hidden = false; } else { els.ship.hidden = true; }
+  els.callouts.innerHTML = day.windows.length ? day.windows.map((w,i) => `<span class="time-callout"><b>允许 ${pad(i+1)}</b>${fmtTime(w.start)} — ${fmtTime(w.end)}</span>`).join('') : '<span class="time-callout no-passage"><b>当日无允许通过窗口</b>缓流时段均在夜间或无符合条件的缓流窗口</span>';
 }
 function render(day) {
   selected = day;
-  const d = day.date, sun = day.sun, total = day.windows.reduce((a,w)=>a+w.duration,0);
+  const d = day.date, sun = day.sun;
   els.picker.value = day.iso; els.readable.textContent = `${YEAR}年${pad(d.getMonth()+1)}月${pad(d.getDate())}日 · ${weekNames[d.getDay()]}`;
   els.timelineDate.textContent = `${weekShort[d.getDay()]} · ${pad(d.getDate())} ${['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getMonth()]} ${YEAR}`;
-  els.count.textContent = pad(day.windows.length); els.total.textContent = `合计 ${fmtDuration(total)}`; els.first.textContent = fmtTime(day.windows[0].start); els.firstNote.textContent = `流向 · ${day.windows[0].direction}`;
-  els.light.textContent = `${fmtTime(sun.dawn)} — ${fmtTime(sun.dusk)}`; els.sunrise.textContent = fmtTime(sun.dawn); els.sunriseReal.textContent = fmtTime(sun.sunrise); els.sunsetReal.textContent = fmtTime(sun.sunset); els.sunset.textContent = fmtTime(sun.dusk);
-  els.list.innerHTML = day.windows.map((w,i) => `<div class="window-row"><div class="window-time">${fmtTime(w.start)}<br /><span>— ${fmtTime(w.end)}</span></div><div class="window-bar"><i style="width:${Math.min(100,w.duration/150*100)}%"></i></div><div class="window-direction"><b>${w.peak.toFixed(2)} kn peak</b>${w.direction}</div></div>`).join('');
+  els.sunrise.textContent = fmtTime(sun.dawn); els.sunriseReal.textContent = fmtTime(sun.sunrise); els.sunsetReal.textContent = fmtTime(sun.sunset); els.sunset.textContent = fmtTime(sun.dusk);
+  els.list.innerHTML = day.windows.length ? day.windows.map((w,i) => `<div class="window-row"><span class="window-status-icon">${i+1}</span><div class="window-time"><strong>${fmtTime(w.start)} — ${fmtTime(w.end)}</strong><small>${fmtDuration(w.duration)} · 航海曙暮光/日照内</small></div><div class="window-direction"><b>${w.peak.toFixed(2)} kn</b>${w.direction}</div></div>`).join('') : '<div class="empty-window"><span>禁</span><div><b>当日无允许通过时间</b><small>缓流窗口未与航海曙光始至暮光终重合</small></div></div>';
   renderTimeline(day); document.querySelectorAll('.year-day').forEach(b=>b.classList.toggle('selected', b.dataset.iso===day.iso));
 }
 
 function renderYearGrid() {
   const first = new Date(YEAR,0,1), startPad = first.getDay();
-  els.yearGrid.innerHTML = Array.from({length:startPad},()=>'<button class="year-day empty" aria-hidden="true"></button>').concat(days.map(day => `<button class="year-day dot-${day.windows.length===3?'high':day.windows.length===2?'mid':'low'}" data-iso="${day.iso}" title="${day.iso} · ${day.windows.length}段窗口"></button>`)).join('');
+  els.yearGrid.innerHTML = Array.from({length:startPad},()=>'<button class="year-day empty" aria-hidden="true"></button>').concat(days.map(day => `<button class="year-day dot-${day.windows.length===0?'none':day.windows.length===3?'high':day.windows.length===2?'mid':'low'}" data-iso="${day.iso}" title="${day.iso} · ${day.windows.length}段允许窗口"></button>`)).join('');
   els.yearGrid.addEventListener('click', e => { const b=e.target.closest('.year-day[data-iso]'); if(b) render(days.find(d=>d.iso===b.dataset.iso)); });
   els.monthStrip.innerHTML = monthNames.map((name,i)=>`<button data-month="${i}">${name}</button>`).join('');
   els.monthStrip.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => { const m=Number(btn.dataset.month), target=days.find(d=>d.date.getMonth()===m); render(target); els.monthStrip.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===btn)); target && document.querySelector(`[data-iso="${target.iso}"]`)?.scrollIntoView({block:'nearest',inline:'center'}); }));
-  const totalWindows = days.reduce((a,d)=>a+d.windows.length,0); els.summary.textContent = `365 天 · ${totalWindows.toLocaleString('en-US')} 个窗口`;
+  const totalWindows = days.reduce((a,d)=>a+d.windows.length,0); els.summary.textContent = `365 天 · ${totalWindows.toLocaleString('en-US')} 个允许窗口`;
 }
 function shift(delta){ const idx=days.findIndex(d=>d.iso===selected.iso); render(days[Math.max(0,Math.min(days.length-1,idx+delta))]); }
 const todayInYear = () => { const today = new Date(); return days.find(day => day.iso === isoFromDate(today)) || days[0]; };
