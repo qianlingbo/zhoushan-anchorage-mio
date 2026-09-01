@@ -27,3 +27,7 @@ body{background:radial-gradient(circle at 84% -8%,#cce9e2 0,transparent min(34re
 @media(max-width:1000px){.month-strip{grid-template-columns:repeat(6,1fr)}.year-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:700px){.month-strip{grid-template-columns:repeat(4,1fr)}.year-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:430px){.year-card{padding:15px 12px}.year-grid{grid-template-columns:1fr}.year-day{font-size:9px}}
+
+/* Compact contact card */
+.contact-float{right:18px;bottom:18px;width:174px;padding:11px 13px 10px;border-radius:10px}.contact-close{right:6px;top:4px;font-size:14px}.contact-orbit{font-size:7px;margin-bottom:7px}.contact-float>strong{font-size:12px;letter-spacing:.06em}.contact-float>span:not(.contact-orbit){font-size:8px;margin-top:3px}.wechat-line{grid-template-columns:19px 1fr;column-gap:6px;margin-top:9px;padding-top:8px}.wechat-line i{width:19px;height:19px;border-radius:5px;font-size:10px}.wechat-line b{font-size:11px}.wechat-line small{font-size:7px}
+@media(max-width:620px){.contact-float{right:8px;bottom:8px;width:162px;padding:10px 12px 9px}}
