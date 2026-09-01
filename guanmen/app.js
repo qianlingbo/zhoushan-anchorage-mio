@@ -32,18 +32,10 @@ function solarTimes(date) {
 }
 
 function makeDay(date) {
-  const doy = dayOfYear(date), phase = (doy * 0.61803398875) % 1;
-  const tidePhase = ((doy * 0.101 + Math.sin(doy/31)*.23) % 1 + 1) % 1;
-  const starts = [
-    190 + tidePhase * 45 + Math.sin(doy/17)*10,
-    650 + ((tidePhase + .37) % 1) * 70 + Math.cos(doy/23)*12,
-    1160 + ((tidePhase + .68) % 1) * 65 + Math.sin(doy/11)*9
-  ].map(v => Math.round(v));
-  const lengths = [105 + Math.round((Math.sin(doy/29)+1)*13), 118 + Math.round((Math.cos(doy/21)+1)*12), 112 + Math.round((Math.sin(doy/37)+1)*14)];
-  const directions = ['西北 → 东南','东南 → 西北','西北 → 东南'];
-  const count = 1 + Math.floor(((Math.sin(doy / 18) + 1) / 2) * 3) % 3;
+  const iso = isoFromDate(date);
   const sun = solarTimes(date);
-  const rawWindows = starts.map((start, i) => ({ start, end: Math.min(start + lengths[i], 1438), duration: lengths[i], direction: directions[i], peak: +(1.08 + ((Math.sin(doy*.27+i)+1)/2)*.34).toFixed(2) })).slice(0, count).filter(w => w.start < 1440 && w.end > 0);
+  const sourceWindows = window.C1_WINDOWS_2026?.[iso] || [];
+  const rawWindows = sourceWindows.map(([start, end]) => ({ start, end, duration: end - start }));
   const windows = rawWindows.map(w => ({ ...w, start: Math.max(w.start, sun.dawn), end: Math.min(w.end, sun.dusk) })).filter(w => w.end > w.start).map(w => ({ ...w, duration: w.end - w.start }));
   const blockedWindows = rawWindows.flatMap(w => {
     const blocked = [];
@@ -51,7 +43,7 @@ function makeDay(date) {
     if (w.end > sun.dusk) blocked.push({ ...w, start: Math.max(w.start, sun.dusk), duration: w.end - Math.max(w.start, sun.dusk) });
     return blocked.filter(part => part.duration > 0);
   });
-  return { iso: isoFromDate(date), date, windows, rawWindows, blockedWindows, sun, doy, phase };
+  return { iso, date, windows, rawWindows, blockedWindows, sun };
 }
 const days = Array.from({length:365}, (_,i) => makeDay(new Date(YEAR,0,i+1)));
 let selected = days[0];
@@ -72,7 +64,10 @@ function renderTimeline(day) {
   els.blockedLayer.innerHTML = day.blockedWindows.map(w => `<div class="blocked-segment" style="left:${pct(w.start)};width:${pct(w.duration)}" title="${fmtTime(w.start)}–${fmtTime(w.end)} 缓流但夜间禁行"></div>`).join('');
   els.markers.innerHTML = `<span class="sun-marker" style="left:${pct(sun.dawn)}">曙光始 ${fmtTime(sun.dawn)}</span><span class="sun-marker end" style="left:${pct(sun.dusk)}">暮光终 ${fmtTime(sun.dusk)}</span>`;
   if (day.windows.length) { const middle = day.windows[0].start + day.windows[0].duration / 2; els.ship.style.left = pct(middle); els.ship.hidden = false; } else { els.ship.hidden = true; }
-  els.callouts.innerHTML = day.windows.length ? day.windows.map((w,i) => `<span class="time-callout"><b>允许 ${pad(i+1)}</b>${fmtTime(w.start)} — ${fmtTime(w.end)}</span>`).join('') : '<span class="time-callout no-passage"><b>当日无允许通过窗口</b>缓流时段均在夜间或无符合条件的缓流窗口</span>';
+  els.callouts.innerHTML = day.rawWindows.length ? day.rawWindows.map((w,i) => {
+    const allowed = w.end > sun.dawn && w.start < sun.dusk;
+    return `<span class="time-callout${allowed ? '' : ' blocked-callout'}"><b>${allowed ? '允许' : '夜禁'} ${pad(i+1)}</b>${fmtTime(w.start)} — ${fmtTime(w.end)}</span>`;
+  }).join('') : '<span class="time-callout no-passage"><b>当日无缓流窗口</b>源站没有符合流速 ≤ 1.5 节的时段</span>';
 }
 function render(day) {
   selected = day;
@@ -80,7 +75,7 @@ function render(day) {
   els.picker.value = day.iso; els.readable.textContent = `${YEAR}年${pad(d.getMonth()+1)}月${pad(d.getDate())}日 · ${weekNames[d.getDay()]}`;
   els.timelineDate.textContent = `${weekShort[d.getDay()]} · ${pad(d.getDate())} ${['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getMonth()]} ${YEAR}`;
   els.sunrise.textContent = fmtTime(sun.dawn); els.sunriseReal.textContent = fmtTime(sun.sunrise); els.sunsetReal.textContent = fmtTime(sun.sunset); els.sunset.textContent = fmtTime(sun.dusk);
-  els.list.innerHTML = day.windows.length ? day.windows.map((w,i) => `<div class="window-row"><span class="window-status-icon">${i+1}</span><div class="window-time"><strong>${fmtTime(w.start)} — ${fmtTime(w.end)}</strong><small>${fmtDuration(w.duration)} · 航海曙暮光/日照内</small></div><div class="window-direction"><b>${w.peak.toFixed(2)} kn</b>${w.direction}</div></div>`).join('') : '<div class="empty-window"><span>禁</span><div><b>当日无允许通过时间</b><small>缓流窗口未与航海曙光始至暮光终重合</small></div></div>';
+  els.list.innerHTML = day.windows.length ? day.windows.map((w,i) => `<div class="window-row"><span class="window-status-icon">${i+1}</span><div class="window-time"><strong>${fmtTime(w.start)} — ${fmtTime(w.end)}</strong><small>${fmtDuration(w.duration)} · 航海曙暮光/日照内</small></div><div class="window-direction"><b>≤ 1.5 kn</b>C1 源站预报</div></div>`).join('') : '<div class="empty-window"><span>禁</span><div><b>当日无允许通过时间</b><small>缓流窗口未与航海曙光始至暮光终重合</small></div></div>';
   renderTimeline(day); document.querySelectorAll('.year-day').forEach(b=>b.classList.toggle('selected', b.dataset.iso===day.iso));
 }
 
@@ -98,4 +93,3 @@ document.querySelector('#prev-day').addEventListener('click',()=>shift(-1)); doc
 els.picker.addEventListener('change', e => { const day=days.find(d=>d.iso===e.target.value); if(day) render(day); });
 document.querySelector('.contact-close')?.addEventListener('click', e => e.currentTarget.closest('.contact-float').classList.add('is-hidden'));
 renderYearGrid(); render(todayInYear());
-
