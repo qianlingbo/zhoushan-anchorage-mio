@@ -62,7 +62,7 @@ function renderTimeline(day) {
   els.twilightLayer.innerHTML = `<div class="night-segment" style="left:0;width:${pct(sun.dawn)}"><span>夜间禁行</span></div><div class="twilight-segment" style="left:${pct(sun.dawn)};width:${pct(sun.sunrise-sun.dawn)}"></div><div class="day-segment" style="left:${pct(sun.sunrise)};width:${pct(sun.sunset-sun.sunrise)}"><span>日照</span></div><div class="twilight-segment" style="left:${pct(sun.sunset)};width:${pct(sun.dusk-sun.sunset)}"></div><div class="night-segment" style="left:${pct(sun.dusk)};width:${pct(1440-sun.dusk)}"><span>夜间禁行</span></div>`;
   els.safeLayer.innerHTML = day.windows.map(w => `<div class="safe-segment" style="left:${pct(w.start)};width:${pct(w.duration)}" title="${fmtTime(w.start)}–${fmtTime(w.end)}"></div>`).join('');
   els.blockedLayer.innerHTML = day.blockedWindows.map(w => `<div class="blocked-segment" style="left:${pct(w.start)};width:${pct(w.duration)}" title="${fmtTime(w.start)}–${fmtTime(w.end)} 缓流但夜间禁行"></div>`).join('');
-  els.markers.innerHTML = `<span class="sun-marker" style="left:${pct(sun.dawn)}">曙光始 ${fmtTime(sun.dawn)}</span><span class="sun-marker end" style="left:${pct(sun.dusk)}">暮光终 ${fmtTime(sun.dusk)}</span>`;
+  els.markers.innerHTML = `<span class="sun-marker" style="left:${pct(sun.dawn)}"><span>曙光始 ${fmtTime(sun.dawn)}</span></span><span class="sun-marker end" style="left:${pct(sun.dusk)}"><span>暮光终 ${fmtTime(sun.dusk)}</span></span>`;
   if (day.windows.length) { const middle = day.windows[0].start + day.windows[0].duration / 2; els.ship.style.left = pct(middle); els.ship.hidden = false; } else { els.ship.hidden = true; }
   els.callouts.innerHTML = day.rawWindows.length ? day.rawWindows.map((w,i) => {
     const allowed = w.end > sun.dawn && w.start < sun.dusk;
