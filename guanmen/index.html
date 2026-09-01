@@ -33,8 +33,21 @@
             <p class="hero-note">马岙航道窄口处 · C1 站 · 缓流通航窗口</p>
           </div>
           <div class="hero-aside">
-            <div class="compass" aria-hidden="true"><span>N</span><i></i><span>E</span><span>S</span><span>W</span></div>
-            <p>以 C1 流速 <b>V ≤ 1.5 节</b> 的缓流时段为基础，再与航海曙暮光取交集。下方为全天路线轴叠加视图。</p>
+            <article class="agent-skill-card" aria-labelledby="agent-skill-title">
+              <div class="skill-card-top">
+                <span class="agent-orb" aria-hidden="true">AI</span>
+                <div><small>AGENT SKILL / DATE API</small><strong id="agent-skill-title">灌门航窗查询</strong></div>
+                <span class="skill-live"><i></i> LIVE</span>
+              </div>
+              <p>让 Codex、Hermes、OpenClaw 等 Agent 直接获取某日允许过灌门时间。</p>
+              <code>GET /api/2026-09-01.json</code>
+              <div class="skill-actions">
+                <a class="skill-primary" href="skill/" aria-label="打开灌门航窗 Agent Skill 安装指南">安装 Skill <span>↓</span></a>
+                <a href="api/2026-09-01.json" target="_blank" rel="noreferrer">接口示例 ↗</a>
+              </div>
+              <div class="skill-agents"><span>CODEX</span><span>HERMES</span><span>OPENCLAW</span></div>
+            </article>
+            <p class="hero-method">判定口径：C1 流速 <b>V ≤ 1.5 节</b>，并位于航海曙光始至暮光终之间。</p>
           </div>
         </section>
 
