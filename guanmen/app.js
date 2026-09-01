@@ -76,15 +76,27 @@ function render(day) {
   els.timelineDate.textContent = `${weekShort[d.getDay()]} · ${pad(d.getDate())} ${['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getMonth()]} ${YEAR}`;
   els.sunrise.textContent = fmtTime(sun.dawn); els.sunriseReal.textContent = fmtTime(sun.sunrise); els.sunsetReal.textContent = fmtTime(sun.sunset); els.sunset.textContent = fmtTime(sun.dusk);
   els.list.innerHTML = day.windows.length ? day.windows.map((w,i) => `<div class="window-row"><span class="window-status-icon">${i+1}</span><div class="window-time"><strong>${fmtTime(w.start)} — ${fmtTime(w.end)}</strong><small>${fmtDuration(w.duration)} · 航海曙暮光/日照内</small></div><div class="window-direction"><b>≤ 1.5 kn</b>C1 源站预报</div></div>`).join('') : '<div class="empty-window"><span>禁</span><div><b>当日无允许通过时间</b><small>缓流窗口未与航海曙光始至暮光终重合</small></div></div>';
-  renderTimeline(day); document.querySelectorAll('.year-day').forEach(b=>b.classList.toggle('selected', b.dataset.iso===day.iso));
+  renderTimeline(day);
+  document.querySelectorAll('.year-day').forEach(b=>b.classList.toggle('selected', b.dataset.iso===day.iso));
+  els.monthStrip.querySelectorAll('button').forEach(b=>b.classList.toggle('active', Number(b.dataset.month)===d.getMonth()));
 }
 
 function renderYearGrid() {
-  const first = new Date(YEAR,0,1), startPad = first.getDay();
-  els.yearGrid.innerHTML = Array.from({length:startPad},()=>'<button class="year-day empty" aria-hidden="true"></button>').concat(days.map(day => `<button class="year-day dot-${day.windows.length===0?'none':day.windows.length===3?'high':day.windows.length===2?'mid':'low'}" data-iso="${day.iso}" title="${day.iso} · ${day.windows.length}段允许窗口"></button>`)).join('');
+  const dotClass = day => day.windows.length===0 ? 'none' : day.windows.length>=3 ? 'high' : day.windows.length===2 ? 'mid' : 'low';
+  const weekdays = ['日','一','二','三','四','五','六'];
+  els.yearGrid.innerHTML = monthNames.map((name, month) => {
+    const monthDays = days.filter(day => day.date.getMonth()===month);
+    const blanks = Array.from({length:monthDays[0].date.getDay()},()=>'<span class="month-blank" aria-hidden="true"></span>').join('');
+    const dateButtons = monthDays.map(day => `<button class="year-day dot-${dotClass(day)}" data-iso="${day.iso}" title="${day.iso} · ${day.windows.length}段允许窗口"><span>${day.date.getDate()}</span></button>`).join('');
+    return `<section class="year-month" id="year-month-${month+1}" data-month-panel="${month}"><header><span>${pad(month+1)}</span><b>${name}</b><small>${monthDays.length} DAYS</small></header><div class="month-weekdays">${weekdays.map(w=>`<span>${w}</span>`).join('')}</div><div class="month-days">${blanks}${dateButtons}</div></section>`;
+  }).join('');
   els.yearGrid.addEventListener('click', e => { const b=e.target.closest('.year-day[data-iso]'); if(b) render(days.find(d=>d.iso===b.dataset.iso)); });
-  els.monthStrip.innerHTML = monthNames.map((name,i)=>`<button data-month="${i}">${name}</button>`).join('');
-  els.monthStrip.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => { const m=Number(btn.dataset.month), target=days.find(d=>d.date.getMonth()===m); render(target); els.monthStrip.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===btn)); target && document.querySelector(`[data-iso="${target.iso}"]`)?.scrollIntoView({block:'nearest',inline:'center'}); }));
+  els.monthStrip.innerHTML = monthNames.map((name,i)=>`<button data-month="${i}"><b>${pad(i+1)}</b><span>${name}</span></button>`).join('');
+  els.monthStrip.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const month = Number(btn.dataset.month), target = days.find(day=>day.date.getMonth()===month);
+    render(target);
+    document.querySelector(`[data-month-panel="${month}"]`)?.scrollIntoView({block:'nearest',behavior:'smooth'});
+  }));
   const totalWindows = days.reduce((a,d)=>a+d.windows.length,0); els.summary.textContent = `365 天 · ${totalWindows.toLocaleString('en-US')} 个允许窗口`;
 }
 function shift(delta){ const idx=days.findIndex(d=>d.iso===selected.iso); render(days[Math.max(0,Math.min(days.length-1,idx+delta))]); }
