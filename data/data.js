@@ -1,14 +1,14 @@
 window.__ANCHOR_DATA__ = {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-09-02 16:55:29",
-  "lastChecked": "2026-09-02 16:55:29",
-  "lastSuccessfulFetch": "2026-09-02 13:48:12",
-  "updateWindow": "2026-09-02T15:00+08:00",
-  "publishTime": "2026年09月02日11时",
-  "publishCode": "2026090211",
+  "status": "更新完成",
+  "lastUpdated": "2026-09-02 21:39:55",
+  "lastChecked": "2026-09-02 21:39:55",
+  "lastSuccessfulFetch": "2026-09-02 21:39:55",
+  "updateWindow": "2026-09-02T21:00+08:00",
+  "publishTime": "2026年09月02日19时",
+  "publishCode": "2026090219",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -254,9 +254,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有阵雨，雨量中到大，今天夜里到明天阴有阵雨。后天阴到多云有时有阵雨。5日多云到阴局部阵雨。6日阴有阵雨或雷雨。<br><br>",
-      "Time": "2026090211",
-      "PreciseForecastTime": "2026年09月02日11时"
+      "Text": "天气预报：今天阴有时有阵雨，局部雨量中到大。明天阴有阵雨。后天阴到多云有时有阵雨。5日多云到阴局部阵雨。6日阴有阵雨或雷雨。<br><br>",
+      "Time": "2026090219",
+      "PreciseForecastTime": "2026年09月02日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -502,9 +502,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有阵雨，雨量中到大，今天夜里到明天阴有阵雨。后天阴到多云有时有阵雨。5日多云到阴局部阵雨。6日阴有阵雨或雷雨。<br><br><br>",
-      "Time": "2026090211",
-      "PreciseForecastTime": "2026年09月02日11时"
+      "Text": "天气预报：今天阴有时有阵雨，局部雨量中到大。明天阴有阵雨。后天阴到多云有时有阵雨。5日多云到阴局部阵雨。6日阴有阵雨或雷雨。<br><br><br>",
+      "Time": "2026090219",
+      "PreciseForecastTime": "2026年09月02日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,9 +750,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有阵雨，雨量中到大，今天夜里到明天阴有阵雨。后天阴到多云有时有阵雨。5日多云到阴局部阵雨。6日阴有阵雨或雷雨。<br><br>",
-      "Time": "2026090211",
-      "PreciseForecastTime": "2026年09月02日11时"
+      "Text": "天气预报：今天阴有时有阵雨，局部雨量中到大。明天阴有阵雨。后天阴到多云有时有阵雨。5日多云到阴局部阵雨。6日阴有阵雨或雷雨。<br><br>",
+      "Time": "2026090219",
+      "PreciseForecastTime": "2026年09月02日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -998,12 +998,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有阵雨，雨量中到大，今天夜里到明天阴有阵雨。后天阴到多云有时有阵雨。5日多云到阴局部阵雨。6日阴有阵雨或雷雨。<br><br>",
-      "Time": "2026090211",
-      "PreciseForecastTime": "2026年09月02日11时"
+      "Text": "天气预报：今天阴有时有阵雨，局部雨量中到大。明天阴有阵雨。后天阴到多云有时有阵雨。5日多云到阴局部阵雨。6日阴有阵雨或雷雨。<br><br>",
+      "Time": "2026090219",
+      "PreciseForecastTime": "2026年09月02日19时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 };
