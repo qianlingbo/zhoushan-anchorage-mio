@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-09-03 16:56:00",
-  "lastChecked": "2026-09-03 16:56:00",
-  "lastSuccessfulFetch": "2026-09-03 16:56:00",
-  "updateWindow": "2026-09-03T15:00+08:00",
-  "publishTime": "2026年09月03日14时",
-  "publishCode": "2026090314",
+  "lastUpdated": "2026-09-03 21:35:12",
+  "lastChecked": "2026-09-03 21:35:12",
+  "lastSuccessfulFetch": "2026-09-03 21:35:12",
+  "updateWindow": "2026-09-03T21:00+08:00",
+  "publishTime": "2026年09月03日19时",
+  "publishCode": "2026090319",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴有时有阵雨。明天阴到多云有时有阵雨，夜里局部雨量中等。后天阴到多云有时有阵雨，局部雨量中等。6-7日阴到多云，有时有阵雨。<br><br>",
-      "Time": "2026090314",
-      "PreciseForecastTime": "2026年09月03日14时"
+      "Time": "2026090319",
+      "PreciseForecastTime": "2026年09月03日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴有时有阵雨。明天阴到多云有时有阵雨，夜里局部雨量中等。后天阴到多云有时有阵雨，局部雨量中等。6-7日阴到多云，有时有阵雨。<br><br>",
-      "Time": "2026090314",
-      "PreciseForecastTime": "2026年09月03日14时"
+      "Time": "2026090319",
+      "PreciseForecastTime": "2026年09月03日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴有时有阵雨。明天阴到多云有时有阵雨，夜里局部雨量中等。后天阴到多云有时有阵雨，局部雨量中等。6-7日阴到多云，有时有阵雨。<br><br>",
-      "Time": "2026090314",
-      "PreciseForecastTime": "2026年09月03日14时"
+      "Time": "2026090319",
+      "PreciseForecastTime": "2026年09月03日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴有时有阵雨。明天阴到多云有时有阵雨，夜里局部雨量中等。后天阴到多云有时有阵雨，局部雨量中等。6-7日阴到多云，有时有阵雨。<br><br>",
-      "Time": "2026090314",
-      "PreciseForecastTime": "2026年09月03日14时"
+      "Time": "2026090319",
+      "PreciseForecastTime": "2026年09月03日19时"
     }
   }
 };
