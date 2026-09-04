@@ -7,7 +7,9 @@ a { color:inherit; }
 .skip:focus { transform:translateY(0); }
 header, main, footer { width:min(100% - 4rem, 1240px); margin-inline:auto; }
 header { display:flex; justify-content:space-between; align-items:center; min-height:7rem; border-bottom:1px solid var(--line); }
-.brand { font-family:"Iowan Old Style","Songti SC",serif; font-size:1.05rem; font-weight:700; text-decoration:none; }
+.brand { display:flex; flex-direction:column; align-items:flex-start; gap:.35rem; text-decoration:none; }
+.brand span:first-child { font-family:"Iowan Old Style","Songti SC",serif; font-size:.95rem; font-weight:700; }
+.brand span:last-child { color:var(--muted); font:600 .62rem/1 ui-monospace,monospace; letter-spacing:.06em; }
 nav { display:flex; align-items:center; gap:1.8rem; }
 nav a { position:relative; padding:.5rem 0; color:var(--muted); font:700 .68rem/1 ui-monospace,monospace; letter-spacing:.1em; text-decoration:none; }
 nav a::after { content:""; position:absolute; right:0; bottom:0; left:0; height:1px; background:var(--ink); transform:scaleX(0); transform-origin:right; transition:transform 220ms var(--ease); }
@@ -32,13 +34,11 @@ nav a::after { content:""; position:absolute; right:0; bottom:0; left:0; height:
 .about { display:grid; grid-template-columns:1fr 2fr; padding:8rem 0 10rem; border-top:1px solid var(--line); }
 .about h2 { margin:0 0 2.5rem; font-family:"Iowan Old Style","Songti SC",serif; font-size:clamp(2.2rem,4vw,4rem); font-weight:400; letter-spacing:-.055em; line-height:1.08; }
 .about div p { width:min(100%,35rem); margin:0; color:var(--muted); font-size:1rem; line-height:2; }
-.contact-list { width:min(100%,35rem); margin:3rem 0 0; border-top:1px solid var(--ink); }
-.contact-list div { display:grid; grid-template-columns:7rem 1fr; gap:1rem; padding:1rem 0; border-bottom:1px solid var(--line); }
-.contact-list dt { color:var(--muted); font-size:.72rem; letter-spacing:.08em; }
-.contact-list dd { margin:0; font-family:"Songti SC",serif; font-size:.95rem; font-weight:600; }
 footer { display:flex; justify-content:space-between; align-items:end; min-height:12rem; border-top:1px solid var(--ink); }
 footer p { font-family:"Iowan Old Style","Songti SC",serif; font-size:1.2rem; }
 footer span { color:var(--muted); font:600 .62rem/1.4 ui-monospace,monospace; letter-spacing:.1em; text-transform:uppercase; }
+.footer-contact { display:flex; flex-direction:column; gap:.45rem; }
+.footer-contact strong { font-size:1rem; }
 footer a { margin-bottom:1.2rem; font-size:.75rem; text-underline-offset:.4em; }
 @media (hover:hover) and (pointer:fine) {
   nav a:hover { color:var(--ink); }
