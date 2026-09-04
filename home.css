@@ -13,7 +13,7 @@ nav a { position:relative; padding:.5rem 0; color:var(--muted); font:700 .68rem/
 nav a::after { content:""; position:absolute; right:0; bottom:0; left:0; height:1px; background:var(--ink); transform:scaleX(0); transform-origin:right; transition:transform 220ms var(--ease); }
 .hero { min-height:calc(100vh - 7rem); display:flex; flex-direction:column; justify-content:center; padding:6rem 0 4rem; }
 .kicker, .section-head > p, .section-label { margin:0; color:var(--red); font:700 .67rem/1.4 ui-monospace,monospace; letter-spacing:.16em; text-transform:uppercase; }
-.hero h1 { margin:2.3rem 0 5rem; max-width:12ch; font-family:"Iowan Old Style","Songti SC",serif; font-size:clamp(4rem,10vw,9.5rem); font-weight:400; letter-spacing:-.07em; line-height:.91; }
+.hero h1 { margin:2.3rem 0 5rem; max-width:12ch; font-family:"Iowan Old Style","Songti SC",serif; font-size:clamp(3.6rem,8vw,7.8rem); font-weight:400; letter-spacing:-.07em; line-height:.93; }
 .hero h1 em { color:var(--muted); font-weight:400; }
 .hero-foot { display:grid; grid-template-columns:1fr auto; gap:3rem; align-items:end; margin-left:32%; }
 .hero-foot p { max-width:32rem; margin:0; color:var(--muted); font-family:"Songti SC",serif; font-size:1.05rem; line-height:1.9; }
@@ -21,17 +21,21 @@ nav a::after { content:""; position:absolute; right:0; bottom:0; left:0; height:
 .hero-foot a span { margin-left:1.5rem; }
 .work { padding:8rem 0; border-top:1px solid var(--line); }
 .section-head { display:grid; grid-template-columns:1fr 2fr; margin-bottom:5rem; }
-.section-head h2 { margin:0; font-family:"Iowan Old Style","Songti SC",serif; font-size:clamp(2rem,4vw,4rem); font-weight:400; letter-spacing:-.045em; }
+.section-head h2 { margin:0; font-family:"Iowan Old Style","Songti SC",serif; font-size:clamp(1.8rem,3.2vw,3.2rem); font-weight:400; letter-spacing:-.045em; }
 .project-list { border-top:1px solid var(--ink); }
 .project { display:grid; grid-template-columns:4rem 1.45fr 1fr 2.5rem; gap:2rem; align-items:center; min-height:9.5rem; border-bottom:1px solid var(--line); text-decoration:none; transition:padding 260ms var(--ease),color 180ms ease; }
 .number { color:var(--red); font:700 .7rem/1 ui-monospace,monospace; }
-.project h3 { margin:0 0 .6rem; font-family:"Songti SC",serif; font-size:clamp(1.25rem,2.4vw,2.1rem); font-weight:600; letter-spacing:-.03em; }
+.project h3 { margin:0 0 .6rem; font-family:"Songti SC",serif; font-size:clamp(1.15rem,2vw,1.75rem); font-weight:600; letter-spacing:-.03em; }
 .project div p { margin:0; color:var(--muted); font:600 .62rem/1.4 ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase; }
 .description { margin:0; color:var(--muted); font-size:.82rem; line-height:1.8; }
 .arrow { font-size:1.4rem; transition:transform 220ms var(--ease); }
 .about { display:grid; grid-template-columns:1fr 2fr; padding:8rem 0 10rem; border-top:1px solid var(--line); }
-.about h2 { margin:0 0 2.5rem; font-family:"Iowan Old Style","Songti SC",serif; font-size:clamp(2.5rem,5vw,5rem); font-weight:400; letter-spacing:-.055em; line-height:1.08; }
+.about h2 { margin:0 0 2.5rem; font-family:"Iowan Old Style","Songti SC",serif; font-size:clamp(2.2rem,4vw,4rem); font-weight:400; letter-spacing:-.055em; line-height:1.08; }
 .about div p { width:min(100%,35rem); margin:0; color:var(--muted); font-size:1rem; line-height:2; }
+.contact-list { width:min(100%,35rem); margin:3rem 0 0; border-top:1px solid var(--ink); }
+.contact-list div { display:grid; grid-template-columns:7rem 1fr; gap:1rem; padding:1rem 0; border-bottom:1px solid var(--line); }
+.contact-list dt { color:var(--muted); font-size:.72rem; letter-spacing:.08em; }
+.contact-list dd { margin:0; font-family:"Songti SC",serif; font-size:.95rem; font-weight:600; }
 footer { display:flex; justify-content:space-between; align-items:end; min-height:12rem; border-top:1px solid var(--ink); }
 footer p { font-family:"Iowan Old Style","Songti SC",serif; font-size:1.2rem; }
 footer span { color:var(--muted); font:600 .62rem/1.4 ui-monospace,monospace; letter-spacing:.1em; text-transform:uppercase; }
