@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>舟山锚地供油指数看板</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css?v=20260814-responsive">
+</head>
+<body>
+  <main class="dashboard">
+    <div class="topbar">
+      <a class="home-link" href="/">← 返回个人主页</a>
+      <div class="language-switch" aria-label="Language">
+        <button class="language-button is-active" type="button" data-lang="zh" aria-pressed="true">中文</button>
+        <button class="language-button" type="button" data-lang="en" aria-pressed="false">ENGLISH</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div>
+        <p class="eyebrow" data-i18n="eyebrow">API 数据 · 精细化预报</p>
+        <h1 data-i18n="title">舟山锚地供油指数看板</h1>
+        <p class="subtitle" data-i18n="subtitle">条帚门锚地、虾峙门外锚地、马峙锚地、秀山东锚地的 MIO 供油指数精细化预报一览。</p>
+        <div class="weather-text" id="weather-text"></div>
+        <a class="tide-current-link" href="http://hai.tsphp.com/" target="_blank" rel="noreferrer" data-i18n="tideCurrentLink">舟山海域潮汐潮流信息发布</a>
+      </div>
+      <div class="meta-card">
+        <div><span class="meta-label" data-i18n="sourceLabel">数据来源</span><a class="meta-link" href="https://www.zs121.com.cn/Portarea/Portarea" target="_blank" rel="noreferrer" data-i18n="sourceName">舟山海洋气象台 zs121.com.cn</a></div>
+        <div><span class="meta-label" data-i18n="publishTimeLabel">预报发布时间</span><strong id="publish-time">等待数据</strong></div>
+        <div><span class="meta-label" data-i18n="localUpdateLabel">本地更新时间</span><strong id="last-updated">等待数据</strong></div>
+      </div>
+    </section>
+
+    <section class="controls" aria-label="页面状态" data-i18n-aria-label="pageStatusLabel">
+      <div class="status-pill" id="status-pill">等待数据</div>
+      <button class="refresh-link" type="button" id="refresh-button" data-i18n="refreshLocalData">重新读取本地数据</button>
+    </section>
+    <section class="grid" id="anchor-grid" aria-live="polite"></section>
+
+    <div class="skill-banner"><a href="/skill.html">🤖 安装 Agent 技能</a></div>
+    <footer class="footer">
+      <span data-i18n="footerSource">数据来源：</span><a href="https://www.zs121.com.cn/Portarea/Portarea" target="_blank" rel="noreferrer" data-i18n="sourceShortName">舟山海洋气象台</a>
+      <span data-i18n="footerMio"> · MIO 评分：</span><span style="color:var(--mio-4)">●</span> <span data-i18n="rating4">适宜</span>
+      <span style="color:var(--mio-3)">●</span> <span data-i18n="rating3">一般</span>
+      <span style="color:var(--mio-2)">●</span> <span data-i18n="rating2">较差</span>
+      <span style="color:var(--mio-1)">●</span> <span data-i18n="rating1">恶劣</span>
+    </footer>
+    <aside class="contact-corner" aria-label="联系信息">
+      <div class="contact-line"><span class="contact-label">公众号</span><strong>舟山船舶代理笔记</strong></div>
+      <div class="contact-line"><span class="contact-label">个人微信号</span><strong>zsagent01</strong></div>
+    </aside>
+  </main>
+  <script src="/data/data.js?v=20260502-1250"></script>
+  <script src="/app.js?v=20260904-weather-path"></script>
+</body>
+</html>

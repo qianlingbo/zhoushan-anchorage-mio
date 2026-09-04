@@ -1,13 +1,15 @@
-# 舟山锚地供油指数静态看板
+# ZS AGENT 01 个人主页与舟山港航工具
 
-四个锚地（条帚门、虾峙门外、马峙、秀山东）的 MIO 供油指数精细化预报一览页面。
+暖白编辑风个人主页，汇总舟山锚地天气、靠泊窗口、灌门航窗和河泥漕潮汐工具。原舟山锚地 MIO 看板已迁移到 `/weather/`，数据抓取与自动更新方式保持不变。
 
 ## 文件结构
 
 ```
-├── index.html              # 主页面（双击打开即可使用）
-├── styles.css              # 样式
-├── app.js                  # 渲染逻辑
+├── index.html              # 个人主页
+├── home.css                # 主页样式
+├── weather/index.html      # 舟山锚地天气看板
+├── styles.css              # 天气看板样式
+├── app.js                  # 天气看板渲染逻辑
 ├── data/
 │   ├── latest.json         # 完整 API 数据
 │   └── data.js             # window.__ANCHOR_DATA__ 注入（file:// 协议用）
@@ -30,7 +32,13 @@ python3 scripts/update_data.py
 
 ### 2. 查看页面
 
-直接双击 `index.html` 在浏览器中打开即可（支持 file:// 协议，无需本地服务器）。
+建议在项目根目录启动静态服务器后访问主页与各子路径，例如：
+
+```bash
+python3 -m http.server 8000
+```
+
+然后访问 `http://localhost:8000/`。天气看板位于 `http://localhost:8000/weather/`。
 
 ### 3. 自动更新
 
