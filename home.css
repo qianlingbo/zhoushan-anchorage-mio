@@ -21,9 +21,10 @@ nav a::after { content:""; position:absolute; right:0; bottom:0; left:0; height:
 .hero-foot p { max-width:32rem; margin:0; color:var(--muted); font-family:"Songti SC",serif; font-size:1.05rem; line-height:1.9; }
 .hero-foot a { padding-bottom:.35rem; border-bottom:1px solid; font-size:.77rem; font-weight:700; letter-spacing:.08em; text-decoration:none; }
 .hero-foot a span { margin-left:1.5rem; }
-.manifesto { position:relative; width:86%; min-height:clamp(22rem,38vw,30rem); margin:0 0 7rem auto; overflow:hidden; background:var(--ink); color:#fff; }
-.manifesto-background { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 38%; filter:saturate(.72) contrast(1.06); }
-.manifesto-shade { position:absolute; inset:0; background:linear-gradient(110deg,rgba(9,14,18,.78) 0%,rgba(9,14,18,.28) 58%,rgba(9,14,18,.12) 100%),linear-gradient(0deg,rgba(9,14,18,.72),transparent 56%); }
+.manifesto { position:relative; width:86%; min-height:clamp(20rem,34vw,27rem); margin:0 0 7rem auto; overflow:hidden; background:#2a3031; color:#fff; }
+.manifesto-background { position:absolute; right:0; bottom:0; left:0; width:100%; height:82%; background-repeat:no-repeat; background-size:cover; background-position:center 42%; opacity:.76; filter:saturate(.84) contrast(1.08) brightness(.96); -webkit-mask-image:linear-gradient(to top, #000 0%, #000 78%, rgba(0,0,0,.72) 91%, transparent 100%); mask-image:linear-gradient(to top, #000 0%, #000 78%, rgba(0,0,0,.72) 91%, transparent 100%); }
+.manifesto-background--wide { background-image:url('/assets/wechat-background.jpeg'); }
+.manifesto-shade { position:absolute; inset:0; background:linear-gradient(100deg,rgba(20,27,28,.58) 0%,rgba(20,27,28,.22) 40%,rgba(20,27,28,.04) 74%),linear-gradient(0deg,rgba(20,27,28,.42),rgba(20,27,28,.08) 64%,transparent 100%); }
 .manifesto-content { position:absolute; inset:clamp(1.5rem,4vw,3.5rem); display:flex; flex-direction:column; align-items:flex-start; }
 .account-badge { display:flex; align-items:center; gap:1rem; padding:.6rem 1rem .6rem .6rem; border:1px solid rgba(255,255,255,.32); background:rgba(10,15,18,.28); backdrop-filter:blur(12px); }
 .account-badge img { width:3.5rem; height:3.5rem; border:2px solid rgba(255,255,255,.75); border-radius:50%; object-fit:cover; }
@@ -65,7 +66,7 @@ footer a { margin-bottom:1.2rem; font-size:.75rem; text-underline-offset:.4em; }
   .hero h1 { margin:2rem 0 3rem; }
   .hero-foot, .section-head, .about { grid-template-columns:1fr; margin-left:0; gap:2rem; }
   .manifesto { width:100%; min-height:27rem; margin-bottom:5rem; }
-  .manifesto-background { object-position:58% center; }
+  .manifesto-background { height:76%; background-position:58% 42%; opacity:.72; }
   .manifesto blockquote,.manifesto-content > p { align-self:flex-start; width:100%; }
   .manifesto blockquote { margin:auto 0 1rem; }
   .account-badge img { width:3.6rem; height:3.6rem; }
