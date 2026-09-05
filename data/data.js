@@ -1,14 +1,14 @@
 window.__ANCHOR_DATA__ = {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-09-05 16:30:05",
-  "lastChecked": "2026-09-05 16:30:05",
-  "lastSuccessfulFetch": "2026-09-05 13:44:14",
-  "updateWindow": "2026-09-05T15:00+08:00",
-  "publishTime": "2026年09月05日10时",
-  "publishCode": "2026090510",
+  "status": "更新完成",
+  "lastUpdated": "2026-09-05 20:42:37",
+  "lastChecked": "2026-09-05 20:42:37",
+  "lastSuccessfulFetch": "2026-09-05 20:42:37",
+  "updateWindow": "2026-09-05T18:00+08:00",
+  "publishTime": "2026年09月05日19时",
+  "publishCode": "2026090519",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -37,8 +37,8 @@ window.__ANCHOR_DATA__ = {
           "Vis": ">1000m",
           "WindWave": "2.5-3.0m",
           "Riskrating": "1 4 1 1",
-          "WindSpeed": 19.0,
-          "WindSpeedAvg": "14.3",
+          "WindSpeed": 18.5,
+          "WindSpeedAvg": "13.9",
           "Time": "05日14时-17时",
           "WindDirect": "北到东北风"
         },
@@ -47,8 +47,8 @@ window.__ANCHOR_DATA__ = {
           "Vis": ">1000m",
           "WindWave": "2.5-3.0m",
           "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.2,
-          "WindSpeedAvg": "13.7",
+          "WindSpeed": 18.0,
+          "WindSpeedAvg": "13.5",
           "Time": "05日17时-20时",
           "WindDirect": "北到东北风"
         },
@@ -65,7 +65,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
+          "WindWave": "2.5-3.0m",
           "Riskrating": "2 4 1 1",
           "WindSpeed": 16.4,
           "WindSpeedAvg": "12.3",
@@ -254,9 +254,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴到多云，有时有阵雨，夜里转阴有阵雨，局部雨量中到大。明天、后天多云到阴，有时有阵雨。8-9日多云到阴，有时有阵雨。<br><br>",
-      "Time": "2026090510",
-      "PreciseForecastTime": "2026年09月05日10时"
+      "Text": "天气预报：今天阴有时有阵雨，局部雨量中等。明天、后天多云到阴，有时有阵雨。8-9日多云到阴，有时有阵雨。<br><br>",
+      "Time": "2026090519",
+      "PreciseForecastTime": "2026年09月05日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -285,8 +285,8 @@ window.__ANCHOR_DATA__ = {
           "Vis": ">1000m",
           "WindWave": "2.5-3.0m",
           "Riskrating": "1 4 1 1",
-          "WindSpeed": 19.0,
-          "WindSpeedAvg": "14.3",
+          "WindSpeed": 18.5,
+          "WindSpeedAvg": "13.9",
           "Time": "05日14时-17时",
           "WindDirect": "北到东北风"
         },
@@ -295,15 +295,15 @@ window.__ANCHOR_DATA__ = {
           "Vis": ">1000m",
           "WindWave": "2.5-3.0m",
           "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.2,
-          "WindSpeedAvg": "13.7",
+          "WindSpeed": 18.0,
+          "WindSpeedAvg": "13.5",
           "Time": "05日17时-20时",
           "WindDirect": "北到东北风"
         },
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
+          "WindWave": "2.0-2.5m",
           "Riskrating": "2 4 1 1",
           "WindSpeed": 16.6,
           "WindSpeedAvg": "12.5",
@@ -502,9 +502,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴到多云，有时有阵雨，夜里转阴有阵雨，局部雨量中到大。明天、后天多云到阴，有时有阵雨。8-9日多云到阴，有时有阵雨。<br><br>",
-      "Time": "2026090510",
-      "PreciseForecastTime": "2026年09月05日10时"
+      "Text": "天气预报：今天阴有时有阵雨，局部雨量中等。明天、后天多云到阴，有时有阵雨。8-9日多云到阴，有时有阵雨。<br><br>",
+      "Time": "2026090519",
+      "PreciseForecastTime": "2026年09月05日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -533,8 +533,8 @@ window.__ANCHOR_DATA__ = {
           "Vis": ">1000m",
           "WindWave": "0.5-1.0m",
           "Riskrating": "2 4 4 2",
-          "WindSpeed": 16.8,
-          "WindSpeedAvg": "12.6",
+          "WindSpeed": 15.5,
+          "WindSpeedAvg": "11.6",
           "Time": "05日14时-17时",
           "WindDirect": "北到东北风"
         },
@@ -543,8 +543,8 @@ window.__ANCHOR_DATA__ = {
           "Vis": ">1000m",
           "WindWave": "0.5-1.0m",
           "Riskrating": "2 4 4 2",
-          "WindSpeed": 16.0,
-          "WindSpeedAvg": "12.0",
+          "WindSpeed": 15.0,
+          "WindSpeedAvg": "11.3",
           "Time": "05日17时-20时",
           "WindDirect": "北到东北风"
         },
@@ -750,9 +750,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴到多云，有时有阵雨，夜里转阴有阵雨，局部雨量中等。明天、后天多云到阴，有时有阵雨。8-9日多云到阴，有时有阵雨。<br><br>",
-      "Time": "2026090510",
-      "PreciseForecastTime": "2026年09月05日10时"
+      "Text": "天气预报：今天阴有时有阵雨，局部雨量中等。明天、后天多云到阴，有时有阵雨。8-9日多云到阴，有时有阵雨。<br><br>",
+      "Time": "2026090519",
+      "PreciseForecastTime": "2026年09月05日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -779,10 +779,10 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.5,
-          "WindSpeedAvg": "13.9",
+          "WindWave": "2.0-2.5m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 16.8,
+          "WindSpeedAvg": "12.6",
           "Time": "05日14时-17时",
           "WindDirect": "北到东北风"
         },
@@ -791,8 +791,8 @@ window.__ANCHOR_DATA__ = {
           "Vis": ">1000m",
           "WindWave": "1.5-2.0m",
           "Riskrating": "2 4 1 1",
-          "WindSpeed": 16.8,
-          "WindSpeedAvg": "12.6",
+          "WindSpeed": 16.5,
+          "WindSpeedAvg": "12.4",
           "Time": "05日17时-20时",
           "WindDirect": "北到东北风"
         },
@@ -801,8 +801,8 @@ window.__ANCHOR_DATA__ = {
           "Vis": ">1000m",
           "WindWave": "1.5-2.0m",
           "Riskrating": "2 4 1 1",
-          "WindSpeed": 16.8,
-          "WindSpeedAvg": "12.6",
+          "WindSpeed": 16.0,
+          "WindSpeedAvg": "12.0",
           "Time": "05日20时-23时",
           "WindDirect": "东北风"
         },
@@ -811,8 +811,8 @@ window.__ANCHOR_DATA__ = {
           "Vis": ">1000m",
           "WindWave": "1.0-1.5m",
           "Riskrating": "2 4 2 2",
-          "WindSpeed": 16.5,
-          "WindSpeedAvg": "12.4",
+          "WindSpeed": 16.0,
+          "WindSpeedAvg": "12.0",
           "Time": "05日23时-06日02时",
           "WindDirect": "东北风"
         },
@@ -821,8 +821,8 @@ window.__ANCHOR_DATA__ = {
           "Vis": ">1000m",
           "WindWave": "1.0-1.5m",
           "Riskrating": "2 4 2 2",
-          "WindSpeed": 16.5,
-          "WindSpeedAvg": "12.4",
+          "WindSpeed": 15.5,
+          "WindSpeedAvg": "11.6",
           "Time": "06日02时-05时",
           "WindDirect": "东北风"
         },
@@ -840,9 +840,9 @@ window.__ANCHOR_DATA__ = {
           "wd_en": "NNE",
           "Vis": ">1000m",
           "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 17.2,
-          "WindSpeedAvg": "12.9",
+          "Riskrating": "2 4 2 2",
+          "WindSpeed": 17.0,
+          "WindSpeedAvg": "12.8",
           "Time": "06日08时-11时",
           "WindDirect": "北到东北风"
         },
@@ -850,9 +850,9 @@ window.__ANCHOR_DATA__ = {
           "wd_en": "NNE",
           "Vis": ">1000m",
           "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 17.8,
-          "WindSpeedAvg": "13.4",
+          "Riskrating": "2 4 2 2",
+          "WindSpeed": 17.0,
+          "WindSpeedAvg": "12.8",
           "Time": "06日11时-14时",
           "WindDirect": "北到东北风"
         },
@@ -860,9 +860,9 @@ window.__ANCHOR_DATA__ = {
           "wd_en": "NNE",
           "Vis": ">1000m",
           "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 17.2,
-          "WindSpeedAvg": "12.9",
+          "Riskrating": "2 4 2 2",
+          "WindSpeed": 16.5,
+          "WindSpeedAvg": "12.4",
           "Time": "06日14时-17时",
           "WindDirect": "北到东北风"
         },
@@ -871,8 +871,8 @@ window.__ANCHOR_DATA__ = {
           "Vis": ">1000m",
           "WindWave": "1.0-1.5m",
           "Riskrating": "2 4 2 2",
-          "WindSpeed": 16.8,
-          "WindSpeedAvg": "12.6",
+          "WindSpeed": 16.0,
+          "WindSpeedAvg": "12.0",
           "Time": "06日17时-20时",
           "WindDirect": "北到东北风"
         },
@@ -889,18 +889,18 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
-          "WindSpeed": 13.5,
-          "WindSpeedAvg": "10.1",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "2 4 4 2",
+          "WindSpeed": 14.5,
+          "WindSpeedAvg": "10.9",
           "Time": "07日02时-08时",
           "WindDirect": "北到西北风"
         },
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "2 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "2 4 4 2",
           "WindSpeed": 14.2,
           "WindSpeedAvg": "10.7",
           "Time": "07日08时-14时",
@@ -909,8 +909,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "2 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "2 4 4 2",
           "WindSpeed": 15.8,
           "WindSpeedAvg": "11.9",
           "Time": "07日14时-20时",
@@ -998,12 +998,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴到多云，有时有阵雨，夜里转阴有阵雨，局部雨量小到中等。明天、后天多云到阴，有时有阵雨。8-9日多云到阴，有时有阵雨。<br><br>",
-      "Time": "2026090510",
-      "PreciseForecastTime": "2026年09月05日10时"
+      "Text": "天气预报：今天阴有时有阵雨，局部雨量小到中等。明天、后天多云到阴，有时有阵雨。8-9日多云到阴，有时有阵雨。<br><br>",
+      "Time": "2026090519",
+      "PreciseForecastTime": "2026年09月05日19时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 };
