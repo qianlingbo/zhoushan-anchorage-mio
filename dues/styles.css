@@ -21,3 +21,9 @@ td{padding-left:8px;padding-right:8px}
 .amount-line{gap:10px;margin-top:49px;padding:0;border:0}
 .amount-line strong{padding:9px 16px 11px;border-radius:999px;background:#f5f8f7;color:#164b63;font-family:'DM Mono',monospace;font-weight:500;font-size:clamp(36px,4.8vw,54px);letter-spacing:-.085em;text-shadow:none;box-shadow:0 10px 25px rgba(0,0,0,.12)}
 .amount-line span{color:#80dfcd;font-weight:700}
+
+/* Financial-display treatment: currency marker + luminous quote plate. */
+.amount-line{align-items:center;gap:8px;margin-top:42px;padding:15px 14px 16px;border:1px solid rgba(242,186,94,.52);border-radius:18px;background:linear-gradient(135deg,#f7f1df 0%,#fffdf6 55%,#e2f1ec 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 16px 30px rgba(0,0,0,.16)}
+.amount-line strong{padding:0;background:transparent;color:#123f56;font-family:'DM Mono',monospace;font-size:clamp(36px,4.8vw,55px);font-weight:500;letter-spacing:-.09em;box-shadow:none}
+.amount-line .currency-symbol{color:#c48732;font:600 clamp(26px,3.2vw,36px) 'Manrope',sans-serif;line-height:1}
+.amount-line .currency-unit{margin-left:auto;color:#1b6d68;font-size:12px;letter-spacing:.04em}
