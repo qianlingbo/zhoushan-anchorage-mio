@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  var DATA_URL = "./data/latest.json";
+  var DATA_URL = "/data/latest.json";
 
   var currentLanguage = "zh";
   var currentData = null;

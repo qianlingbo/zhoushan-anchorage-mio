@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#edf6f1" />
+    <title>安装灌门航窗 Agent Skill</title>
+    <style>
+      :root{--ink:#18312f;--muted:#667d79;--line:#cfe0da;--green:#0f7773;--amber:#b87925;--paper:#f4f8f5}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 84% 0,#cee9e2,transparent 34rem),#edf4f0;color:var(--ink);font-family:"Avenir Next","PingFang SC",sans-serif}.shell{width:min(940px,calc(100% - 36px));margin:0 auto;padding:42px 0 70px}.back{color:var(--green);font-size:13px;text-decoration:none}.hero{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;padding:54px 0 34px;border-bottom:1px solid var(--line)}.eyebrow{font:11px ui-monospace,SFMono-Regular,monospace;letter-spacing:.14em;color:var(--green)}h1{font-size:clamp(34px,6vw,64px);line-height:1.08;margin:13px 0 14px}h1 em{font-style:normal;color:var(--amber)}.lead{max-width:650px;color:var(--muted);line-height:1.7;margin:0}.download{display:inline-flex;align-items:center;gap:14px;padding:15px 19px;border-radius:11px;background:var(--green);color:#fff;text-decoration:none;font-weight:700;white-space:nowrap;box-shadow:0 12px 28px rgba(15,119,115,.18)}.meta{display:flex;gap:8px;flex-wrap:wrap;margin:25px 0}.meta span{padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.65);color:var(--muted);font:10px ui-monospace,SFMono-Regular,monospace}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.card{background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:15px;padding:22px;box-shadow:0 12px 30px rgba(35,82,76,.06)}.card h2{font-size:18px;margin:0 0 6px}.card p{color:var(--muted);font-size:12px;line-height:1.6;margin:0 0 15px}.card code,.api code{display:block;background:var(--paper);border:1px solid #dce8e3;border-radius:9px;padding:12px;color:#31514d;font:11px/1.6 ui-monospace,SFMono-Regular,monospace;overflow-wrap:anywhere;user-select:all}.api{margin-top:13px;background:#fff;border:1px solid var(--line);border-radius:15px;padding:24px}.api h2{margin:0 0 8px;font-size:20px}.api p{color:var(--muted);font-size:12px;line-height:1.7}.links{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.links a{color:var(--green);font-size:12px;text-decoration:none;border-bottom:1px solid currentColor}.note{margin-top:18px;color:var(--muted);font-size:11px;line-height:1.7}@media(max-width:760px){.hero{grid-template-columns:1fr;align-items:start}.download{justify-self:start}.grid{grid-template-columns:1fr}.shell{padding-top:25px}}
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <a class="back" href="../">← 返回大型船舶过灌门时间表</a>
+      <section class="hero">
+        <div><span class="eyebrow">AGENT SKILL · GUANMEN PASSAGE</span><h1>安装<em>灌门航窗</em>查询</h1><p class="lead">安装后，Codex、Hermes、OpenClaw 等 Agent 可按日期直接读取 2026 年大型船舶允许过灌门时间。Skill 使用公开 JSON，不需要密钥。</p></div>
+        <a class="download" href="guanmen-passage-skill.zip" download>下载 Skill ZIP <span>↓</span></a>
+      </section>
+      <div class="meta"><span>SKILL.md STANDARD</span><span>NO API KEY</span><span>ASIA/SHANGHAI</span><span>2026 FULL YEAR</span></div>
+      <section class="grid" aria-label="Agent 安装方法">
+        <article class="card"><h2>Codex</h2><p>安装到 Codex 默认个人 Skill 目录。</p><code>mkdir -p ~/.agents/skills/guanmen-passage<br>curl -L https://www.zsagent01.com/guanmen/skill/guanmen-passage/SKILL.md -o ~/.agents/skills/guanmen-passage/SKILL.md</code></article>
+        <article class="card"><h2>Hermes</h2><p>Hermes 支持从公开 SKILL.md 地址直接安装。</p><code>hermes skills install https://www.zsagent01.com/guanmen/skill/guanmen-passage/SKILL.md --name guanmen-passage</code></article>
+        <article class="card"><h2>OpenClaw</h2><p>下载 ZIP、解压，然后作为本地 Skill 全局安装。</p><code>unzip guanmen-passage-skill.zip<br>openclaw skills install ./guanmen-passage --global</code></article>
+      </section>
+      <section class="api"><h2>按日期直接调用</h2><p>不安装 Skill 也可直接获取 JSON。把日期替换为 2026 年任意一天；最终允许时段读取 <b>allowedWindows</b>。</p><code>GET https://www.zsagent01.com/guanmen/api/2026-09-01.json</code><div class="links"><a href="../api/2026-09-01.json" target="_blank" rel="noreferrer">打开 2026-09-01 示例 ↗</a><a href="../api/index.json" target="_blank" rel="noreferrer">查看 API 元数据 ↗</a><a href="guanmen-passage/SKILL.md" target="_blank" rel="noreferrer">查看 SKILL.md ↗</a></div></section>
+      <p class="note">航窗判定：C1 流速 ≤ 1.5 节的缓流时段，与航海曙光始至暮光终时段取交集。结果仅供计划参考，实际通航仍需服从 VTS、引航和现场管制要求。</p>
+    </main>
+  </body>
+</html>

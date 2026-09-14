@@ -1,0 +1,10 @@
+{
+  "name": "Guanmen Passage Window API",
+  "description": "2026 年马岙航道窄口处 C1 站大型船舶允许过灌门时间。",
+  "timezone": "Asia/Shanghai",
+  "supportedFrom": "2026-01-01",
+  "supportedTo": "2026-12-31",
+  "dateEndpoint": "https://www.zsagent01.com/guanmen/api/{YYYY-MM-DD}.json",
+  "skill": "https://www.zsagent01.com/guanmen/skill/guanmen-passage/SKILL.md",
+  "example": "https://www.zsagent01.com/guanmen/api/2026-09-01.json"
+}

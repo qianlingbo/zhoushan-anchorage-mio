@@ -1,0 +1,69 @@
+{
+  "date": "2026-04-02",
+  "timezone": "Asia/Shanghai",
+  "station": {
+    "name": "马岙航道窄口处 C1 站",
+    "channelId": 2
+  },
+  "rule": {
+    "maxCurrentKnots": 1.5,
+    "lightLimit": "nautical_dawn_to_nautical_dusk",
+    "summary": "允许窗口 = C1 流速 ≤ 1.5 节的缓流时段，与航海曙光始至暮光终时段的交集。"
+  },
+  "light": {
+    "nauticalDawn": "04:51",
+    "sunrise": "05:43",
+    "sunset": "18:13",
+    "nauticalDusk": "19:05"
+  },
+  "slackWindows": [
+    {
+      "start": "00:00",
+      "end": "00:26",
+      "durationMinutes": 26,
+      "status": "night_prohibited"
+    },
+    {
+      "start": "05:49",
+      "end": "06:36",
+      "durationMinutes": 47,
+      "status": "allowed"
+    },
+    {
+      "start": "11:38",
+      "end": "12:41",
+      "durationMinutes": 63,
+      "status": "allowed"
+    },
+    {
+      "start": "18:03",
+      "end": "18:51",
+      "durationMinutes": 48,
+      "status": "allowed"
+    }
+  ],
+  "allowedWindows": [
+    {
+      "start": "05:49",
+      "end": "06:36",
+      "durationMinutes": 47
+    },
+    {
+      "start": "11:38",
+      "end": "12:41",
+      "durationMinutes": 63
+    },
+    {
+      "start": "18:03",
+      "end": "18:51",
+      "durationMinutes": 48
+    }
+  ],
+  "passageAllowed": true,
+  "advisory": "本结果仅供航行计划参考，不代替引航、VTS 指令、现场气象海况核验或通航许可。",
+  "sources": {
+    "current": "http://hai.tsphp.com/?",
+    "light": "https://www.timeanddate.com/sun/china/ningbo?month=4&year=2026",
+    "website": "https://www.zsagent01.com/guanmen/?date=2026-04-02"
+  }
+}
