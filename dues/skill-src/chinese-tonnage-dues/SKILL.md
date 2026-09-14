@@ -17,7 +17,7 @@ Use the bundled deterministic calculator so the rate table and the website stay 
    python3 scripts/calculate_tonnage_dues.py --country 中国 --tonnage 10000 --duration 30 --json
    ```
 
-3. Report the country, tax category, net tonnage, duration, vessel type, rate, factor, formula, and final amount. Preserve the returned amount to two decimal places and use `¥`/`元`.
+3. Report the country, tax category, net tonnage, duration, vessel type, rate, factor, formula, final amount, and the returned RMB uppercase amount. Preserve the returned amount to two decimal places and use `¥`/`元`.
 4. Include the calculator's note that the result is rounded to 0.01 yuan and is for pre-declaration estimation only.
 
 ## Tax rules
@@ -30,7 +30,7 @@ Use the bundled deterministic calculator so the rate table and the website stay 
 
 ## Output modes
 
-- Use `--json` for downstream Agent calls. The JSON includes `amount_yuan`, `amount_display`, `rate_yuan_per_nt`, `tax_type`, `preferential`, `duration_days`, and `formula`.
+- Use `--json` for downstream Agent calls. The JSON includes `amount_yuan`, `amount_display`, `amount_uppercase`, `rate_yuan_per_nt`, `tax_type`, `preferential`, `duration_days`, and `formula`.
 - Omit `--json` for a concise Chinese report suitable for a user.
 - Add `--pretty` with `--json` for indented JSON.
 

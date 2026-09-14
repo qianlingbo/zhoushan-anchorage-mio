@@ -12,6 +12,9 @@ from pathlib import Path
 DATA_PATH = Path(__file__).resolve().parent.parent / "references" / "tonnage-dues-data.json"
 DEFAULT_COUNTRY = "中国"
 DEFAULT_DURATION = 30
+RMB_DIGITS = "零壹贰叁肆伍陆柒捌玖"
+RMB_SECTION_UNITS = ("", "拾", "佰", "仟")
+RMB_GROUP_UNITS = ("", "万", "亿", "万亿")
 
 
 def parse_args() -> argparse.Namespace:
@@ -31,6 +34,66 @@ def money(value: Decimal) -> str:
 
 def number(value: Decimal) -> str:
     return format(value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP), ",.2f")
+
+
+def rmb_section(section: int) -> str:
+    output = []
+    zero_pending = False
+    for position in range(3, -1, -1):
+        digit = (section // (10**position)) % 10
+        if digit == 0:
+            zero_pending = bool(output)
+            continue
+        if zero_pending:
+            output.append("零")
+        output.extend((RMB_DIGITS[digit], RMB_SECTION_UNITS[position]))
+        zero_pending = False
+    return "".join(output)
+
+
+def rmb_integer(integer: int) -> str:
+    if integer == 0:
+        return "零"
+    sections = []
+    remaining = integer
+    while remaining > 0:
+        sections.insert(0, remaining % 10000)
+        remaining //= 10000
+    if len(sections) > len(RMB_GROUP_UNITS):
+        return "金额过大"
+    output = []
+    zero_between = False
+    for index, section in enumerate(sections):
+        if section == 0:
+            zero_between = bool(output)
+            continue
+        if output and (zero_between or section < 1000):
+            output.append("零")
+        output.extend((rmb_section(section), RMB_GROUP_UNITS[len(sections) - 1 - index]))
+        zero_between = False
+    return "".join(output)
+
+
+def rmb_uppercase(value: Decimal) -> str:
+    rounded = value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    fen_total = int(rounded * 100)
+    integer, remainder = divmod(fen_total, 100)
+    jiao, fen = divmod(remainder, 10)
+    integer_text = rmb_integer(integer)
+    if integer_text == "金额过大":
+        return "金额过大"
+    if integer == 0 and (jiao or fen):
+        return f"人民币{RMB_DIGITS[jiao] + '角' if jiao else ''}{RMB_DIGITS[fen] + '分' if fen else ''}"
+    output = f"人民币{integer_text}元"
+    if not jiao and not fen:
+        return f"{output}整"
+    if jiao:
+        output += f"{RMB_DIGITS[jiao]}角"
+    if not jiao and fen and integer:
+        output += "零"
+    if fen:
+        output += f"{RMB_DIGITS[fen]}分"
+    return output
 
 
 def percent(value: Decimal) -> str:
@@ -93,6 +156,7 @@ def calculate(country: str, tonnage: Decimal, duration: int, vessel_type: str, d
         "vessel_factor": float(factor),
         "amount_yuan": float(amount),
         "amount_display": money(amount),
+        "amount_uppercase": rmb_uppercase(amount),
         "formula": f"{number(tonnage)} × {rate:.2f} × {percent(factor)}%",
         "source": data["source"],
         "note": "结果四舍五入至 0.01 元，仅供申报前测算参考。",
@@ -107,6 +171,7 @@ def text_report(result: dict) -> str:
             f"净吨位：{number(Decimal(str(result['tonnage_nt'])))} NT｜执照期限：{duration_label}｜船型：{result['vessel_type_label']}",
             f"适用税率：{result['rate_yuan_per_nt']:g} 元/净吨，船型系数：{percent(Decimal(str(result['vessel_factor'])))}%",
             f"应纳吨税：¥{result['amount_display']} 元",
+            f"人民币大写：{result['amount_uppercase']}",
             f"计算式：{result['formula']}",
             result["note"],
         ]

@@ -1,8 +1,8 @@
 {
   "name": "chinese-tonnage-dues",
-  "version": "2026.09.14",
+  "version": "2026.09.15",
   "display_name": "中国船舶吨税",
-  "description": "根据船籍国、净吨位、执照期限和船型计算中国船舶吨税；默认中国、30日、优惠税率。",
+  "description": "根据船籍国、净吨位、执照期限和船型计算中国船舶吨税，并返回人民币大写金额；默认中国、30日、优惠税率。",
   "compatible_agents": ["Codex", "OpenClaw", "Hermes", "Agent Skills-compatible runtimes"],
   "package_url": "https://www.zsagent01.com/dues/chinese-tonnage-dues.zip",
   "install_script_url": "https://www.zsagent01.com/dues/install-chinese-tonnage-dues.sh",
