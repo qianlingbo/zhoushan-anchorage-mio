@@ -33,3 +33,9 @@ td{padding-left:8px;padding-right:8px}
 .contact-float div{display:flex;flex-direction:column;gap:2px}.contact-float div+div{padding-left:12px;border-left:1px solid rgba(203,231,229,.2)}
 .contact-float small{color:#80dfcd;font-size:9px;letter-spacing:.05em}.contact-float strong{font-size:11px;font-weight:600;white-space:nowrap}
 @media(max-width:560px){.contact-float{right:12px;bottom:12px;min-width:0;max-width:calc(100% - 24px);gap:9px;padding:10px 11px}.contact-float-mark{width:26px;height:26px;font-size:12px}.contact-float div+div{padding-left:9px}.contact-float strong{font-size:10px}.contact-float small{font-size:8px}}
+
+/* Stack the two contact methods vertically for quick scanning. */
+.contact-float{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:12px;row-gap:7px}
+.contact-float-mark{grid-row:1 / span 2}
+.contact-float div+div{padding:7px 0 0;border-left:0;border-top:1px solid rgba(203,231,229,.2)}
+@media(max-width:560px){.contact-float{column-gap:9px;row-gap:4px}.contact-float div+div{padding:5px 0 0}}
