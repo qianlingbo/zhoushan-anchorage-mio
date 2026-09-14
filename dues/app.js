@@ -9,7 +9,8 @@
     { label: '超过 10,000 · 不超过 50,000', max: 50000, ordinary: [27.6, 9.2, 4.6], preferential: [19.8, 6.6, 3.3] },
     { label: '超过 50,000', max: Infinity, ordinary: [31.8, 10.6, 5.3], preferential: [22.8, 7.6, 3.8] }
   ];
-  const durationIndex = { 30: 0, 90: 1, 365: 2 };
+  // PDF column order is 1 year → 90 days → 30 days.
+  const durationIndex = { 365: 0, 90: 1, 30: 2 };
   const $ = (id) => document.getElementById(id);
   const countryInput = $('country');
   const tonnageInput = $('tonnage');
