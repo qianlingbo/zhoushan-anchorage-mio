@@ -28,6 +28,7 @@ td{padding-left:8px;padding-right:8px}
 .amount-line strong{padding:0;background:transparent;color:#123f56;font-family:'DM Mono',monospace;font-size:clamp(36px,4.8vw,55px);font-weight:500;letter-spacing:-.09em;box-shadow:none}
 .amount-line .currency-symbol{color:#c48732;font:600 clamp(26px,3.2vw,36px) 'Manrope',sans-serif;line-height:1}
 .amount-line .currency-unit{margin-left:auto;color:#1b6d68;font-size:12px;letter-spacing:.04em}
+.amount-uppercase{position:relative;z-index:1;display:flex;align-items:baseline;gap:9px;margin:11px 0 0;padding:9px 11px;border:1px solid rgba(128,223,205,.16);border-radius:9px;background:rgba(255,255,255,.07);line-height:1.45}.amount-uppercase span{color:#80dfcd;font:500 9px 'DM Mono',monospace;letter-spacing:.05em;white-space:nowrap}.amount-uppercase strong{color:#f5f1df;font:600 13px 'Noto Sans SC',sans-serif;letter-spacing:.08em;word-break:break-all}
 
 .contact-float{position:fixed;right:22px;bottom:20px;z-index:20;display:flex;align-items:center;gap:12px;min-width:250px;padding:13px 16px;border:1px solid rgba(128,223,205,.3);border-radius:15px;background:rgba(8,43,58,.95);box-shadow:0 14px 36px rgba(8,43,58,.25);color:#eaf6f2}
 .contact-float div{display:flex;flex-direction:column;gap:2px}.contact-float div+div{padding-left:12px;border-left:1px solid rgba(203,231,229,.2)}

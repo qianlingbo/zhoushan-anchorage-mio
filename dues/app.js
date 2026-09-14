@@ -30,6 +30,53 @@
 
   const formatMoney = (value) => value.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const formatNumber = (value) => value.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const rmbDigits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];
+  const rmbSectionUnits = ['', '拾', '佰', '仟'];
+  const rmbGroupUnits = ['', '万', '亿', '万亿'];
+  const rmbSection = (section) => {
+    let output = '';
+    let zeroPending = false;
+    for (let position = 3; position >= 0; position -= 1) {
+      const digit = Math.floor(section / (10 ** position)) % 10;
+      if (digit === 0) { zeroPending = output.length > 0; continue; }
+      if (zeroPending) output += '零';
+      output += `${rmbDigits[digit]}${rmbSectionUnits[position]}`;
+      zeroPending = false;
+    }
+    return output;
+  };
+  const rmbInteger = (integer) => {
+    if (integer === 0) return '零';
+    const sections = [];
+    let remaining = integer;
+    while (remaining > 0) { sections.unshift(remaining % 10000); remaining = Math.floor(remaining / 10000); }
+    if (sections.length > rmbGroupUnits.length) return '金额过大';
+    let output = '';
+    let zeroBetween = false;
+    sections.forEach((section, index) => {
+      if (section === 0) { zeroBetween = output.length > 0; return; }
+      if (output && (zeroBetween || section < 1000)) output += '零';
+      output += `${rmbSection(section)}${rmbGroupUnits[sections.length - 1 - index]}`;
+      zeroBetween = false;
+    });
+    return output;
+  };
+  const rmbUppercase = (value) => {
+    const fenTotal = Math.round(Number(value.toFixed(2)) * 100);
+    const integer = Math.floor(fenTotal / 100);
+    const jiao = Math.floor(fenTotal / 10) % 10;
+    const fen = fenTotal % 10;
+    if (rmbInteger(integer) === '金额过大') return '金额过大';
+    if (integer === 0 && (jiao > 0 || fen > 0)) {
+      return `人民币${jiao > 0 ? `${rmbDigits[jiao]}角` : ''}${fen > 0 ? `${rmbDigits[fen]}分` : ''}`;
+    }
+    let output = `人民币${rmbInteger(integer)}元`;
+    if (jiao === 0 && fen === 0) return `${output}整`;
+    if (jiao > 0) output += `${rmbDigits[jiao]}角`;
+    if (jiao === 0 && fen > 0 && integer > 0) output += '零';
+    if (fen > 0) output += `${rmbDigits[fen]}分`;
+    return output;
+  };
   const countryIsPreferential = (name) => chinaAliases.includes(name.trim()) || preferentialCountries.includes(name.trim());
   const selectedDuration = () => form.querySelector('input[name="duration"]:checked').value;
 
@@ -60,7 +107,7 @@
 
     if (!valid) {
       error.hidden = false; error.textContent = '请输入大于 0 的船舶净吨位。';
-      $('tax-amount').textContent = '—'; $('applied-rate').innerHTML = '—'; $('billable-tonnage').innerHTML = '—'; $('formula-text').textContent = '等待有效吨位';
+      $('tax-amount').textContent = '—'; $('amount-uppercase').textContent = '—'; $('applied-rate').innerHTML = '—'; $('billable-tonnage').innerHTML = '—'; $('formula-text').textContent = '等待有效吨位';
       return;
     }
     error.hidden = true;
@@ -69,6 +116,7 @@
     const typeLabel = type === 'standard' ? '普通船舶' : type === 'tug' ? '拖船' : '非机动驳船';
     $('result-badge').textContent = preferential ? '优惠税率' : '普通税率';
     $('tax-amount').textContent = formatMoney(amount);
+    $('amount-uppercase').textContent = rmbUppercase(amount);
     $('result-caption').textContent = `${country || '未填写船籍'} · ${duration === '365' ? '1 年' : `${duration} 日`} · ${typeLabel}`;
     $('applied-rate').innerHTML = `${rate.toFixed(2)} <small>元/净吨</small>`;
     $('billable-tonnage').innerHTML = `${formatNumber(tonnage)} <small>NT</small>`;
