@@ -29,13 +29,11 @@ td{padding-left:8px;padding-right:8px}
 .amount-line .currency-unit{margin-left:auto;color:#1b6d68;font-size:12px;letter-spacing:.04em}
 
 .contact-float{position:fixed;right:22px;bottom:20px;z-index:20;display:flex;align-items:center;gap:12px;min-width:250px;padding:13px 16px;border:1px solid rgba(128,223,205,.3);border-radius:15px;background:rgba(8,43,58,.95);box-shadow:0 14px 36px rgba(8,43,58,.25);color:#eaf6f2}
-.contact-float-mark{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:9px;background:#80dfcd;color:#082b3a;font-size:14px;font-weight:900}
 .contact-float div{display:flex;flex-direction:column;gap:2px}.contact-float div+div{padding-left:12px;border-left:1px solid rgba(203,231,229,.2)}
 .contact-float small{color:#80dfcd;font-size:9px;letter-spacing:.05em}.contact-float strong{font-size:11px;font-weight:600;white-space:nowrap}
-@media(max-width:560px){.contact-float{right:12px;bottom:12px;min-width:0;max-width:calc(100% - 24px);gap:9px;padding:10px 11px}.contact-float-mark{width:26px;height:26px;font-size:12px}.contact-float div+div{padding-left:9px}.contact-float strong{font-size:10px}.contact-float small{font-size:8px}}
+@media(max-width:560px){.contact-float{right:12px;bottom:12px;min-width:0;max-width:calc(100% - 24px);gap:9px;padding:10px 11px}.contact-float div+div{padding-left:9px}.contact-float strong{font-size:10px}.contact-float small{font-size:8px}}
 
 /* Stack the two contact methods vertically for quick scanning. */
-.contact-float{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:12px;row-gap:7px}
-.contact-float-mark{grid-row:1 / span 2}
+.contact-float{display:grid;grid-template-columns:1fr;align-items:center;column-gap:0;row-gap:7px}
 .contact-float div+div{padding:7px 0 0;border-left:0;border-top:1px solid rgba(203,231,229,.2)}
 @media(max-width:560px){.contact-float{column-gap:9px;row-gap:4px}.contact-float div+div{padding:5px 0 0}}
