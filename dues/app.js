@@ -32,11 +32,13 @@
   const countryIsPreferential = (name) => chinaAliases.includes(name.trim()) || preferentialCountries.includes(name.trim());
   const selectedDuration = () => form.querySelector('input[name="duration"]:checked').value;
 
-  function renderRateTable(selectedBracket, preferential) {
+  function renderRateTable(selectedBracket, preferential, duration) {
+    const selectedDurationIndex = durationIndex[duration];
     $('rate-table-body').innerHTML = brackets.map((row, index) => {
-      const values = (preferential ? row.preferential : row.ordinary).map((value) => value.toFixed(1).replace('.0', '')).join(' / ');
-      const otherValues = (preferential ? row.ordinary : row.preferential).map((value) => value.toFixed(1).replace('.0', '')).join(' / ');
-      return `<tr class="rate-row ${index === selectedBracket ? 'is-selected' : ''}"><td>${row.label}</td><td class="ordinary-values">${preferential ? otherValues : values}</td><td class="preferential-values">${preferential ? values : otherValues}</td></tr>`;
+      const ordinary = row.ordinary.map((value) => value.toFixed(1).replace('.0', ''));
+      const preferentialValues = row.preferential.map((value) => value.toFixed(1).replace('.0', ''));
+      const cell = (value, className, cellIndex) => `<td class="${className} ${cellIndex === selectedDurationIndex ? 'is-duration-selected' : ''}">${value}</td>`;
+      return `<tr class="rate-row ${index === selectedBracket ? 'is-selected' : ''}"><td>${row.label}</td>${ordinary.map((value, cellIndex) => cell(value, 'ordinary-values', cellIndex)).join('')}${preferentialValues.map((value, cellIndex) => cell(value, 'preferential-values', cellIndex)).join('')}</tr>`;
     }).join('');
   }
 
@@ -71,7 +73,7 @@
     $('billable-tonnage').innerHTML = `${formatNumber(tonnage)} <small>NT</small>`;
     $('vessel-factor').textContent = `${factor * 100}%`;
     $('formula-text').textContent = `${formatNumber(tonnage)} × ${rate.toFixed(2)} × ${factor * 100}%`;
-    renderRateTable(bracketIndex, preferential);
+    renderRateTable(bracketIndex, preferential, duration);
   }
 
   form.addEventListener('input', update);
