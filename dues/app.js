@@ -17,6 +17,7 @@
   const typeInput = $('vessel-type');
   const form = $('tax-form');
   const error = $('form-error');
+  const copySkillButton = $('copy-skill-command');
 
   const options = $('country-options');
   [...chinaAliases, ...preferentialCountries].forEach((country) => {
@@ -78,6 +79,16 @@
 
   form.addEventListener('input', update);
   form.addEventListener('change', update);
+  copySkillButton?.addEventListener('click', async () => {
+    const command = copySkillButton.dataset.command;
+    try {
+      await navigator.clipboard.writeText(command);
+      copySkillButton.textContent = '已复制';
+      window.setTimeout(() => { copySkillButton.textContent = '复制安装命令'; }, 1800);
+    } catch {
+      copySkillButton.textContent = '请手动复制';
+    }
+  });
   document.addEventListener('keydown', (event) => {
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); countryInput.focus(); countryInput.select(); }
   });
