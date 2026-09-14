@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#082b3a">
+  <meta name="description" content="按船籍国、船舶净吨位和执照期限计算船舶吨税。">
+  <title>船舶吨税计算器 · zsagent01</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css?v=20260914">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="../" aria-label="返回 zsagent01 首页">
+        <span class="brand-mark">Z</span>
+        <span><strong>zsagent01</strong><small>船舶代理工具箱</small></span>
+      </a>
+      <div class="topbar-meta"><span class="live-dot"></span> 在线计算 · 人民币</div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">MARITIME TAX DESK <span>·</span> 船舶吨税</p>
+          <h1>把吨税算清楚，<em>再出发。</em></h1>
+          <p class="hero-lede">选择船籍国、输入净吨位，立即得到对应执照期限的应纳税额。默认按 30 日优惠税率计算。</p>
+        </div>
+        <div class="hero-stamp" aria-label="计算公式">
+          <span class="stamp-label">核心公式</span>
+          <strong>净吨位 × 定额税率</strong>
+          <small>单位：元 / 净吨</small>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="吨税计算器">
+        <div class="calculator-card">
+          <div class="card-heading">
+            <div><span class="step-label">STEP 01—03</span><h2>输入计税条件</h2></div>
+            <span class="required-note"><i>*</i> 必填</span>
+          </div>
+
+          <form id="tax-form" novalidate>
+            <div class="field-block country-field">
+              <label for="country">船籍国（地区）<span>*</span></label>
+              <div class="input-wrap search-wrap">
+                <span class="field-icon">⌕</span>
+                <input id="country" name="country" type="search" list="country-options" value="中国" autocomplete="off" placeholder="搜索国家或地区" aria-describedby="country-hint">
+                <span class="kbd">⌘ K</span>
+              </div>
+              <datalist id="country-options"></datalist>
+              <p id="country-hint" class="field-hint"><span class="status-dot"></span><strong id="rate-kind">中国籍 · 优惠税率</strong><span id="country-hint-text">与我国签订最惠国待遇条款的船籍适用优惠税率</span></p>
+            </div>
+
+            <div class="form-row">
+              <div class="field-block">
+                <label for="tonnage">船舶净吨位 <span>*</span></label>
+                <div class="input-wrap unit-wrap">
+                  <input id="tonnage" name="tonnage" type="number" min="0.01" step="0.01" value="10000" inputmode="decimal" aria-describedby="tonnage-hint">
+                  <span class="unit">NT</span>
+                </div>
+                <p id="tonnage-hint" class="field-hint">按吨位证书填写；临界值按“超过 / 不超过”划分</p>
+              </div>
+              <div class="field-block">
+                <label for="vessel-type">船舶类型</label>
+                <div class="input-wrap select-wrap">
+                  <select id="vessel-type" name="vesselType">
+                    <option value="standard">普通船舶</option>
+                    <option value="tug">拖船（按 50% 计征）</option>
+                    <option value="barge">非机动驳船（按 50% 计征）</option>
+                  </select>
+                </div>
+                <p class="field-hint">拖船：发动机功率每千瓦折合净吨位 0.67 吨</p>
+              </div>
+            </div>
+
+            <fieldset class="field-block duration-block">
+              <legend>执照期限 <span>*</span></legend>
+              <div class="duration-options" role="radiogroup" aria-label="执照期限">
+                <label class="duration-option is-active"><input type="radio" name="duration" value="30" checked><span><strong>30 日</strong><small>短期靠港</small></span><b>默认</b></label>
+                <label class="duration-option"><input type="radio" name="duration" value="90"><span><strong>90 日</strong><small>季度计划</small></span></label>
+                <label class="duration-option"><input type="radio" name="duration" value="365"><span><strong>1 年</strong><small>年度执照</small></span></label>
+              </div>
+            </fieldset>
+
+            <div id="form-error" class="form-error" role="alert" hidden></div>
+          </form>
+
+          <div class="source-note"><span class="source-icon">i</span><span>税率依据《船舶吨税的税率（定额税率）》；优惠国家依据所附 78 个国家（地区）清单。</span></div>
+        </div>
+
+        <aside class="result-card" aria-live="polite">
+          <div class="result-topline"><span>应纳税额</span><span class="result-badge" id="result-badge">优惠税率</span></div>
+          <div class="amount-line"><strong id="tax-amount">29,000.00</strong><span>元</span></div>
+          <p class="result-caption" id="result-caption">中国 · 30 日 · 普通船舶</p>
+          <div class="result-breakdown">
+            <div><span>适用税率</span><strong id="applied-rate">2.90 <small>元/净吨</small></strong></div>
+            <div><span>计税吨位</span><strong id="billable-tonnage">10,000.00 <small>NT</small></strong></div>
+            <div><span>船型系数</span><strong id="vessel-factor">100%</strong></div>
+          </div>
+          <div class="result-formula"><span>计算结果</span><strong id="formula-text">10,000 × 2.90 × 100%</strong></div>
+          <p class="result-disclaimer">结果四舍五入至 0.01 元，仅供申报前测算参考。</p>
+        </aside>
+      </section>
+
+      <section class="details-grid">
+        <article class="panel rate-panel">
+          <div class="panel-heading"><div><span class="step-label">RATE TABLE</span><h2>定额税率速查</h2></div><span class="table-unit">元 / 净吨</span></div>
+          <div class="rate-table-wrap">
+            <table>
+              <thead><tr><th>船舶净吨位</th><th class="ordinary-col">普通<br><small>30 / 90 / 1年</small></th><th class="preferential-col">优惠<br><small>30 / 90 / 1年</small></th></tr></thead>
+              <tbody id="rate-table-body"></tbody>
+            </table>
+          </div>
+          <p class="table-note">优惠税率适用于中国籍，以及与我国签订含最惠国待遇条款的国家（地区）船舶。</p>
+        </article>
+
+        <article class="panel country-panel">
+          <div class="panel-heading"><div><span class="step-label">PREFERENTIAL LIST</span><h2>优惠税率国家</h2></div><span class="country-count">78 个</span></div>
+          <p class="country-intro">在上方搜索框输入国家名称即可切换税率类别。未列入清单的船籍按普通税率计征。</p>
+          <div id="country-chips" class="country-chips" aria-label="优惠税率国家列表"></div>
+          <div class="alert-note"><span>!</span><p><strong>特别提醒</strong><br>利比里亚籍船舶适用优惠税率的到期日为 <b>2029 年 12 月 10 日</b>。</p></div>
+        </article>
+      </section>
+
+      <section class="rules-strip" aria-label="计税说明">
+        <div><span class="rule-number">01</span><p><strong>优惠税率</strong>中国籍及清单内船籍适用。</p></div>
+        <div><span class="rule-number">02</span><p><strong>吨位分档</strong>2000、10000、50000 净吨为分界。</p></div>
+        <div><span class="rule-number">03</span><p><strong>拖船 / 驳船</strong>按相同净吨位税率的 50% 计征。</p></div>
+      </section>
+    </main>
+
+    <footer class="footer"><span>船舶吨税计算器 · 2026</span><span>数据整理：zsagent01 · <a href="../">返回工具箱</a></span></footer>
+  </div>
+  <script src="./app.js?v=20260914"></script>
+</body>
+</html>
