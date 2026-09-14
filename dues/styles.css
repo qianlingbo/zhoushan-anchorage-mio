@@ -16,3 +16,8 @@ th{padding-left:8px;padding-right:8px;white-space:nowrap}
 td{padding-left:8px;padding-right:8px}
 .rate-row.is-selected td:first-child{padding-left:5px}
 .is-duration-selected{box-shadow:inset 0 -3px 0 var(--orange)}
+
+/* Amount treatment inspired by a clean quote-display pill. */
+.amount-line{gap:10px;margin-top:49px;padding:0;border:0}
+.amount-line strong{padding:9px 16px 11px;border-radius:999px;background:#f5f8f7;color:#164b63;font-family:'DM Mono',monospace;font-weight:500;font-size:clamp(36px,4.8vw,54px);letter-spacing:-.085em;text-shadow:none;box-shadow:0 10px 25px rgba(0,0,0,.12)}
+.amount-line span{color:#80dfcd;font-weight:700}
