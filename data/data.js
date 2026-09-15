@@ -1,14 +1,14 @@
 window.__ANCHOR_DATA__ = {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-09-15 23:07:54",
-  "lastChecked": "2026-09-15 23:07:54",
-  "lastSuccessfulFetch": "2026-09-15 14:09:19",
-  "updateWindow": "2026-09-15T21:00+08:00",
-  "publishTime": "2026年09月15日11时",
-  "publishCode": "2026091511",
+  "status": "更新完成",
+  "lastUpdated": "2026-09-16 00:58:52",
+  "lastChecked": "2026-09-16 00:58:52",
+  "lastSuccessfulFetch": "2026-09-16 00:58:52",
+  "updateWindow": "2026-09-16T00:00+08:00",
+  "publishTime": "2026年09月15日20时",
+  "publishCode": "2026091520",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天多云。后天多云到阴，偶有阵雨。18日阴到多云，局部阵雨。19日阴有时有阵雨。<br><br>",
-      "Time": "2026091511",
-      "PreciseForecastTime": "2026年09月15日11时"
+      "Time": "2026091520",
+      "PreciseForecastTime": "2026年09月15日20时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天多云。后天多云到阴，偶有阵雨。18日阴到多云，局部阵雨。19日阴有时有阵雨。<br><br>",
-      "Time": "2026091511",
-      "PreciseForecastTime": "2026年09月15日11时"
+      "Time": "2026091520",
+      "PreciseForecastTime": "2026年09月15日20时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天多云。后天多云到阴，偶有阵雨。18日阴到多云，局部阵雨。19日阴有时有阵雨。<br><br>",
-      "Time": "2026091511",
-      "PreciseForecastTime": "2026年09月15日11时"
+      "Time": "2026091520",
+      "PreciseForecastTime": "2026年09月15日20时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,11 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天多云。后天多云到阴，偶有阵雨。18日阴到多云，局部阵雨。19日阴有时有阵雨。<br><br>",
-      "Time": "2026091511",
-      "PreciseForecastTime": "2026年09月15日11时"
+      "Time": "2026091520",
+      "PreciseForecastTime": "2026年09月15日20时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 };
