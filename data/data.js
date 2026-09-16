@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-09-16 17:17:47",
-  "lastChecked": "2026-09-16 17:17:47",
-  "lastSuccessfulFetch": "2026-09-16 17:17:47",
-  "updateWindow": "2026-09-16T15:00+08:00",
-  "publishTime": "2026年09月16日15时",
-  "publishCode": "2026091615",
+  "lastUpdated": "2026-09-16 22:57:46",
+  "lastChecked": "2026-09-16 22:57:46",
+  "lastSuccessfulFetch": "2026-09-16 22:57:46",
+  "updateWindow": "2026-09-16T21:00+08:00",
+  "publishTime": "2026年09月16日19时",
+  "publishCode": "2026091619",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天多云，局部有阵雨。后天多云到阴，局部有阵雨。19日阴有时有阵雨。20日阴有时有阵雨转阴到多云。<br><br>",
-      "Time": "2026091615",
-      "PreciseForecastTime": "2026年09月16日15时"
+      "Time": "2026091619",
+      "PreciseForecastTime": "2026年09月16日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天多云，局部有阵雨。后天多云到阴，局部有阵雨。19日阴有时有阵雨。20日阴有时有阵雨转阴到多云。<br><br>",
-      "Time": "2026091615",
-      "PreciseForecastTime": "2026年09月16日15时"
+      "Time": "2026091619",
+      "PreciseForecastTime": "2026年09月16日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天多云，局部有阵雨。后天多云到阴，局部有阵雨。19日阴有时有阵雨。20日阴有时有阵雨转阴到多云。<br><br>",
-      "Time": "2026091615",
-      "PreciseForecastTime": "2026年09月16日15时"
+      "Time": "2026091619",
+      "PreciseForecastTime": "2026年09月16日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天多云，局部有阵雨。后天多云到阴，局部有阵雨。19日阴有时有阵雨。20日阴有时有阵雨转阴到多云。<br><br>",
-      "Time": "2026091615",
-      "PreciseForecastTime": "2026年09月16日15时"
+      "Time": "2026091619",
+      "PreciseForecastTime": "2026年09月16日19时"
     }
   }
 };
