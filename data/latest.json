@@ -1,14 +1,14 @@
 {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-09-17 23:08:04",
-  "lastChecked": "2026-09-17 23:08:04",
-  "lastSuccessfulFetch": "2026-09-17 17:26:33",
-  "updateWindow": "2026-09-17T21:00+08:00",
-  "publishTime": "2026年09月17日14时",
-  "publishCode": "2026091714",
+  "status": "更新完成",
+  "lastUpdated": "2026-09-18 00:59:36",
+  "lastChecked": "2026-09-18 00:59:36",
+  "lastSuccessfulFetch": "2026-09-18 00:59:36",
+  "updateWindow": "2026-09-18T00:00+08:00",
+  "publishTime": "2026年09月17日19时",
+  "publishCode": "2026091719",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -255,8 +255,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴，局部阵雨。明天多云到阴，局部阵雨。后天阴有时有阵雨，傍晚转多云。20-21日多云。<br><br>",
-      "Time": "2026091714",
-      "PreciseForecastTime": "2026年09月17日14时"
+      "Time": "2026091719",
+      "PreciseForecastTime": "2026年09月17日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴，局部阵雨。明天多云到阴，局部阵雨。后天阴有时有阵雨，傍晚转多云。20-21日多云。<br><br>",
-      "Time": "2026091714",
-      "PreciseForecastTime": "2026年09月17日14时"
+      "Time": "2026091719",
+      "PreciseForecastTime": "2026年09月17日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴，局部阵雨。明天多云到阴，局部阵雨。后天阴有时有阵雨，傍晚转多云。20-21日多云。<br><br>",
-      "Time": "2026091714",
-      "PreciseForecastTime": "2026年09月17日14时"
+      "Time": "2026091719",
+      "PreciseForecastTime": "2026年09月17日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,11 +999,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴，局部阵雨。明天多云到阴，局部阵雨。后天阴有时有阵雨，傍晚转多云。20-21日多云。<br><br>",
-      "Time": "2026091714",
-      "PreciseForecastTime": "2026年09月17日14时"
+      "Time": "2026091719",
+      "PreciseForecastTime": "2026年09月17日19时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 }
