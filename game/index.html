@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#86cbc8" />
+  <meta name="description" content="绕着一颗港口星球奔跑，体验舟山船舶代理的一天。" />
+  <title>船代跑现场 · 舟山船舶代理笔记</title>
+  <link rel="icon" href="/favicon.svg" />
+  <link rel="stylesheet" href="./styles.css?v=20260919-globe-1" />
+</head>
+<body>
+  <a class="site-back" href="/">← 舟山港航工具</a>
+
+  <main class="game-shell">
+    <section class="screen intro-screen is-active" id="intro-screen" aria-labelledby="game-title">
+      <canvas id="title-canvas" aria-hidden="true"></canvas>
+      <div class="intro-logo">
+        <p>ZS AGENT · LITTLE PORT PLANET</p>
+        <h1 id="game-title"><span>舟山</span><strong>船代</strong><em>跑现场</em></h1>
+      </div>
+      <button class="enter-button" id="start-button" type="button">ENTER</button>
+      <p class="intro-tip"><kbd>A</kbd><kbd>D</kbd> 或 ← → 绕星球奔跑 · 靠近任务地点按 <kbd>E</kbd></p>
+      <p class="intro-edition">A NEVER-ENDING WORKDAY<br />ZHOUSHAN · 2026</p>
+    </section>
+
+    <section class="screen play-screen" id="play-screen" aria-label="船代星球游戏区域">
+      <canvas id="world-canvas" aria-label="可无限环绕奔跑的港口星球"></canvas>
+
+      <header class="game-header">
+        <div class="game-mark">
+          <strong>船代跑现场</strong>
+          <span>PORT AGENT ON THE RUN</span>
+        </div>
+        <div class="status-strip" aria-live="polite">
+          <div><span>TIME</span><strong id="clock-value">07:20</strong></div>
+          <div><span>ENERGY</span><strong id="energy-value">100</strong></div>
+          <div><span>DONE</span><strong><b id="completed-value">0</b>/8</strong></div>
+        </div>
+        <button class="round-button" id="help-button" type="button" aria-label="查看玩法">?</button>
+      </header>
+
+      <aside class="mission-note" id="mission-note">
+        <span id="task-sequence">01 / 08</span>
+        <p id="task-deadline">08:10 前</p>
+        <h2 id="task-title">机场接班船员</h2>
+        <p id="task-description">沿星球跑到机场，确认接班船员身份和登轮安排。</p>
+        <strong id="task-destination">下一站 · 普陀山机场</strong>
+      </aside>
+
+      <div class="orbit-meter" aria-hidden="true">
+        <span class="orbit-progress" id="orbit-progress"></span>
+        <i>∞</i>
+      </div>
+
+      <div class="location-hint" id="location-hint" hidden>
+        <span id="location-name">普陀山机场</span>
+        <button id="interact-button" type="button"><kbd>E</kbd> 进入现场</button>
+      </div>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+      <div class="run-controls" aria-label="移动控制">
+        <button id="run-left" type="button" aria-label="向左跑">←</button>
+        <button class="action-button" id="mobile-action" type="button">办理</button>
+        <button id="run-right" type="button" aria-label="向右跑">→</button>
+      </div>
+
+      <p class="route-caption">机场 · 边检 · 海关 · 船厂 · 海事 · 集装箱 · 件杂货 · 锚地 · 无限循环</p>
+    </section>
+
+    <section class="screen ending-screen" id="ending-screen" aria-labelledby="ending-title">
+      <canvas id="ending-canvas" aria-hidden="true"></canvas>
+      <div class="ending-copy">
+        <p>ONE MORE SHIP SAILED · SHIFT COMPLETE</p>
+        <h2 id="ending-title">今天的船，<br />都顺利开了。</h2>
+        <p id="ending-summary">八项任务全部办结。</p>
+        <div class="ending-score">
+          <span>专业度 <strong id="final-score">100</strong></span>
+          <span>收工 <strong id="final-time">18:10</strong></span>
+        </div>
+        <button id="restart-button" type="button">再跑一圈 ↻</button>
+        <a href="/">返回舟山港航工具</a>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="scene-dialog" id="scene-dialog">
+    <div class="scene-visual" id="scene-visual" aria-hidden="true">
+      <span id="scene-code">AIRPORT / 01</span>
+      <div class="scene-sketch"></div>
+    </div>
+    <div class="scene-content">
+      <button class="dialog-close" id="dialog-close" type="button" aria-label="暂时离开">×</button>
+      <p class="scene-location" id="scene-location">普陀山机场 · 到达大厅</p>
+      <h2 id="scene-title">四名接班船员已经到了</h2>
+      <p class="scene-story" id="scene-story"></p>
+      <fieldset id="scene-choices">
+        <legend id="scene-question">离开机场前，最稳妥的第一步是？</legend>
+      </fieldset>
+      <div class="scene-result" id="scene-result" hidden>
+        <strong id="result-title"></strong>
+        <p id="result-text"></p>
+      </div>
+      <button class="complete-button" id="complete-button" type="button" hidden>办结，继续跑 →</button>
+    </div>
+  </dialog>
+
+  <dialog class="help-dialog" id="help-dialog">
+    <button class="dialog-close" id="help-close" type="button" aria-label="关闭玩法说明">×</button>
+    <p>HOW TO RUN A PLANET</p>
+    <h2>这颗星球没有尽头。</h2>
+    <dl>
+      <div><dt>奔跑</dt><dd>按 <kbd>A</kbd><kbd>D</kbd>、左右方向键，或长按屏幕底部左右按钮。</dd></div>
+      <div><dt>循环</dt><dd>港区首尾相接，向任意方向跑都可以绕回原点。</dd></div>
+      <div><dt>现场</dt><dd>目标地点转到人物脚下时，按 <kbd>E</kbd> 或“办理”。</dd></div>
+      <div><dt>说明</dt><dd>这是游戏化体验，场景经过简化，不作为实际申报或办证清单。</dd></div>
+    </dl>
+  </dialog>
+
+  <script src="./game.js?v=20260919-globe-1"></script>
+</body>
+</html>
