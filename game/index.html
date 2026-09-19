@@ -7,7 +7,7 @@
   <meta name="description" content="绕着一颗港口星球奔跑，体验舟山船舶代理的一天。" />
   <title>船代跑现场 · 舟山船舶代理笔记</title>
   <link rel="icon" href="/favicon.svg" />
-  <link rel="stylesheet" href="./styles.css?v=20260919-globe-1" />
+  <link rel="stylesheet" href="./styles.css?v=20260919-webgl-1" />
 </head>
 <body>
   <a class="site-back" href="/">← 舟山港航工具</a>
@@ -19,9 +19,10 @@
         <p>ZS AGENT · LITTLE PORT PLANET</p>
         <h1 id="game-title"><span>舟山</span><strong>船代</strong><em>跑现场</em></h1>
       </div>
-      <button class="enter-button" id="start-button" type="button">ENTER</button>
+      <button class="enter-button" id="start-button" type="button" disabled>LOADING</button>
       <p class="intro-tip"><kbd>A</kbd><kbd>D</kbd> 或 ← → 绕星球奔跑 · 靠近任务地点按 <kbd>E</kbd></p>
       <p class="intro-edition">A NEVER-ENDING WORKDAY<br />ZHOUSHAN · 2026</p>
+      <p class="renderer-badge">THREE.JS · WEBGL · TOON SHADER</p>
     </section>
 
     <section class="screen play-screen" id="play-screen" aria-label="船代星球游戏区域">
@@ -118,6 +119,6 @@
     </dl>
   </dialog>
 
-  <script src="./game.js?v=20260919-globe-1"></script>
+  <script type="module" src="./game.js?v=20260919-webgl-1"></script>
 </body>
 </html>

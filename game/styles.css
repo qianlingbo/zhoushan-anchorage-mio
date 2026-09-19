@@ -65,6 +65,7 @@ button { font: inherit; }
   display: block;
   width: 100%;
   height: 100%;
+  touch-action: none;
 }
 
 .intro-screen {
@@ -165,6 +166,13 @@ button { font: inherit; }
   transform: translate(-47%, 3px) rotate(-1deg);
 }
 
+.enter-button:disabled {
+  color: rgba(23,44,50,.52);
+  background: rgba(244,237,218,.6);
+  box-shadow: 3px 4px 0 rgba(23,44,50,.2);
+  cursor: wait;
+}
+
 .intro-tip {
   position: absolute;
   z-index: 3;
@@ -201,6 +209,17 @@ kbd {
   line-height: 1.5;
   letter-spacing: .18em;
   text-align: right;
+}
+
+.renderer-badge {
+  position: absolute;
+  z-index: 3;
+  left: 24px;
+  bottom: 20px;
+  margin: 0;
+  color: rgba(23,44,50,.55);
+  font: 800 8px ui-monospace, monospace;
+  letter-spacing: .16em;
 }
 
 .play-screen { background: linear-gradient(#8ccfcb, #78c0bd); }
