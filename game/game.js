@@ -3,6 +3,9 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.m
 const TAU = Math.PI * 2;
 const ISLAND_X = 21;
 const ISLAND_Z = 15.5;
+const PLANET_RADIUS = 34;
+const PLANET_Z_SCALE = ISLAND_Z / ISLAND_X;
+const PLANET_CENTER_Y = .38 - PLANET_RADIUS;
 const COLORS = {
   ink: 0x172726, cream: 0xf4eddc, paper: 0xe5ddc9, sky: 0xa9bbb0,
   sea: 0x7d9991, seaDeep: 0x496662, grass: 0x829071, grassLight: 0xaeb796,
@@ -190,9 +193,15 @@ function formatTime(total) {
   return `${String(Math.floor(total / 60) % 24).padStart(2, "0")}:${String(Math.floor(total % 60)).padStart(2, "0")}`;
 }
 
+function globeHeight(x, z) {
+  const scaledZ = z / PLANET_Z_SCALE;
+  const radialSq = x * x + scaledZ * scaledZ;
+  return PLANET_CENTER_Y + Math.sqrt(Math.max(.01, PLANET_RADIUS * PLANET_RADIUS - radialSq));
+}
+
 function terrainHeight(x, z) {
   const edge = Math.max(0, 1 - Math.sqrt((x / ISLAND_X) ** 2 + (z / ISLAND_Z) ** 2));
-  return 0.2 + (Math.sin(x * 0.37) + Math.cos(z * 0.34) + Math.sin((x + z) * 0.2)) * 0.13 * edge;
+  return globeHeight(x, z) + (Math.sin(x * 0.37) + Math.cos(z * 0.34) + Math.sin((x + z) * 0.2)) * 0.11 * edge;
 }
 
 function makeGradientMap() {
@@ -365,6 +374,18 @@ function addWindow(group, x, y, z, color = 0x9fc7c2) {
   addMesh(group, new THREE.BoxGeometry(0.025, 0.34, 0.06), COLORS.cream, { position: [x, y, z + .035], outline: false, shadow: false });
 }
 
+function addContainer(group, x, y, z, color, rotationY = 0) {
+  const container = new THREE.Group();
+  addMesh(container, new THREE.BoxGeometry(1.32, .58, .72), color, { position: [0, 0, 0], outlineScale: 1.022 });
+  [-.43, -.14, .14, .43].forEach((ridgeX) => addMesh(container, new THREE.BoxGeometry(.028, .48, .025), COLORS.ink, {
+    position: [ridgeX, 0, .372], outline: false, shadow: false
+  }));
+  container.position.set(x, y, z);
+  container.rotation.y = rotationY;
+  group.add(container);
+  return container;
+}
+
 function makeBuilding(location) {
   const group = new THREE.Group();
   addBlobShadow(group, 4.1, 2.7, 0.18);
@@ -384,19 +405,35 @@ function makeBuilding(location) {
     addMesh(group, new THREE.BoxGeometry(3.4, .14, .14), COLORS.ink, { position: [-.08, 3.86, 0], rotation: [0, 0, -.08] });
     addMesh(group, new THREE.BoxGeometry(.11, 2.1, .11), COLORS.ink, { position: [1.45, 2.9, 0], rotation: [0, 0, -.22] });
     addMesh(group, new THREE.BoxGeometry(.5, .52, .5), COLORS.yellow, { position: [1.7, 1.72, 0] });
-  } else if (kind === "container" || kind === "cargo") {
+  } else if (kind === "immigration" || kind === "customs") {
+    const authorityColor = kind === "immigration" ? 0x9a5549 : 0x58747a;
+    addMesh(group, new THREE.BoxGeometry(3.45, 1.62, 2), authorityColor, { position: [0, .88, 0] });
+    addMesh(group, new THREE.BoxGeometry(3.8, .16, 2.28), COLORS.cream, { position: [0, 1.78, 0] });
+    [-1.08, -.36, .36, 1.08].forEach((x) => addWindow(group, x, 1.05, 1.03, 0xb7c6bd));
+    addMesh(group, new THREE.BoxGeometry(1.85, .34, .12), kind === "immigration" ? COLORS.orange : COLORS.yellow, { position: [0, 1.52, 1.08], outlineScale: 1.025 });
+    addMesh(group, new THREE.BoxGeometry(.52, .92, .13), COLORS.navy, { position: [0, .48, 1.05], outlineScale: 1.03 });
+    addMesh(group, new THREE.CylinderGeometry(.035, .045, 2.8, 7), COLORS.ink, { position: [-1.95, 1.42, .65] });
+    addMesh(group, new THREE.BoxGeometry(.82, .38, .035), 0xa74235, { position: [-1.54, 2.55, .65], outlineScale: 1.02 });
+    if (kind === "immigration") {
+      addMesh(group, new THREE.BoxGeometry(2.7, .14, .14), COLORS.ink, { position: [2.35, 2.22, .5] });
+      addMesh(group, new THREE.BoxGeometry(.14, 2.15, .14), COLORS.ink, { position: [1.05, 1.08, .5] });
+      addMesh(group, new THREE.BoxGeometry(.14, 2.15, .14), COLORS.ink, { position: [3.65, 1.08, .5] });
+      addMesh(group, new THREE.BoxGeometry(1.65, .1, .18), COLORS.orange, { position: [2.48, .72, .62], rotation: [0, 0, -.08] });
+    }
+  } else if (kind === "container") {
     const boxColors = [COLORS.orange, COLORS.yellow, COLORS.blue, COLORS.rust];
     for (let row = 0; row < 3; row += 1) {
       for (let column = 0; column < 4; column += 1) {
-        const z = column % 2 ? -.38 : .38;
-        addMesh(group, new THREE.BoxGeometry(1.1, .54, .74), boxColors[(row + column) % boxColors.length], {
-          position: [(column - 1.5) * 1.04, .3 + row * .55, z], outlineScale: 1.025
-        });
+        addContainer(group, (column - 1.5) * 1.16, .3 + row * .59, column % 2 ? -.43 : .43, boxColors[(row + column) % boxColors.length]);
       }
     }
-    addMesh(group, new THREE.CylinderGeometry(.09, .13, 3.35, 8), COLORS.ink, { position: [-2.35, 1.8, 0] });
-    addMesh(group, new THREE.BoxGeometry(3.2, .13, .13), COLORS.ink, { position: [-.82, 3.38, 0], rotation: [0, 0, -.07] });
-    addMesh(group, new THREE.BoxGeometry(.1, 1.85, .1), COLORS.ink, { position: [.65, 2.5, 0], rotation: [0, 0, -.23] });
+    addMesh(group, new THREE.BoxGeometry(4.9, .12, 1.65), 0x776957, { position: [0, .02, 0], outlineScale: 1.015 });
+  } else if (kind === "cargo") {
+    const boxColors = [COLORS.orange, COLORS.yellow, COLORS.blue, COLORS.rust];
+    for (let column = 0; column < 4; column += 1) addContainer(group, (column - 1.5) * 1.15, .31, column % 2 ? -.4 : .4, boxColors[column]);
+    addMesh(group, new THREE.CylinderGeometry(.11, .15, 3.55, 8), COLORS.ink, { position: [-2.35, 1.88, 0] });
+    addMesh(group, new THREE.BoxGeometry(3.4, .14, .14), COLORS.ink, { position: [-.7, 3.48, 0], rotation: [0, 0, -.1] });
+    addMesh(group, new THREE.BoxGeometry(.11, 1.95, .11), COLORS.ink, { position: [.85, 2.55, 0], rotation: [0, 0, -.23] });
   } else if (kind === "anchorage") {
     addMesh(group, new THREE.BoxGeometry(3.8, .48, 1.45), COLORS.cream, { position: [0, .38, 0] });
     addMesh(group, new THREE.BoxGeometry(1.55, 1, 1.18), color, { position: [.25, 1.12, 0] });
@@ -423,6 +460,54 @@ function makeBoat(color, scale = 1) {
   return group;
 }
 
+function makeQuayCrane(color = COLORS.orange) {
+  const group = new THREE.Group();
+  addBlobShadow(group, 4.8, 2.5, .18);
+  [-1.25, 1.25].forEach((x) => {
+    addMesh(group, new THREE.BoxGeometry(.18, 3.9, .2), color, { position: [x, 1.95, 0], rotation: [0, 0, x * -.1], outlineScale: 1.035 });
+    addMesh(group, new THREE.BoxGeometry(.58, .18, .72), COLORS.ink, { position: [x, .12, 0], outlineScale: 1.025 });
+  });
+  addMesh(group, new THREE.BoxGeometry(3.25, .24, .34), color, { position: [0, 3.9, 0], outlineScale: 1.03 });
+  addMesh(group, new THREE.BoxGeometry(6.1, .2, .24), color, { position: [1.48, 4.45, 0], rotation: [0, 0, -.035], outlineScale: 1.03 });
+  addMesh(group, new THREE.BoxGeometry(2.65, .12, .14), COLORS.ink, { position: [-.05, 3.05, 0], rotation: [0, 0, .72], outlineScale: 1.02 });
+  addMesh(group, new THREE.BoxGeometry(2.65, .12, .14), COLORS.ink, { position: [.05, 3.05, 0], rotation: [0, 0, -.72], outlineScale: 1.02 });
+  addMesh(group, new THREE.BoxGeometry(.72, .58, .64), COLORS.cream, { position: [-.7, 4.18, 0], outlineScale: 1.025 });
+  const trolley = new THREE.Group();
+  trolley.position.set(.6, 4.28, 0);
+  addMesh(trolley, new THREE.BoxGeometry(.45, .22, .48), COLORS.navy, { outlineScale: 1.025 });
+  const cable = addMesh(trolley, new THREE.CylinderGeometry(.025, .025, 1.45, 7), COLORS.ink, { position: [0, -.82, 0], outline: false, shadow: false });
+  const spreader = addMesh(trolley, new THREE.BoxGeometry(1.12, .12, .52), COLORS.yellow, { position: [0, -1.56, 0], outlineScale: 1.03 });
+  const cargo = new THREE.Group();
+  addContainer(cargo, 0, -1.98, 0, COLORS.rust);
+  trolley.add(cargo);
+  group.add(trolley);
+  Object.assign(group.userData, { trolley, cable, spreader, cargo });
+  return group;
+}
+
+function makeYardGantry() {
+  const group = new THREE.Group();
+  [-1.65, 1.65].forEach((x) => {
+    addMesh(group, new THREE.BoxGeometry(.2, 2.7, .22), COLORS.yellow, { position: [x, 1.36, 0], rotation: [0, 0, x * -.07], outlineScale: 1.035 });
+    [-.45, .45].forEach((z) => addMesh(group, new THREE.CylinderGeometry(.13, .13, .16, 10), COLORS.ink, {
+      position: [x, .12, z], rotation: [Math.PI / 2, 0, 0], outlineScale: 1.025
+    }));
+  });
+  addMesh(group, new THREE.BoxGeometry(3.9, .24, .5), COLORS.yellow, { position: [0, 2.78, 0], outlineScale: 1.03 });
+  addMesh(group, new THREE.BoxGeometry(.5, .4, .56), COLORS.navy, { position: [.55, 2.52, 0], outlineScale: 1.025 });
+  addMesh(group, new THREE.CylinderGeometry(.025, .025, 1.15, 7), COLORS.ink, { position: [.55, 1.84, 0], outline: false });
+  addMesh(group, new THREE.BoxGeometry(1.05, .1, .48), COLORS.orange, { position: [.55, 1.28, 0], outlineScale: 1.03 });
+  return group;
+}
+
+function makeBeachUmbrella(color) {
+  const group = new THREE.Group();
+  addMesh(group, new THREE.CylinderGeometry(.035, .045, 1.45, 7), 0x775c45, { position: [0, .72, 0], outlineScale: 1.03 });
+  addMesh(group, new THREE.ConeGeometry(.82, .38, 18), color, { position: [0, 1.42, 0], rotation: [Math.PI, 0, 0], outlineScale: 1.025 });
+  addMesh(group, new THREE.BoxGeometry(.85, .08, .34), COLORS.cream, { position: [.72, .12, .2], rotation: [0, -.25, 0], outlineScale: 1.025 });
+  return group;
+}
+
 class PortWorld {
   constructor() {
     this.scene = new THREE.Scene();
@@ -433,7 +518,6 @@ class PortWorld {
     this.camera = new THREE.PerspectiveCamera(42, 1, .1, 180);
     this.raycaster = new THREE.Raycaster();
     this.pointer = new THREE.Vector2();
-    this.walkPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -.24);
     this.cameraYaw = state.facing;
     this.renderers = new Map();
     [["intro", elements.titleCanvas], ["play", elements.worldCanvas]].forEach(([name, canvas]) => {
@@ -461,6 +545,8 @@ class PortWorld {
     this.locationGroups = new Map();
     this.ambientPeople = [];
     this.clouds = [];
+    this.walkSurfaces = [];
+    this.craneMotions = [];
     this.player = makePerson({ jacket: COLORS.orange, trousers: COLORS.navy, skin: COLORS.skinC, hair: 0x4a2d28, bag: true });
     this.world.add(this.player);
     this.moveMarker = new THREE.Group();
@@ -481,11 +567,32 @@ class PortWorld {
     this.resize();
   }
 
-  makeIsland(radius, color, y, scaleZ = .74) {
-    const mesh = new THREE.Mesh(new THREE.CircleGeometry(radius, 96), toonMaterial(color));
-    mesh.rotation.x = -Math.PI / 2;
-    mesh.scale.y = scaleZ;
-    mesh.position.y = y;
+  makeIsland(radius, color, offset, scaleZ = PLANET_Z_SCALE) {
+    const radialSegments = 28;
+    const angularSegments = 128;
+    const vertices = [];
+    const indices = [];
+    for (let ring = 0; ring <= radialSegments; ring += 1) {
+      const ringRadius = radius * ring / radialSegments;
+      for (let segment = 0; segment <= angularSegments; segment += 1) {
+        const angle = segment / angularSegments * TAU;
+        const x = Math.cos(angle) * ringRadius;
+        const z = Math.sin(angle) * ringRadius * scaleZ;
+        vertices.push(x, terrainHeight(x, z) + offset, z);
+      }
+    }
+    for (let ring = 0; ring < radialSegments; ring += 1) {
+      for (let segment = 0; segment < angularSegments; segment += 1) {
+        const current = ring * (angularSegments + 1) + segment;
+        const next = current + angularSegments + 1;
+        indices.push(current, current + 1, next, current + 1, next + 1, next);
+      }
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+    geometry.setIndex(indices);
+    geometry.computeVertexNormals();
+    const mesh = new THREE.Mesh(geometry, toonMaterial(color));
     mesh.receiveShadow = true;
     return mesh;
   }
@@ -501,21 +608,30 @@ class PortWorld {
   buildWorld() {
     this.waterMaterial = new THREE.ShaderMaterial({
       uniforms: { uTime: { value: 0 }, uA: { value: new THREE.Color(COLORS.sea) }, uB: { value: new THREE.Color(COLORS.seaDeep) } },
-      vertexShader: `uniform float uTime; varying float vWave; void main(){ vec3 p=position; float w=sin(p.x*.16+uTime)*.1+cos(p.y*.21-uTime*.75)*.07; p.z+=w; vWave=w; gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.); }`,
+      vertexShader: `uniform float uTime; varying float vWave; void main(){ vec3 p=position; float w=sin((p.x+p.z)*.18+uTime)*.08+cos((p.z-p.x)*.14-uTime*.72)*.055; p+=normal*w; vWave=w; gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.); }`,
       fragmentShader: `uniform vec3 uA; uniform vec3 uB; varying float vWave; void main(){ float wash=smoothstep(-.16,.16,vWave); float inkLine=1.-smoothstep(0.,.026,abs(vWave-.018)); vec3 color=mix(uB,uA,wash); color=mix(color,vec3(.08,.14,.13),inkLine*.24); gl_FragColor=vec4(color,1.); }`
     });
-    const water = new THREE.Mesh(new THREE.PlaneGeometry(150, 150, 44, 44), this.waterMaterial);
-    water.rotation.x = -Math.PI / 2;
-    water.position.y = -.95;
+    const water = new THREE.Mesh(new THREE.SphereGeometry(PLANET_RADIUS, 96, 64), this.waterMaterial);
+    water.scale.z = PLANET_Z_SCALE;
+    water.position.y = PLANET_CENTER_Y;
+    water.receiveShadow = true;
     this.world.add(water);
-    const cliff = new THREE.Mesh(new THREE.CylinderGeometry(20.9, 22.1, 1.35, 96), toonMaterial(COLORS.cliff));
-    cliff.scale.z = .74;
-    cliff.position.y = -.48;
-    cliff.castShadow = true;
-    cliff.receiveShadow = true;
-    this.world.add(cliff);
-    this.world.add(this.makeIsland(21.1, COLORS.sand, .16));
-    this.world.add(this.makeIsland(20.25, COLORS.grass, .23));
+    const soil = this.makeIsland(21.15, COLORS.cliff, -.16);
+    const sand = this.makeIsland(20.85, COLORS.sand, .04);
+    const grass = this.makeIsland(18.9, COLORS.grass, .13);
+    this.world.add(soil, sand, grass);
+    this.walkSurfaces.push(sand, grass);
+    const shorelinePoints = Array.from({ length: 72 }, (_, index) => {
+      const angle = index / 72 * TAU;
+      const x = Math.cos(angle) * 19.55;
+      const z = Math.sin(angle) * 19.55 * PLANET_Z_SCALE;
+      return new THREE.Vector3(x, terrainHeight(x, z) + .17, z);
+    });
+    const shoreline = new THREE.Mesh(
+      new THREE.TubeGeometry(new THREE.CatmullRomCurve3(shorelinePoints, true), 144, .045, 6, true),
+      toonMaterial(COLORS.cream)
+    );
+    this.world.add(shoreline);
     this.addRoad([[0, 8.2], [-6.5, 8], [-14.4, 8]]);
     this.addRoad([[-14.4, 8], [-11, 5.4], [-9.2, 2.3], [-2.2, -1.7], [3.7, 3.3], [9, 5.5], [13.8, 7.4]]);
     this.addRoad([[3.7, 3.3], [8.4, .3], [14, -3.1], [9.2, -8], [4.7, -11], [-3.8, -10], [-11.2, -10]]);
@@ -545,10 +661,60 @@ class PortWorld {
       this.locationGroups.set(location.id, { location, building, label, npc, marker: npc.userData.marker });
       colliders.push({ x, z, radius: ["container", "cargo"].includes(location.kind) ? 2.65 : 2.1 });
     });
+
+    const terminalPadY = terrainHeight(14.6, -9.1) + .02;
+    addMesh(this.world, new THREE.BoxGeometry(6.6, .22, 3.7), 0x6e7168, {
+      position: [14.6, terminalPadY, -9.1], rotation: [0, .12, 0], outlineScale: 1.015
+    });
+    const quayCrane = makeQuayCrane(COLORS.orange);
+    quayCrane.position.set(15.2, terminalPadY + .12, -9.2);
+    quayCrane.rotation.y = .54;
+    quayCrane.scale.setScalar(1.12);
+    this.world.add(quayCrane);
+    this.craneMotions.push({ crane: quayCrane, phase: 0 });
+    colliders.push({ x: 15.2, z: -9.2, radius: 1.75 });
+
+    const yardStacks = new THREE.Group();
+    const terminalColors = [COLORS.orange, COLORS.blue, COLORS.yellow, COLORS.rust];
+    for (let row = 0; row < 2; row += 1) {
+      for (let column = 0; column < 5; column += 1) {
+        addContainer(yardStacks, (column - 2) * 1.3, .31 + row * .6, column % 2 ? -.58 : .58, terminalColors[(row + column) % terminalColors.length]);
+      }
+    }
+    yardStacks.position.set(10.4, terrainHeight(10.4, -5.7), -5.7);
+    yardStacks.rotation.y = -.08;
+    this.world.add(yardStacks);
+    const yardGantry = makeYardGantry();
+    yardGantry.position.set(10.4, terrainHeight(10.4, -5.7) + .04, -5.7);
+    yardGantry.rotation.y = -.08;
+    yardGantry.scale.setScalar(1.08);
+    this.world.add(yardGantry);
+    colliders.push({ x: 10.4, z: -5.7, radius: 1.55 });
+
+    const cargoCrane = makeQuayCrane(COLORS.yellow);
+    cargoCrane.position.set(5.1, terrainHeight(5.1, -13) + .04, -13);
+    cargoCrane.rotation.y = 1.2;
+    cargoCrane.scale.setScalar(.72);
+    this.world.add(cargoCrane);
+    this.craneMotions.push({ crane: cargoCrane, phase: Math.PI * .75 });
+
+    [[-17.1, -7.2, COLORS.orange, .15], [-13.3, -10.2, COLORS.yellow, -.4], [-17.8, 5.6, COLORS.blue, .42]].forEach(([x, z, color, rotation]) => {
+      const umbrella = makeBeachUmbrella(color);
+      umbrella.position.set(x, terrainHeight(x, z) + .06, z);
+      umbrella.rotation.y = rotation;
+      umbrella.scale.setScalar(.82);
+      this.world.add(umbrella);
+    });
+    const beachFlag = new THREE.Group();
+    addMesh(beachFlag, new THREE.CylinderGeometry(.025, .035, 1.8, 7), COLORS.ink, { position: [0, .9, 0], outline: false });
+    addMesh(beachFlag, new THREE.BoxGeometry(.58, .3, .025), COLORS.orange, { position: [.29, 1.56, 0], outlineScale: 1.02 });
+    beachFlag.position.set(-18.1, terrainHeight(-18.1, -3.8), -3.8);
+    this.world.add(beachFlag);
+
     const treePositions = [
-      [-17, 4, 1.2], [-16, -2, 1], [-15, -7, 1.25], [-12, 11.5, 1.05], [-8, 10.5, 1.15], [-4.5, 12, 1.3],
+      [-16, -2, 1], [-12, 11.5, 1.05], [-8, 10.5, 1.15], [-4.5, 12, 1.3],
       [-4, 4.4, .85], [-.7, 11.3, 1.18], [3, 11.2, 1], [7.2, 9.6, 1.25], [10, 11.2, 1.08], [17.3, 4.5, 1.2],
-      [18, -1, 1], [16.5, -8, 1.2], [12, -12.4, .95], [8, -13.4, 1.1], [.2, -13.2, 1], [-6, -12.3, 1.25],
+      [18, -1, 1], [.2, -13.2, 1], [-6, -12.3, 1.25],
       [-13.5, -3, .9], [-7, -1, .78], [7.3, 7, .8], [7.6, -3.5, .78], [.5, 3.3, .72]
     ];
     treePositions.forEach(([x, z, scale]) => {
@@ -594,16 +760,20 @@ class PortWorld {
       this.world.add(person);
       this.ambientPeople.push(person);
     }
-    const westPier = addMesh(this.world, new THREE.BoxGeometry(4, .3, 9), 0x9d7352, { position: [-11, -.55, -17], outlineScale: 1.02 });
-    westPier.rotation.y = .04;
-    const eastPier = addMesh(this.world, new THREE.BoxGeometry(4.8, .3, 9), 0x9d7352, { position: [9, -.55, -17], outlineScale: 1.02 });
-    eastPier.rotation.y = -.05;
-    const boatA = makeBoat(COLORS.blue, 1.05); boatA.position.set(-14.2, -.72, -21); boatA.rotation.y = -.35; this.world.add(boatA);
-    const boatB = makeBoat(COLORS.orange, 1.1); boatB.position.set(15.8, -.72, -17.5); boatB.rotation.y = .85; this.world.add(boatB);
-    [[-30, -17, 5.5], [30, -13, 6.5], [-27, 25, 4.5], [28, 23, 5]].forEach(([x, z, scale]) => {
+    const westPier = addMesh(this.world, new THREE.BoxGeometry(3.5, .28, 5.4), 0x85664f, {
+      position: [-10.6, terrainHeight(-10.6, -13.2) - .02, -13.2], rotation: [-.2, .04, 0], outlineScale: 1.02
+    });
+    westPier.receiveShadow = true;
+    const eastPier = addMesh(this.world, new THREE.BoxGeometry(4.1, .28, 5.6), 0x85664f, {
+      position: [8.3, terrainHeight(8.3, -13.5) - .02, -13.5], rotation: [-.2, -.05, 0], outlineScale: 1.02
+    });
+    eastPier.receiveShadow = true;
+    const boatA = makeBoat(COLORS.blue, 1.05); boatA.position.set(-13.8, globeHeight(-13.8, -16.5) + .35, -16.5); boatA.rotation.y = -.35; this.world.add(boatA);
+    const boatB = makeBoat(COLORS.orange, 1.1); boatB.position.set(15.8, globeHeight(15.8, -14.5) + .35, -14.5); boatB.rotation.y = .85; this.world.add(boatB);
+    [[-25, -8, 3.3], [25, -7, 3.7], [-19, 15, 3], [18, 16, 3.4]].forEach(([x, z, scale]) => {
       const island = new THREE.Group();
       addMesh(island, new THREE.DodecahedronGeometry(scale, 1), COLORS.grassDark, { scale: [1.5, .38, 1], outlineScale: 1.02 });
-      island.position.set(x, -.5, z);
+      island.position.set(x, globeHeight(x, z) + .2, z);
       this.world.add(island);
     });
     for (let index = 0; index < 7; index += 1) {
@@ -625,8 +795,8 @@ class PortWorld {
       -((clientY - rect.top) / rect.height) * 2 + 1
     );
     this.raycaster.setFromCamera(this.pointer, this.camera);
-    const point = new THREE.Vector3();
-    return this.raycaster.ray.intersectPlane(this.walkPlane, point) ? point : null;
+    const hits = this.raycaster.intersectObjects(this.walkSurfaces, false);
+    return hits.length ? hits[0].point : null;
   }
 
   clickedLocation(clientX, clientY) {
@@ -692,6 +862,16 @@ class PortWorld {
   render(time, delta) {
     this.waterMaterial.uniforms.uTime.value = time * .75;
     this.updatePeople(time);
+    this.craneMotions.forEach(({ crane, phase }) => {
+      const { trolley, cable, spreader, cargo } = crane.userData;
+      const travel = reducedMotion.matches ? .55 : .55 + Math.sin(time * .34 + phase) * 1.55;
+      const cableScale = reducedMotion.matches ? 1 : 1 + (Math.sin(time * .27 + phase + .8) + 1) * .16;
+      trolley.position.x = travel;
+      cable.scale.y = cableScale;
+      cable.position.y = -.82 * cableScale;
+      spreader.position.y = -1.56 * cableScale;
+      cargo.position.y = -(cableScale - 1) * 1.8;
+    });
     this.clouds.forEach((cloud, index) => {
       if (!reducedMotion.matches) cloud.position.x = -30 + ((time * (.18 + index * .015) + index * 9) % 70);
     });
@@ -738,10 +918,10 @@ class PortWorld {
       state.cameraSnap = false;
     } else {
       const mobile = window.innerWidth < 760;
-      const orbit = reducedMotion.matches ? .78 : .78 + time * .025;
-      const distance = mobile ? 55 : 42;
-      this.camera.position.set(Math.sin(orbit) * distance, mobile ? 38 : 29, Math.cos(orbit) * distance);
-      this.camera.lookAt(0, .3, 0);
+      const orbit = reducedMotion.matches ? .72 : .72 + time * .018;
+      const distance = mobile ? 68 : 62;
+      this.camera.position.set(Math.sin(orbit) * distance, mobile ? 70 : 62, Math.cos(orbit) * distance);
+      this.camera.lookAt(0, -8, 0);
     }
     this.renderers.get(state.mode).render(this.scene, this.camera);
   }

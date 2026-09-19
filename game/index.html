@@ -4,10 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#9eb3aa" />
-  <meta name="description" content="在水墨三维港岛点击奔跑、跳跃并切换第一与第三人称，随机遇见船舶代理现场事件。" />
+  <meta name="description" content="在球状水墨港岛穿过沙滩、边防、海关、集装箱堆场与岸吊码头，随机遇见船舶代理现场事件。" />
   <title>船代跑现场 · 舟山船舶代理笔记</title>
   <link rel="icon" href="/favicon.svg" />
-  <link rel="stylesheet" href="./styles.css?v=20260919-ink-controls-1" />
+  <link rel="stylesheet" href="./styles.css?v=20260920-port-globe-1" />
 </head>
 <body>
   <a class="site-back" href="/">← 舟山港航工具</a>
@@ -22,7 +22,7 @@
       <button class="enter-button" id="start-button" type="button" disabled>LOADING</button>
       <p class="intro-tip">点击地面自动奔跑 · <kbd>Space</kbd> 跳跃 · <kbd>V</kbd> 切换视角</p>
       <p class="intro-edition">NO ROUTE · NO CHECKLIST<br />ZHOUSHAN · 2026</p>
-      <p class="renderer-badge">THREE.JS · INK WASH · DUAL VIEW</p>
+      <p class="renderer-badge">THREE.JS · INK GLOBE · WORKING PORT</p>
     </section>
 
     <section class="screen play-screen" id="play-screen" aria-label="船代港区游戏区域">
@@ -49,7 +49,7 @@
         <span id="task-sequence">FREE ROAM</span>
         <p id="task-deadline">没有固定路线</p>
         <h2 id="task-title">今天会遇见什么？</h2>
-        <p id="task-description">沿海边、道路和码头随便走。每个人、每个地点都可能出现不同现场。</p>
+        <p id="task-description">沿球面道路穿过沙滩、海关、边防和集装箱码头。每个人、每个地点都可能出现不同现场。</p>
         <strong id="task-destination">靠近有 ◇ 标记的人物</strong>
       </aside>
 
@@ -108,12 +108,12 @@
       <div><dt>奔跑</dt><dd>直接点击地面，人物会自动跑向目标；也保留 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 作为补充。</dd></div>
       <div><dt>跳跃</dt><dd>按 <kbd>Space</kbd> 或屏幕“跳”按钮。奔跑途中也能起跳。</dd></div>
       <div><dt>视角</dt><dd>按 <kbd>V</kbd> 或右上角按钮切换第一、第三人称；第三人称可用滚轮调节距离。</dd></div>
-      <div><dt>探索</dt><dd>机场、边检、海关、船厂、码头和锚地没有先后顺序，想去哪里就去哪里。</dd></div>
+      <div><dt>探索</dt><dd>沙滩、机场、边防、海关、船厂、堆场、岸吊码头和锚地没有先后顺序，想去哪里就去哪里。</dd></div>
       <div><dt>现场</dt><dd>靠近带 ◇ 标记的人物按 <kbd>E</kbd>。同一地点再次来访，也可能遇见另一件事。</dd></div>
       <div><dt>说明</dt><dd>这是游戏化体验，场景经过简化，不作为实际申报或办证清单。</dd></div>
     </dl>
   </dialog>
 
-  <script type="module" src="./game.js?v=20260919-ink-controls-1"></script>
+  <script type="module" src="./game.js?v=20260920-port-globe-1"></script>
 </body>
 </html>
