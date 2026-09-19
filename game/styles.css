@@ -1,14 +1,14 @@
 :root {
-  --ink: #172c32;
-  --ink-soft: #4c6265;
-  --paper: #f4edda;
-  --paper-bright: #fffaf0;
-  --sea: #87ccc9;
-  --sea-deep: #67afa9;
-  --orange: #ed6a45;
-  --yellow: #f0bd4d;
-  --green: #6c9b74;
-  --line: rgba(23, 44, 50, 0.22);
+  --ink: #182727;
+  --ink-soft: #55625c;
+  --paper: #e9e2cf;
+  --paper-bright: #f7f1df;
+  --sea: #9eb3aa;
+  --sea-deep: #566f6d;
+  --orange: #aa4d36;
+  --yellow: #c69b4a;
+  --green: #71836b;
+  --line: rgba(24, 39, 39, 0.24);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   font-family: "Kaiti SC", "STKaiti", "Songti SC", serif;
@@ -40,9 +40,9 @@ button { font: inherit; }
   inset: 0;
   z-index: 20;
   pointer-events: none;
-  opacity: .08;
+  opacity: .16;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
-  mix-blend-mode: multiply;
+  mix-blend-mode: soft-light;
 }
 
 .site-back {
@@ -68,6 +68,8 @@ button { font: inherit; }
   height: 100%;
   touch-action: none;
 }
+
+#world-canvas { cursor: crosshair; }
 
 .intro-screen {
   background: var(--sea);
@@ -223,9 +225,7 @@ kbd {
   letter-spacing: .16em;
 }
 
-.play-screen {
-  background: linear-gradient(#82c9c6, #55aaa8);
-}
+.play-screen { background: linear-gradient(#a7bbb1, #657f79); }
 
 .play-screen::before {
   content: "";
@@ -233,7 +233,10 @@ kbd {
   inset: 0;
   z-index: 4;
   pointer-events: none;
-  box-shadow: inset 0 0 110px rgba(25, 46, 48, .24);
+  background:
+    radial-gradient(circle at 50% 42%, transparent 0 36%, rgba(23, 38, 36, .12) 74%, rgba(18, 30, 29, .34) 100%),
+    linear-gradient(112deg, rgba(247,241,223,.06), transparent 35%, rgba(36,56,52,.08));
+  box-shadow: inset 0 0 130px rgba(20, 33, 32, .22);
 }
 
 .game-header {
@@ -265,7 +268,7 @@ kbd {
 .status-strip {
   display: flex;
   margin-left: auto;
-  margin-right: 48px;
+  margin-right: 220px;
   border: 1.5px solid var(--ink);
   background: var(--ink);
   box-shadow: 3px 4px 0 rgba(23,44,50,.3);
@@ -285,8 +288,7 @@ kbd {
 .status-strip b { color: var(--orange); }
 
 .round-button {
-  position: absolute;
-  right: 0;
+  position: static;
   width: 34px;
   height: 34px;
   border: 2px solid var(--ink);
@@ -298,6 +300,37 @@ kbd {
   cursor: pointer;
   font: 900 16px ui-monospace, monospace;
 }
+
+.camera-tools {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  pointer-events: auto;
+}
+
+.view-switch,
+.jump-button {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  min-height: 34px;
+  border: 1.5px solid var(--ink);
+  padding: 6px 9px;
+  color: var(--ink);
+  background: rgba(247,241,223,.82);
+  box-shadow: 2px 3px 0 rgba(24,39,39,.42);
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform 140ms var(--ease-out), background-color 140ms ease;
+}
+
+.view-switch[aria-pressed="true"] { color: var(--paper-bright); background: var(--ink); }
+.view-switch small,
+.jump-button small { opacity: .58; font: 700 8px ui-monospace, monospace; letter-spacing: .06em; }
+.jump-button { background: rgba(198,155,74,.88); }
 
 .roam-note {
   position: absolute;
@@ -432,7 +465,7 @@ kbd {
   z-index: 7;
   right: max(25px, env(safe-area-inset-right));
   bottom: max(28px, calc(env(safe-area-inset-bottom) + 15px));
-  display: flex;
+  display: none;
   align-items: flex-end;
   gap: 14px;
 }
@@ -596,6 +629,8 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
 
 @media (hover: hover) and (pointer: fine) {
   .choice-button:hover { border-color: var(--ink); transform: translateX(3px); }
+  .view-switch:hover,
+  .jump-button:hover { transform: translateY(-2px); }
 }
 
 @media (max-width: 760px), (pointer: coarse) {
@@ -615,7 +650,13 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
   .roam-note { display: none; }
   .mini-map { top: 70px; right: 10px; width: 98px; height: 78px; opacity: .9; }
   .route-caption { display: none; }
-  .run-controls { right: 13px; bottom: max(14px, calc(env(safe-area-inset-bottom) + 8px)); gap: 10px; transform: none; }
+  .camera-tools { right: 0; }
+  .view-switch { padding: 6px 8px; }
+  .view-switch span { display: none; }
+  .jump-button { position: fixed; right: 84px; bottom: max(94px, calc(env(safe-area-inset-bottom) + 84px)); min-width: 58px; min-height: 58px; border-radius: 50%; justify-content: center; }
+  .jump-button span { font-size: 15px; }
+  .jump-button small { display: none; }
+  .run-controls { right: 13px; bottom: max(14px, calc(env(safe-area-inset-bottom) + 8px)); display: flex; gap: 10px; transform: none; }
   .move-pad { grid-template: repeat(3, 42px) / repeat(3, 42px); }
   .move-pad button { width: 42px; height: 42px; background: rgba(255,250,240,.88); }
   .run-controls .action-button { width: 66px; height: 66px; margin-bottom: 38px; }

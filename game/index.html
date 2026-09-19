@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#86cbc8" />
-  <meta name="description" content="在手绘三维港岛自由漫游，随机遇见船舶代理现场事件。" />
+  <meta name="theme-color" content="#9eb3aa" />
+  <meta name="description" content="在水墨三维港岛点击奔跑、跳跃并切换第一与第三人称，随机遇见船舶代理现场事件。" />
   <title>船代跑现场 · 舟山船舶代理笔记</title>
   <link rel="icon" href="/favicon.svg" />
-  <link rel="stylesheet" href="./styles.css?v=20260919-free-roam-1" />
+  <link rel="stylesheet" href="./styles.css?v=20260919-ink-controls-1" />
 </head>
 <body>
   <a class="site-back" href="/">← 舟山港航工具</a>
@@ -20,9 +20,9 @@
         <h1 id="game-title"><span>舟山</span><strong>船代</strong><em>跑现场</em></h1>
       </div>
       <button class="enter-button" id="start-button" type="button" disabled>LOADING</button>
-      <p class="intro-tip"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 自由行走 · 靠近人物或地点按 <kbd>E</kbd></p>
+      <p class="intro-tip">点击地面自动奔跑 · <kbd>Space</kbd> 跳跃 · <kbd>V</kbd> 切换视角</p>
       <p class="intro-edition">NO ROUTE · NO CHECKLIST<br />ZHOUSHAN · 2026</p>
-      <p class="renderer-badge">THREE.JS · CEL SHADED · FREE ROAM</p>
+      <p class="renderer-badge">THREE.JS · INK WASH · DUAL VIEW</p>
     </section>
 
     <section class="screen play-screen" id="play-screen" aria-label="船代港区游戏区域">
@@ -38,7 +38,11 @@
           <div><span>TRUST</span><strong id="energy-value">72</strong></div>
           <div><span>ENCOUNTERS</span><strong><b id="completed-value">0</b></strong></div>
         </div>
-        <button class="round-button" id="help-button" type="button" aria-label="查看玩法">?</button>
+        <div class="camera-tools">
+          <button class="view-switch" id="view-switch" type="button" aria-pressed="false"><span>第三人称</span><small>V</small></button>
+          <button class="jump-button" id="jump-button" type="button"><span>跳跃</span><small>Space</small></button>
+          <button class="round-button" id="help-button" type="button" aria-label="查看玩法">?</button>
+        </div>
       </header>
 
       <aside class="roam-note" id="mission-note">
@@ -71,7 +75,7 @@
         <button class="action-button" id="mobile-action" type="button">交互</button>
       </div>
 
-      <p class="route-caption">没有任务顺序 · 没有唯一路线 · 每次交互都会重新抽取现场</p>
+      <p class="route-caption">点击地面奔跑 · 空格跳跃 · V 切换第一 / 第三人称 · 滚轮调节距离</p>
     </section>
   </main>
 
@@ -101,13 +105,15 @@
     <p>HOW TO WANDER THE PORT</p>
     <h2>别等任务，去碰见现场。</h2>
     <dl>
-      <div><dt>行走</dt><dd>按 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>、方向键，或使用屏幕方向盘。</dd></div>
+      <div><dt>奔跑</dt><dd>直接点击地面，人物会自动跑向目标；也保留 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 作为补充。</dd></div>
+      <div><dt>跳跃</dt><dd>按 <kbd>Space</kbd> 或屏幕“跳”按钮。奔跑途中也能起跳。</dd></div>
+      <div><dt>视角</dt><dd>按 <kbd>V</kbd> 或右上角按钮切换第一、第三人称；第三人称可用滚轮调节距离。</dd></div>
       <div><dt>探索</dt><dd>机场、边检、海关、船厂、码头和锚地没有先后顺序，想去哪里就去哪里。</dd></div>
       <div><dt>现场</dt><dd>靠近带 ◇ 标记的人物按 <kbd>E</kbd>。同一地点再次来访，也可能遇见另一件事。</dd></div>
       <div><dt>说明</dt><dd>这是游戏化体验，场景经过简化，不作为实际申报或办证清单。</dd></div>
     </dl>
   </dialog>
 
-  <script type="module" src="./game.js?v=20260919-free-roam-1"></script>
+  <script type="module" src="./game.js?v=20260919-ink-controls-1"></script>
 </body>
 </html>

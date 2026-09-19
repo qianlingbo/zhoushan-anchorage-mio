@@ -4,11 +4,11 @@ const TAU = Math.PI * 2;
 const ISLAND_X = 21;
 const ISLAND_Z = 15.5;
 const COLORS = {
-  ink: 0x1d3033, cream: 0xfff8e8, paper: 0xeee4cc, sky: 0x82c9c6,
-  sea: 0x55aaa8, seaDeep: 0x327e82, grass: 0x7ba56a, grassLight: 0xa9c77a,
-  grassDark: 0x3f6e50, cliff: 0x8d795c, sand: 0xd9c483, road: 0xe7d5a6,
-  orange: 0xdc6849, yellow: 0xe9b94d, blue: 0x587f91, navy: 0x283e4a,
-  rust: 0xa85e45, skinA: 0xd69a6a, skinB: 0xb97855, skinC: 0xf0bd88
+  ink: 0x172726, cream: 0xf4eddc, paper: 0xe5ddc9, sky: 0xa9bbb0,
+  sea: 0x7d9991, seaDeep: 0x496662, grass: 0x829071, grassLight: 0xaeb796,
+  grassDark: 0x526755, cliff: 0x837563, sand: 0xc9b98f, road: 0xd9cfb7,
+  orange: 0xa9503c, yellow: 0xc49b4e, blue: 0x617b80, navy: 0x263d40,
+  rust: 0x8d5846, skinA: 0xc98e68, skinB: 0xaa7157, skinC: 0xdfad82
 };
 
 const locations = [
@@ -149,22 +149,29 @@ const elements = {
   roamNote: $("mission-note"), noteKicker: $("task-sequence"), noteTime: $("task-deadline"), noteTitle: $("task-title"), noteBody: $("task-description"), noteFooter: $("task-destination"),
   locationHint: $("location-hint"), locationName: $("location-name"), interact: $("interact-button"), mobileAction: $("mobile-action"),
   runUp: $("run-up"), runDown: $("run-down"), runLeft: $("run-left"), runRight: $("run-right"), toast: $("toast"),
+  viewSwitch: $("view-switch"), jumpButton: $("jump-button"),
   dialog: $("scene-dialog"), sceneVisual: $("scene-visual"), sceneCode: $("scene-code"), sceneLocation: $("scene-location"), sceneTitle: $("scene-title"),
   sceneStory: $("scene-story"), sceneChoices: $("scene-choices"), sceneResult: $("scene-result"), resultTitle: $("result-title"), resultText: $("result-text"),
   complete: $("complete-button"), dialogClose: $("dialog-close"), help: $("help-dialog"), helpButton: $("help-button"), helpClose: $("help-close")
 };
 
 const state = {
-  mode: "intro", position: new THREE.Vector3(3.1, 0, 7.2), velocity: new THREE.Vector3(), facing: Math.PI, cameraFacing: Math.PI,
+  mode: "intro", position: new THREE.Vector3(3.1, 0, 7.2), velocity: new THREE.Vector3(), facing: Math.PI,
   keys: new Set(), holds: { up: false, down: false, left: false, right: false }, minutes: 445, trust: 72, encounterCount: 0,
   nearbyId: null, activeEncounter: null, activeChoice: false, runPhase: 0, distanceWalked: 0, nextAmbientAt: 28,
-  lastEncounter: new Map(), lastFrame: performance.now(), toastTimer: 0
+  lastEncounter: new Map(), lastFrame: performance.now(), toastTimer: 0, destination: null, pendingInteractId: null,
+  cameraMode: "third", cameraDistance: 7.4, cameraSnap: true, jumpHeight: 0, jumpVelocity: 0, grounded: true
 };
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const materialCache = new Map();
 const colliders = [];
 const outlineMaterial = new THREE.MeshBasicMaterial({ color: COLORS.ink, side: THREE.BackSide });
+
+function lerpAngle(from, to, amount) {
+  const delta = Math.atan2(Math.sin(to - from), Math.cos(to - from));
+  return from + delta * amount;
+}
 
 function seededRandom(seed = 7823) {
   let value = seed >>> 0;
@@ -420,24 +427,28 @@ class PortWorld {
   constructor() {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(COLORS.sky);
-    this.scene.fog = new THREE.Fog(COLORS.sky, 34, 72);
+    this.scene.fog = new THREE.Fog(COLORS.sky, 24, 58);
     this.world = new THREE.Group();
     this.scene.add(this.world);
     this.camera = new THREE.PerspectiveCamera(42, 1, .1, 180);
+    this.raycaster = new THREE.Raycaster();
+    this.pointer = new THREE.Vector2();
+    this.walkPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -.24);
+    this.cameraYaw = state.facing;
     this.renderers = new Map();
     [["intro", elements.titleCanvas], ["play", elements.worldCanvas]].forEach(([name, canvas]) => {
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: "high-performance" });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 0.9;
+      renderer.toneMappingExposure = 0.78;
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       this.renderers.set(name, renderer);
     });
-    const hemisphere = new THREE.HemisphereLight(0xe5fff2, 0x49604c, 2.25);
+    const hemisphere = new THREE.HemisphereLight(0xe9e4d3, 0x3d4d45, 2.05);
     this.scene.add(hemisphere);
-    const sun = new THREE.DirectionalLight(0xfff0c7, 3.4);
+    const sun = new THREE.DirectionalLight(0xf4ddba, 2.85);
     sun.position.set(-14, 24, 16);
     sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);
@@ -452,6 +463,20 @@ class PortWorld {
     this.clouds = [];
     this.player = makePerson({ jacket: COLORS.orange, trousers: COLORS.navy, skin: COLORS.skinC, hair: 0x4a2d28, bag: true });
     this.world.add(this.player);
+    this.moveMarker = new THREE.Group();
+    const targetRing = new THREE.Mesh(
+      new THREE.RingGeometry(.3, .38, 32),
+      new THREE.MeshBasicMaterial({ color: COLORS.orange, transparent: true, opacity: .88, side: THREE.DoubleSide, depthWrite: false })
+    );
+    targetRing.rotation.x = -Math.PI / 2;
+    this.moveMarker.add(targetRing);
+    [-1, 1].forEach((direction) => {
+      const stroke = new THREE.Mesh(new THREE.BoxGeometry(.24, .035, .035), new THREE.MeshBasicMaterial({ color: COLORS.ink }));
+      stroke.rotation.y = Math.PI / 4 * direction;
+      this.moveMarker.add(stroke);
+    });
+    this.moveMarker.visible = false;
+    this.world.add(this.moveMarker);
     this.buildWorld();
     this.resize();
   }
@@ -477,7 +502,7 @@ class PortWorld {
     this.waterMaterial = new THREE.ShaderMaterial({
       uniforms: { uTime: { value: 0 }, uA: { value: new THREE.Color(COLORS.sea) }, uB: { value: new THREE.Color(COLORS.seaDeep) } },
       vertexShader: `uniform float uTime; varying float vWave; void main(){ vec3 p=position; float w=sin(p.x*.16+uTime)*.1+cos(p.y*.21-uTime*.75)*.07; p.z+=w; vWave=w; gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.); }`,
-      fragmentShader: `uniform vec3 uA; uniform vec3 uB; varying float vWave; void main(){ float b=floor(clamp((vWave+.2)*7.,0.,3.))/3.; gl_FragColor=vec4(mix(uB,uA,b),1.); }`
+      fragmentShader: `uniform vec3 uA; uniform vec3 uB; varying float vWave; void main(){ float wash=smoothstep(-.16,.16,vWave); float inkLine=1.-smoothstep(0.,.026,abs(vWave-.018)); vec3 color=mix(uB,uA,wash); color=mix(color,vec3(.08,.14,.13),inkLine*.24); gl_FragColor=vec4(color,1.); }`
     });
     const water = new THREE.Mesh(new THREE.PlaneGeometry(150, 150, 44, 44), this.waterMaterial);
     water.rotation.x = -Math.PI / 2;
@@ -593,6 +618,40 @@ class PortWorld {
     }
   }
 
+  groundPointFromPointer(clientX, clientY) {
+    const rect = elements.worldCanvas.getBoundingClientRect();
+    this.pointer.set(
+      (clientX - rect.left) / rect.width * 2 - 1,
+      -((clientY - rect.top) / rect.height) * 2 + 1
+    );
+    this.raycaster.setFromCamera(this.pointer, this.camera);
+    const point = new THREE.Vector3();
+    return this.raycaster.ray.intersectPlane(this.walkPlane, point) ? point : null;
+  }
+
+  clickedLocation(clientX, clientY) {
+    const rect = elements.worldCanvas.getBoundingClientRect();
+    let closest = null;
+    let closestDistance = rect.width < 760 ? 62 : 90;
+    this.locationGroups.forEach(({ location, npc }) => {
+      const screen = npc.position.clone().add(new THREE.Vector3(0, 1.25, 0)).project(this.camera);
+      if (screen.z < -1 || screen.z > 1) return;
+      const x = rect.left + (screen.x + 1) * .5 * rect.width;
+      const y = rect.top + (1 - screen.y) * .5 * rect.height;
+      const distance = Math.hypot(clientX - x, clientY - y);
+      if (distance < closestDistance) {
+        closest = location;
+        closestDistance = distance;
+      }
+    });
+    return closest;
+  }
+
+  showMoveMarker(point) {
+    this.moveMarker.position.set(point.x, terrainHeight(point.x, point.z) + .08, point.z);
+    this.moveMarker.visible = true;
+  }
+
   resize() {
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -640,13 +699,43 @@ class PortWorld {
     if (state.mode === "play") {
       const movement = Math.min(state.velocity.length() / 5.1, 1);
       animatePerson(this.player, state.runPhase, movement, time);
+      if (!state.grounded) {
+        const tuck = Math.min(state.jumpHeight * .55, .38);
+        this.player.userData.leftArm.rotation.x = -.55;
+        this.player.userData.rightArm.rotation.x = -.55;
+        this.player.userData.leftLeg.rotation.x += tuck;
+        this.player.userData.rightLeg.rotation.x += tuck;
+      }
       this.player.rotation.y = state.facing;
-      this.player.position.set(state.position.x, terrainHeight(state.position.x, state.position.z), state.position.z);
-      const mobile = window.innerWidth < 760;
-      const desired = state.position.clone().add(new THREE.Vector3(mobile ? 10.8 : 8.8, mobile ? 9.2 : 7.5, mobile ? 13.4 : 10.8));
-      const cameraLerp = reducedMotion.matches ? 1 : 1 - Math.exp(-4.8 * delta);
-      this.camera.position.lerp(desired, cameraLerp);
-      this.camera.lookAt(state.position.x, 1.25, state.position.z);
+      const ground = terrainHeight(state.position.x, state.position.z);
+      this.player.position.set(state.position.x, ground + state.jumpHeight, state.position.z);
+      const yawLerp = state.cameraSnap || reducedMotion.matches ? 1 : 1 - Math.exp(-6.5 * delta);
+      this.cameraYaw = lerpAngle(this.cameraYaw, state.facing, yawLerp);
+      const forward = new THREE.Vector3(Math.sin(this.cameraYaw), 0, Math.cos(this.cameraYaw));
+      const cameraLerp = state.cameraSnap || reducedMotion.matches ? 1 : 1 - Math.exp(-7.2 * delta);
+      if (state.cameraMode === "first") {
+        const eye = new THREE.Vector3(state.position.x, ground + state.jumpHeight + 1.86, state.position.z).addScaledVector(forward, .08);
+        this.camera.position.lerp(eye, cameraLerp);
+        this.camera.lookAt(eye.clone().addScaledVector(forward, 14).add(new THREE.Vector3(0, -.35, 0)));
+        this.player.visible = false;
+      } else {
+        const mobile = window.innerWidth < 760;
+        const distance = mobile ? Math.max(6.2, state.cameraDistance - .4) : state.cameraDistance;
+        const desired = new THREE.Vector3(state.position.x, ground + state.jumpHeight, state.position.z)
+          .addScaledVector(forward, -distance)
+          .add(new THREE.Vector3(0, mobile ? 5.5 : 4.8, 0));
+        const focus = new THREE.Vector3(state.position.x, ground + state.jumpHeight + 1.15, state.position.z)
+          .addScaledVector(forward, 2.2);
+        this.camera.position.lerp(desired, cameraLerp);
+        this.camera.lookAt(focus);
+      }
+      if (this.moveMarker.visible && !reducedMotion.matches) {
+        const pulse = 1 + Math.sin(time * 5.2) * .08;
+        this.moveMarker.scale.setScalar(pulse);
+      } else {
+        this.moveMarker.scale.setScalar(1);
+      }
+      state.cameraSnap = false;
     } else {
       const mobile = window.innerWidth < 760;
       const orbit = reducedMotion.matches ? .78 : .78 + time * .025;
@@ -679,11 +768,68 @@ function showToast(message) {
   state.toastTimer = window.setTimeout(() => elements.toast.classList.remove("is-visible"), 2400);
 }
 
+function setCameraMode(mode) {
+  state.cameraMode = mode;
+  state.cameraSnap = true;
+  const firstPerson = mode === "first";
+  elements.viewSwitch.setAttribute("aria-pressed", String(firstPerson));
+  elements.viewSwitch.querySelector("span").textContent = firstPerson ? "第一人称" : "第三人称";
+}
+
+function toggleCameraMode() {
+  setCameraMode(state.cameraMode === "third" ? "first" : "third");
+  showToast(state.cameraMode === "first" ? "第一人称 · 点击前方地面继续跑" : "第三人称 · 现在可以看见自己");
+}
+
+function jump() {
+  if (state.mode !== "play" || !state.grounded || elements.dialog.open || elements.help.open) return;
+  state.grounded = false;
+  state.jumpVelocity = 6.15;
+}
+
+function setDestination(point, pendingInteractId = null) {
+  if (!point || !insideIsland(point.x, point.z) || collides(point.x, point.z)) {
+    showToast("那里走不过去，换一块地面试试");
+    return;
+  }
+  state.destination = new THREE.Vector3(point.x, 0, point.z);
+  state.pendingInteractId = pendingInteractId;
+  stage.showMoveMarker(point);
+}
+
+function moveFromPointer(clientX, clientY) {
+  if (state.mode !== "play" || elements.dialog.open || elements.help.open) return;
+  const clickedLocation = stage.clickedLocation(clientX, clientY);
+  if (clickedLocation) {
+    const group = stage.locationGroups.get(clickedLocation.id);
+    const npcDistance = Math.hypot(state.position.x - group.npc.position.x, state.position.z - group.npc.position.z);
+    if (npcDistance < 2.5) {
+      state.nearbyId = clickedLocation.id;
+      interact();
+      return;
+    }
+    const npcPoint = new THREE.Vector3(group.npc.position.x, 0, group.npc.position.z);
+    const approach = npcPoint.clone().sub(new THREE.Vector3(clickedLocation.position[0], 0, clickedLocation.position[1])).normalize();
+    setDestination(npcPoint.addScaledVector(approach, 1.15), clickedLocation.id);
+    showToast(`正在前往 ${clickedLocation.name}`);
+    return;
+  }
+  setDestination(stage.groundPointFromPointer(clientX, clientY));
+}
+
 function resetGame() {
   state.position.set(3.1, 0, 7.2);
   state.velocity.set(0, 0, 0);
   state.facing = Math.PI;
-  state.cameraFacing = Math.PI;
+  state.destination = null;
+  state.pendingInteractId = null;
+  state.jumpHeight = 0;
+  state.jumpVelocity = 0;
+  state.grounded = true;
+  state.cameraDistance = 7.4;
+  stage.cameraYaw = state.facing;
+  stage.moveMarker.visible = false;
+  setCameraMode("third");
   state.minutes = 445;
   state.trust = 72;
   state.encounterCount = 0;
@@ -699,7 +845,7 @@ function resetGame() {
   updateHud();
   drawMinimap();
   setMode("play");
-  showToast("没有固定路线。看见 ◇ 就过去聊聊。");
+  showToast("点击地面奔跑 · 点击带 ◇ 的人物可自动前往");
 }
 
 function movementAxes() {
@@ -726,7 +872,9 @@ function moveCandidate(x, z) {
 }
 
 function applyMovement(direction, distance) {
-  if (!direction.lengthSq()) return;
+  if (!direction.lengthSq()) return false;
+  const previousX = state.position.x;
+  const previousZ = state.position.z;
   direction.normalize();
   const nextX = state.position.x + direction.x * distance;
   const nextZ = state.position.z + direction.z * distance;
@@ -734,6 +882,7 @@ function applyMovement(direction, distance) {
     if (!moveCandidate(nextX, state.position.z)) moveCandidate(state.position.x, nextZ);
   }
   state.facing = Math.atan2(direction.x, direction.z);
+  return Math.hypot(state.position.x - previousX, state.position.z - previousZ) > .0001;
 }
 
 function updateNearby() {
@@ -801,6 +950,9 @@ function openEncounter(locationId) {
   const location = locations.find((item) => item.id === locationId);
   const encounter = chooseEncounter(locationId);
   state.velocity.set(0, 0, 0);
+  state.destination = null;
+  state.pendingInteractId = null;
+  stage.moveMarker.visible = false;
   state.activeEncounter = { location, encounter };
   state.activeChoice = false;
   elements.sceneVisual.style.setProperty("--scene-color", `#${new THREE.Color(location.color).getHexString()}`);
@@ -861,21 +1013,55 @@ function update(delta) {
   if (state.mode !== "play" || elements.dialog.open || elements.help.open) return;
   const axes = movementAxes();
   const desired = new THREE.Vector3(axes.x, 0, axes.z);
+  const hasManualInput = desired.lengthSq() > 0;
+  if (hasManualInput) {
+    state.destination = null;
+    state.pendingInteractId = null;
+    stage.moveMarker.visible = false;
+  } else if (state.destination) {
+    desired.copy(state.destination).sub(state.position);
+    desired.y = 0;
+    if (desired.length() < .28) {
+      state.destination = null;
+      stage.moveMarker.visible = false;
+      desired.set(0, 0, 0);
+    }
+  }
   if (desired.lengthSq() > 1) desired.normalize();
-  const targetVelocity = desired.multiplyScalar(5.1);
+  const targetVelocity = desired.multiplyScalar(5.55);
   state.velocity.lerp(targetVelocity, 1 - Math.exp(-11 * delta));
   if (state.velocity.lengthSq() > .025) {
     const distance = state.velocity.length() * delta;
-    applyMovement(state.velocity.clone(), distance);
-    state.runPhase += distance * 2.55;
-    state.distanceWalked += distance;
-    state.minutes += delta * .34;
-    if (state.distanceWalked >= state.nextAmbientAt) {
-      state.nextAmbientAt += 28 + Math.random() * 28;
-      showToast(ambientMessages[Math.floor(Math.random() * ambientMessages.length)]);
+    const moved = applyMovement(state.velocity.clone(), distance);
+    if (moved) {
+      state.runPhase += distance * 2.55;
+      state.distanceWalked += distance;
+      state.minutes += delta * .34;
+      if (state.distanceWalked >= state.nextAmbientAt) {
+        state.nextAmbientAt += 28 + Math.random() * 28;
+        showToast(ambientMessages[Math.floor(Math.random() * ambientMessages.length)]);
+      }
+    } else if (state.destination) {
+      state.destination = null;
+      state.pendingInteractId = null;
+      stage.moveMarker.visible = false;
+      showToast("前面被挡住了，点另一条路绕过去");
+    }
+  }
+  if (!state.grounded) {
+    state.jumpVelocity -= 14.5 * delta;
+    state.jumpHeight += state.jumpVelocity * delta;
+    if (state.jumpHeight <= 0) {
+      state.jumpHeight = 0;
+      state.jumpVelocity = 0;
+      state.grounded = true;
     }
   }
   updateNearby();
+  if (!state.destination && state.pendingInteractId && state.nearbyId === state.pendingInteractId) {
+    state.pendingInteractId = null;
+    interact();
+  }
   updateHud();
   drawMinimap();
 }
@@ -912,6 +1098,8 @@ elements.complete.addEventListener("click", closeEncounter);
 elements.dialogClose.addEventListener("click", () => elements.dialog.close());
 elements.helpButton.addEventListener("click", () => elements.help.showModal());
 elements.helpClose.addEventListener("click", () => elements.help.close());
+elements.viewSwitch.addEventListener("click", toggleCameraMode);
+elements.jumpButton.addEventListener("click", jump);
 elements.dialog.addEventListener("click", (event) => { if (event.target === elements.dialog) elements.dialog.close(); });
 elements.help.addEventListener("click", (event) => { if (event.target === elements.help) elements.help.close(); });
 bindHold(elements.runUp, "up");
@@ -919,22 +1107,34 @@ bindHold(elements.runDown, "down");
 bindHold(elements.runLeft, "left");
 bindHold(elements.runRight, "right");
 
+let canvasPointerStart = null;
+elements.worldCanvas.addEventListener("pointerdown", (event) => {
+  if (event.button !== 0) return;
+  canvasPointerStart = { x: event.clientX, y: event.clientY, time: performance.now() };
+});
+elements.worldCanvas.addEventListener("pointerup", (event) => {
+  if (!canvasPointerStart || event.button !== 0) return;
+  const distance = Math.hypot(event.clientX - canvasPointerStart.x, event.clientY - canvasPointerStart.y);
+  const duration = performance.now() - canvasPointerStart.time;
+  canvasPointerStart = null;
+  if (distance < 9 && duration < 650) moveFromPointer(event.clientX, event.clientY);
+});
+elements.worldCanvas.addEventListener("pointercancel", () => { canvasPointerStart = null; });
+elements.worldCanvas.addEventListener("contextmenu", (event) => event.preventDefault());
+elements.worldCanvas.addEventListener("wheel", (event) => {
+  if (state.cameraMode !== "third" || state.mode !== "play") return;
+  event.preventDefault();
+  state.cameraDistance = THREE.MathUtils.clamp(state.cameraDistance + Math.sign(event.deltaY) * .65, 5.4, 10.6);
+}, { passive: false });
+
 const moveCodes = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyA", "KeyS", "KeyD"];
 window.addEventListener("keydown", (event) => {
   if (moveCodes.includes(event.code)) {
     event.preventDefault();
     state.keys.add(event.code);
-    if (!event.repeat && state.mode === "play" && !elements.dialog.open && !elements.help.open) {
-      const nudge = new THREE.Vector3(
-        event.code === "ArrowRight" || event.code === "KeyD" ? 1 : event.code === "ArrowLeft" || event.code === "KeyA" ? -1 : 0,
-        0,
-        event.code === "ArrowDown" || event.code === "KeyS" ? 1 : event.code === "ArrowUp" || event.code === "KeyW" ? -1 : 0
-      );
-      applyMovement(nudge, .34);
-      state.runPhase += .58;
-      updateNearby();
-    }
   }
+  if (event.code === "Space" && !event.repeat) { event.preventDefault(); jump(); }
+  if (event.code === "KeyV" && !event.repeat && state.mode === "play" && !elements.dialog.open && !elements.help.open) toggleCameraMode();
   if (event.code === "KeyE" && !event.repeat && !elements.dialog.open && !elements.help.open) interact();
   if (event.key === "?" && !elements.help.open) elements.help.showModal();
   if (event.code === "Escape") {
@@ -951,6 +1151,7 @@ window.addEventListener("resize", () => stage?.resize());
 
 try {
   stage = new PortWorld();
+  setCameraMode("third");
   elements.start.disabled = false;
   elements.start.textContent = "BEGIN";
   updateHud();
