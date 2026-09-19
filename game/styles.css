@@ -9,6 +9,8 @@
   --yellow: #f0bd4d;
   --green: #6c9b74;
   --line: rgba(23, 44, 50, 0.22);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   font-family: "Kaiti SC", "STKaiti", "Songti SC", serif;
   color: var(--ink);
   background: var(--sea);
@@ -60,8 +62,7 @@ button { font: inherit; }
 .site-back:hover { opacity: 1; transform: translateX(-3px); }
 
 #title-canvas,
-#world-canvas,
-#ending-canvas {
+#world-canvas {
   display: block;
   width: 100%;
   height: 100%;
@@ -222,7 +223,18 @@ kbd {
   letter-spacing: .16em;
 }
 
-.play-screen { background: linear-gradient(#8ccfcb, #78c0bd); }
+.play-screen {
+  background: linear-gradient(#82c9c6, #55aaa8);
+}
+
+.play-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  box-shadow: inset 0 0 110px rgba(25, 46, 48, .24);
+}
 
 .game-header {
   position: absolute;
@@ -237,10 +249,11 @@ kbd {
 
 .game-mark {
   margin-left: 86px;
-  padding: 8px 11px;
-  border: 2px solid var(--ink);
-  background: rgba(255,250,240,.9);
-  box-shadow: 4px 4px 0 var(--ink);
+  padding: 7px 10px;
+  border: 1.5px solid var(--ink);
+  background: rgba(255,250,240,.8);
+  box-shadow: 3px 3px 0 rgba(23,44,50,.72);
+  backdrop-filter: blur(8px);
   transform: rotate(-1deg);
 }
 
@@ -253,15 +266,16 @@ kbd {
   display: flex;
   margin-left: auto;
   margin-right: 48px;
-  border: 2px solid var(--ink);
+  border: 1.5px solid var(--ink);
   background: var(--ink);
-  box-shadow: 4px 5px 0 rgba(23,44,50,.24);
+  box-shadow: 3px 4px 0 rgba(23,44,50,.3);
+  backdrop-filter: blur(8px);
 }
 
 .status-strip > div {
-  min-width: 78px;
+  min-width: 84px;
   padding: 7px 9px 8px;
-  background: rgba(255,250,240,.9);
+  background: rgba(255,250,240,.8);
 }
 
 .status-strip span,
@@ -285,77 +299,77 @@ kbd {
   font: 900 16px ui-monospace, monospace;
 }
 
-.mission-note {
+.roam-note {
   position: absolute;
   z-index: 5;
-  top: 105px;
+  top: auto;
+  bottom: max(24px, env(safe-area-inset-bottom));
   left: max(24px, env(safe-area-inset-left));
-  width: 244px;
-  padding: 13px 15px 14px;
-  border: 2px solid var(--ink);
-  background: rgba(255,250,240,.92);
-  box-shadow: 6px 7px 0 rgba(23,44,50,.62);
-  transform: rotate(-1deg);
+  width: 252px;
+  padding: 12px 14px 13px;
+  border: 1.5px solid var(--ink);
+  background: rgba(255,250,240,.78);
+  box-shadow: 4px 5px 0 rgba(23,44,50,.48);
+  backdrop-filter: blur(8px);
+  transform: rotate(-.6deg);
 }
 
-.mission-note::before {
+.roam-note::before {
   content: "";
   position: absolute;
-  top: -7px;
-  left: 54px;
-  width: 58px;
-  height: 13px;
-  background: rgba(240,189,77,.86);
-  transform: rotate(2deg);
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--orange);
 }
 
-.mission-note > span {
+.roam-note > span {
   float: right;
   font: 800 8px ui-monospace, monospace;
   letter-spacing: .12em;
 }
 
-.mission-note > p:first-of-type {
+.roam-note > p:first-of-type {
   display: inline-block;
   margin: 0 0 6px;
-  padding: 2px 6px;
-  color: var(--paper-bright);
-  background: var(--orange);
+  color: var(--orange);
   font: 800 9px ui-monospace, monospace;
 }
 
-.mission-note h2 {
+.roam-note h2 {
   margin: 4px 0 7px;
-  font-size: 23px;
+  font-size: 20px;
   line-height: 1.05;
 }
 
-.mission-note #task-description {
+.roam-note #task-description {
   margin: 0 0 10px;
   color: var(--ink-soft);
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: 11px;
+  line-height: 1.45;
 }
 
-.mission-note > strong {
+.roam-note > strong {
   display: block;
   padding-top: 8px;
   border-top: 1px dashed var(--line);
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .mini-map {
   position: absolute;
   z-index: 5;
-  top: 91px;
+  top: 82px;
   right: max(22px, env(safe-area-inset-right));
-  width: 148px;
-  height: 118px;
+  width: 128px;
+  height: 102px;
   margin: 0;
-  border: 2px solid var(--ink);
+  border: 1.5px solid var(--ink);
   border-radius: 46% 54% 48% 52%;
-  background: rgba(255,250,240,.74);
-  box-shadow: 4px 5px 0 rgba(23,44,50,.34);
+  background: rgba(255,250,240,.68);
+  box-shadow: 3px 4px 0 rgba(23,44,50,.34);
+  backdrop-filter: blur(6px);
   overflow: hidden;
   transform: rotate(1deg);
 }
@@ -389,7 +403,7 @@ kbd {
   background: var(--paper-bright);
   box-shadow: 5px 6px 0 var(--orange);
   transform: translateX(-50%) rotate(-1deg);
-  animation: pop 180ms ease both;
+  animation: pop 180ms var(--ease-out) both;
 }
 
 .location-hint span { font-size: 13px; font-weight: 800; }
@@ -408,7 +422,7 @@ kbd {
   opacity: 0;
   pointer-events: none;
   transform: translate(-50%, -10px);
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out);
 }
 
 .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
@@ -469,12 +483,13 @@ kbd {
 .route-caption {
   position: absolute;
   z-index: 5;
-  left: max(24px, env(safe-area-inset-left));
-  bottom: max(20px, env(safe-area-inset-bottom));
+  left: 50%;
+  bottom: max(15px, env(safe-area-inset-bottom));
   margin: 0;
   color: rgba(23,44,50,.58);
   font: 700 8px ui-monospace, monospace;
   letter-spacing: .12em;
+  transform: translateX(-50%);
 }
 
 dialog { margin: auto; color: var(--ink); }
@@ -552,8 +567,8 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
 .scene-story { margin: 18px 0 20px; color: var(--ink-soft); font-family: "Songti SC", serif; font-size: 14px; line-height: 1.7; }
 .scene-content fieldset { display: grid; gap: 8px; margin: 0; border: 0; padding: 0; }
 .scene-content legend { margin-bottom: 10px; font-size: 15px; font-weight: 800; }
-.choice-button { width: 100%; border: 1px solid var(--line); padding: 11px 13px; color: var(--ink); background: #f8f2e6; cursor: pointer; text-align: left; font-family: "Songti SC", serif; font-size: 13px; line-height: 1.45; transition: transform 150ms ease, border-color 150ms ease; }
-.choice-button:hover { border-color: var(--ink); transform: translateX(3px); }
+.choice-button { width: 100%; border: 1px solid var(--line); padding: 11px 13px; color: var(--ink); background: #f8f2e6; cursor: pointer; text-align: left; font-family: "Songti SC", serif; font-size: 13px; line-height: 1.45; transition: transform 150ms var(--ease-out), border-color 150ms ease, background-color 150ms ease; }
+.choice-button.is-chosen { border-color: var(--green); background: rgba(108,155,116,.15); }
 .choice-button.is-correct { border-color: var(--green); background: rgba(108,155,116,.15); }
 .choice-button.is-wrong { border-color: var(--orange); background: rgba(237,106,69,.12); }
 .choice-button:disabled { cursor: default; transform: none; }
@@ -576,19 +591,12 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
 .help-dialog dt { font-weight: 800; }
 .help-dialog dd { margin: 0; color: var(--ink-soft); font-family: "Songti SC", serif; font-size: 13px; line-height: 1.55; }
 
-.ending-screen { background: #efa468; }
-.ending-copy { position: absolute; z-index: 3; top: 50%; left: clamp(30px, 8vw, 130px); width: min(600px, 55vw); transform: translateY(-50%); }
-.ending-copy > p:first-child { margin: 0 0 18px; color: var(--yellow); font: 800 9px ui-monospace, monospace; letter-spacing: .18em; text-shadow: 1px 1px 0 var(--ink); }
-.ending-copy h2 { margin: 0; color: var(--paper-bright); font-size: clamp(54px, 8vw, 116px); line-height: .88; letter-spacing: -.04em; text-shadow: 4px 5px 0 var(--ink); }
-.ending-copy #ending-summary { margin: 24px 0; color: rgba(255,250,240,.78); font-family: "Songti SC", serif; }
-.ending-score { display: flex; gap: 16px; margin-bottom: 24px; }
-.ending-score span { padding: 8px 12px; border: 2px solid var(--ink); color: var(--ink); background: rgba(255,250,240,.75); font-size: 12px; }
-.ending-score strong { margin-left: 8px; font: 900 20px ui-monospace, monospace; }
-.ending-copy button { border: 3px solid var(--ink); padding: 12px 24px; color: var(--ink); background: var(--yellow); box-shadow: 4px 5px 0 var(--ink); cursor: pointer; font-weight: 800; }
-.ending-copy a { margin-left: 20px; color: var(--ink); font-size: 12px; }
-
 @keyframes pop { from { opacity: 0; transform: translate(-50%, 8px) rotate(-1deg) scale(.96); } }
 @keyframes dialog-in { from { opacity: 0; transform: translateY(18px) scale(.98); } }
+
+@media (hover: hover) and (pointer: fine) {
+  .choice-button:hover { border-color: var(--ink); transform: translateX(3px); }
+}
 
 @media (max-width: 760px), (pointer: coarse) {
   .site-back { top: max(12px, env(safe-area-inset-top)); left: max(13px, env(safe-area-inset-left)); font-size: 10px; }
@@ -604,9 +612,7 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
   .status-strip { margin: 0 auto; }
   .status-strip > div { min-width: 68px; padding: 6px 7px; }
   .status-strip strong { font-size: 14px; }
-  .mission-note { top: 72px; left: 12px; width: 212px; padding: 11px 12px; }
-  .mission-note h2 { font-size: 20px; }
-  .mission-note #task-description { display: none; }
+  .roam-note { display: none; }
   .mini-map { top: 70px; right: 10px; width: 98px; height: 78px; opacity: .9; }
   .route-caption { display: none; }
   .run-controls { right: 13px; bottom: max(14px, calc(env(safe-area-inset-bottom) + 8px)); gap: 10px; transform: none; }
@@ -625,19 +631,13 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
   .scene-sketch { width: 45%; height: 36%; bottom: 12%; }
   .help-dialog { padding: 36px 22px 26px; }
   .help-dialog h2 { font-size: 38px; }
-  .ending-copy { top: 52%; right: 24px; left: 24px; width: auto; }
-  .ending-copy h2 { font-size: 58px; }
-  .ending-score { gap: 6px; }
-  .ending-score span { padding: 7px; font-size: 10px; }
-  .ending-copy button { display: block; margin-bottom: 20px; }
-  .ending-copy a { margin-left: 0; }
 }
 
 @media (max-height: 650px) {
-  .mission-note #task-description { display: none; }
+  .roam-note #task-description { display: none; }
   .scene-dialog[open] { grid-template-rows: 24% 76%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 100ms !important; }
 }

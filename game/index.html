@@ -4,10 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#86cbc8" />
-  <meta name="description" content="在一座三维港区自由行走，完成一艘外轮靠泊前的八站代理任务。" />
+  <meta name="description" content="在手绘三维港岛自由漫游，随机遇见船舶代理现场事件。" />
   <title>船代跑现场 · 舟山船舶代理笔记</title>
   <link rel="icon" href="/favicon.svg" />
-  <link rel="stylesheet" href="./styles.css?v=20260919-world-1" />
+  <link rel="stylesheet" href="./styles.css?v=20260919-free-roam-1" />
 </head>
 <body>
   <a class="site-back" href="/">← 舟山港航工具</a>
@@ -16,13 +16,13 @@
     <section class="screen intro-screen is-active" id="intro-screen" aria-labelledby="game-title">
       <canvas id="title-canvas" aria-hidden="true"></canvas>
       <div class="intro-logo">
-        <p>ZS AGENT · LITTLE PORT TOWN</p>
+        <p>ZS AGENT · AN ENDLESS PORT ERRAND</p>
         <h1 id="game-title"><span>舟山</span><strong>船代</strong><em>跑现场</em></h1>
       </div>
       <button class="enter-button" id="start-button" type="button" disabled>LOADING</button>
       <p class="intro-tip"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 自由行走 · 靠近人物或地点按 <kbd>E</kbd></p>
-      <p class="intro-edition">A NEVER-ENDING WORKDAY<br />ZHOUSHAN · 2026</p>
-      <p class="renderer-badge">THREE.JS · OPEN WORLD · TOON SHADER</p>
+      <p class="intro-edition">NO ROUTE · NO CHECKLIST<br />ZHOUSHAN · 2026</p>
+      <p class="renderer-badge">THREE.JS · CEL SHADED · FREE ROAM</p>
     </section>
 
     <section class="screen play-screen" id="play-screen" aria-label="船代港区游戏区域">
@@ -35,18 +35,18 @@
         </div>
         <div class="status-strip" aria-live="polite">
           <div><span>TIME</span><strong id="clock-value">07:20</strong></div>
-          <div><span>ENERGY</span><strong id="energy-value">100</strong></div>
-          <div><span>DONE</span><strong><b id="completed-value">0</b>/8</strong></div>
+          <div><span>TRUST</span><strong id="energy-value">72</strong></div>
+          <div><span>ENCOUNTERS</span><strong><b id="completed-value">0</b></strong></div>
         </div>
         <button class="round-button" id="help-button" type="button" aria-label="查看玩法">?</button>
       </header>
 
-      <aside class="mission-note" id="mission-note">
-        <span id="task-sequence">01 / 08</span>
-        <p id="task-deadline">08:10 前</p>
-        <h2 id="task-title">机场接班船员</h2>
-        <p id="task-description">穿过港区去机场，确认接班船员身份和登轮安排。</p>
-        <strong id="task-destination">下一站 · 普陀山机场</strong>
+      <aside class="roam-note" id="mission-note">
+        <span id="task-sequence">FREE ROAM</span>
+        <p id="task-deadline">没有固定路线</p>
+        <h2 id="task-title">今天会遇见什么？</h2>
+        <p id="task-description">沿海边、道路和码头随便走。每个人、每个地点都可能出现不同现场。</p>
+        <strong id="task-destination">靠近有 ◇ 标记的人物</strong>
       </aside>
 
       <aside class="mini-map" aria-label="港区小地图">
@@ -71,28 +71,13 @@
         <button class="action-button" id="mobile-action" type="button">交互</button>
       </div>
 
-      <p class="route-caption">WASD / 方向键移动 · E 交互 · 探索机场、边检、海关、船厂、码头与锚地</p>
-    </section>
-
-    <section class="screen ending-screen" id="ending-screen" aria-labelledby="ending-title">
-      <canvas id="ending-canvas" aria-hidden="true"></canvas>
-      <div class="ending-copy">
-        <p>ONE MORE SHIP SAILED · SHIFT COMPLETE</p>
-        <h2 id="ending-title">今天的船，<br />都顺利开了。</h2>
-        <p id="ending-summary">八项任务全部办结。</p>
-        <div class="ending-score">
-          <span>专业度 <strong id="final-score">100</strong></span>
-          <span>收工 <strong id="final-time">18:10</strong></span>
-        </div>
-        <button id="restart-button" type="button">再跑一圈 ↻</button>
-        <a href="/">返回舟山港航工具</a>
-      </div>
+      <p class="route-caption">没有任务顺序 · 没有唯一路线 · 每次交互都会重新抽取现场</p>
     </section>
   </main>
 
   <dialog class="scene-dialog" id="scene-dialog">
     <div class="scene-visual" id="scene-visual" aria-hidden="true">
-      <span id="scene-code">AIRPORT / 01</span>
+      <span id="scene-code">RANDOM ENCOUNTER</span>
       <div class="scene-sketch"></div>
     </div>
     <div class="scene-content">
@@ -107,22 +92,22 @@
         <strong id="result-title"></strong>
         <p id="result-text"></p>
       </div>
-      <button class="complete-button" id="complete-button" type="button" hidden>办结，继续跑 →</button>
+      <button class="complete-button" id="complete-button" type="button" hidden>记下结果，继续赶路 →</button>
     </div>
   </dialog>
 
   <dialog class="help-dialog" id="help-dialog">
     <button class="dialog-close" id="help-close" type="button" aria-label="关闭玩法说明">×</button>
-    <p>HOW TO RUN THE PORT</p>
-    <h2>在港区里自由行动。</h2>
+    <p>HOW TO WANDER THE PORT</p>
+    <h2>别等任务，去碰见现场。</h2>
     <dl>
       <div><dt>行走</dt><dd>按 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>、方向键，或使用屏幕方向盘。</dd></div>
-      <div><dt>探索</dt><dd>镜头会跟随人物穿过港区道路，建筑和岸线具有碰撞边界。</dd></div>
-      <div><dt>现场</dt><dd>靠近发光标记或现场人员时，按 <kbd>E</kbd> 或“交互”。</dd></div>
+      <div><dt>探索</dt><dd>机场、边检、海关、船厂、码头和锚地没有先后顺序，想去哪里就去哪里。</dd></div>
+      <div><dt>现场</dt><dd>靠近带 ◇ 标记的人物按 <kbd>E</kbd>。同一地点再次来访，也可能遇见另一件事。</dd></div>
       <div><dt>说明</dt><dd>这是游戏化体验，场景经过简化，不作为实际申报或办证清单。</dd></div>
     </dl>
   </dialog>
 
-  <script type="module" src="./game.js?v=20260919-world-2"></script>
+  <script type="module" src="./game.js?v=20260919-free-roam-1"></script>
 </body>
 </html>

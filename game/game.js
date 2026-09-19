@@ -1,126 +1,183 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js";
 
 const TAU = Math.PI * 2;
-const ISLAND_X = 19;
-const ISLAND_Z = 13.6;
+const ISLAND_X = 21;
+const ISLAND_Z = 15.5;
 const COLORS = {
-  ink: 0x172c32,
-  cream: 0xfffaf0,
-  paper: 0xf4edda,
-  sky: 0x94d5cf,
-  sea: 0x63b7b4,
-  seaDeep: 0x438f92,
-  grass: 0x7ca96e,
-  grassLight: 0xa8c77a,
-  grassDark: 0x4f7956,
-  sand: 0xd8c58a,
-  road: 0xe8d9af,
-  orange: 0xed6a45,
-  yellow: 0xf0bd4d,
-  blue: 0x668fa2,
-  rust: 0xba7452,
-  skin: 0xd9a16e,
-  sunset: 0xe4a17a
+  ink: 0x1d3033, cream: 0xfff8e8, paper: 0xeee4cc, sky: 0x82c9c6,
+  sea: 0x55aaa8, seaDeep: 0x327e82, grass: 0x7ba56a, grassLight: 0xa9c77a,
+  grassDark: 0x3f6e50, cliff: 0x8d795c, sand: 0xd9c483, road: 0xe7d5a6,
+  orange: 0xdc6849, yellow: 0xe9b94d, blue: 0x587f91, navy: 0x283e4a,
+  rust: 0xa85e45, skinA: 0xd69a6a, skinB: 0xb97855, skinC: 0xf0bd88
 };
 
 const locations = [
-  { id: "office", name: "船代办公室", short: "办公室", kind: "office", color: COLORS.yellow, position: [0, 7], interact: [1.6, 6] },
-  { id: "airport", name: "普陀山机场", short: "机场", kind: "airport", color: 0xe99a58, position: [-13, 7.5], interact: [-11.5, 6.1] },
-  { id: "immigration", name: "出入境边防检查站", short: "边检", kind: "immigration", color: 0xd96d55, position: [-8, 2], interact: [-6.4, 3] },
-  { id: "customs", name: "舟山海关", short: "海关", kind: "customs", color: 0x7397a4, position: [-2, -1.5], interact: [-0.4, -0.3] },
-  { id: "msa", name: "海事政务窗口", short: "海事", kind: "msa", color: 0x5e8ba1, position: [3, 3], interact: [4.4, 4.2] },
-  { id: "shipyard", name: "船厂修造码头", short: "船厂", kind: "shipyard", color: 0xce8550, position: [12, 7], interact: [10.4, 5.7] },
-  { id: "container", name: "集装箱码头", short: "集装箱", kind: "container", color: 0xe2a84f, position: [12, -3], interact: [10.3, -4.2] },
-  { id: "cargo", name: "件杂货码头", short: "装卸码头", kind: "cargo", color: COLORS.rust, position: [4, -10], interact: [2.5, -8.3] },
-  { id: "anchorage", name: "锚地交通艇码头", short: "锚地", kind: "anchorage", color: 0x568d91, position: [-10, -9], interact: [-8.3, -7.3] }
+  { id: "office", name: "船代办公室", person: "值班调度", short: "办公室", kind: "office", color: COLORS.yellow, position: [0, 8.2], interact: [2.2, 7.2] },
+  { id: "airport", name: "普陀山机场", person: "接班船员", short: "机场", kind: "airport", color: 0xde8753, position: [-14.4, 8], interact: [-12.1, 6.6] },
+  { id: "immigration", name: "边检船舶窗口", person: "边检民警", short: "边检", kind: "immigration", color: 0xb9574d, position: [-9.2, 2.3], interact: [-7.3, 3.1] },
+  { id: "customs", name: "舟山海关", person: "海关关员", short: "海关", kind: "customs", color: 0x688795, position: [-2.2, -1.7], interact: [-0.2, -0.4] },
+  { id: "msa", name: "海事政务窗口", person: "海事受理员", short: "海事", kind: "msa", color: 0x507f92, position: [3.7, 3.3], interact: [5.3, 4.6] },
+  { id: "shipyard", name: "船厂修造码头", person: "船厂门岗", short: "船厂", kind: "shipyard", color: 0xb46d48, position: [13.8, 7.4], interact: [11.6, 6] },
+  { id: "container", name: "集装箱码头", person: "卡口调度", short: "集装箱", kind: "container", color: 0xd99b42, position: [14, -3.1], interact: [11.6, -4.5] },
+  { id: "cargo", name: "件杂货码头", person: "现场理货员", short: "装卸码头", kind: "cargo", color: COLORS.rust, position: [4.7, -11], interact: [2.8, -8.9] },
+  { id: "anchorage", name: "锚地交通艇码头", person: "艇长", short: "锚地", kind: "anchorage", color: 0x4d8585, position: [-11.2, -10], interact: [-9.1, -7.9] }
 ];
 
-const tasks = [
-  {
-    destination: "airport", deadline: "08:10 前", title: "机场接班船员", description: "穿过港区去机场，确认接班船员身份和登轮安排。",
-    code: "AIRPORT / 01", sceneLocation: "普陀山机场 · 到达大厅", sceneTitle: "四名接班船员已经到了",
-    story: "船员带着行李在出口等候，其中一人的航班信息与预报有一点出入。车辆已经在外面催促。",
-    question: "离开机场前，最稳妥的第一步是？",
-    choices: ["逐一核对身份、行程、登轮名单和行李", "先上车，路上再慢慢确认", "只确认人数，证件到码头再看"],
-    correct: 0, success: "核对完成。人员、证件、行李与登轮安排一致，可以安全出发。", duration: 25, energy: 4, color: "#e99a58"
-  },
-  {
-    destination: "immigration", deadline: "09:10 前", title: "边检入境手续", description: "沿海边公路去边检窗口，带上最新船期和人员信息。",
-    code: "IMMIGRATION / 02", sceneLocation: "出入境边防检查站 · 船舶窗口", sceneTitle: "实际靠泊时间又变了",
-    story: "代理计划上的时间和刚收到的实际动态不一致，窗口正在等你确认。", question: "你应该怎样处理这处变化？",
-    choices: ["沿用旧计划，避免多解释", "更新为实际计划并说明变化原因", "先提交，之后有空再补"],
-    correct: 1, success: "变化已经说明，申报信息与实际动态一致。", duration: 35, energy: 5, color: "#d96d55"
-  },
-  {
-    destination: "customs", deadline: "10:05 前", title: "海关物料申报", description: "去海关确认临时增加的船供物料申报。",
-    code: "CUSTOMS / 03", sceneLocation: "舟山海关 · 业务窗口", sceneTitle: "供应清单临时多了两项",
-    story: "供应商已经在路上，但新增物料尚未反映在原申报清单里。", question: "下一步最合适的是？",
-    choices: ["先送上船，数量不大", "删掉新增项，按原单操作", "进港前更新申报并确认放行要求"],
-    correct: 2, success: "清单已更新，供应安排与申报内容一致。", duration: 30, energy: 5, color: "#7397a4"
-  },
-  {
-    destination: "shipyard", deadline: "11:20 前", title: "船厂登轮协调", description: "赶到船厂，为工程师落实通行和安全路线。",
-    code: "SHIPYARD / 04", sceneLocation: "船厂 · 门岗外", sceneTitle: "工程师到了，门岗却没有记录",
-    story: "现场正进行吊装作业，原定登轮路线也被临时封闭。", question: "怎样安排最稳妥？",
-    choices: ["让工程师自己找船", "确认入厂权限、安全要求和替代路线", "借用别人的证件先进去"],
-    correct: 1, success: "厂方确认了通行权限，并给出安全登轮路线。", duration: 40, energy: 7, color: "#ce8550"
-  },
-  {
-    destination: "msa", deadline: "13:30 前", title: "海事文件确认", description: "回到海事窗口确认本航次文件和受理回执。",
-    code: "MSA / 05", sceneLocation: "海事政务窗口 · 受理台", sceneTitle: "系统里出现了两个版本",
-    story: "船方刚补发了一份文件，文件名相似，但签章时间不同。", question: "提交前首先确认什么？",
-    choices: ["确认本航次要求、有效版本并留存回执", "随便选一份较大的文件", "两个版本一起传，不作说明"],
-    correct: 0, success: "有效版本已经确认，受理回执也已留存。", duration: 30, energy: 4, color: "#5e8ba1"
-  },
-  {
-    destination: "container", deadline: "14:40 前", title: "集装箱码头进场", description: "前往集装箱码头，核对预约、车辆和作业计划。",
-    code: "CONTAINER / 06", sceneLocation: "集装箱码头 · 一号卡口", sceneTitle: "车辆信息和预约单差一位",
-    story: "卡口排起了队，司机希望先进去再修改。", question: "此时应该怎么做？",
-    choices: ["让司机跟前车混进去", "核对预约、人员、车辆和最新计划后更正", "取消今天的全部安排"],
-    correct: 1, success: "信息已更正，车辆按预约顺利进场。", duration: 35, energy: 6, color: "#e2a84f"
-  },
-  {
-    destination: "cargo", deadline: "16:05 前", title: "装卸完工确认", description: "去件杂货码头核实完工、单证与离泊条件。",
-    code: "CARGO / 07", sceneLocation: "件杂货码头 · 作业平台", sceneTitle: "最后一票货正在收尾",
-    story: "船长询问能否按原时间开航，但现场尚未给出最终完工确认。", question: "向船长回复前需要什么？",
-    choices: ["凭经验直接保证准时", "只问吊机司机是否结束", "确认完工、货物放行和离泊手续状态"],
-    correct: 2, success: "现场、单证和离泊条件均已核实，开航时间可以确认。", duration: 35, energy: 7, color: "#ba7452"
-  },
-  {
-    destination: "anchorage", deadline: "17:20 前", title: "锚地交通艇登轮", description: "最后去交通艇码头，确认天气、船艇和会合位置。",
-    code: "ANCHORAGE / 08", sceneLocation: "锚地交通艇码头 · 浮桥", sceneTitle: "风浪正在慢慢变大",
-    story: "交通艇准备离岸，船方刚刚调整了锚位。", question: "解缆前最后确认什么？",
-    choices: ["只要交通艇能开就出发", "确认天气、适航、救生装备和新会合点", "站在甲板上用手机找船"],
-    correct: 1, success: "天气与船艇条件允许，新锚位和会合方式已经确认。", duration: 45, energy: 8, color: "#568d91"
-  }
+const encounters = {
+  office: [
+    { title: "群里同时弹出三条船期", story: "靠泊、移泊和船员换班的时间撞在一起。司机问先去哪里，船长又发来一句“ASAP”。", question: "你先做什么？", choices: [
+      ["把三个时间点画成一张现场时间线", "冲突被看见后，车辆和窗口都重新排好了顺序。", 3, 12],
+      ["先回复最着急的船长", "船长安心了，但司机仍不知道下一站。", 0, 8],
+      ["让每个人各自想办法", "十分钟后，所有电话又回到了你这里。", -3, 15]
+    ]},
+    { title: "凌晨邮件里多了一份新版附件", story: "文件名只差一个下划线，签章页却不一样。旧版已经转发给了两个人。", question: "怎么止住版本混乱？", choices: [
+      ["标明有效版本并逐一撤回旧件", "收件人都确认只使用最新版本。", 3, 10],
+      ["把两份都丢进群里", "大家开始问到底该用哪一份。", -2, 8],
+      ["只改自己电脑里的文件名", "你的文件清楚了，其他人的仍然没变。", 0, 5]
+    ]}
+  ],
+  airport: [
+    { title: "一名船员的行李还没出来", story: "车辆在外面计时，另外三名船员已经把护照递给你。", question: "现在怎么安排？", choices: [
+      ["核对全员身份并联系航司查行李", "人员和行李都有去向，车辆也拿到了新时间。", 3, 18],
+      ["让三个人先走，落下的人自己打车", "分车后，登轮名单又要重新核对。", -2, 12],
+      ["继续在出口等，不做确认", "时间过去了，但问题没有变少。", -1, 15]
+    ]},
+    { title: "船员说自己临时换了航班", story: "他本人、护照和名单都对得上，但抵达航班与预报不一致。", question: "你会相信哪一项？", choices: [
+      ["同时核对登轮名单、实际航班和船方确认", "信息闭环，车辆可以出发。", 3, 12],
+      ["人到了就行，其他都不重要", "窗口随后要求解释航班差异。", -2, 10],
+      ["只看原来的航班截图", "截图没有告诉你眼前的人为什么在这里。", -1, 6]
+    ]}
+  ],
+  immigration: [
+    { title: "靠泊时间又往后推了两小时", story: "窗口里的计划还是上午版本，码头刚刚发来最新动态。", question: "怎样更新最稳？", choices: [
+      ["用实际计划更新并说明变化原因", "窗口记录与现场动态重新一致。", 3, 15],
+      ["继续沿用旧时间", "下一次核对时出现了明显矛盾。", -3, 8],
+      ["先口头说一下，不留记录", "现场知道了，系统却仍然不知道。", -1, 6]
+    ]},
+    { title: "一名船员的证件页反光严重", story: "手机照片看不清号码，原件正在来窗口的路上。", question: "现在提交吗？", choices: [
+      ["等原件并重新采集清晰信息", "号码和姓名都一次核准。", 2, 12],
+      ["凭模糊照片猜一个号码", "一个字符错误让整份名单需要重做。", -4, 16],
+      ["先整理其他人的材料", "等待时间没有浪费，原件随后送到。", 2, 8]
+    ]}
+  ],
+  customs: [
+    { title: "供应清单临时多了两箱备件", story: "供应车已经到港区门口，新增物料不在原申报里。", question: "你怎么处理？", choices: [
+      ["进场前更新清单并确认放行要求", "物料、数量和申报内容保持一致。", 3, 16],
+      ["数量不多，直接送上船", "门岗拦下车辆，时间反而更久。", -4, 14],
+      ["把新增物料从单子上删掉", "纸面简单了，现场却更难解释。", -3, 8]
+    ]},
+    { title: "船长问免税烟酒什么时候能送", story: "供应商说半小时，码头计划却可能提前开工。", question: "你给什么答复？", choices: [
+      ["同时确认供应、监管和码头时间窗", "三个环节给出了同一个可执行时间。", 3, 14],
+      ["把供应商的话直接转发", "消息传到了，但责任边界仍不清楚。", 0, 5],
+      ["答应一定半小时送到", "承诺比你掌握的信息快了一步。", -2, 6]
+    ]}
+  ],
+  msa: [
+    { title: "系统里出现两个同名文件", story: "补发文件与旧版只有签章时间不同，船方催你尽快提交。", question: "先确认什么？", choices: [
+      ["确认本航次要求、有效版本和回执", "版本唯一，后续查询也有凭据。", 3, 13],
+      ["两个版本一起传", "受理员退回材料要求说明。", -2, 10],
+      ["选文件体积更大的那份", "大小没有说明文件是否有效。", -3, 6]
+    ]},
+    { title: "船舶动态和申报时间差了十五分钟", story: "看起来只是小差异，但它会影响后续窗口记录。", question: "要不要改？", choices: [
+      ["按实际动态修正并留存来源", "时间链重新对齐。", 3, 8],
+      ["十五分钟不用管", "小差异在下一个环节被放大。", -2, 5],
+      ["先打电话确认变化是否稳定", "你避免了追着频繁变化反复修改。", 2, 7]
+    ]}
+  ],
+  shipyard: [
+    { title: "原定登轮路线正在吊装", story: "工程师已经到门岗，安全员要求改走另一侧舷梯。", question: "怎样带人进去？", choices: [
+      ["确认权限、安全要求和替代路线", "工程师按指定路线安全登轮。", 3, 18],
+      ["让工程师跟着前车混进去", "门岗立即叫停了人员。", -4, 10],
+      ["只把船位发给工程师", "知道船在哪里，不等于知道怎么安全到达。", -2, 7]
+    ]},
+    { title: "修理项目临时增加热工作业", story: "船方希望今天完成，但许可证和监护安排都还没确认。", question: "你如何回应？", choices: [
+      ["先让船厂确认许可、隔离和监护", "作业条件满足后才进入计划。", 4, 20],
+      ["船长同意就可以开始", "船长的同意不能代替现场许可。", -4, 9],
+      ["把要求转发给所有人等待回复", "信息到了，但还需要一个明确的协调人。", 0, 8]
+    ]}
+  ],
+  container: [
+    { title: "车牌和预约单差了一个字母", story: "卡口后面已经排起长队，司机希望先进去再改。", question: "你怎么做？", choices: [
+      ["核对车辆、人员和计划后立即更正", "卡口拿到一致信息后放行。", 3, 12],
+      ["让司机跟前车进去", "车辆被拦回，队伍更长了。", -4, 10],
+      ["取消今天全部安排", "一个字符的问题被放大成整天的问题。", -3, 5]
+    ]},
+    { title: "箱位临时调整，吊机计划没同步", story: "现场说可以先干，船上却还在等新的配载信息。", question: "现在开工吗？", choices: [
+      ["确认船岸计划一致后再给开工信号", "吊机和船方使用了同一份计划。", 4, 14],
+      ["现场说能干就先干", "第一只箱子就暴露了计划差异。", -4, 9],
+      ["只通知船长，不问码头", "船上知道变化，岸上仍按旧计划。", -2, 7]
+    ]}
+  ],
+  cargo: [
+    { title: "最后一票货还没有完工确认", story: "船长询问能否按原时间开航，吊机正在收尾。", question: "你怎样答复？", choices: [
+      ["核实完工、放行和离泊手续状态", "开航时间建立在完整条件上。", 4, 16],
+      ["凭经验保证准时", "经验无法替代现场的最后确认。", -3, 6],
+      ["只问吊机司机是否结束", "作业结束不代表所有手续都完成。", -2, 8]
+    ]},
+    { title: "理货数字和大副收据不一致", story: "相差不大，但船方不愿在未核清前签字。", question: "先做哪一步？", choices: [
+      ["让理货、码头和船方共同复核", "差异来源找到，三方数字一致。", 4, 18],
+      ["请大副先签，明天再改", "大副拒绝签署不一致的记录。", -3, 8],
+      ["取两个数字的平均值", "平均数并不是真实装卸数。", -4, 5]
+    ]}
+  ],
+  anchorage: [
+    { title: "风浪在出发前突然变大", story: "交通艇已经解下一根缆，船方又发来了新锚位。", question: "最后确认什么？", choices: [
+      ["天气、适航、救生装备和新会合点", "条件允许，艇长按新位置安全出发。", 4, 15],
+      ["只要艇还能开就走", "能开不等于适合安全靠近大船。", -4, 8],
+      ["到了海上再用手机找船", "海面不是核对会合点的好地方。", -3, 6]
+    ]},
+    { title: "船方把梯口从左舷改到右舷", story: "艇长已经按原计划接近，浪涌让掉头空间变小。", question: "怎样调整？", choices: [
+      ["重新确认风浪、舷侧和靠泊方式", "交通艇提前调整了接近路线。", 4, 12],
+      ["到船边再临时掉头", "近距离机动让风险明显增加。", -3, 8],
+      ["让船方自己想办法", "会合需要船岸双方共同确认。", -2, 5]
+    ]}
+  ]
+};
+
+const ambientMessages = [
+  "远处汽笛响了两声，海面上的风向正在变。",
+  "手机震了一下：又一条船舶动态刚刚更新。",
+  "一辆集卡从路口慢慢转过，司机朝你点了点头。",
+  "广播里传来靠泊提醒，港区的节奏又快了一点。",
+  "海鸥掠过堆场，码头上的吊臂正在转向。"
 ];
 
 const $ = (id) => document.getElementById(id);
 const elements = {
-  intro: $("intro-screen"), play: $("play-screen"), ending: $("ending-screen"),
-  titleCanvas: $("title-canvas"), worldCanvas: $("world-canvas"), endingCanvas: $("ending-canvas"), minimap: $("minimap-canvas"),
-  start: $("start-button"), restart: $("restart-button"), clock: $("clock-value"), energy: $("energy-value"), completed: $("completed-value"),
-  sequence: $("task-sequence"), deadline: $("task-deadline"), taskTitle: $("task-title"), description: $("task-description"), destination: $("task-destination"),
+  intro: $("intro-screen"), play: $("play-screen"), titleCanvas: $("title-canvas"), worldCanvas: $("world-canvas"), minimap: $("minimap-canvas"),
+  start: $("start-button"), clock: $("clock-value"), trust: $("energy-value"), encountered: $("completed-value"),
+  roamNote: $("mission-note"), noteKicker: $("task-sequence"), noteTime: $("task-deadline"), noteTitle: $("task-title"), noteBody: $("task-description"), noteFooter: $("task-destination"),
   locationHint: $("location-hint"), locationName: $("location-name"), interact: $("interact-button"), mobileAction: $("mobile-action"),
   runUp: $("run-up"), runDown: $("run-down"), runLeft: $("run-left"), runRight: $("run-right"), toast: $("toast"),
-  dialog: $("scene-dialog"), sceneVisual: $("scene-visual"), sceneCode: $("scene-code"), sceneLocation: $("scene-location"),
-  sceneTitle: $("scene-title"), sceneStory: $("scene-story"), sceneChoices: $("scene-choices"), sceneResult: $("scene-result"),
-  resultTitle: $("result-title"), resultText: $("result-text"), complete: $("complete-button"), dialogClose: $("dialog-close"),
-  help: $("help-dialog"), helpButton: $("help-button"), helpClose: $("help-close"), finalScore: $("final-score"),
-  finalTime: $("final-time"), endingSummary: $("ending-summary")
+  dialog: $("scene-dialog"), sceneVisual: $("scene-visual"), sceneCode: $("scene-code"), sceneLocation: $("scene-location"), sceneTitle: $("scene-title"),
+  sceneStory: $("scene-story"), sceneChoices: $("scene-choices"), sceneResult: $("scene-result"), resultTitle: $("result-title"), resultText: $("result-text"),
+  complete: $("complete-button"), dialogClose: $("dialog-close"), help: $("help-dialog"), helpButton: $("help-button"), helpClose: $("help-close")
 };
 
 const state = {
-  mode: "intro", position: new THREE.Vector3(2.6, 0, 7), velocity: new THREE.Vector3(), facing: Math.PI,
-  keys: new Set(), holds: { up: false, down: false, left: false, right: false }, taskIndex: 0, completed: 0,
-  minutes: 440, energy: 100, score: 100, nearbyId: null, nearTarget: false, sceneAnswered: false,
-  runPhase: 0, lastFrame: performance.now(), toastTimer: 0
+  mode: "intro", position: new THREE.Vector3(3.1, 0, 7.2), velocity: new THREE.Vector3(), facing: Math.PI, cameraFacing: Math.PI,
+  keys: new Set(), holds: { up: false, down: false, left: false, right: false }, minutes: 445, trust: 72, encounterCount: 0,
+  nearbyId: null, activeEncounter: null, activeChoice: false, runPhase: 0, distanceWalked: 0, nextAmbientAt: 28,
+  lastEncounter: new Map(), lastFrame: performance.now(), toastTimer: 0
 };
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-const toonMaterials = new Map();
-const outlineMaterial = new THREE.MeshBasicMaterial({ color: COLORS.ink, side: THREE.BackSide });
+const materialCache = new Map();
 const colliders = [];
+const outlineMaterial = new THREE.MeshBasicMaterial({ color: COLORS.ink, side: THREE.BackSide });
+
+function seededRandom(seed = 7823) {
+  let value = seed >>> 0;
+  return () => {
+    value += 0x6d2b79f5;
+    let result = value;
+    result = Math.imul(result ^ result >>> 15, result | 1);
+    result ^= result + Math.imul(result ^ result >>> 7, result | 61);
+    return ((result ^ result >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+const random = seededRandom();
 
 function formatTime(total) {
   return `${String(Math.floor(total / 60) % 24).padStart(2, "0")}:${String(Math.floor(total % 60)).padStart(2, "0")}`;
@@ -128,378 +185,412 @@ function formatTime(total) {
 
 function terrainHeight(x, z) {
   const edge = Math.max(0, 1 - Math.sqrt((x / ISLAND_X) ** 2 + (z / ISLAND_Z) ** 2));
-  return 0.12 + (Math.sin(x * 0.42) + Math.cos(z * 0.37) + Math.sin((x + z) * 0.24)) * 0.075 * edge;
+  return 0.2 + (Math.sin(x * 0.37) + Math.cos(z * 0.34) + Math.sin((x + z) * 0.2)) * 0.13 * edge;
 }
 
+function makeGradientMap() {
+  const data = new Uint8Array([48, 112, 190, 255]);
+  const texture = new THREE.DataTexture(data, 4, 1, THREE.RedFormat);
+  texture.minFilter = THREE.NearestFilter;
+  texture.magFilter = THREE.NearestFilter;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+const gradientMap = makeGradientMap();
+
 function toonMaterial(color) {
-  if (toonMaterials.has(color)) return toonMaterials.get(color);
-  const material = new THREE.ShaderMaterial({
-    uniforms: { uBase: { value: new THREE.Color(color) } },
-    vertexShader: `
-      varying vec3 vNormal;
-      varying vec3 vViewDirection;
-      varying vec3 vWorldPosition;
-      void main() {
-        vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-        vec4 viewPosition = viewMatrix * worldPosition;
-        vWorldPosition = worldPosition.xyz;
-        vNormal = normalize(normalMatrix * normal);
-        vViewDirection = normalize(-viewPosition.xyz);
-        gl_Position = projectionMatrix * viewPosition;
-      }
-    `,
-    fragmentShader: `
-      uniform vec3 uBase;
-      varying vec3 vNormal;
-      varying vec3 vViewDirection;
-      varying vec3 vWorldPosition;
-      float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
-      void main() {
-        vec3 normal = normalize(vNormal);
-        vec3 lightDirection = normalize(vec3(-0.5, 0.85, 0.55));
-        float light = dot(normal, lightDirection) * 0.5 + 0.5;
-        float band = floor(light * 4.0) / 3.0;
-        float rim = pow(1.0 - max(dot(normal, normalize(vViewDirection)), 0.0), 3.0);
-        float grain = (hash(gl_FragCoord.xy) - 0.5) * 0.03;
-        float heightTint = clamp((vWorldPosition.y + 1.0) * 0.025, 0.0, 0.08);
-        vec3 color = uBase * (0.6 + band * 0.46 + grain + heightTint) + vec3(0.07, 0.1, 0.09) * rim;
-        gl_FragColor = vec4(color, 1.0);
-      }
-    `
-  });
-  toonMaterials.set(color, material);
-  return material;
+  if (!materialCache.has(color)) materialCache.set(color, new THREE.MeshToonMaterial({ color, gradientMap }));
+  return materialCache.get(color);
 }
 
 function addMesh(parent, geometry, color, options = {}) {
   const mesh = new THREE.Mesh(geometry, toonMaterial(color));
-  const { position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1], outline = true, outlineScale = 1.045 } = options;
+  const { position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1], outline = true, outlineScale = 1.028, shadow = true } = options;
   mesh.position.set(...position);
   mesh.rotation.set(...rotation);
   mesh.scale.set(...scale);
+  mesh.castShadow = shadow;
+  mesh.receiveShadow = shadow;
   if (outline) {
-    const outline = new THREE.Mesh(geometry, outlineMaterial);
-    outline.scale.setScalar(outlineScale);
-    outline.renderOrder = -1;
-    mesh.add(outline);
+    const outlineMesh = new THREE.Mesh(geometry, outlineMaterial);
+    outlineMesh.scale.setScalar(outlineScale);
+    outlineMesh.renderOrder = -1;
+    mesh.add(outlineMesh);
   }
   parent.add(mesh);
   return mesh;
 }
 
-function addBlobShadow(parent, width, depth, y = 0.025) {
-  const shadow = new THREE.Mesh(
-    new THREE.CircleGeometry(0.5, 24),
-    new THREE.MeshBasicMaterial({ color: COLORS.ink, transparent: true, opacity: 0.18, depthWrite: false })
-  );
+function addBlobShadow(parent, width, depth, opacity = 0.2) {
+  const shadow = new THREE.Mesh(new THREE.CircleGeometry(0.5, 32), new THREE.MeshBasicMaterial({ color: COLORS.ink, transparent: true, opacity, depthWrite: false }));
   shadow.rotation.x = -Math.PI / 2;
-  shadow.position.y = y;
+  shadow.position.y = 0.035;
   shadow.scale.set(width, depth, 1);
   parent.add(shadow);
   return shadow;
 }
 
+function makeMarker(color = COLORS.yellow) {
+  const group = new THREE.Group();
+  addMesh(group, new THREE.OctahedronGeometry(0.16, 0), color, { outlineScale: 1.08, shadow: false });
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.21, 0.27, 24), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.62, side: THREE.DoubleSide, depthWrite: false }));
+  ring.rotation.x = Math.PI / 2;
+  ring.position.y = -0.26;
+  group.add(ring);
+  return group;
+}
+
+function makePerson(options = {}) {
+  const { jacket = COLORS.orange, trousers = COLORS.navy, skin = COLORS.skinA, hair = 0x302b29, bag = true, hat = false, marker = false } = options;
+  const root = new THREE.Group();
+  const rig = new THREE.Group();
+  root.add(rig);
+  addBlobShadow(root, 0.95, 0.58, 0.24);
+  const hips = addMesh(rig, new THREE.CylinderGeometry(0.26, 0.31, 0.34, 10), trousers, { position: [0, 0.86, 0], outlineScale: 1.035 });
+  const torso = addMesh(rig, new THREE.CylinderGeometry(0.28, 0.36, 0.76, 12), jacket, { position: [0, 1.29, 0], outlineScale: 1.025 });
+  addMesh(rig, new THREE.BoxGeometry(0.16, 0.62, 0.025), COLORS.cream, { position: [0, 1.3, 0.318], outline: false, shadow: false });
+  addMesh(rig, new THREE.CylinderGeometry(0.1, 0.11, 0.12, 10), skin, { position: [0, 1.75, 0], outlineScale: 1.025 });
+  const head = addMesh(rig, new THREE.SphereGeometry(0.265, 18, 12), skin, { position: [0, 2.02, 0], scale: [0.92, 1.08, 0.92], outlineScale: 1.022 });
+  addMesh(rig, new THREE.SphereGeometry(0.055, 10, 8), skin, { position: [-0.265, 2.02, 0], outline: false });
+  addMesh(rig, new THREE.SphereGeometry(0.055, 10, 8), skin, { position: [0.265, 2.02, 0], outline: false });
+  addMesh(rig, new THREE.SphereGeometry(0.035, 8, 6), COLORS.ink, { position: [-0.09, 2.07, 0.235], outline: false, shadow: false });
+  addMesh(rig, new THREE.SphereGeometry(0.035, 8, 6), COLORS.ink, { position: [0.09, 2.07, 0.235], outline: false, shadow: false });
+  addMesh(rig, new THREE.ConeGeometry(0.035, 0.12, 8), skin, { position: [0, 1.99, 0.27], rotation: [Math.PI / 2, 0, 0], outline: false });
+  addMesh(rig, new THREE.TorusGeometry(0.065, 0.012, 5, 12, Math.PI), 0x7d4037, { position: [0, 1.91, 0.242], rotation: [0, 0, Math.PI], outline: false, shadow: false });
+  addMesh(rig, new THREE.SphereGeometry(0.278, 14, 8, 0, TAU, 0, Math.PI / 2), hair, { position: [0, 2.13, -0.018], scale: [0.96, 0.9, 0.96], outlineScale: 1.02 });
+  [-0.17, -0.06, 0.07, 0.18].forEach((x, index) => addMesh(rig, new THREE.ConeGeometry(0.08, 0.22 + (index % 2) * 0.04, 7), hair, {
+    position: [x, 2.15 - Math.abs(x) * 0.15, 0.17], rotation: [0.42, 0, x * 1.6], outline: false
+  }));
+  if (hat) {
+    addMesh(rig, new THREE.CylinderGeometry(0.29, 0.31, 0.12, 14), COLORS.yellow, { position: [0, 2.28, 0], outlineScale: 1.025 });
+    addMesh(rig, new THREE.BoxGeometry(0.42, 0.045, 0.3), COLORS.yellow, { position: [0, 2.25, 0.14], outlineScale: 1.025 });
+  }
+  const limbs = {};
+  [["leftArm", -0.4], ["rightArm", 0.4]].forEach(([name, x]) => {
+    const pivot = new THREE.Group();
+    pivot.position.set(x, 1.55, 0);
+    addMesh(pivot, new THREE.CapsuleGeometry(0.085, 0.46, 5, 10), jacket, { position: [0, -0.29, 0], outlineScale: 1.03 });
+    addMesh(pivot, new THREE.SphereGeometry(0.095, 10, 8), skin, { position: [0, -0.6, 0], outlineScale: 1.025 });
+    rig.add(pivot);
+    limbs[name] = pivot;
+  });
+  [["leftLeg", -0.17], ["rightLeg", 0.17]].forEach(([name, x]) => {
+    const pivot = new THREE.Group();
+    pivot.position.set(x, 0.76, 0);
+    addMesh(pivot, new THREE.CapsuleGeometry(0.105, 0.45, 5, 10), trousers, { position: [0, -0.31, 0], outlineScale: 1.03 });
+    addMesh(pivot, new THREE.BoxGeometry(0.24, 0.16, 0.42), COLORS.cream, { position: [0, -0.66, 0.09], outlineScale: 1.025 });
+    rig.add(pivot);
+    limbs[name] = pivot;
+  });
+  if (bag) {
+    addMesh(rig, new THREE.BoxGeometry(0.46, 0.58, 0.18), 0x9a6547, { position: [0, 1.2, -0.34], outlineScale: 1.03 });
+    addMesh(rig, new THREE.TorusGeometry(0.47, 0.035, 6, 18, Math.PI * 1.15), COLORS.ink, { position: [0.04, 1.46, -0.03], rotation: [0.2, 0.15, 0.76], outline: false });
+  }
+  if (marker) {
+    const markerMesh = makeMarker();
+    markerMesh.position.y = 2.75;
+    root.add(markerMesh);
+    root.userData.marker = markerMesh;
+  }
+  Object.assign(root.userData, { rig, hips, torso, head, ...limbs });
+  return root;
+}
+
+function animatePerson(person, phase, amount, time) {
+  const { rig, torso, head, leftArm, rightArm, leftLeg, rightLeg } = person.userData;
+  const stride = Math.sin(phase) * amount;
+  rig.position.y = amount > 0.03 ? Math.abs(Math.sin(phase * 2)) * 0.055 : Math.sin(time * 1.7) * 0.012;
+  torso.rotation.z = -stride * 0.045;
+  torso.rotation.x = amount * 0.05;
+  head.rotation.y = amount < 0.05 ? Math.sin(time * 0.65) * 0.1 : 0;
+  leftLeg.rotation.x = stride * 0.82;
+  rightLeg.rotation.x = -stride * 0.82;
+  leftArm.rotation.x = -stride * 0.68;
+  rightArm.rotation.x = stride * 0.68;
+}
+
+function makeTree(scale = 1) {
+  const group = new THREE.Group();
+  addBlobShadow(group, 1.45 * scale, 1.05 * scale, 0.16);
+  addMesh(group, new THREE.CylinderGeometry(0.1 * scale, 0.17 * scale, 1.3 * scale, 8), 0x73553d, { position: [0, 0.66 * scale, 0], outlineScale: 1.04 });
+  [[0, 1.55, 0, .66], [-.35, 1.45, .06, .49], [.37, 1.48, -.04, .53], [.08, 1.88, 0, .48]].forEach(([x, y, z, size], index) => {
+    addMesh(group, new THREE.IcosahedronGeometry(size * scale, 1), index === 3 ? COLORS.grassLight : COLORS.grassDark, {
+      position: [x * scale, y * scale, z * scale], scale: [1, .85, 1], outlineScale: 1.02
+    });
+  });
+  return group;
+}
+
+function makeGrassTuft(scale = 1) {
+  const group = new THREE.Group();
+  [-0.12, 0, 0.12].forEach((x, index) => addMesh(group, new THREE.ConeGeometry(0.065 * scale, (0.3 + index * 0.04) * scale, 4), COLORS.grassDark, {
+    position: [x * scale, 0.15 * scale, 0], rotation: [0, 0, (index - 1) * 0.22], outline: false, shadow: false
+  }));
+  return group;
+}
+
 function makeLabel(text, accent) {
   const canvas = document.createElement("canvas");
-  canvas.width = 384;
-  canvas.height = 112;
+  canvas.width = 512;
+  canvas.height = 128;
   const ctx = canvas.getContext("2d");
-  ctx.fillStyle = "rgba(255,250,240,.96)";
-  ctx.strokeStyle = "#172c32";
-  ctx.lineWidth = 8;
-  ctx.beginPath();
-  ctx.roundRect(8, 8, 368, 96, 18);
-  ctx.fill();
-  ctx.stroke();
+  ctx.fillStyle = "rgba(255,248,232,.94)";
+  ctx.strokeStyle = "#1d3033";
+  ctx.lineWidth = 7;
+  ctx.beginPath(); ctx.roundRect(8, 8, 496, 112, 18); ctx.fill(); ctx.stroke();
   ctx.fillStyle = `#${new THREE.Color(accent).getHexString()}`;
-  ctx.fillRect(24, 25, 10, 62);
-  ctx.fillStyle = "#172c32";
-  ctx.font = "900 42px 'Kaiti SC', 'STKaiti', serif";
+  ctx.fillRect(25, 26, 12, 76);
+  ctx.fillStyle = "#1d3033";
+  ctx.font = "900 46px 'Kaiti SC', 'STKaiti', serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(text, 204, 58);
+  ctx.fillText(text, 274, 66);
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: true, depthWrite: false }));
-  sprite.scale.set(2.15, 0.63, 1);
+  sprite.scale.set(1.62, 0.41, 1);
   return sprite;
 }
 
-function makeMarker() {
-  const marker = new THREE.Group();
-  addMesh(marker, new THREE.ConeGeometry(0.18, 0.34, 4), COLORS.orange, { position: [0, 0.17, 0], rotation: [Math.PI, Math.PI / 4, 0] });
-  addMesh(marker, new THREE.ConeGeometry(0.18, 0.34, 4), COLORS.orange, { position: [0, -0.17, 0], rotation: [0, Math.PI / 4, 0] });
-  marker.visible = false;
-  return marker;
-}
-
-function addWindow(group, x, y, z = 0.42) {
-  addMesh(group, new THREE.BoxGeometry(0.28, 0.32, 0.05), COLORS.cream, { position: [x, y, z], outline: false });
+function addWindow(group, x, y, z, color = 0x9fc7c2) {
+  addMesh(group, new THREE.BoxGeometry(0.3, 0.36, 0.05), color, { position: [x, y, z], outlineScale: 1.04 });
+  addMesh(group, new THREE.BoxGeometry(0.025, 0.34, 0.06), COLORS.cream, { position: [x, y, z + .035], outline: false, shadow: false });
 }
 
 function makeBuilding(location) {
   const group = new THREE.Group();
-  addBlobShadow(group, 3.5, 2.4);
-
-  if (location.kind === "airport") {
-    addMesh(group, new THREE.BoxGeometry(2.8, 1.1, 1.15), location.color, { position: [0, 0.62, 0] });
-    addMesh(group, new THREE.BoxGeometry(3.2, 0.13, 0.5), COLORS.cream, { position: [0, 1.26, 0.23] });
-    addMesh(group, new THREE.CylinderGeometry(0.1, 0.1, 2.4, 8), COLORS.cream, { position: [0, 1.95, 0], rotation: [0, 0, Math.PI / 2] });
-    addMesh(group, new THREE.BoxGeometry(1.35, 0.08, 0.42), COLORS.cream, { position: [0, 1.95, 0], rotation: [0, 0.05, 0.18] });
-    [-0.78, 0, 0.78].forEach((x) => addWindow(group, x, 0.72, 0.6));
-  } else if (location.kind === "shipyard") {
-    addMesh(group, new THREE.BoxGeometry(2.4, 0.78, 1.6), location.color, { position: [0, 0.44, 0] });
-    addMesh(group, new THREE.BoxGeometry(0.16, 2.8, 0.16), COLORS.ink, { position: [-1.15, 1.55, 0] });
-    addMesh(group, new THREE.BoxGeometry(2.5, 0.14, 0.14), COLORS.ink, { position: [0, 2.82, 0], rotation: [0, 0, -0.08] });
-    addMesh(group, new THREE.BoxGeometry(0.1, 1.6, 0.1), COLORS.ink, { position: [1.08, 2.1, 0], rotation: [0, 0, -0.34] });
-    addMesh(group, new THREE.BoxGeometry(0.42, 0.42, 0.42), COLORS.yellow, { position: [1.28, 1.05, 0] });
-  } else if (location.kind === "container" || location.kind === "cargo") {
-    const colors = [COLORS.orange, COLORS.yellow, COLORS.blue];
+  addBlobShadow(group, 4.1, 2.7, 0.18);
+  const { kind, color } = location;
+  if (kind === "airport") {
+    addMesh(group, new THREE.BoxGeometry(3.9, 1.25, 1.8), color, { position: [0, .72, 0] });
+    addMesh(group, new THREE.BoxGeometry(4.25, .14, 2.05), COLORS.cream, { position: [0, 1.43, 0] });
+    [-1.25, -.42, .42, 1.25].forEach((x) => addWindow(group, x, .82, .93));
+    addMesh(group, new THREE.BoxGeometry(1.15, .78, .12), 0x6e969e, { position: [0, .55, .96], outlineScale: 1.03 });
+    addMesh(group, new THREE.CylinderGeometry(.07, .07, 2.9, 8), COLORS.cream, { position: [0, 2.25, -.1], rotation: [0, 0, Math.PI / 2] });
+    addMesh(group, new THREE.BoxGeometry(1.65, .1, .46), COLORS.cream, { position: [0, 2.25, -.1], rotation: [.03, 0, .15] });
+  } else if (kind === "shipyard") {
+    addMesh(group, new THREE.BoxGeometry(3.3, 1.05, 2.2), color, { position: [0, .58, 0] });
+    addMesh(group, new THREE.BoxGeometry(3.6, .18, 2.48), COLORS.navy, { position: [0, 1.22, 0] });
+    [-1.15, -.38, .38, 1.15].forEach((x) => addWindow(group, x, .7, 1.13, 0xbad1c8));
+    addMesh(group, new THREE.CylinderGeometry(.11, .15, 3.7, 8), COLORS.ink, { position: [-1.7, 2.1, 0] });
+    addMesh(group, new THREE.BoxGeometry(3.4, .14, .14), COLORS.ink, { position: [-.08, 3.86, 0], rotation: [0, 0, -.08] });
+    addMesh(group, new THREE.BoxGeometry(.11, 2.1, .11), COLORS.ink, { position: [1.45, 2.9, 0], rotation: [0, 0, -.22] });
+    addMesh(group, new THREE.BoxGeometry(.5, .52, .5), COLORS.yellow, { position: [1.7, 1.72, 0] });
+  } else if (kind === "container" || kind === "cargo") {
+    const boxColors = [COLORS.orange, COLORS.yellow, COLORS.blue, COLORS.rust];
     for (let row = 0; row < 3; row += 1) {
-      for (let column = 0; column < 3; column += 1) {
-        addMesh(group, new THREE.BoxGeometry(0.95, 0.52, 0.75), colors[(row + column) % 3], {
-          position: [(column - 1) * 0.98, 0.3 + row * 0.53, 0]
+      for (let column = 0; column < 4; column += 1) {
+        const z = column % 2 ? -.38 : .38;
+        addMesh(group, new THREE.BoxGeometry(1.1, .54, .74), boxColors[(row + column) % boxColors.length], {
+          position: [(column - 1.5) * 1.04, .3 + row * .55, z], outlineScale: 1.025
         });
       }
     }
-    if (location.kind === "cargo") {
-      addMesh(group, new THREE.BoxGeometry(0.14, 2.6, 0.14), COLORS.ink, { position: [-1.75, 1.45, 0] });
-      addMesh(group, new THREE.BoxGeometry(2.1, 0.14, 0.14), COLORS.ink, { position: [-0.76, 2.62, 0], rotation: [0, 0, -0.08] });
-    }
-  } else if (location.kind === "anchorage") {
-    addMesh(group, new THREE.BoxGeometry(2.8, 0.45, 1.05), COLORS.cream, { position: [0, 0.38, 0], rotation: [0, 0, -0.04] });
-    addMesh(group, new THREE.BoxGeometry(1.05, 0.72, 0.8), location.color, { position: [0.25, 0.95, 0] });
-    addMesh(group, new THREE.CylinderGeometry(0.04, 0.04, 1.7, 6), COLORS.ink, { position: [0, 1.85, 0] });
-    addMesh(group, new THREE.BoxGeometry(0.85, 0.08, 0.05), COLORS.orange, { position: [0.38, 2.28, 0], rotation: [0, 0, -0.2] });
+    addMesh(group, new THREE.CylinderGeometry(.09, .13, 3.35, 8), COLORS.ink, { position: [-2.35, 1.8, 0] });
+    addMesh(group, new THREE.BoxGeometry(3.2, .13, .13), COLORS.ink, { position: [-.82, 3.38, 0], rotation: [0, 0, -.07] });
+    addMesh(group, new THREE.BoxGeometry(.1, 1.85, .1), COLORS.ink, { position: [.65, 2.5, 0], rotation: [0, 0, -.23] });
+  } else if (kind === "anchorage") {
+    addMesh(group, new THREE.BoxGeometry(3.8, .48, 1.45), COLORS.cream, { position: [0, .38, 0] });
+    addMesh(group, new THREE.BoxGeometry(1.55, 1, 1.18), color, { position: [.25, 1.12, 0] });
+    addWindow(group, -.12, 1.23, .61);
+    addWindow(group, .62, 1.23, .61);
+    addMesh(group, new THREE.CylinderGeometry(.05, .05, 2.05, 7), COLORS.ink, { position: [.08, 2.55, 0] });
+    addMesh(group, new THREE.BoxGeometry(1.05, .08, .06), COLORS.orange, { position: [.52, 3.01, 0], rotation: [0, 0, -.18] });
   } else {
-    addMesh(group, new THREE.BoxGeometry(2.15, 1.75, 1.35), location.color, { position: [0, 0.95, 0] });
-    addMesh(group, new THREE.ConeGeometry(1.55, 0.72, 4), COLORS.cream, { position: [0, 2.18, 0], rotation: [0, Math.PI / 4, 0] });
-    addWindow(group, -0.62, 1.15, 0.7); addWindow(group, 0.62, 1.15, 0.7);
-    addMesh(group, new THREE.BoxGeometry(0.42, 0.88, 0.1), COLORS.ink, { position: [0, 0.48, 0.72], outline: false });
-    if (location.kind === "office") addMesh(group, new THREE.BoxGeometry(1.25, 0.28, 0.12), COLORS.orange, { position: [0, 1.75, 0.75] });
+    addMesh(group, new THREE.BoxGeometry(2.75, 2.05, 1.8), color, { position: [0, 1.12, 0] });
+    addMesh(group, new THREE.ConeGeometry(1.95, .92, 4), kind === "office" ? COLORS.orange : COLORS.cream, { position: [0, 2.58, 0], rotation: [0, Math.PI / 4, 0] });
+    [-.76, 0, .76].forEach((x) => addWindow(group, x, 1.42, .93));
+    addMesh(group, new THREE.BoxGeometry(.48, 1.04, .13), COLORS.navy, { position: [0, .56, .96], outlineScale: 1.03 });
+    addMesh(group, new THREE.BoxGeometry(2.1, .22, .14), COLORS.cream, { position: [0, 2.05, .98], outlineScale: 1.03 });
   }
   return group;
 }
 
-function makeNpc(color) {
-  const npc = new THREE.Group();
-  addBlobShadow(npc, 0.85, 0.55);
-  addMesh(npc, new THREE.BoxGeometry(0.48, 0.78, 0.34), color, { position: [0, 0.95, 0] });
-  addMesh(npc, new THREE.SphereGeometry(0.27, 12, 8), COLORS.skin, { position: [0, 1.55, 0] });
-  addMesh(npc, new THREE.SphereGeometry(0.285, 12, 8, 0, TAU, 0, Math.PI / 2), COLORS.ink, { position: [0, 1.62, -0.02], outline: false });
-  addMesh(npc, new THREE.CapsuleGeometry(0.07, 0.48, 4, 8), COLORS.ink, { position: [-0.14, 0.42, 0] });
-  addMesh(npc, new THREE.CapsuleGeometry(0.07, 0.48, 4, 8), COLORS.ink, { position: [0.14, 0.42, 0] });
-  const marker = makeMarker();
-  marker.position.y = 2.45;
-  npc.add(marker);
-  npc.userData.marker = marker;
-  return npc;
+function makeBoat(color, scale = 1) {
+  const group = new THREE.Group();
+  addMesh(group, new THREE.BoxGeometry(3.7 * scale, .55 * scale, 1.35 * scale), COLORS.cream, { position: [0, .3 * scale, 0], outlineScale: 1.02 });
+  addMesh(group, new THREE.BoxGeometry(1.45 * scale, .9 * scale, 1.05 * scale), color, { position: [.18 * scale, 1.02 * scale, 0], outlineScale: 1.025 });
+  addMesh(group, new THREE.CylinderGeometry(.04 * scale, .04 * scale, 1.55 * scale, 7), COLORS.ink, { position: [0, 2.03 * scale, 0] });
+  addMesh(group, new THREE.BoxGeometry(.82 * scale, .055 * scale, .05 * scale), COLORS.orange, { position: [.36 * scale, 2.37 * scale, 0], rotation: [0, 0, -.15] });
+  return group;
 }
 
-function makePlayer() {
-  const root = new THREE.Group();
-  const rig = new THREE.Group();
-  root.add(rig);
-  addBlobShadow(root, 0.95, 0.62);
-  const body = addMesh(rig, new THREE.BoxGeometry(0.58, 0.84, 0.4), COLORS.orange, { position: [0, 1.08, 0] });
-  addMesh(rig, new THREE.BoxGeometry(0.3, 0.42, 0.12), COLORS.cream, { position: [0, 1.08, 0.26], outline: false });
-  addMesh(rig, new THREE.SphereGeometry(0.31, 12, 8), COLORS.skin, { position: [0, 1.8, 0] });
-  addMesh(rig, new THREE.SphereGeometry(0.325, 12, 8, 0, TAU, 0, Math.PI / 2), COLORS.ink, { position: [0, 1.87, -0.02], outline: false });
-  addMesh(rig, new THREE.BoxGeometry(0.48, 0.6, 0.2), COLORS.paper, { position: [0, 1.06, -0.31] });
-
-  const limbs = {};
-  ["leftArm", "rightArm"].forEach((name, index) => {
-    const limb = new THREE.Group();
-    limb.position.set(index ? 0.35 : -0.35, 1.38, 0);
-    addMesh(limb, new THREE.CapsuleGeometry(0.085, 0.5, 4, 8), COLORS.skin, { position: [0, -0.28, 0] });
-    rig.add(limb);
-    limbs[name] = limb;
-  });
-  ["leftLeg", "rightLeg"].forEach((name, index) => {
-    const limb = new THREE.Group();
-    limb.position.set(index ? 0.16 : -0.16, 0.7, 0);
-    addMesh(limb, new THREE.CapsuleGeometry(0.095, 0.5, 4, 8), COLORS.ink, { position: [0, -0.3, 0] });
-    addMesh(limb, new THREE.BoxGeometry(0.25, 0.14, 0.42), COLORS.cream, { position: [0, -0.64, 0.1] });
-    rig.add(limb);
-    limbs[name] = limb;
-  });
-  root.userData = { rig, body, ...limbs };
-  return root;
-}
-
-function makeTree(scale = 1) {
-  const tree = new THREE.Group();
-  addBlobShadow(tree, 1.5 * scale, 1.1 * scale);
-  addMesh(tree, new THREE.CylinderGeometry(0.11 * scale, 0.16 * scale, 1.15 * scale, 7), 0x835d41, { position: [0, 0.58 * scale, 0] });
-  addMesh(tree, new THREE.DodecahedronGeometry(0.62 * scale, 0), COLORS.grassDark, { position: [0, 1.42 * scale, 0] });
-  addMesh(tree, new THREE.DodecahedronGeometry(0.48 * scale, 0), COLORS.grass, { position: [0.42 * scale, 1.3 * scale, 0.05] });
-  return tree;
-}
-
-function makeBoat(color) {
-  const boat = new THREE.Group();
-  addMesh(boat, new THREE.BoxGeometry(3.4, 0.5, 1.25), COLORS.cream, { position: [0, 0.25, 0] });
-  addMesh(boat, new THREE.BoxGeometry(1.3, 0.85, 1), color, { position: [0.2, 0.9, 0] });
-  addMesh(boat, new THREE.CylinderGeometry(0.05, 0.05, 2.4, 6), COLORS.ink, { position: [-0.25, 2, 0] });
-  addMesh(boat, new THREE.BoxGeometry(1.4, 0.08, 0.06), COLORS.orange, { position: [0.38, 2.55, 0], rotation: [0, 0, -0.18] });
-  return boat;
-}
-
-class PortTownStage {
+class PortWorld {
   constructor() {
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(40, 1, 0.1, 180);
-    this.renderers = new Map([
-      ["intro", this.makeRenderer(elements.titleCanvas)],
-      ["play", this.makeRenderer(elements.worldCanvas)],
-      ["ending", this.makeRenderer(elements.endingCanvas)]
-    ]);
+    this.scene.background = new THREE.Color(COLORS.sky);
+    this.scene.fog = new THREE.Fog(COLORS.sky, 34, 72);
     this.world = new THREE.Group();
     this.scene.add(this.world);
+    this.camera = new THREE.PerspectiveCamera(42, 1, .1, 180);
+    this.renderers = new Map();
+    [["intro", elements.titleCanvas], ["play", elements.worldCanvas]].forEach(([name, canvas]) => {
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: "high-performance" });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 0.9;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      this.renderers.set(name, renderer);
+    });
+    const hemisphere = new THREE.HemisphereLight(0xe5fff2, 0x49604c, 2.25);
+    this.scene.add(hemisphere);
+    const sun = new THREE.DirectionalLight(0xfff0c7, 3.4);
+    sun.position.set(-14, 24, 16);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.camera.left = -30;
+    sun.shadow.camera.right = 30;
+    sun.shadow.camera.top = 28;
+    sun.shadow.camera.bottom = -28;
+    sun.shadow.bias = -0.0002;
+    this.scene.add(sun);
     this.locationGroups = new Map();
-    this.waterMaterial = null;
-    this.buildWorld();
-    this.player = makePlayer();
+    this.ambientPeople = [];
+    this.clouds = [];
+    this.player = makePerson({ jacket: COLORS.orange, trousers: COLORS.navy, skin: COLORS.skinC, hair: 0x4a2d28, bag: true });
     this.world.add(this.player);
-    this.targetId = "airport";
-    this.camera.position.set(9, 10, 18);
+    this.buildWorld();
     this.resize();
   }
 
-  makeRenderer(canvas) {
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.06;
-    return renderer;
-  }
-
-  makeTerrain(radius, color, base, scaleZ = 0.74) {
-    const geometry = new THREE.CircleGeometry(radius, 72);
-    const positions = geometry.attributes.position;
-    for (let index = 0; index < positions.count; index += 1) {
-      const x = positions.getX(index);
-      const localY = positions.getY(index);
-      const z = -localY * scaleZ;
-      const height = base + (base > 0 ? terrainHeight(x, z) : 0);
-      positions.setZ(index, height);
-    }
-    geometry.computeVertexNormals();
-    const mesh = new THREE.Mesh(geometry, toonMaterial(color));
+  makeIsland(radius, color, y, scaleZ = .74) {
+    const mesh = new THREE.Mesh(new THREE.CircleGeometry(radius, 96), toonMaterial(color));
     mesh.rotation.x = -Math.PI / 2;
     mesh.scale.y = scaleZ;
+    mesh.position.y = y;
+    mesh.receiveShadow = true;
     return mesh;
   }
 
-  addRoad(points, width = 0.32) {
-    const curvePoints = points.map(([x, z]) => new THREE.Vector3(x, terrainHeight(x, z) + 0.13, z));
-    const curve = new THREE.CatmullRomCurve3(curvePoints, false, "catmullrom", 0.2);
-    this.world.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 72, width, 7, false), toonMaterial(COLORS.road)));
+  addRoad(points, width = .56) {
+    const curvePoints = points.map(([x, z]) => new THREE.Vector3(x, terrainHeight(x, z) + .105, z));
+    const curve = new THREE.CatmullRomCurve3(curvePoints, false, "catmullrom", .18);
+    const road = new THREE.Mesh(new THREE.TubeGeometry(curve, 96, width, 9, false), toonMaterial(COLORS.road));
+    road.receiveShadow = true;
+    this.world.add(road);
   }
 
   buildWorld() {
-    this.scene.background = new THREE.Color(COLORS.sky);
     this.waterMaterial = new THREE.ShaderMaterial({
-      uniforms: { uTime: { value: 0 }, uColorA: { value: new THREE.Color(COLORS.sea) }, uColorB: { value: new THREE.Color(COLORS.seaDeep) } },
-      vertexShader: `
-        uniform float uTime;
-        varying float vWave;
-        void main() {
-          vec3 p = position;
-          float wave = sin(p.x * 0.18 + uTime) * 0.08 + cos(p.y * 0.22 - uTime * 0.8) * 0.06;
-          p.z += wave;
-          vWave = wave;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform vec3 uColorA;
-        uniform vec3 uColorB;
-        varying float vWave;
-        void main() {
-          float band = floor((vWave + 0.16) * 10.0) / 3.0;
-          gl_FragColor = vec4(mix(uColorA, uColorB, clamp(band, 0.0, 1.0)), 1.0);
-        }
-      `
+      uniforms: { uTime: { value: 0 }, uA: { value: new THREE.Color(COLORS.sea) }, uB: { value: new THREE.Color(COLORS.seaDeep) } },
+      vertexShader: `uniform float uTime; varying float vWave; void main(){ vec3 p=position; float w=sin(p.x*.16+uTime)*.1+cos(p.y*.21-uTime*.75)*.07; p.z+=w; vWave=w; gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.); }`,
+      fragmentShader: `uniform vec3 uA; uniform vec3 uB; varying float vWave; void main(){ float b=floor(clamp((vWave+.2)*7.,0.,3.))/3.; gl_FragColor=vec4(mix(uB,uA,b),1.); }`
     });
-    const water = new THREE.Mesh(new THREE.PlaneGeometry(140, 140, 42, 42), this.waterMaterial);
+    const water = new THREE.Mesh(new THREE.PlaneGeometry(150, 150, 44, 44), this.waterMaterial);
     water.rotation.x = -Math.PI / 2;
-    water.position.y = -0.45;
+    water.position.y = -.95;
     this.world.add(water);
-
-    const islandShadow = new THREE.Mesh(
-      new THREE.CircleGeometry(21, 72),
-      new THREE.MeshBasicMaterial({ color: COLORS.ink, transparent: true, opacity: 0.18, depthWrite: false })
-    );
-    islandShadow.rotation.x = -Math.PI / 2;
-    islandShadow.scale.y = 0.74;
-    islandShadow.position.y = -0.34;
-    this.world.add(islandShadow);
-    this.world.add(this.makeTerrain(20.4, COLORS.sand, -0.08));
-    this.world.add(this.makeTerrain(19.2, COLORS.grass, 0.02));
-
-    this.addRoad([[0, 7], [-6, 7], [-13, 7.5]]);
-    this.addRoad([[-13, 7.5], [-10, 5], [-8, 2], [-2, -1.5], [3, 3], [8, 5], [12, 7]]);
-    this.addRoad([[3, 3], [7, 0], [12, -3], [8, -7], [4, -10], [-3, -9], [-10, -9]]);
-    this.addRoad([[-10, -9], [-7, -4], [-2, -1.5]]);
-
-    const trees = [
-      [-16, 4, 1.1], [-15, -1, .9], [-14, -6, 1.2], [-11, 11, .9], [-8, 9, 1], [-5, 11, 1.15],
-      [-4, 4, .8], [-1, 10, 1.15], [2, 10, .9], [6, 9, 1.1], [9, 11, .95], [15, 4, 1.1],
-      [16, -1, .9], [15, -7, 1.1], [11, -10, .85], [8, -12, 1], [0, -11, .95], [-5, -11, 1.1],
-      [-12, -3, .8], [-7, -1, .7], [7, 6, .75], [7, -3, .7], [0, 3, .65]
+    const cliff = new THREE.Mesh(new THREE.CylinderGeometry(20.9, 22.1, 1.35, 96), toonMaterial(COLORS.cliff));
+    cliff.scale.z = .74;
+    cliff.position.y = -.48;
+    cliff.castShadow = true;
+    cliff.receiveShadow = true;
+    this.world.add(cliff);
+    this.world.add(this.makeIsland(21.1, COLORS.sand, .16));
+    this.world.add(this.makeIsland(20.25, COLORS.grass, .23));
+    this.addRoad([[0, 8.2], [-6.5, 8], [-14.4, 8]]);
+    this.addRoad([[-14.4, 8], [-11, 5.4], [-9.2, 2.3], [-2.2, -1.7], [3.7, 3.3], [9, 5.5], [13.8, 7.4]]);
+    this.addRoad([[3.7, 3.3], [8.4, .3], [14, -3.1], [9.2, -8], [4.7, -11], [-3.8, -10], [-11.2, -10]]);
+    this.addRoad([[-11.2, -10], [-8.1, -4.2], [-2.2, -1.7]]);
+    locations.forEach((location, index) => {
+      const [x, z] = location.position;
+      const building = makeBuilding(location);
+      building.position.set(x, terrainHeight(x, z), z);
+      building.rotation.y = (index % 3 - 1) * .08;
+      this.world.add(building);
+      const label = makeLabel(location.short, location.color);
+      label.position.set(x, terrainHeight(x, z) + 3.75, z);
+      this.world.add(label);
+      const skinTones = [COLORS.skinA, COLORS.skinB, COLORS.skinC];
+      const npc = makePerson({
+        jacket: location.color, trousers: index % 2 ? COLORS.navy : 0x48504b, skin: skinTones[index % skinTones.length],
+        hair: index % 3 === 1 ? 0x211e1e : 0x4a3028, bag: index % 2 === 0,
+        hat: ["shipyard", "container", "cargo"].includes(location.kind), marker: true
+      });
+      const [npcX, npcZ] = location.interact;
+      npc.position.set(npcX, terrainHeight(npcX, npcZ), npcZ);
+      npc.rotation.y = Math.atan2(x - npcX, z - npcZ) + Math.PI;
+      npc.userData.anchor = new THREE.Vector2(npcX, npcZ);
+      npc.userData.phase = index * 1.7;
+      npc.userData.wanderRadius = .24 + (index % 3) * .11;
+      this.world.add(npc);
+      this.locationGroups.set(location.id, { location, building, label, npc, marker: npc.userData.marker });
+      colliders.push({ x, z, radius: ["container", "cargo"].includes(location.kind) ? 2.65 : 2.1 });
+    });
+    const treePositions = [
+      [-17, 4, 1.2], [-16, -2, 1], [-15, -7, 1.25], [-12, 11.5, 1.05], [-8, 10.5, 1.15], [-4.5, 12, 1.3],
+      [-4, 4.4, .85], [-.7, 11.3, 1.18], [3, 11.2, 1], [7.2, 9.6, 1.25], [10, 11.2, 1.08], [17.3, 4.5, 1.2],
+      [18, -1, 1], [16.5, -8, 1.2], [12, -12.4, .95], [8, -13.4, 1.1], [.2, -13.2, 1], [-6, -12.3, 1.25],
+      [-13.5, -3, .9], [-7, -1, .78], [7.3, 7, .8], [7.6, -3.5, .78], [.5, 3.3, .72]
     ];
-    trees.forEach(([x, z, scale]) => {
+    treePositions.forEach(([x, z, scale]) => {
       const tree = makeTree(scale);
       tree.position.set(x, terrainHeight(x, z), z);
       this.world.add(tree);
     });
-
-    locations.forEach((location) => {
-      const [x, z] = location.position;
-      const group = new THREE.Group();
-      const building = makeBuilding(location);
-      group.add(building);
-      const label = makeLabel(location.short, location.color);
-      label.position.set(0, 3.55, 0);
-      group.add(label);
-      group.position.set(x, terrainHeight(x, z), z);
-      this.world.add(group);
-
-      const [npcX, npcZ] = location.interact;
-      const npc = makeNpc(location.color);
-      npc.position.set(npcX, terrainHeight(npcX, npcZ), npcZ);
-      npc.rotation.y = Math.atan2(x - npcX, z - npcZ) + Math.PI;
-      this.world.add(npc);
-      this.locationGroups.set(location.id, { group, npc, marker: npc.userData.marker });
-      colliders.push({ x, z, radius: location.kind === "container" || location.kind === "cargo" ? 2.2 : 1.75 });
-    });
-
-    const westPier = addMesh(this.world, new THREE.BoxGeometry(3.2, 0.25, 8), 0xa67a55, { position: [-10, -0.18, -15], outlineScale: 1.02 });
-    westPier.rotation.y = 0.05;
-    const eastPier = addMesh(this.world, new THREE.BoxGeometry(4, 0.25, 8), 0xa67a55, { position: [8, -0.18, -15], outlineScale: 1.02 });
-    eastPier.rotation.y = -0.06;
-    const boatA = makeBoat(COLORS.blue); boatA.position.set(-12.5, -0.2, -20); boatA.rotation.y = -0.35; this.world.add(boatA);
-    const boatB = makeBoat(COLORS.orange); boatB.position.set(15, -0.2, -15); boatB.rotation.y = 0.8; this.world.add(boatB);
-
-    [[-27, -14, 5], [27, -11, 6], [-24, 22, 4], [24, 20, 4.5]].forEach(([x, z, scale]) => {
-      const distant = new THREE.Group();
-      addMesh(distant, new THREE.DodecahedronGeometry(scale, 1), COLORS.grassDark, { scale: [1.4, 0.45, 1] });
-      distant.position.set(x, -0.2, z);
-      this.world.add(distant);
-    });
-
-    const particles = [];
-    for (let index = 0; index < 150; index += 1) {
-      const angle = index * 2.37;
-      const radius = 8 + index % 28;
-      particles.push(Math.sin(angle) * radius, 2 + (index * 17 % 80) / 10, Math.cos(angle) * radius);
+    for (let index = 0; index < 120; index += 1) {
+      const angle = random() * TAU;
+      const radius = 5 + random() * 14.4;
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius * .72;
+      if (locations.some((location) => Math.hypot(x - location.position[0], z - location.position[1]) < 3.1)) continue;
+      const tuft = makeGrassTuft(.65 + random() * .65);
+      tuft.position.set(x, terrainHeight(x, z) + .02, z);
+      tuft.rotation.y = random() * TAU;
+      this.world.add(tuft);
     }
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.Float32BufferAttribute(particles, 3));
-    this.airParticles = new THREE.Points(geometry, new THREE.PointsMaterial({ color: COLORS.cream, size: 0.055, transparent: true, opacity: 0.7 }));
-    this.world.add(this.airParticles);
+    for (let index = 0; index < 25; index += 1) {
+      const angle = random() * TAU;
+      const radius = 8 + random() * 11.5;
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius * .72;
+      const rock = new THREE.Group();
+      addMesh(rock, new THREE.DodecahedronGeometry(.22 + random() * .32, 0), index % 3 ? 0x718273 : 0x9b8d72, { scale: [1.4, .7, 1], outlineScale: 1.035 });
+      rock.position.set(x, terrainHeight(x, z) + .16, z);
+      rock.rotation.y = random() * TAU;
+      this.world.add(rock);
+    }
+    for (let index = 0; index < 10; index += 1) {
+      const angle = index / 10 * TAU;
+      const radius = 10.5 + (index % 3) * 2.8;
+      const person = makePerson({
+        jacket: [0x9c6654, 0x56796e, 0xc48a4a][index % 3], trousers: COLORS.navy,
+        skin: [COLORS.skinA, COLORS.skinB, COLORS.skinC][index % 3], hair: index % 2 ? 0x292424 : 0x5c3a2c, bag: index % 3 === 0
+      });
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius * .68;
+      person.position.set(x, terrainHeight(x, z), z);
+      person.userData.anchor = new THREE.Vector2(x, z);
+      person.userData.phase = index * .73;
+      person.userData.wanderRadius = .7 + (index % 3) * .35;
+      this.world.add(person);
+      this.ambientPeople.push(person);
+    }
+    const westPier = addMesh(this.world, new THREE.BoxGeometry(4, .3, 9), 0x9d7352, { position: [-11, -.55, -17], outlineScale: 1.02 });
+    westPier.rotation.y = .04;
+    const eastPier = addMesh(this.world, new THREE.BoxGeometry(4.8, .3, 9), 0x9d7352, { position: [9, -.55, -17], outlineScale: 1.02 });
+    eastPier.rotation.y = -.05;
+    const boatA = makeBoat(COLORS.blue, 1.05); boatA.position.set(-14.2, -.72, -21); boatA.rotation.y = -.35; this.world.add(boatA);
+    const boatB = makeBoat(COLORS.orange, 1.1); boatB.position.set(15.8, -.72, -17.5); boatB.rotation.y = .85; this.world.add(boatB);
+    [[-30, -17, 5.5], [30, -13, 6.5], [-27, 25, 4.5], [28, 23, 5]].forEach(([x, z, scale]) => {
+      const island = new THREE.Group();
+      addMesh(island, new THREE.DodecahedronGeometry(scale, 1), COLORS.grassDark, { scale: [1.5, .38, 1], outlineScale: 1.02 });
+      island.position.set(x, -.5, z);
+      this.world.add(island);
+    });
+    for (let index = 0; index < 7; index += 1) {
+      const cloud = new THREE.Group();
+      [0, .8, 1.5].forEach((x, part) => addMesh(cloud, new THREE.SphereGeometry(.85 + part * .14, 12, 8), COLORS.cream, {
+        position: [x, part === 1 ? .3 : 0, 0], scale: [1.3, .62, .82], outline: false, shadow: false
+      }));
+      cloud.position.set(-25 + index * 8, 10 + (index % 3) * 2, -18 + (index % 4) * 11);
+      cloud.scale.setScalar(.9 + (index % 2) * .35);
+      this.scene.add(cloud);
+      this.clouds.push(cloud);
+    }
   }
 
   resize() {
@@ -510,55 +601,60 @@ class PortTownStage {
     this.renderers.forEach((renderer) => renderer.setSize(width, height, false));
   }
 
-  setTarget(id) {
-    this.targetId = id;
-    this.locationGroups.forEach((entry, locationId) => { entry.marker.visible = locationId === id; });
+  updatePeople(time) {
+    this.locationGroups.forEach(({ npc, label, location }, id) => {
+      const { anchor, phase, wanderRadius } = npc.userData;
+      const x = anchor.x + Math.sin(time * .34 + phase) * wanderRadius;
+      const z = anchor.y + Math.sin(time * .21 + phase * 1.8) * wanderRadius * .65;
+      const dx = x - npc.position.x;
+      const dz = z - npc.position.z;
+      npc.position.set(x, terrainHeight(x, z), z);
+      if (Math.abs(dx) + Math.abs(dz) > .0001) npc.rotation.y = Math.atan2(dx, dz);
+      animatePerson(npc, time * 2.15 + phase, .22, time);
+      const near = state.nearbyId === id;
+      const pulse = reducedMotion.matches ? 1 : 1 + Math.sin(time * 3 + phase) * .08;
+      npc.userData.marker.scale.setScalar(near ? 1.32 : pulse);
+      npc.userData.marker.position.y = 2.75 + (reducedMotion.matches ? 0 : Math.sin(time * 2.4 + phase) * .08);
+      const labelDistance = Math.hypot(state.position.x - location.position[0], state.position.z - location.position[1]);
+      label.visible = state.mode === "intro" || (labelDistance > 8 && labelDistance < 15);
+    });
+    this.ambientPeople.forEach((person, index) => {
+      const { anchor, phase, wanderRadius } = person.userData;
+      const x = anchor.x + Math.sin(time * .22 + phase) * wanderRadius;
+      const z = anchor.y + Math.cos(time * .18 + phase) * wanderRadius;
+      const dx = x - person.position.x;
+      const dz = z - person.position.z;
+      person.position.set(x, terrainHeight(x, z), z);
+      person.rotation.y = Math.atan2(dx, dz);
+      animatePerson(person, time * 1.65 + index, .28, time);
+    });
   }
 
-  updatePlayer(time, movement) {
-    const { rig, body, leftArm, rightArm, leftLeg, rightLeg } = this.player.userData;
-    const amount = Math.min(movement, 1);
-    const stride = Math.sin(state.runPhase) * amount;
-    rig.position.y = amount ? Math.abs(Math.sin(state.runPhase * 2)) * 0.08 : Math.sin(time * 2) * 0.018;
-    body.rotation.z = -stride * 0.07;
-    leftLeg.rotation.x = stride * 0.85;
-    rightLeg.rotation.x = -stride * 0.85;
-    leftArm.rotation.x = -stride * 0.72;
-    rightArm.rotation.x = stride * 0.72;
-    this.player.rotation.y = state.facing;
-    this.player.position.copy(state.position);
-    this.player.position.y = terrainHeight(state.position.x, state.position.z);
-  }
-
-  render(mode, time, delta) {
-    this.waterMaterial.uniforms.uTime.value = time * 0.8;
-    this.airParticles.rotation.y = reducedMotion.matches ? 0 : time * 0.008;
-    this.player.visible = mode === "play";
-    this.scene.background.set(mode === "ending" ? COLORS.sunset : COLORS.sky);
-
-    if (mode === "play") {
-      this.updatePlayer(time, Math.min(state.velocity.length() / 5.4, 1));
+  render(time, delta) {
+    this.waterMaterial.uniforms.uTime.value = time * .75;
+    this.updatePeople(time);
+    this.clouds.forEach((cloud, index) => {
+      if (!reducedMotion.matches) cloud.position.x = -30 + ((time * (.18 + index * .015) + index * 9) % 70);
+    });
+    this.player.visible = state.mode === "play";
+    if (state.mode === "play") {
+      const movement = Math.min(state.velocity.length() / 5.1, 1);
+      animatePerson(this.player, state.runPhase, movement, time);
+      this.player.rotation.y = state.facing;
+      this.player.position.set(state.position.x, terrainHeight(state.position.x, state.position.z), state.position.z);
       const mobile = window.innerWidth < 760;
-      const offset = mobile ? new THREE.Vector3(10, 13, 18) : new THREE.Vector3(8.5, 10, 13);
-      const desired = state.position.clone().add(offset);
-      const cameraLerp = reducedMotion.matches ? 1 : 1 - Math.exp(-4.5 * delta);
+      const desired = state.position.clone().add(new THREE.Vector3(mobile ? 10.8 : 8.8, mobile ? 9.2 : 7.5, mobile ? 13.4 : 10.8));
+      const cameraLerp = reducedMotion.matches ? 1 : 1 - Math.exp(-4.8 * delta);
       this.camera.position.lerp(desired, cameraLerp);
-      this.camera.lookAt(state.position.x, 1.15, state.position.z);
+      this.camera.lookAt(state.position.x, 1.25, state.position.z);
     } else {
       const mobile = window.innerWidth < 760;
-      const distance = mobile ? 54 : 39;
-      const orbit = mode === "intro" ? (reducedMotion.matches ? 0.75 : 0.75 + time * 0.035) : 0.45 + time * 0.025;
-      this.camera.position.set(Math.sin(orbit) * distance, mobile ? 36 : 28, Math.cos(orbit) * distance);
-      this.camera.lookAt(0, 0, 0);
+      const orbit = reducedMotion.matches ? .78 : .78 + time * .025;
+      const distance = mobile ? 55 : 42;
+      this.camera.position.set(Math.sin(orbit) * distance, mobile ? 38 : 29, Math.cos(orbit) * distance);
+      this.camera.lookAt(0, .3, 0);
     }
-
-    const marker = this.locationGroups.get(this.targetId)?.marker;
-    if (marker?.visible) {
-      const pulse = reducedMotion.matches ? 1 : 1 + Math.sin(time * 5) * 0.1;
-      marker.scale.setScalar(pulse);
-      marker.position.y = 2.45 + (reducedMotion.matches ? 0 : Math.sin(time * 3) * 0.1);
-    }
-    this.renderers.get(mode).render(this.scene, this.camera);
+    this.renderers.get(state.mode).render(this.scene, this.camera);
   }
 }
 
@@ -566,22 +662,14 @@ let stage;
 
 function setMode(mode) {
   state.mode = mode;
-  [elements.intro, elements.play, elements.ending].forEach((screen) => screen.classList.remove("is-active"));
-  elements[mode].classList.add("is-active");
+  elements.intro.classList.toggle("is-active", mode === "intro");
+  elements.play.classList.toggle("is-active", mode === "play");
 }
 
 function updateHud() {
   elements.clock.textContent = formatTime(state.minutes);
-  elements.energy.textContent = Math.max(0, Math.round(state.energy));
-  elements.completed.textContent = state.completed;
-  const task = tasks[state.taskIndex];
-  if (!task) return;
-  const location = locations.find((item) => item.id === task.destination);
-  elements.sequence.textContent = `${String(state.taskIndex + 1).padStart(2, "0")} / ${String(tasks.length).padStart(2, "0")}`;
-  elements.deadline.textContent = task.deadline;
-  elements.taskTitle.textContent = task.title;
-  elements.description.textContent = task.description;
-  elements.destination.textContent = `下一站 · ${location.name}`;
+  elements.trust.textContent = Math.round(state.trust);
+  elements.encountered.textContent = state.encounterCount;
 }
 
 function showToast(message) {
@@ -592,24 +680,26 @@ function showToast(message) {
 }
 
 function resetGame() {
-  state.position.set(2.6, 0, 7);
+  state.position.set(3.1, 0, 7.2);
   state.velocity.set(0, 0, 0);
   state.facing = Math.PI;
-  state.taskIndex = 0;
-  state.completed = 0;
-  state.minutes = 440;
-  state.energy = 100;
-  state.score = 100;
+  state.cameraFacing = Math.PI;
+  state.minutes = 445;
+  state.trust = 72;
+  state.encounterCount = 0;
   state.nearbyId = null;
-  state.nearTarget = false;
-  state.sceneAnswered = false;
+  state.activeEncounter = null;
+  state.activeChoice = false;
   state.runPhase = 0;
+  state.distanceWalked = 0;
+  state.nextAmbientAt = 28;
+  state.lastEncounter.clear();
   state.keys.clear();
   Object.keys(state.holds).forEach((key) => { state.holds[key] = false; });
-  stage.setTarget(tasks[0].destination);
   updateHud();
+  drawMinimap();
   setMode("play");
-  showToast("沿道路前往机场，靠近发光的现场人员后交互");
+  showToast("没有固定路线。看见 ◇ 就过去聊聊。");
 }
 
 function movementAxes() {
@@ -621,11 +711,11 @@ function movementAxes() {
 }
 
 function insideIsland(x, z) {
-  return (x / (ISLAND_X - 0.9)) ** 2 + (z / (ISLAND_Z - 0.9)) ** 2 < 1;
+  return (x / (ISLAND_X - 1.15)) ** 2 + (z / (ISLAND_Z - 1.15)) ** 2 < 1;
 }
 
 function collides(x, z) {
-  return colliders.some((item) => Math.hypot(x - item.x, z - item.z) < item.radius + 0.48);
+  return colliders.some((item) => Math.hypot(x - item.x, z - item.z) < item.radius + .42);
 }
 
 function moveCandidate(x, z) {
@@ -648,16 +738,15 @@ function applyMovement(direction, distance) {
 
 function updateNearby() {
   let nearest = null;
-  let distance = Infinity;
-  locations.forEach((location) => {
-    const current = Math.hypot(state.position.x - location.interact[0], state.position.z - location.interact[1]);
-    if (current < distance) { nearest = location; distance = current; }
+  let nearestDistance = Infinity;
+  stage.locationGroups.forEach(({ location, npc }) => {
+    const distance = Math.hypot(state.position.x - npc.position.x, state.position.z - npc.position.z);
+    if (distance < nearestDistance) { nearest = location; nearestDistance = distance; }
   });
-  state.nearbyId = distance < 2.65 ? nearest.id : null;
-  state.nearTarget = state.nearbyId === tasks[state.taskIndex]?.destination;
+  state.nearbyId = nearestDistance < 2.5 ? nearest.id : null;
   elements.locationHint.hidden = !state.nearbyId;
-  elements.mobileAction.classList.toggle("is-ready", state.nearTarget);
-  if (state.nearbyId) elements.locationName.textContent = nearest.name;
+  elements.mobileAction.classList.toggle("is-ready", Boolean(state.nearbyId));
+  if (state.nearbyId) elements.locationName.textContent = `${nearest.name} · ${nearest.person}`;
 }
 
 function drawMinimap() {
@@ -665,113 +754,107 @@ function drawMinimap() {
   const ctx = canvas.getContext("2d");
   const width = canvas.width;
   const height = canvas.height;
-  const mapX = (x) => width / 2 + x / 21 * (width * 0.43);
-  const mapY = (z) => height / 2 + z / 15 * (height * 0.42);
+  const mapX = (x) => width / 2 + x / 23 * (width * .43);
+  const mapY = (z) => height / 2 + z / 17 * (height * .42);
   ctx.clearRect(0, 0, width, height);
-  ctx.fillStyle = "rgba(99,183,180,.65)";
+  ctx.fillStyle = "rgba(60,134,137,.78)";
   ctx.fillRect(0, 0, width, height);
-  ctx.fillStyle = "rgba(124,169,110,.88)";
-  ctx.strokeStyle = "#172c32";
+  ctx.fillStyle = "rgba(123,165,106,.94)";
+  ctx.strokeStyle = "#1d3033";
   ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.ellipse(width / 2, height / 2, width * 0.42, height * 0.39, 0, 0, TAU);
-  ctx.fill(); ctx.stroke();
-  const targetId = tasks[state.taskIndex]?.destination;
+  ctx.beginPath(); ctx.ellipse(width / 2, height / 2, width * .42, height * .38, 0, 0, TAU); ctx.fill(); ctx.stroke();
   locations.forEach((location) => {
-    ctx.fillStyle = location.id === targetId ? "#ed6a45" : "#fffaf0";
-    ctx.strokeStyle = "#172c32";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(mapX(location.position[0]), mapY(location.position[1]), location.id === targetId ? 5 : 3.2, 0, TAU);
-    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = location.id === state.nearbyId ? "#e9b94d" : "#fff8e8";
+    ctx.strokeStyle = "#1d3033";
+    ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(mapX(location.position[0]), mapY(location.position[1]), location.id === state.nearbyId ? 4.5 : 2.7, 0, TAU); ctx.fill(); ctx.stroke();
   });
   ctx.save();
   ctx.translate(mapX(state.position.x), mapY(state.position.z));
   ctx.rotate(-state.facing);
-  ctx.fillStyle = "#f0bd4d";
-  ctx.strokeStyle = "#172c32";
+  ctx.fillStyle = "#dc6849";
+  ctx.strokeStyle = "#1d3033";
   ctx.lineWidth = 2;
   ctx.beginPath(); ctx.moveTo(0, -7); ctx.lineTo(5, 6); ctx.lineTo(-5, 6); ctx.closePath(); ctx.fill(); ctx.stroke();
   ctx.restore();
 }
 
-function interact() {
-  if (state.mode !== "play" || elements.dialog.open) return;
-  if (!state.nearbyId) {
-    showToast("靠近现场人员或建筑后再交互");
-    return;
-  }
-  if (!state.nearTarget) {
-    const target = locations.find((item) => item.id === tasks[state.taskIndex].destination);
-    showToast(`现场人员：你这一单要去 ${target.name}`);
-    return;
-  }
-  openScene();
+function chooseEncounter(locationId) {
+  const pool = encounters[locationId];
+  const previous = state.lastEncounter.get(locationId);
+  const candidates = pool.filter((_, index) => index !== previous);
+  const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+  state.lastEncounter.set(locationId, pool.indexOf(chosen));
+  return chosen;
 }
 
-function openScene() {
-  const task = tasks[state.taskIndex];
+function interact() {
+  if (state.mode !== "play" || elements.dialog.open || elements.help.open) return;
+  if (!state.nearbyId) {
+    showToast("靠近带 ◇ 标记的人物再交互");
+    return;
+  }
+  openEncounter(state.nearbyId);
+}
+
+function openEncounter(locationId) {
+  const location = locations.find((item) => item.id === locationId);
+  const encounter = chooseEncounter(locationId);
   state.velocity.set(0, 0, 0);
-  state.sceneAnswered = false;
-  elements.sceneVisual.style.setProperty("--scene-color", task.color);
-  elements.sceneCode.textContent = task.code;
-  elements.sceneLocation.textContent = task.sceneLocation;
-  elements.sceneTitle.textContent = task.sceneTitle;
-  elements.sceneStory.textContent = task.story;
+  state.activeEncounter = { location, encounter };
+  state.activeChoice = false;
+  elements.sceneVisual.style.setProperty("--scene-color", `#${new THREE.Color(location.color).getHexString()}`);
+  elements.sceneCode.textContent = `${location.short.toUpperCase()} · RANDOM ENCOUNTER`;
+  elements.sceneLocation.textContent = `${location.name} · ${location.person}`;
+  elements.sceneTitle.textContent = encounter.title;
+  elements.sceneStory.textContent = encounter.story;
   elements.sceneResult.hidden = true;
+  elements.sceneResult.classList.remove("is-warning");
   elements.complete.hidden = true;
-  elements.sceneChoices.innerHTML = `<legend id="scene-question">${task.question}</legend>`;
-  task.choices.forEach((choice, index) => {
+  elements.sceneChoices.innerHTML = `<legend id="scene-question">${encounter.question}</legend>`;
+  encounter.choices.forEach(([label], index) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "choice-button";
-    button.innerHTML = `<span>${String.fromCharCode(65 + index)}</span>${choice}`;
-    button.addEventListener("click", () => answerScene(index));
+    button.innerHTML = `<span>${String.fromCharCode(65 + index)}</span>${label}`;
+    button.addEventListener("click", () => answerEncounter(index));
     elements.sceneChoices.appendChild(button);
   });
   elements.dialog.showModal();
 }
 
-function answerScene(index) {
-  if (state.sceneAnswered) return;
-  const task = tasks[state.taskIndex];
-  state.sceneAnswered = true;
-  const correct = index === task.correct;
-  if (!correct) state.score = Math.max(0, state.score - 7);
+function answerEncounter(index) {
+  if (state.activeChoice || !state.activeEncounter) return;
+  state.activeChoice = true;
+  const [label, result, trustDelta, minutes] = state.activeEncounter.encounter.choices[index];
+  state.trust = Math.max(0, Math.min(100, state.trust + trustDelta));
+  state.minutes += minutes;
+  state.encounterCount += 1;
   [...elements.sceneChoices.querySelectorAll("button")].forEach((button, buttonIndex) => {
     button.disabled = true;
-    button.classList.toggle("is-correct", buttonIndex === task.correct);
-    button.classList.toggle("is-wrong", buttonIndex === index && !correct);
+    button.classList.toggle("is-chosen", buttonIndex === index);
   });
-  elements.resultTitle.textContent = correct ? "处理稳妥 ✓" : "现场提醒";
-  elements.resultText.textContent = correct ? task.success : `更稳妥的做法：${task.choices[task.correct]}。${task.success}`;
-  elements.sceneResult.classList.toggle("is-warning", !correct);
+  const sign = trustDelta > 0 ? "+" : "";
+  elements.resultTitle.textContent = trustDelta > 0 ? `处理稳妥 · 信任 ${sign}${trustDelta}` : trustDelta < 0 ? `现场变复杂 · 信任 ${trustDelta}` : "事情暂时过去了";
+  elements.resultText.textContent = `${label}。${result}`;
+  elements.sceneResult.classList.toggle("is-warning", trustDelta < 0);
   elements.sceneResult.hidden = false;
   elements.complete.hidden = false;
+  updateHud();
 }
 
-function completeTask() {
-  if (!state.sceneAnswered) return;
-  const task = tasks[state.taskIndex];
+function closeEncounter() {
+  if (!state.activeChoice) return;
+  const { location, encounter } = state.activeEncounter;
   elements.dialog.close();
-  state.completed += 1;
-  state.minutes += task.duration;
-  state.energy = Math.max(12, state.energy - task.energy);
-  state.taskIndex += 1;
-  state.nearTarget = false;
-  if (state.taskIndex >= tasks.length) {
-    elements.finalScore.textContent = state.score;
-    elements.finalTime.textContent = formatTime(state.minutes);
-    elements.endingSummary.textContent = state.score === 100
-      ? "八项任务全部办结，整座港区都跑遍了。"
-      : `八项任务全部办结，专业度 ${state.score}。下次还可以跑得更稳。`;
-    setMode("ending");
-    return;
-  }
-  stage.setTarget(tasks[state.taskIndex].destination);
-  updateHud();
-  const next = locations.find((item) => item.id === tasks[state.taskIndex].destination);
-  showToast(`办结！下一站：${next.name}`);
+  elements.noteKicker.textContent = `ENCOUNTER ${String(state.encounterCount).padStart(2, "0")}`;
+  elements.noteTime.textContent = location.short;
+  elements.noteTitle.textContent = encounter.title;
+  elements.noteBody.textContent = "这里没有完成列表。你可以继续留在附近，也可以转身去港区另一头。";
+  elements.noteFooter.textContent = "下一件事，会在你靠近某个人时发生";
+  state.activeEncounter = null;
+  state.activeChoice = false;
+  showToast("现场告一段落。接下来往哪走，由你决定。");
 }
 
 function update(delta) {
@@ -779,13 +862,18 @@ function update(delta) {
   const axes = movementAxes();
   const desired = new THREE.Vector3(axes.x, 0, axes.z);
   if (desired.lengthSq() > 1) desired.normalize();
-  const targetVelocity = desired.multiplyScalar(5.4);
-  state.velocity.lerp(targetVelocity, 1 - Math.exp(-10 * delta));
-  if (state.velocity.lengthSq() > 0.02) {
-    applyMovement(state.velocity.clone(), state.velocity.length() * delta);
-    state.runPhase += state.velocity.length() * delta * 2.2;
-    state.minutes += delta * 0.42;
-    state.energy = Math.max(12, state.energy - delta * 0.07);
+  const targetVelocity = desired.multiplyScalar(5.1);
+  state.velocity.lerp(targetVelocity, 1 - Math.exp(-11 * delta));
+  if (state.velocity.lengthSq() > .025) {
+    const distance = state.velocity.length() * delta;
+    applyMovement(state.velocity.clone(), distance);
+    state.runPhase += distance * 2.55;
+    state.distanceWalked += distance;
+    state.minutes += delta * .34;
+    if (state.distanceWalked >= state.nextAmbientAt) {
+      state.nextAmbientAt += 28 + Math.random() * 28;
+      showToast(ambientMessages[Math.floor(Math.random() * ambientMessages.length)]);
+    }
   }
   updateNearby();
   updateHud();
@@ -793,10 +881,10 @@ function update(delta) {
 }
 
 function frame(now) {
-  const delta = Math.min((now - state.lastFrame) / 1000, 0.05);
+  const delta = Math.min((now - state.lastFrame) / 1000, .05);
   state.lastFrame = now;
   update(delta);
-  stage?.render(state.mode, now / 1000, delta);
+  stage?.render(now / 1000, delta);
   requestAnimationFrame(frame);
 }
 
@@ -818,10 +906,9 @@ function bindHold(button, direction) {
 }
 
 elements.start.addEventListener("click", resetGame);
-elements.restart.addEventListener("click", resetGame);
 elements.interact.addEventListener("click", interact);
 elements.mobileAction.addEventListener("click", interact);
-elements.complete.addEventListener("click", completeTask);
+elements.complete.addEventListener("click", closeEncounter);
 elements.dialogClose.addEventListener("click", () => elements.dialog.close());
 elements.helpButton.addEventListener("click", () => elements.help.showModal());
 elements.helpClose.addEventListener("click", () => elements.help.close());
@@ -843,8 +930,8 @@ window.addEventListener("keydown", (event) => {
         0,
         event.code === "ArrowDown" || event.code === "KeyS" ? 1 : event.code === "ArrowUp" || event.code === "KeyW" ? -1 : 0
       );
-      applyMovement(nudge, 0.38);
-      state.runPhase += 0.65;
+      applyMovement(nudge, .34);
+      state.runPhase += .58;
       updateNearby();
     }
   }
@@ -863,10 +950,9 @@ window.addEventListener("blur", () => {
 window.addEventListener("resize", () => stage?.resize());
 
 try {
-  stage = new PortTownStage();
-  stage.setTarget(tasks[0].destination);
+  stage = new PortWorld();
   elements.start.disabled = false;
-  elements.start.textContent = "ENTER";
+  elements.start.textContent = "BEGIN";
   updateHud();
   drawMinimap();
   requestAnimationFrame(frame);
