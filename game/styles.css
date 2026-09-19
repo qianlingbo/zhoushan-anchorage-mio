@@ -344,36 +344,36 @@ kbd {
   font-size: 11px;
 }
 
-.orbit-meter {
+.mini-map {
   position: absolute;
   z-index: 5;
-  top: 50%;
+  top: 91px;
   right: max(22px, env(safe-area-inset-right));
-  width: 4px;
-  height: 29vh;
-  border-radius: 3px;
-  background: rgba(23,44,50,.25);
-  transform: translateY(-50%);
-}
-
-.orbit-progress {
-  position: absolute;
-  left: 50%;
-  width: 12px;
-  height: 12px;
+  width: 148px;
+  height: 118px;
+  margin: 0;
   border: 2px solid var(--ink);
-  border-radius: 50%;
-  background: var(--yellow);
-  transform: translate(-50%, -50%);
+  border-radius: 46% 54% 48% 52%;
+  background: rgba(255,250,240,.74);
+  box-shadow: 4px 5px 0 rgba(23,44,50,.34);
+  overflow: hidden;
+  transform: rotate(1deg);
 }
 
-.orbit-meter i {
+.mini-map canvas {
   position: absolute;
-  top: -28px;
-  left: 50%;
-  color: var(--ink);
-  font: 900 20px Georgia, serif;
-  transform: translateX(-50%);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mini-map span {
+  position: absolute;
+  right: 9px;
+  bottom: 6px;
+  color: rgba(23,44,50,.62);
+  font: 800 7px ui-monospace, monospace;
+  letter-spacing: .15em;
 }
 
 .location-hint {
@@ -419,7 +419,15 @@ kbd {
   right: max(25px, env(safe-area-inset-right));
   bottom: max(28px, calc(env(safe-area-inset-bottom) + 15px));
   display: flex;
-  gap: 8px;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+.move-pad {
+  display: grid;
+  grid-template: repeat(3, 34px) / repeat(3, 34px);
+  gap: 3px;
+  transform: rotate(-2deg);
 }
 
 .run-controls button {
@@ -435,10 +443,23 @@ kbd {
   touch-action: none;
 }
 
+.move-pad button {
+  width: 34px;
+  height: 34px;
+  border-width: 1.5px;
+  font-size: 15px;
+  box-shadow: 2px 2px 0 rgba(23,44,50,.48);
+}
+
+.move-pad #run-up { grid-column: 2; grid-row: 1; }
+.move-pad #run-left { grid-column: 1; grid-row: 2; }
+.move-pad #run-down { grid-column: 2; grid-row: 2; }
+.move-pad #run-right { grid-column: 3; grid-row: 2; }
+
 .run-controls .action-button {
   width: 64px;
   height: 64px;
-  margin-top: -12px;
+  margin-bottom: 30px;
   color: var(--paper-bright);
   background: var(--orange);
   font-family: "Kaiti SC", "STKaiti", serif;
@@ -586,12 +607,13 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
   .mission-note { top: 72px; left: 12px; width: 212px; padding: 11px 12px; }
   .mission-note h2 { font-size: 20px; }
   .mission-note #task-description { display: none; }
-  .orbit-meter { right: 13px; height: 22vh; }
+  .mini-map { top: 70px; right: 10px; width: 98px; height: 78px; opacity: .9; }
   .route-caption { display: none; }
-  .run-controls { right: 50%; bottom: max(22px, calc(env(safe-area-inset-bottom) + 12px)); transform: translateX(50%); }
-  .run-controls button { width: 58px; height: 58px; background: rgba(255,250,240,.88); }
-  .run-controls .action-button { width: 70px; height: 70px; }
-  .location-hint { bottom: max(106px, calc(env(safe-area-inset-bottom) + 94px)); }
+  .run-controls { right: 13px; bottom: max(14px, calc(env(safe-area-inset-bottom) + 8px)); gap: 10px; transform: none; }
+  .move-pad { grid-template: repeat(3, 42px) / repeat(3, 42px); }
+  .move-pad button { width: 42px; height: 42px; background: rgba(255,250,240,.88); }
+  .run-controls .action-button { width: 66px; height: 66px; margin-bottom: 38px; }
+  .location-hint { bottom: max(124px, calc(env(safe-area-inset-bottom) + 112px)); }
   .location-hint button { display: none; }
   .toast { top: auto; bottom: max(190px, calc(env(safe-area-inset-bottom) + 175px)); }
   .scene-dialog { width: calc(100vw - 20px); height: calc(100vh - 22px); }
