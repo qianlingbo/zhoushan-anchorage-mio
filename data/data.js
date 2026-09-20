@@ -1,14 +1,14 @@
 window.__ANCHOR_DATA__ = {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-09-20 17:25:39",
-  "lastChecked": "2026-09-20 17:25:39",
-  "lastSuccessfulFetch": "2026-09-20 09:07:34",
-  "updateWindow": "2026-09-20T15:00+08:00",
-  "publishTime": "2026年09月20日07时",
-  "publishCode": "2026092007",
+  "status": "更新完成",
+  "lastUpdated": "2026-09-20 22:13:08",
+  "lastChecked": "2026-09-20 22:13:08",
+  "lastSuccessfulFetch": "2026-09-20 22:13:08",
+  "updateWindow": "2026-09-20T21:00+08:00",
+  "publishTime": "2026年09月20日19时",
+  "publishCode": "2026092019",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -254,9 +254,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天、明天多云。后天多云到阴，局部阵雨。23日多云到阴。24日多云转阴，局部有阵雨。<br><br>",
-      "Time": "2026092007",
-      "PreciseForecastTime": "2026年09月20日07时"
+      "Text": "天气预报：今天、明天、后天多云。23日多云。24日多云转阴，局部有阵雨。<br><br>",
+      "Time": "2026092019",
+      "PreciseForecastTime": "2026年09月20日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -502,9 +502,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天、明天多云。后天多云到阴，局部阵雨。23日多云到阴。24日多云转阴，局部有阵雨。<br><br>",
-      "Time": "2026092007",
-      "PreciseForecastTime": "2026年09月20日07时"
+      "Text": "天气预报：今天、明天、后天多云。23日多云。24日多云转阴，局部有阵雨。<br><br>",
+      "Time": "2026092019",
+      "PreciseForecastTime": "2026年09月20日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,17 +750,17 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天、明天多云。后天多云到阴，局部阵雨。23日多云到阴。24日多云转阴，局部有阵雨。<br><br>",
-      "Time": "2026092007",
-      "PreciseForecastTime": "2026年09月20日07时"
+      "Text": "天气预报：今天、明天、后天多云。23日多云。24日多云转阴，局部有阵雨。<br><br>",
+      "Time": "2026092019",
+      "PreciseForecastTime": "2026年09月20日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 11.3,
           "WindSpeedAvg": "8.5",
           "Time": "20日08时-11时",
@@ -769,8 +769,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 11.5,
           "WindSpeedAvg": "8.6",
           "Time": "20日11时-14时",
@@ -779,8 +779,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 12.4,
           "WindSpeedAvg": "9.3",
           "Time": "20日14时-17时",
@@ -789,8 +789,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 13.1,
           "WindSpeedAvg": "9.8",
           "Time": "20日17时-20时",
@@ -799,8 +799,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 12.2,
           "WindSpeedAvg": "9.2",
           "Time": "20日20时-23时",
@@ -809,8 +809,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 11.1,
           "WindSpeedAvg": "8.3",
           "Time": "20日23时-21日02时",
@@ -819,8 +819,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 12.0,
           "WindSpeedAvg": "9.0",
           "Time": "21日02时-05时",
@@ -829,8 +829,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 11.7,
           "WindSpeedAvg": "8.8",
           "Time": "21日05时-08时",
@@ -839,8 +839,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 11.5,
           "WindSpeedAvg": "8.6",
           "Time": "21日08时-11时",
@@ -879,8 +879,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 11.2,
           "WindSpeedAvg": "8.4",
           "Time": "21日20时-22日02时",
@@ -889,8 +889,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 11.0,
           "WindSpeedAvg": "8.3",
           "Time": "22日02时-08时",
@@ -998,12 +998,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天、明天多云。后天多云到阴，局部阵雨。23日多云到阴。24日多云转阴，局部有阵雨。<br><br>",
-      "Time": "2026092007",
-      "PreciseForecastTime": "2026年09月20日07时"
+      "Text": "天气预报：今天、明天、后天多云。23日多云。24日多云转阴，局部有阵雨。<br><br>",
+      "Time": "2026092019",
+      "PreciseForecastTime": "2026年09月20日19时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 };
