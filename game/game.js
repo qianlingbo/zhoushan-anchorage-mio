@@ -2,8 +2,8 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.m
 
 const TAU = Math.PI * 2;
 const ISLAND_X = 21;
-const ISLAND_Z = 15.5;
-const PLANET_RADIUS = 34;
+const ISLAND_Z = 20.5;
+const PLANET_RADIUS = 25;
 const PLANET_Z_SCALE = ISLAND_Z / ISLAND_X;
 const PLANET_CENTER_Y = .38 - PLANET_RADIUS;
 const COLORS = {
@@ -159,11 +159,11 @@ const elements = {
 };
 
 const state = {
-  mode: "intro", position: new THREE.Vector3(3.1, 0, 7.2), velocity: new THREE.Vector3(), facing: Math.PI,
+  mode: "intro", position: new THREE.Vector3(-15.4, 0, -4.6), velocity: new THREE.Vector3(), facing: .45,
   keys: new Set(), holds: { up: false, down: false, left: false, right: false }, minutes: 445, trust: 72, encounterCount: 0,
   nearbyId: null, activeEncounter: null, activeChoice: false, runPhase: 0, distanceWalked: 0, nextAmbientAt: 28,
   lastEncounter: new Map(), lastFrame: performance.now(), toastTimer: 0, destination: null, pendingInteractId: null,
-  cameraMode: "third", cameraDistance: 7.4, cameraSnap: true, jumpHeight: 0, jumpVelocity: 0, grounded: true
+  cameraMode: "third", cameraDistance: 18.6, cameraSnap: true, jumpHeight: 0, jumpVelocity: 0, grounded: true
 };
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -202,6 +202,21 @@ function globeHeight(x, z) {
 function terrainHeight(x, z) {
   const edge = Math.max(0, 1 - Math.sqrt((x / ISLAND_X) ** 2 + (z / ISLAND_Z) ** 2));
   return globeHeight(x, z) + (Math.sin(x * 0.37) + Math.cos(z * 0.34) + Math.sin((x + z) * 0.2)) * 0.11 * edge;
+}
+
+function globeFrame(x, z, offset = 0) {
+  const point = new THREE.Vector3(x, terrainHeight(x, z), z);
+  const normal = point.clone().sub(new THREE.Vector3(0, PLANET_CENTER_Y, 0)).normalize();
+  point.addScaledVector(normal, offset);
+  const quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), normal);
+  return { point, normal, quaternion };
+}
+
+function placeOnGlobe(object, x, z, heading = 0, offset = 0) {
+  const { point, quaternion } = globeFrame(x, z, offset);
+  object.position.copy(point);
+  object.quaternion.copy(quaternion).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), heading));
+  return object;
 }
 
 function makeGradientMap() {
@@ -512,7 +527,7 @@ class PortWorld {
   constructor() {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(COLORS.sky);
-    this.scene.fog = new THREE.Fog(COLORS.sky, 24, 58);
+    this.scene.fog = new THREE.Fog(COLORS.sky, 42, 105);
     this.world = new THREE.Group();
     this.scene.add(this.world);
     this.camera = new THREE.PerspectiveCamera(42, 1, .1, 180);
@@ -548,6 +563,7 @@ class PortWorld {
     this.walkSurfaces = [];
     this.craneMotions = [];
     this.player = makePerson({ jacket: COLORS.orange, trousers: COLORS.navy, skin: COLORS.skinC, hair: 0x4a2d28, bag: true });
+    this.player.scale.setScalar(.7);
     this.world.add(this.player);
     this.moveMarker = new THREE.Group();
     const targetRing = new THREE.Mesh(
@@ -639,11 +655,10 @@ class PortWorld {
     locations.forEach((location, index) => {
       const [x, z] = location.position;
       const building = makeBuilding(location);
-      building.position.set(x, terrainHeight(x, z), z);
-      building.rotation.y = (index % 3 - 1) * .08;
+      placeOnGlobe(building, x, z, (index % 3 - 1) * .08);
       this.world.add(building);
       const label = makeLabel(location.short, location.color);
-      label.position.set(x, terrainHeight(x, z) + 3.75, z);
+      placeOnGlobe(label, x, z, 0, 3.75);
       this.world.add(label);
       const skinTones = [COLORS.skinA, COLORS.skinB, COLORS.skinC];
       const npc = makePerson({
@@ -652,8 +667,7 @@ class PortWorld {
         hat: ["shipyard", "container", "cargo"].includes(location.kind), marker: true
       });
       const [npcX, npcZ] = location.interact;
-      npc.position.set(npcX, terrainHeight(npcX, npcZ), npcZ);
-      npc.rotation.y = Math.atan2(x - npcX, z - npcZ) + Math.PI;
+      placeOnGlobe(npc, npcX, npcZ, Math.atan2(x - npcX, z - npcZ) + Math.PI);
       npc.userData.anchor = new THREE.Vector2(npcX, npcZ);
       npc.userData.phase = index * 1.7;
       npc.userData.wanderRadius = .24 + (index % 3) * .11;
@@ -662,13 +676,10 @@ class PortWorld {
       colliders.push({ x, z, radius: ["container", "cargo"].includes(location.kind) ? 2.65 : 2.1 });
     });
 
-    const terminalPadY = terrainHeight(14.6, -9.1) + .02;
-    addMesh(this.world, new THREE.BoxGeometry(6.6, .22, 3.7), 0x6e7168, {
-      position: [14.6, terminalPadY, -9.1], rotation: [0, .12, 0], outlineScale: 1.015
-    });
+    const terminalPad = addMesh(this.world, new THREE.BoxGeometry(6.6, .22, 3.7), 0x6e7168, { outlineScale: 1.015 });
+    placeOnGlobe(terminalPad, 14.6, -9.1, .12, .02);
     const quayCrane = makeQuayCrane(COLORS.orange);
-    quayCrane.position.set(15.2, terminalPadY + .12, -9.2);
-    quayCrane.rotation.y = .54;
+    placeOnGlobe(quayCrane, 15.2, -9.2, .54, .14);
     quayCrane.scale.setScalar(1.12);
     this.world.add(quayCrane);
     this.craneMotions.push({ crane: quayCrane, phase: 0 });
@@ -681,34 +692,30 @@ class PortWorld {
         addContainer(yardStacks, (column - 2) * 1.3, .31 + row * .6, column % 2 ? -.58 : .58, terminalColors[(row + column) % terminalColors.length]);
       }
     }
-    yardStacks.position.set(10.4, terrainHeight(10.4, -5.7), -5.7);
-    yardStacks.rotation.y = -.08;
+    placeOnGlobe(yardStacks, 10.4, -5.7, -.08);
     this.world.add(yardStacks);
     const yardGantry = makeYardGantry();
-    yardGantry.position.set(10.4, terrainHeight(10.4, -5.7) + .04, -5.7);
-    yardGantry.rotation.y = -.08;
+    placeOnGlobe(yardGantry, 10.4, -5.7, -.08, .04);
     yardGantry.scale.setScalar(1.08);
     this.world.add(yardGantry);
     colliders.push({ x: 10.4, z: -5.7, radius: 1.55 });
 
     const cargoCrane = makeQuayCrane(COLORS.yellow);
-    cargoCrane.position.set(5.1, terrainHeight(5.1, -13) + .04, -13);
-    cargoCrane.rotation.y = 1.2;
+    placeOnGlobe(cargoCrane, 5.1, -13, 1.2, .04);
     cargoCrane.scale.setScalar(.72);
     this.world.add(cargoCrane);
     this.craneMotions.push({ crane: cargoCrane, phase: Math.PI * .75 });
 
     [[-17.1, -7.2, COLORS.orange, .15], [-13.3, -10.2, COLORS.yellow, -.4], [-17.8, 5.6, COLORS.blue, .42]].forEach(([x, z, color, rotation]) => {
       const umbrella = makeBeachUmbrella(color);
-      umbrella.position.set(x, terrainHeight(x, z) + .06, z);
-      umbrella.rotation.y = rotation;
+      placeOnGlobe(umbrella, x, z, rotation, .06);
       umbrella.scale.setScalar(.82);
       this.world.add(umbrella);
     });
     const beachFlag = new THREE.Group();
     addMesh(beachFlag, new THREE.CylinderGeometry(.025, .035, 1.8, 7), COLORS.ink, { position: [0, .9, 0], outline: false });
     addMesh(beachFlag, new THREE.BoxGeometry(.58, .3, .025), COLORS.orange, { position: [.29, 1.56, 0], outlineScale: 1.02 });
-    beachFlag.position.set(-18.1, terrainHeight(-18.1, -3.8), -3.8);
+    placeOnGlobe(beachFlag, -18.1, -3.8);
     this.world.add(beachFlag);
 
     const treePositions = [
@@ -719,7 +726,7 @@ class PortWorld {
     ];
     treePositions.forEach(([x, z, scale]) => {
       const tree = makeTree(scale);
-      tree.position.set(x, terrainHeight(x, z), z);
+      placeOnGlobe(tree, x, z, random() * .3 - .15);
       this.world.add(tree);
     });
     for (let index = 0; index < 120; index += 1) {
@@ -729,8 +736,7 @@ class PortWorld {
       const z = Math.sin(angle) * radius * .72;
       if (locations.some((location) => Math.hypot(x - location.position[0], z - location.position[1]) < 3.1)) continue;
       const tuft = makeGrassTuft(.65 + random() * .65);
-      tuft.position.set(x, terrainHeight(x, z) + .02, z);
-      tuft.rotation.y = random() * TAU;
+      placeOnGlobe(tuft, x, z, random() * TAU, .02);
       this.world.add(tuft);
     }
     for (let index = 0; index < 25; index += 1) {
@@ -740,8 +746,7 @@ class PortWorld {
       const z = Math.sin(angle) * radius * .72;
       const rock = new THREE.Group();
       addMesh(rock, new THREE.DodecahedronGeometry(.22 + random() * .32, 0), index % 3 ? 0x718273 : 0x9b8d72, { scale: [1.4, .7, 1], outlineScale: 1.035 });
-      rock.position.set(x, terrainHeight(x, z) + .16, z);
-      rock.rotation.y = random() * TAU;
+      placeOnGlobe(rock, x, z, random() * TAU, .16);
       this.world.add(rock);
     }
     for (let index = 0; index < 10; index += 1) {
@@ -753,27 +758,25 @@ class PortWorld {
       });
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius * .68;
-      person.position.set(x, terrainHeight(x, z), z);
+      placeOnGlobe(person, x, z, angle + Math.PI);
       person.userData.anchor = new THREE.Vector2(x, z);
       person.userData.phase = index * .73;
       person.userData.wanderRadius = .7 + (index % 3) * .35;
       this.world.add(person);
       this.ambientPeople.push(person);
     }
-    const westPier = addMesh(this.world, new THREE.BoxGeometry(3.5, .28, 5.4), 0x85664f, {
-      position: [-10.6, terrainHeight(-10.6, -13.2) - .02, -13.2], rotation: [-.2, .04, 0], outlineScale: 1.02
-    });
+    const westPier = addMesh(this.world, new THREE.BoxGeometry(3.5, .28, 5.4), 0x85664f, { outlineScale: 1.02 });
+    placeOnGlobe(westPier, -10.6, -13.2, .04, -.02);
     westPier.receiveShadow = true;
-    const eastPier = addMesh(this.world, new THREE.BoxGeometry(4.1, .28, 5.6), 0x85664f, {
-      position: [8.3, terrainHeight(8.3, -13.5) - .02, -13.5], rotation: [-.2, -.05, 0], outlineScale: 1.02
-    });
+    const eastPier = addMesh(this.world, new THREE.BoxGeometry(4.1, .28, 5.6), 0x85664f, { outlineScale: 1.02 });
+    placeOnGlobe(eastPier, 8.3, -13.5, -.05, -.02);
     eastPier.receiveShadow = true;
-    const boatA = makeBoat(COLORS.blue, 1.05); boatA.position.set(-13.8, globeHeight(-13.8, -16.5) + .35, -16.5); boatA.rotation.y = -.35; this.world.add(boatA);
-    const boatB = makeBoat(COLORS.orange, 1.1); boatB.position.set(15.8, globeHeight(15.8, -14.5) + .35, -14.5); boatB.rotation.y = .85; this.world.add(boatB);
-    [[-25, -8, 3.3], [25, -7, 3.7], [-19, 15, 3], [18, 16, 3.4]].forEach(([x, z, scale]) => {
+    const boatA = makeBoat(COLORS.blue, 1.05); placeOnGlobe(boatA, -13.8, -16.5, -.35, .35); this.world.add(boatA);
+    const boatB = makeBoat(COLORS.orange, 1.1); placeOnGlobe(boatB, 15.8, -14.5, .85, .35); this.world.add(boatB);
+    [[-21, -7, 3.3], [21, -6, 3.7], [-17, 14, 3], [17, 14, 3.4]].forEach(([x, z, scale]) => {
       const island = new THREE.Group();
       addMesh(island, new THREE.DodecahedronGeometry(scale, 1), COLORS.grassDark, { scale: [1.5, .38, 1], outlineScale: 1.02 });
-      island.position.set(x, globeHeight(x, z) + .2, z);
+      placeOnGlobe(island, x, z, random() * TAU, .2);
       this.world.add(island);
     });
     for (let index = 0; index < 7; index += 1) {
@@ -818,7 +821,7 @@ class PortWorld {
   }
 
   showMoveMarker(point) {
-    this.moveMarker.position.set(point.x, terrainHeight(point.x, point.z) + .08, point.z);
+    placeOnGlobe(this.moveMarker, point.x, point.z, 0, .08);
     this.moveMarker.visible = true;
   }
 
@@ -837,8 +840,7 @@ class PortWorld {
       const z = anchor.y + Math.sin(time * .21 + phase * 1.8) * wanderRadius * .65;
       const dx = x - npc.position.x;
       const dz = z - npc.position.z;
-      npc.position.set(x, terrainHeight(x, z), z);
-      if (Math.abs(dx) + Math.abs(dz) > .0001) npc.rotation.y = Math.atan2(dx, dz);
+      placeOnGlobe(npc, x, z, Math.abs(dx) + Math.abs(dz) > .0001 ? Math.atan2(dx, dz) : 0);
       animatePerson(npc, time * 2.15 + phase, .22, time);
       const near = state.nearbyId === id;
       const pulse = reducedMotion.matches ? 1 : 1 + Math.sin(time * 3 + phase) * .08;
@@ -853,8 +855,7 @@ class PortWorld {
       const z = anchor.y + Math.cos(time * .18 + phase) * wanderRadius;
       const dx = x - person.position.x;
       const dz = z - person.position.z;
-      person.position.set(x, terrainHeight(x, z), z);
-      person.rotation.y = Math.atan2(dx, dz);
+      placeOnGlobe(person, x, z, Math.atan2(dx, dz));
       animatePerson(person, time * 1.65 + index, .28, time);
     });
   }
@@ -886,26 +887,29 @@ class PortWorld {
         this.player.userData.leftLeg.rotation.x += tuck;
         this.player.userData.rightLeg.rotation.x += tuck;
       }
-      this.player.rotation.y = state.facing;
-      const ground = terrainHeight(state.position.x, state.position.z);
-      this.player.position.set(state.position.x, ground + state.jumpHeight, state.position.z);
+      const surface = globeFrame(state.position.x, state.position.z, state.jumpHeight);
+      const localYaw = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), state.facing);
+      this.player.position.copy(surface.point);
+      this.player.quaternion.copy(surface.quaternion).multiply(localYaw);
       const yawLerp = state.cameraSnap || reducedMotion.matches ? 1 : 1 - Math.exp(-6.5 * delta);
       this.cameraYaw = lerpAngle(this.cameraYaw, state.facing, yawLerp);
-      const forward = new THREE.Vector3(Math.sin(this.cameraYaw), 0, Math.cos(this.cameraYaw));
+      const forward = new THREE.Vector3(Math.sin(this.cameraYaw), 0, Math.cos(this.cameraYaw)).applyQuaternion(surface.quaternion).normalize();
       const cameraLerp = state.cameraSnap || reducedMotion.matches ? 1 : 1 - Math.exp(-7.2 * delta);
+      this.camera.up.lerp(surface.normal, cameraLerp).normalize();
       if (state.cameraMode === "first") {
-        const eye = new THREE.Vector3(state.position.x, ground + state.jumpHeight + 1.86, state.position.z).addScaledVector(forward, .08);
+        const eye = surface.point.clone().addScaledVector(surface.normal, 1.52).addScaledVector(forward, .08);
         this.camera.position.lerp(eye, cameraLerp);
-        this.camera.lookAt(eye.clone().addScaledVector(forward, 14).add(new THREE.Vector3(0, -.35, 0)));
+        this.camera.lookAt(eye.clone().addScaledVector(forward, 14).addScaledVector(surface.normal, -.25));
         this.player.visible = false;
       } else {
         const mobile = window.innerWidth < 760;
-        const distance = mobile ? Math.max(6.2, state.cameraDistance - .4) : state.cameraDistance;
-        const desired = new THREE.Vector3(state.position.x, ground + state.jumpHeight, state.position.z)
+        const distance = mobile ? Math.max(15.8, state.cameraDistance - 2) : state.cameraDistance;
+        const desired = surface.point.clone()
           .addScaledVector(forward, -distance)
-          .add(new THREE.Vector3(0, mobile ? 5.5 : 4.8, 0));
-        const focus = new THREE.Vector3(state.position.x, ground + state.jumpHeight + 1.15, state.position.z)
-          .addScaledVector(forward, 2.2);
+          .addScaledVector(surface.normal, mobile ? 13.2 : 12.2);
+        const focus = surface.point.clone()
+          .addScaledVector(surface.normal, 1.15)
+          .addScaledVector(forward, 5.2);
         this.camera.position.lerp(desired, cameraLerp);
         this.camera.lookAt(focus);
       }
@@ -919,9 +923,10 @@ class PortWorld {
     } else {
       const mobile = window.innerWidth < 760;
       const orbit = reducedMotion.matches ? .72 : .72 + time * .018;
-      const distance = mobile ? 68 : 62;
-      this.camera.position.set(Math.sin(orbit) * distance, mobile ? 70 : 62, Math.cos(orbit) * distance);
-      this.camera.lookAt(0, -8, 0);
+      const distance = mobile ? 58 : 62;
+      this.camera.up.set(0, 1, 0);
+      this.camera.position.set(Math.sin(orbit) * distance, mobile ? 64 : 58, Math.cos(orbit) * distance);
+      this.camera.lookAt(0, mobile ? -13 : -18, 0);
     }
     this.renderers.get(state.mode).render(this.scene, this.camera);
   }
@@ -998,15 +1003,15 @@ function moveFromPointer(clientX, clientY) {
 }
 
 function resetGame() {
-  state.position.set(3.1, 0, 7.2);
+  state.position.set(-15.4, 0, -4.6);
   state.velocity.set(0, 0, 0);
-  state.facing = Math.PI;
+  state.facing = .45;
   state.destination = null;
   state.pendingInteractId = null;
   state.jumpHeight = 0;
   state.jumpVelocity = 0;
   state.grounded = true;
-  state.cameraDistance = 7.4;
+  state.cameraDistance = 18.6;
   stage.cameraYaw = state.facing;
   stage.moveMarker.visible = false;
   setCameraMode("third");
@@ -1304,7 +1309,7 @@ elements.worldCanvas.addEventListener("contextmenu", (event) => event.preventDef
 elements.worldCanvas.addEventListener("wheel", (event) => {
   if (state.cameraMode !== "third" || state.mode !== "play") return;
   event.preventDefault();
-  state.cameraDistance = THREE.MathUtils.clamp(state.cameraDistance + Math.sign(event.deltaY) * .65, 5.4, 10.6);
+  state.cameraDistance = THREE.MathUtils.clamp(state.cameraDistance + Math.sign(event.deltaY) * .9, 13.5, 24);
 }, { passive: false });
 
 const moveCodes = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyA", "KeyS", "KeyD"];

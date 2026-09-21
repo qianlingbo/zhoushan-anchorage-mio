@@ -89,7 +89,7 @@ button { font: inherit; }
 .intro-logo {
   position: absolute;
   z-index: 3;
-  top: 45%;
+  top: 44%;
   left: 50%;
   text-align: center;
   transform: translate(-50%, -50%) rotate(-1deg);
@@ -98,7 +98,7 @@ button { font: inherit; }
 }
 
 .intro-logo > p {
-  margin: 0 0 8px;
+  margin: 0 0 14px;
   color: var(--paper-bright);
   font-family: ui-monospace, "SFMono-Regular", monospace;
   font-size: 10px;
@@ -113,8 +113,8 @@ button { font: inherit; }
   margin: 0;
   color: var(--paper-bright);
   font-weight: 900;
-  line-height: .72;
-  letter-spacing: -.06em;
+  line-height: .78;
+  letter-spacing: -.08em;
   text-shadow:
     3px 3px 0 var(--ink),
     6px 6px 0 var(--ink),
@@ -122,26 +122,28 @@ button { font: inherit; }
 }
 
 .intro-logo h1 span {
-  justify-self: start;
-  margin-left: .22em;
-  color: var(--yellow);
-  font-size: clamp(36px, 4.4vw, 68px);
-  letter-spacing: .12em;
+  justify-self: center;
+  margin: 0;
+  color: var(--paper-bright);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: clamp(72px, 8.4vw, 132px);
+  letter-spacing: -.08em;
 }
 
 .intro-logo h1 strong {
-  font-size: clamp(92px, 12vw, 190px);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: clamp(82px, 9.6vw, 150px);
 }
 
 .intro-logo h1 em {
-  justify-self: end;
-  margin-top: .18em;
-  margin-right: .08em;
-  color: var(--orange);
-  font-size: clamp(44px, 5.6vw, 82px);
+  justify-self: center;
+  margin: .1em 0 0;
+  color: var(--paper-bright);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: clamp(62px, 7vw, 108px);
   font-style: normal;
-  letter-spacing: .04em;
-  text-shadow: 2px 2px 0 var(--ink), 4px 4px 0 var(--ink);
+  letter-spacing: -.06em;
+  text-shadow: 3px 3px 0 var(--ink), 6px 6px 0 var(--ink), 9px 9px 0 rgba(23,44,50,.36);
 }
 
 .enter-button {
@@ -234,7 +236,7 @@ kbd {
   z-index: 4;
   pointer-events: none;
   background:
-    radial-gradient(circle at 50% 42%, transparent 0 36%, rgba(23, 38, 36, .12) 74%, rgba(18, 30, 29, .34) 100%),
+    radial-gradient(circle at 50% 44%, transparent 0 52%, rgba(23, 38, 36, .09) 78%, rgba(18, 30, 29, .24) 100%),
     linear-gradient(112deg, rgba(247,241,223,.06), transparent 35%, rgba(36,56,52,.08));
   box-shadow: inset 0 0 130px rgba(20, 33, 32, .22);
 }
@@ -249,6 +251,11 @@ kbd {
   align-items: flex-start;
   pointer-events: none;
 }
+
+.game-mark,
+.roam-note,
+.mini-map,
+.route-caption { display: none; }
 
 .game-mark {
   margin-left: 86px;
@@ -267,17 +274,17 @@ kbd {
 
 .status-strip {
   display: flex;
-  margin-left: auto;
-  margin-right: 220px;
+  margin: 0 auto;
   border: 1.5px solid var(--ink);
   background: var(--ink);
-  box-shadow: 3px 4px 0 rgba(23,44,50,.3);
+  box-shadow: 2px 3px 0 rgba(23,44,50,.24);
+  opacity: .76;
   backdrop-filter: blur(8px);
 }
 
 .status-strip > div {
-  min-width: 84px;
-  padding: 7px 9px 8px;
+  min-width: 76px;
+  padding: 6px 8px 7px;
   background: rgba(255,250,240,.8);
 }
 
@@ -636,9 +643,9 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
 @media (max-width: 760px), (pointer: coarse) {
   .site-back { top: max(12px, env(safe-area-inset-top)); left: max(13px, env(safe-area-inset-left)); font-size: 10px; }
   .intro-logo { top: 43%; }
-  .intro-logo h1 span { font-size: 32px; }
-  .intro-logo h1 strong { font-size: 88px; }
-  .intro-logo h1 em { font-size: 45px; }
+  .intro-logo h1 span { font-size: 62px; }
+  .intro-logo h1 strong { font-size: 76px; }
+  .intro-logo h1 em { font-size: 52px; }
   .enter-button { bottom: 12vh; }
   .intro-tip { bottom: 6.5vh; width: 90vw; font-size: 9px; text-align: center; }
   .intro-edition { display: none; }
