@@ -26,6 +26,18 @@ const locations = [
   { id: "anchorage", name: "锚地交通艇码头", person: "艇长", short: "锚地", kind: "anchorage", color: 0x4d8585, position: [-11.2, -10], interact: [-9.1, -7.9] }
 ];
 
+const discoveryNotes = {
+  office: ["值班电台", "每一段现场奔波，都从一声呼叫开始。"],
+  airport: ["机组行李牌", "接到人，也要接住一段新的航程。"],
+  immigration: ["边检验讫章", "人员、证件和船期在这里重新对齐。"],
+  customs: ["海关封识", "一枚小小封识，守住货物进出的边界。"],
+  msa: ["海事罗盘", "方向正确，申报和航行才不会偏航。"],
+  shipyard: ["船厂安全帽", "修造现场的第一件装备永远是安全。"],
+  container: ["迷你集装箱", "箱号、车牌和计划必须严丝合缝。"],
+  cargo: ["理货吊钩", "每一票货都有属于自己的数字。"],
+  anchorage: ["锚地小船锚", "风浪之外，还有人在等待会合。"]
+};
+
 const encounters = {
   office: [
     { title: "群里同时弹出三条船期", story: "靠泊、移泊和船员换班的时间撞在一起。司机问先去哪里，船长又发来一句“ASAP”。", question: "你先做什么？", choices: [
@@ -148,11 +160,12 @@ const ambientMessages = [
 const $ = (id) => document.getElementById(id);
 const elements = {
   intro: $("intro-screen"), play: $("play-screen"), titleCanvas: $("title-canvas"), worldCanvas: $("world-canvas"), minimap: $("minimap-canvas"),
-  start: $("start-button"), clock: $("clock-value"), trust: $("energy-value"), encountered: $("completed-value"),
+  start: $("start-button"), clock: $("clock-value"), trust: $("energy-value"), encountered: $("completed-value"), discovered: $("discoveries-value"),
   roamNote: $("mission-note"), noteKicker: $("task-sequence"), noteTime: $("task-deadline"), noteTitle: $("task-title"), noteBody: $("task-description"), noteFooter: $("task-destination"),
   locationHint: $("location-hint"), locationName: $("location-name"), interact: $("interact-button"), mobileAction: $("mobile-action"),
   runUp: $("run-up"), runDown: $("run-down"), runLeft: $("run-left"), runRight: $("run-right"), toast: $("toast"),
-  viewSwitch: $("view-switch"), jumpButton: $("jump-button"),
+  viewSwitch: $("view-switch"), jumpButton: $("jump-button"), guideButton: $("guide-button"),
+  discoveryCard: $("discovery-card"), discoveryName: $("discovery-name"), discoveryDescription: $("discovery-description"),
   dialog: $("scene-dialog"), sceneVisual: $("scene-visual"), sceneCode: $("scene-code"), sceneLocation: $("scene-location"), sceneTitle: $("scene-title"),
   sceneStory: $("scene-story"), sceneChoices: $("scene-choices"), sceneResult: $("scene-result"), resultTitle: $("result-title"), resultText: $("result-text"),
   complete: $("complete-button"), dialogClose: $("dialog-close"), help: $("help-dialog"), helpButton: $("help-button"), helpClose: $("help-close")
@@ -162,7 +175,8 @@ const state = {
   mode: "intro", position: new THREE.Vector3(-15.4, 0, -4.6), velocity: new THREE.Vector3(), facing: .45,
   keys: new Set(), holds: { up: false, down: false, left: false, right: false }, minutes: 445, trust: 72, encounterCount: 0,
   nearbyId: null, activeEncounter: null, activeChoice: false, runPhase: 0, distanceWalked: 0, nextAmbientAt: 28,
-  lastEncounter: new Map(), lastFrame: performance.now(), toastTimer: 0, destination: null, pendingInteractId: null,
+  lastEncounter: new Map(), discoveries: new Set(), lastFrame: performance.now(), toastTimer: 0, discoveryTimer: 0, destination: null, pendingInteractId: null,
+  guideTargetId: null,
   cameraMode: "third", cameraDistance: 18.6, cameraSnap: true, jumpHeight: 0, jumpVelocity: 0, grounded: true
 };
 
@@ -337,8 +351,13 @@ function animatePerson(person, phase, amount, time) {
   head.rotation.y = amount < 0.05 ? Math.sin(time * 0.65) * 0.1 : 0;
   leftLeg.rotation.x = stride * 0.82;
   rightLeg.rotation.x = -stride * 0.82;
+  leftLeg.position.y = .76 + Math.max(0, -Math.sin(phase)) * amount * .1;
+  rightLeg.position.y = .76 + Math.max(0, Math.sin(phase)) * amount * .1;
+  leftLeg.rotation.z = -amount * .035;
+  rightLeg.rotation.z = amount * .035;
   leftArm.rotation.x = -stride * 0.68;
   rightArm.rotation.x = stride * 0.68;
+  rig.rotation.x = -amount * .035;
 }
 
 function makeTree(scale = 1) {
@@ -523,6 +542,46 @@ function makeBeachUmbrella(color) {
   return group;
 }
 
+function makeCollectible(location, index) {
+  const group = new THREE.Group();
+  const shapes = [
+    new THREE.BoxGeometry(.34, .42, .22),
+    new THREE.ConeGeometry(.27, .5, 5),
+    new THREE.CylinderGeometry(.25, .25, .22, 10),
+    new THREE.DodecahedronGeometry(.28, 0)
+  ];
+  addMesh(group, shapes[index % shapes.length], location.color, { position: [0, .44, 0], rotation: [0, index * .37, 0], outlineScale: 1.06 });
+  addMesh(group, new THREE.TorusGeometry(.39, .035, 7, 22), COLORS.yellow, { position: [0, .44, 0], rotation: [Math.PI / 2, 0, 0], outlineScale: 1.04, shadow: false });
+  const halo = new THREE.Mesh(
+    new THREE.RingGeometry(.48, .56, 28),
+    new THREE.MeshBasicMaterial({ color: COLORS.cream, transparent: true, opacity: .72, side: THREE.DoubleSide, depthWrite: false })
+  );
+  halo.rotation.x = -Math.PI / 2;
+  halo.position.y = .08;
+  group.add(halo);
+  group.userData.halo = halo;
+  group.userData.phase = index * .83;
+  return group;
+}
+
+function makeGuideSpirit() {
+  const group = new THREE.Group();
+  addMesh(group, new THREE.IcosahedronGeometry(.28, 1), COLORS.cream, { outlineScale: 1.055, shadow: false });
+  addMesh(group, new THREE.SphereGeometry(.045, 8, 6), COLORS.ink, { position: [-.09, .035, .25], outline: false, shadow: false });
+  addMesh(group, new THREE.SphereGeometry(.045, 8, 6), COLORS.ink, { position: [.09, .035, .25], outline: false, shadow: false });
+  [-1, 1].forEach((side) => addMesh(group, new THREE.ConeGeometry(.11, .34, 5), COLORS.yellow, {
+    position: [side * .37, 0, 0], rotation: [0, 0, side * -Math.PI / 2], outlineScale: 1.04, shadow: false
+  }));
+  const ring = new THREE.Mesh(
+    new THREE.TorusGeometry(.47, .022, 6, 28),
+    new THREE.MeshBasicMaterial({ color: 0xffe7a3, transparent: true, opacity: .8, depthWrite: false })
+  );
+  ring.rotation.x = Math.PI / 2;
+  group.add(ring);
+  group.userData.ring = ring;
+  return group;
+}
+
 class PortWorld {
   constructor() {
     this.scene = new THREE.Scene();
@@ -558,6 +617,7 @@ class PortWorld {
     sun.shadow.bias = -0.0002;
     this.scene.add(sun);
     this.locationGroups = new Map();
+    this.collectibles = new Map();
     this.ambientPeople = [];
     this.clouds = [];
     this.walkSurfaces = [];
@@ -565,6 +625,9 @@ class PortWorld {
     this.player = makePerson({ jacket: COLORS.orange, trousers: COLORS.navy, skin: COLORS.skinC, hair: 0x4a2d28, bag: true });
     this.player.scale.setScalar(.7);
     this.world.add(this.player);
+    this.guideSpirit = makeGuideSpirit();
+    this.guideSpirit.visible = false;
+    this.world.add(this.guideSpirit);
     this.moveMarker = new THREE.Group();
     const targetRing = new THREE.Mesh(
       new THREE.RingGeometry(.3, .38, 32),
@@ -673,6 +736,13 @@ class PortWorld {
       npc.userData.wanderRadius = .24 + (index % 3) * .11;
       this.world.add(npc);
       this.locationGroups.set(location.id, { location, building, label, npc, marker: npc.userData.marker });
+      const collectible = makeCollectible(location, index);
+      const collectibleAngle = index * 2.17 + .55;
+      const collectibleX = npcX + Math.sin(collectibleAngle) * 1.35;
+      const collectibleZ = npcZ + Math.cos(collectibleAngle) * 1.35;
+      placeOnGlobe(collectible, collectibleX, collectibleZ, collectibleAngle, .24);
+      this.world.add(collectible);
+      this.collectibles.set(location.id, { location, object: collectible, x: collectibleX, z: collectibleZ });
       colliders.push({ x, z, radius: ["container", "cargo"].includes(location.kind) ? 2.65 : 2.1 });
     });
 
@@ -876,8 +946,35 @@ class PortWorld {
     this.clouds.forEach((cloud, index) => {
       if (!reducedMotion.matches) cloud.position.x = -30 + ((time * (.18 + index * .015) + index * 9) % 70);
     });
+    this.collectibles.forEach(({ object, x, z }, id) => {
+      object.visible = !state.discoveries.has(id);
+      if (!object.visible) return;
+      const phase = object.userData.phase;
+      const bob = reducedMotion.matches ? .3 : .3 + Math.sin(time * 2.1 + phase) * .12;
+      placeOnGlobe(object, x, z, reducedMotion.matches ? phase : time * .65 + phase, bob);
+      if (!reducedMotion.matches) {
+        const pulse = 1 + Math.sin(time * 2.6 + phase) * .08;
+        object.userData.halo.scale.setScalar(pulse);
+      }
+    });
     this.player.visible = state.mode === "play";
+    this.guideSpirit.visible = state.mode === "play";
     if (state.mode === "play") {
+      const guideTarget = state.guideTargetId ? locations.find((location) => location.id === state.guideTargetId) : null;
+      const guideAngle = guideTarget
+        ? Math.atan2(guideTarget.interact[0] - state.position.x, guideTarget.interact[1] - state.position.z)
+        : state.facing + .85;
+      let guideX = state.position.x + Math.sin(guideAngle) * 1.15;
+      let guideZ = state.position.z + Math.cos(guideAngle) * 1.15;
+      if (!insideIsland(guideX, guideZ)) {
+        guideX = state.position.x - Math.sin(guideAngle) * .85;
+        guideZ = state.position.z - Math.cos(guideAngle) * .85;
+      }
+      const guideLift = 1.55 + (reducedMotion.matches ? 0 : Math.sin(time * 3.1) * .14);
+      placeOnGlobe(this.guideSpirit, guideX, guideZ, state.facing + Math.PI, guideLift);
+      this.guideSpirit.userData.ring.rotation.z = reducedMotion.matches ? 0 : time * 1.4;
+      const guidePulse = state.guideTargetId && !reducedMotion.matches ? 1 + Math.sin(time * 4.2) * .1 : 1;
+      this.guideSpirit.scale.setScalar(guidePulse);
       const movement = Math.min(state.velocity.length() / 5.1, 1);
       animatePerson(this.player, state.runPhase, movement, time);
       if (!state.grounded) {
@@ -944,6 +1041,7 @@ function updateHud() {
   elements.clock.textContent = formatTime(state.minutes);
   elements.trust.textContent = Math.round(state.trust);
   elements.encountered.textContent = state.encounterCount;
+  elements.discovered.textContent = `${state.discoveries.size}/${locations.length}`;
 }
 
 function showToast(message) {
@@ -951,6 +1049,52 @@ function showToast(message) {
   elements.toast.textContent = message;
   elements.toast.classList.add("is-visible");
   state.toastTimer = window.setTimeout(() => elements.toast.classList.remove("is-visible"), 2400);
+}
+
+function showDiscovery(location) {
+  const [name, description] = discoveryNotes[location.id];
+  clearTimeout(state.discoveryTimer);
+  elements.discoveryName.textContent = name;
+  elements.discoveryDescription.textContent = description;
+  elements.discoveryCard.hidden = false;
+  state.discoveryTimer = window.setTimeout(() => { elements.discoveryCard.hidden = true; }, 4300);
+}
+
+function collectNearbyDiscoveries() {
+  stage.collectibles.forEach(({ location, object, x, z }, id) => {
+    if (state.discoveries.has(id)) return;
+    if (Math.hypot(state.position.x - x, state.position.z - z) > 1.25) return;
+    state.discoveries.add(id);
+    object.visible = false;
+    if (state.guideTargetId === id) state.guideTargetId = null;
+    updateHud();
+    showDiscovery(location);
+    showToast(`发现 ${discoveryNotes[id][0]} · 已收入船代旅行箱`);
+  });
+}
+
+function callGuide() {
+  if (state.mode !== "play" || elements.dialog.open || elements.help.open) return;
+  const candidates = locations
+    .filter((location) => !state.discoveries.has(location.id))
+    .sort((a, b) => {
+      const distanceA = Math.hypot(state.position.x - a.interact[0], state.position.z - a.interact[1]);
+      const distanceB = Math.hypot(state.position.x - b.interact[0], state.position.z - b.interact[1]);
+      return distanceA - distanceB;
+    });
+  if (!candidates.length) {
+    state.guideTargetId = null;
+    showToast("九件港区纪念物都已经找到，接下来随心跑吧");
+    return;
+  }
+  const target = candidates[0];
+  const group = stage.locationGroups.get(target.id);
+  const buildingPoint = new THREE.Vector3(target.position[0], 0, target.position[1]);
+  const npcPoint = new THREE.Vector3(group.npc.position.x, 0, group.npc.position.z);
+  const approach = npcPoint.clone().sub(buildingPoint).normalize();
+  state.guideTargetId = target.id;
+  setDestination(npcPoint.addScaledVector(approach, 1.2));
+  showToast(`引路精灵发现了线索 · 正在前往 ${target.name}`);
 }
 
 function setCameraMode(mode) {
@@ -1018,6 +1162,8 @@ function resetGame() {
   state.minutes = 445;
   state.trust = 72;
   state.encounterCount = 0;
+  state.discoveries.clear();
+  state.guideTargetId = null;
   state.nearbyId = null;
   state.activeEncounter = null;
   state.activeChoice = false;
@@ -1025,6 +1171,8 @@ function resetGame() {
   state.distanceWalked = 0;
   state.nextAmbientAt = 28;
   state.lastEncounter.clear();
+  clearTimeout(state.discoveryTimer);
+  elements.discoveryCard.hidden = true;
   state.keys.clear();
   Object.keys(state.holds).forEach((key) => { state.holds[key] = false; });
   updateHud();
@@ -1081,6 +1229,7 @@ function updateNearby() {
   elements.locationHint.hidden = !state.nearbyId;
   elements.mobileAction.classList.toggle("is-ready", Boolean(state.nearbyId));
   if (state.nearbyId) elements.locationName.textContent = `${nearest.name} · ${nearest.person}`;
+  collectNearbyDiscoveries();
 }
 
 function drawMinimap() {
@@ -1285,6 +1434,7 @@ elements.helpButton.addEventListener("click", () => elements.help.showModal());
 elements.helpClose.addEventListener("click", () => elements.help.close());
 elements.viewSwitch.addEventListener("click", toggleCameraMode);
 elements.jumpButton.addEventListener("click", jump);
+elements.guideButton.addEventListener("click", callGuide);
 elements.dialog.addEventListener("click", (event) => { if (event.target === elements.dialog) elements.dialog.close(); });
 elements.help.addEventListener("click", (event) => { if (event.target === elements.help) elements.help.close(); });
 bindHold(elements.runUp, "up");
@@ -1319,6 +1469,7 @@ window.addEventListener("keydown", (event) => {
     state.keys.add(event.code);
   }
   if (event.code === "Space" && !event.repeat) { event.preventDefault(); jump(); }
+  if (event.code === "KeyG" && !event.repeat) { event.preventDefault(); callGuide(); }
   if (event.code === "KeyV" && !event.repeat && state.mode === "play" && !elements.dialog.open && !elements.help.open) toggleCameraMode();
   if (event.code === "KeyE" && !event.repeat && !elements.dialog.open && !elements.help.open) interact();
   if (event.key === "?" && !elements.help.open) elements.help.showModal();

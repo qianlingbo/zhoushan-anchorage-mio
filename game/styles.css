@@ -319,7 +319,8 @@ kbd {
 }
 
 .view-switch,
-.jump-button {
+.jump-button,
+.guide-button {
   display: inline-flex;
   align-items: baseline;
   gap: 7px;
@@ -334,9 +335,15 @@ kbd {
   transition: transform 140ms var(--ease-out), background-color 140ms ease;
 }
 
+.guide-button {
+  color: var(--paper-bright);
+  background: rgba(82, 111, 105, .92);
+}
+
 .view-switch[aria-pressed="true"] { color: var(--paper-bright); background: var(--ink); }
 .view-switch small,
-.jump-button small { opacity: .58; font: 700 8px ui-monospace, monospace; letter-spacing: .06em; }
+.jump-button small,
+.guide-button small { opacity: .58; font: 700 8px ui-monospace, monospace; letter-spacing: .06em; }
 .jump-button { background: rgba(198,155,74,.88); }
 
 .roam-note {
@@ -466,6 +473,34 @@ kbd {
 }
 
 .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+
+.discovery-card {
+  position: absolute;
+  z-index: 9;
+  left: max(24px, env(safe-area-inset-left));
+  bottom: max(26px, env(safe-area-inset-bottom));
+  width: min(290px, calc(100vw - 48px));
+  border: 2px solid var(--ink);
+  padding: 13px 15px 14px 53px;
+  background: rgba(247, 241, 223, .94);
+  box-shadow: 5px 6px 0 var(--yellow);
+  transform: rotate(-.8deg);
+  animation: discovery-in 320ms var(--ease-out) both;
+}
+
+.discovery-card::before {
+  content: "✦";
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  color: var(--orange);
+  font: 900 27px ui-monospace, monospace;
+  transform: translateY(-50%);
+}
+
+.discovery-card span { display: block; color: var(--orange); font: 800 8px ui-monospace, monospace; letter-spacing: .14em; }
+.discovery-card strong { display: block; margin-top: 4px; font-size: 18px; }
+.discovery-card p { margin: 3px 0 0; color: var(--ink-soft); font-family: "Songti SC", serif; font-size: 11px; }
 
 .run-controls {
   position: absolute;
@@ -633,11 +668,13 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
 
 @keyframes pop { from { opacity: 0; transform: translate(-50%, 8px) rotate(-1deg) scale(.96); } }
 @keyframes dialog-in { from { opacity: 0; transform: translateY(18px) scale(.98); } }
+@keyframes discovery-in { from { opacity: 0; transform: translateY(14px) rotate(-.8deg) scale(.96); } }
 
 @media (hover: hover) and (pointer: fine) {
   .choice-button:hover { border-color: var(--ink); transform: translateX(3px); }
   .view-switch:hover,
-  .jump-button:hover { transform: translateY(-2px); }
+  .jump-button:hover,
+  .guide-button:hover { transform: translateY(-2px); }
 }
 
 @media (max-width: 760px), (pointer: coarse) {
@@ -660,6 +697,9 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
   .camera-tools { right: 0; }
   .view-switch { padding: 6px 8px; }
   .view-switch span { display: none; }
+  .guide-button { position: fixed; left: 12px; bottom: max(95px, calc(env(safe-area-inset-bottom) + 85px)); min-width: 58px; min-height: 58px; border-radius: 50%; justify-content: center; padding: 5px; }
+  .guide-button span { display: none; }
+  .guide-button small { font-size: 13px; opacity: 1; }
   .jump-button { position: fixed; right: 84px; bottom: max(94px, calc(env(safe-area-inset-bottom) + 84px)); min-width: 58px; min-height: 58px; border-radius: 50%; justify-content: center; }
   .jump-button span { font-size: 15px; }
   .jump-button small { display: none; }
@@ -670,6 +710,7 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
   .location-hint { bottom: max(124px, calc(env(safe-area-inset-bottom) + 112px)); }
   .location-hint button { display: none; }
   .toast { top: auto; bottom: max(190px, calc(env(safe-area-inset-bottom) + 175px)); }
+  .discovery-card { left: 12px; bottom: max(165px, calc(env(safe-area-inset-bottom) + 150px)); width: calc(100vw - 24px); }
   .scene-dialog { width: calc(100vw - 20px); height: calc(100vh - 22px); }
   .scene-dialog[open] { grid-template-columns: 1fr; grid-template-rows: 29% 71%; }
   .scene-content { padding: 28px 22px 24px; }
