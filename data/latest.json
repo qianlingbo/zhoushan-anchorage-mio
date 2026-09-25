@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-09-25 09:29:25",
-  "lastChecked": "2026-09-25 09:29:25",
-  "lastSuccessfulFetch": "2026-09-25 09:29:25",
-  "updateWindow": "2026-09-25T09:00+08:00",
-  "publishTime": "2026年09月25日07时",
-  "publishCode": "2026092507",
+  "lastUpdated": "2026-09-25 14:09:10",
+  "lastChecked": "2026-09-25 14:09:10",
+  "lastSuccessfulFetch": "2026-09-25 14:09:10",
+  "updateWindow": "2026-09-25T12:00+08:00",
+  "publishTime": "2026年09月25日11时",
+  "publishCode": "2026092511",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -254,9 +254,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云。明天多云，午后到夜里局部有阵雨或雷雨。后天阴到多云有时有阵雨或雷雨。28-29日多云到阴，局部有阵雨或雷雨。<br><br>",
-      "Time": "2026092507",
-      "PreciseForecastTime": "2026年09月25日07时"
+      "Text": "天气预报：今天多云。明天多云，下午到夜里局部有阵雨或雷雨。后天阴到多云有时有阵雨或雷雨。28-29日多云到阴，局部有阵雨或雷雨。<br><br>",
+      "Time": "2026092511",
+      "PreciseForecastTime": "2026年09月25日11时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云。明天多云，下午到夜里局部有阵雨或雷雨。后天阴到多云有时有阵雨或雷雨。28-29日多云到阴，局部有阵雨或雷雨。<br><br>",
-      "Time": "2026092507",
-      "PreciseForecastTime": "2026年09月25日07时"
+      "Time": "2026092511",
+      "PreciseForecastTime": "2026年09月25日11时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,9 +750,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云。明天多云，午后到夜里局部有阵雨或雷雨。后天阴到多云有时有阵雨或雷雨。28-29日多云到阴，局部有阵雨或雷雨。<br><br>",
-      "Time": "2026092507",
-      "PreciseForecastTime": "2026年09月25日07时"
+      "Text": "天气预报：今天多云。明天多云，下午到夜里局部有阵雨或雷雨。后天阴到多云有时有阵雨或雷雨。28-29日多云到阴，局部有阵雨或雷雨。<br><br>",
+      "Time": "2026092511",
+      "PreciseForecastTime": "2026年09月25日11时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -998,9 +998,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云。明天多云，午后到夜里局部有阵雨或雷雨。后天阴到多云有时有阵雨或雷雨。28-29日多云到阴，局部有阵雨或雷雨。<br><br>",
-      "Time": "2026092507",
-      "PreciseForecastTime": "2026年09月25日07时"
+      "Text": "天气预报：今天多云。明天多云，下午到夜里局部有阵雨或雷雨。后天阴到多云有时有阵雨或雷雨。28-29日多云到阴，局部有阵雨或雷雨。<br><br>",
+      "Time": "2026092511",
+      "PreciseForecastTime": "2026年09月25日11时"
     }
   }
 }
