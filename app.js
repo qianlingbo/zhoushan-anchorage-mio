@@ -140,18 +140,28 @@
 
   /* Data loading */
 
+  function fetchLatestData() {
+    return fetch(DATA_URL + "?t=" + Date.now(), { cache: "no-store" }).then(function (r) {
+      if (!r.ok) throw new Error("读取数据失败: " + r.status);
+      return r.json();
+    });
+  }
+
   function loadData() {
-    return fetch(DATA_URL + "?t=" + Date.now(), { cache: "no-store" })
-      .then(function (r) {
-        if (!r.ok) throw new Error("读取数据失败: " + r.status);
-        return r.json();
-      })
-      .catch(function (err) {
-        if (window.__ANCHOR_DATA__) {
-          return window.__ANCHOR_DATA__;
-        }
-        throw err;
-      });
+    var embeddedData = window.__ANCHOR_DATA__;
+    if (embeddedData) {
+      window.setTimeout(function () {
+        fetchLatestData().then(function (data) {
+          if (data.lastUpdated !== embeddedData.lastUpdated || data.publishTime !== embeddedData.publishTime) {
+            window.__ANCHOR_DATA__ = data;
+            render(data);
+          }
+        }).catch(function () {});
+      }, 1000);
+      return Promise.resolve(embeddedData);
+    }
+
+    return fetchLatestData();
   }
 
   /* Language */
