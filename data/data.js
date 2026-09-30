@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-09-30 18:29:01",
-  "lastChecked": "2026-09-30 18:29:01",
-  "lastSuccessfulFetch": "2026-09-30 18:29:01",
-  "updateWindow": "2026-09-30T18:00+08:00",
-  "publishTime": "2026年09月30日16时",
-  "publishCode": "2026093016",
+  "lastUpdated": "2026-10-01 00:24:13",
+  "lastChecked": "2026-10-01 00:24:13",
+  "lastSuccessfulFetch": "2026-10-01 00:24:13",
+  "updateWindow": "2026-10-01T00:00+08:00",
+  "publishTime": "2026年09月30日20时",
+  "publishCode": "2026093020",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -254,9 +254,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有时有阵雨或雷雨。明天阴到多云，有时有阵雨。后天多云到阴，局部阵雨。10月3-4日阴有阵雨。<br><br>",
-      "Time": "2026093016",
-      "PreciseForecastTime": "2026年09月30日16时"
+      "Text": "天气预报：今天阴有时有阵雨或雷雨，雷雨时短时风雨较大。明天阴到多云，有时有阵雨。后天多云到阴，局部阵雨。10月3-4日阴有阵雨。<br><br>",
+      "Time": "2026093020",
+      "PreciseForecastTime": "2026年09月30日20时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有时有阵雨或雷雨。明天阴到多云，有时有阵雨。后天多云到阴，局部阵雨。10月3-4日阴有阵雨。<br><br>",
-      "Time": "2026093016",
-      "PreciseForecastTime": "2026年09月30日16时"
+      "Time": "2026093020",
+      "PreciseForecastTime": "2026年09月30日20时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有时有阵雨或雷雨。明天阴到多云，有时有阵雨。后天多云到阴，局部阵雨。10月3-4日阴有阵雨。<br><br>",
-      "Time": "2026093016",
-      "PreciseForecastTime": "2026年09月30日16时"
+      "Time": "2026093020",
+      "PreciseForecastTime": "2026年09月30日20时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有时有阵雨或雷雨。明天阴到多云，有时有阵雨。后天多云到阴，局部阵雨。10月3-4日阴有阵雨。<br><br>",
-      "Time": "2026093016",
-      "PreciseForecastTime": "2026年09月30日16时"
+      "Time": "2026093020",
+      "PreciseForecastTime": "2026年09月30日20时"
     }
   }
 };
