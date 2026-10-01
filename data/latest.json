@@ -1,14 +1,14 @@
 {
-  "status": "更新完成",
-  "lastUpdated": "2026-10-01 15:10:23",
-  "lastChecked": "2026-10-01 15:10:23",
+  "status": "沿用上次数据",
+  "lastUpdated": "2026-10-01 19:05:40",
+  "lastChecked": "2026-10-01 19:05:40",
   "lastSuccessfulFetch": "2026-10-01 15:10:23",
-  "updateWindow": "2026-10-01T15:00+08:00",
+  "updateWindow": "2026-10-01T18:00+08:00",
   "publishTime": "2026年10月01日14时",
   "publishCode": "2026100114",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": false,
+  "sourceUnavailable": true,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -1002,5 +1002,8 @@
       "Time": "2026100114",
       "PreciseForecastTime": "2026年10月01日14时"
     }
-  }
+  },
+  "errors": [
+    "数据源连续重试失败，沿用上次成功数据。"
+  ]
 }
