@@ -1,6 +1,89 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
+// Original facial geometry and clothing; only the underlying civilian body and
+// animation skeleton come from the embedded Mixamo reference.
+function makeAgentHead() {
+  const head = new THREE.Group();
+  const skin = new THREE.MeshStandardMaterial({ color: 0xd5a57f, roughness: .64 });
+  const hair = new THREE.MeshStandardMaterial({ color: 0x151b20, roughness: .9 });
+  const eyeWhite = new THREE.MeshStandardMaterial({ color: 0xe9e0d1, roughness: .4 });
+  const iris = new THREE.MeshStandardMaterial({ color: 0x29221d, roughness: .42 });
+  const lip = new THREE.MeshStandardMaterial({ color: 0xa26959, roughness: .75 });
+  const add = (geometry, material, position, scale = [1, 1, 1]) => {
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(...position); mesh.scale.set(...scale);
+    mesh.castShadow = mesh.receiveShadow = true;
+    head.add(mesh); return mesh;
+  };
+  add(new THREE.SphereGeometry(1, 36, 28), skin, [0, 0, -.008], [.101, .139, .097]);
+  add(new THREE.SphereGeometry(1, 28, 20), skin, [0, -.058, .017], [.077, .073, .076]);
+  for (const side of [-1, 1]) {
+    add(new THREE.SphereGeometry(1, 20, 14), skin, [side * .096, -.012, -.005], [.014, .026, .014]);
+    add(new THREE.SphereGeometry(1, 20, 14), skin, [side * .055, -.017, .061], [.032, .035, .031]);
+    add(new THREE.SphereGeometry(1, 20, 14), eyeWhite, [side * .039, .021, .080], [.019, .0065, .007]);
+    add(new THREE.SphereGeometry(1, 18, 12), iris, [side * .039, .021, .086], [.0058, .0058, .002]);
+    const eyelid = new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(side * .021, .020, .086),
+      new THREE.Vector3(side * .037, .030, .091),
+      new THREE.Vector3(side * .057, .023, .081)
+    );
+    add(new THREE.TubeGeometry(eyelid, 10, .0018, 5, false), skin, [0, 0, 0]);
+    const brow = add(new THREE.CapsuleGeometry(.0032, .029, 4, 8), hair, [side * .039, .041, .081]);
+    brow.rotation.z = side * 1.48;
+  }
+  add(new THREE.SphereGeometry(1, 24, 16), skin, [0, .004, .089], [.011, .031, .015]);
+  add(new THREE.SphereGeometry(1, 20, 14), skin, [0, -.018, .103], [.016, .011, .013]);
+  add(new THREE.SphereGeometry(1, 24, 12), lip, [0, -.061, .086], [.023, .0026, .004]);
+  add(new THREE.SphereGeometry(1, 24, 12), lip, [0, -.066, .085], [.019, .0035, .004]);
+  add(new THREE.SphereGeometry(.105, 32, 22, 0, Math.PI * 2, 0, Math.PI * .56), hair, [0, .034, -.015], [1, 1.07, .97]);
+  // Tapered, side-parted black hair, rather than replacing only a skin tint.
+  for (let index = 0; index < 7; index++) {
+    const lock = add(new THREE.SphereGeometry(1, 16, 12), hair, [-.083 + index * .026, .078 + Math.sin(index * .45) * .014, .054], [.022, .038, .045]);
+    lock.rotation.z = -.45;
+  }
+  for (const side of [-1, 1]) add(new THREE.SphereGeometry(1, 16, 12), hair, [side * .087, .011, -.031], [.015, .063, .052]);
+  return head;
+}
+
+function dressPortAgent(agent, target) {
+  const geometry = target.geometry;
+  const position = geometry.attributes.position;
+  const colors = new Float32Array(position.count * 3);
+  const skin = new THREE.Color(0xd5a57f), jacket = new THREE.Color(0x344c61);
+  const trousers = new THREE.Color(0x273640), shoes = new THREE.Color(0x252a2e);
+  const vertex = new THREE.Vector3();
+  for (let index = 0; index < position.count; index++) {
+    vertex.fromBufferAttribute(position, index);
+    const color = vertex.y < .095 ? shoes : vertex.y < .92 ? trousers
+      : Math.abs(vertex.x) > .54 || (vertex.y > 1.28 && Math.abs(vertex.x) < .105) ? skin : jacket;
+    colors.set(color.toArray(), index * 3);
+  }
+  geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  const indices = geometry.index.array;
+  const bodyIndices = [];
+  for (let index = 0; index < indices.length; index += 3) {
+    // The existing head and hairstyle are removed, not covered by another face.
+    if ([indices[index], indices[index + 1], indices[index + 2]].every((vertexIndex) => position.getY(vertexIndex) < 1.375)) {
+      bodyIndices.push(indices[index], indices[index + 1], indices[index + 2]);
+    }
+  }
+  geometry.setIndex(bodyIndices);
+  target.material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .82 });
+  const mount = (boneName, object, worldPosition) => {
+    const bone = agent.scene.getObjectByName(boneName);
+    const transform = new THREE.Matrix4().makeTranslation(...worldPosition);
+    transform.premultiply(bone.matrixWorld.clone().invert());
+    object.applyMatrix4(transform); bone.add(object);
+  };
+  mount("mixamorigHead", makeAgentHead(), [0, 1.495, -.008]);
+  const badge = new THREE.Group();
+  const card = new THREE.Mesh(new THREE.BoxGeometry(.037, .052, .004), new THREE.MeshStandardMaterial({ color: 0xe0ddd0, roughness: .85 }));
+  const cord = new THREE.Mesh(new THREE.BoxGeometry(.009, .13, .005), new THREE.MeshStandardMaterial({ color: 0x889fb1, roughness: .8 }));
+  cord.position.y = .083; badge.add(card, cord);
+  mount("mixamorigSpine2", badge, [0, 1.11, .086]);
+}
+
 function locomotionClips(agent, locomotion, target, source, heightRatio) {
   const targetBones = [...target.skeleton.bones].sort((a, b) => {
     const depth = (bone) => { let count = 0; while (bone.parent) { count++; bone = bone.parent; } return count; };
@@ -94,6 +177,7 @@ export async function loadAgentCharacter() {
   locomotion.scene.updateMatrixWorld(true);
   const height = new THREE.Box3().setFromObject(agent.scene).getSize(new THREE.Vector3()).y;
   const sourceHeight = new THREE.Box3().setFromObject(locomotion.scene).getSize(new THREE.Vector3()).y;
+  dressPortAgent(agent, target);
   // Preserve the civilian mesh's bind scale and proportions; transfer rotations only.
   const clips = locomotionClips(agent, locomotion, target, source, height / sourceHeight);
   const mixer = new THREE.AnimationMixer(agent.scene);

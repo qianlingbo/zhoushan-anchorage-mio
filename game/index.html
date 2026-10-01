@@ -4,10 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#345861" />
-  <meta name="description" content="在秋日球状海岛自由探索草坡、沙滩、边检、海关与港口码头，以第一或第三人称遇见船舶代理现场。" />
+  <meta name="description" content="从地球上的七洲节点出发，以亚洲面孔的船代角色探索各地港区、不同气候与多样人群。" />
   <title>船代跑现场 · 舟山船舶代理笔记</title>
   <link rel="icon" href="/favicon.svg" />
-  <link rel="stylesheet" href="./styles.css?v=20261001-natural-island-4" />
+  <link rel="stylesheet" href="./styles.css?v=20261001-world-1" />
 </head>
 <body>
   <a class="site-back" href="/">← 舟山港航工具</a>
@@ -16,17 +16,25 @@
     <section class="screen intro-screen is-active" id="intro-screen" aria-labelledby="game-title">
       <canvas id="title-canvas" aria-hidden="true"></canvas>
       <div class="intro-logo">
-        <p>A SMALL PLANET · A THOUSAND PORT ERRANDS</p>
-        <h1 id="game-title"><span>舟山</span><strong>船代</strong><em>跑现场</em></h1>
+        <p>ONE EARTH · SEVEN CONTINENTS</p>
+        <h1 id="game-title"><span>船代</span><strong>环球</strong><em>漫游</em></h1>
       </div>
+      <div class="earth-nodes" id="earth-nodes" aria-label="地球上的洲际传送节点"></div>
+      <aside class="continent-info" aria-live="polite">
+        <span>CHOOSE YOUR NEXT SHORE</span>
+        <h2 id="continent-title">亚洲 · 舟山海港</h2>
+        <p id="continent-description">从家乡海港出发，去遇见世界。</p>
+        <small id="continent-progress">0/9 地标已发现</small>
+      </aside>
       <button class="enter-button" id="start-button" type="button" disabled>LOADING</button>
-      <p class="intro-tip">点击地面奔跑 · 拖动画面环视 · <kbd>Space</kbd> 跳跃 · <kbd>V</kbd> 切换视角</p>
-      <p class="intro-edition">NO ROUTE · NO CHECKLIST<br />ZHOUSHAN · 2026</p>
-      <p class="renderer-badge">秋日海风 · 舟山群岛 · 自由漫游</p>
+      <p class="intro-tip">拖动地球环视 · 点击发光节点传送 · 或选择下方大洲</p>
+      <nav class="continent-selector" id="continent-selector" aria-label="选择探索的大洲"></nav>
+      <p class="intro-edition">NO ROUTE · NO CHECKLIST<br />WORLD PORTS · 2026</p>
     </section>
 
     <section class="screen play-screen" id="play-screen" aria-label="船代港区游戏区域">
       <canvas id="world-canvas" aria-label="可自由探索的三维港区"></canvas>
+      <div class="world-location"><span id="current-continent">亚洲</span><button id="earth-button" type="button">◎ 返回地球</button></div>
 
       <header class="game-header">
         <div class="game-mark">
@@ -113,6 +121,7 @@
     <p>HOW TO WANDER THE PORT</p>
     <h2>别等任务，去碰见现场。</h2>
     <dl>
+      <div><dt>环球</dt><dd>开场拖动地球，点击发光节点或选择大洲出发。港区金色圆环与“返回地球”按钮可以开启下一段旅程；各洲进度在本次游玩中分别保留。</dd></div>
       <div><dt>奔跑</dt><dd>点击或轻触地面，人物会自动绕开建筑奔跑；也保留 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 作为补充。</dd></div>
       <div><dt>跳跃</dt><dd>按 <kbd>Space</kbd> 或屏幕“跳”按钮。奔跑途中也能起跳。</dd></div>
       <div><dt>视角</dt><dd>拖动画面可以环视四周、调整高低。按 <kbd>V</kbd> 切换第一、第三人称；第三人称用滚轮拉近或拉远。</dd></div>
@@ -130,6 +139,6 @@
       "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
     } }
   </script>
-  <script type="module" src="./game.js?v=20261001-natural-island-8"></script>
+  <script type="module" src="./game.js?v=20261001-world-1"></script>
 </body>
 </html>

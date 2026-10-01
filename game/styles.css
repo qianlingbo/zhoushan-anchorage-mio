@@ -729,3 +729,54 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 100ms !important; }
 }
+
+/* The atlas keeps its navigation outside the globe's drag surface. */
+body[data-mode="intro"] .site-back { color: #d9e9e8; }
+.intro-screen { background: #071b28; }
+.intro-screen::before { background: linear-gradient(90deg, rgba(3,17,27,.65), transparent 70%); }
+.intro-logo { top: 28%; }
+.intro-logo h1 span { font-size: clamp(36px,4vw,60px); }
+.intro-logo h1 strong { font-size: clamp(64px,7vw,104px); }
+.intro-logo h1 em { font-size: clamp(50px,5vw,80px); }
+.intro-edition { top: 25px; bottom: auto; color: #a6bbb9; }
+.continent-info { position: absolute; z-index: 4; left: 8%; top: 53%; width: 280px; color: #e5eada; }
+.continent-info > span { color: #b9bb91; font: 700 9px ui-monospace,monospace; letter-spacing: .16em; }
+.continent-info h2 { margin: 10px 0; font-size: 24px; }
+.continent-info p { color: #aec6cb; margin: 0 0 13px; font: 13px/1.7 "Songti SC",serif; }
+.continent-info small { color: #d9c68a; font-size: 11px; }
+.intro-screen .enter-button { left: 8%; bottom: 16%; transform: none; min-width: 210px; border: 1px solid #e0cb8d; border-radius: 3px; box-shadow: none; background: #dcc68e; font-size: 16px; }
+.intro-screen .enter-button:hover { transform: translateY(-2px); background: #eddaa6; }
+.intro-screen .intro-tip { bottom: 11%; left: 8%; transform: none; color: #9fb9c5; font-size: 10px; }
+.continent-selector { position: absolute; z-index: 6; left: 8%; right: 8%; bottom: 22px; display: flex; gap: 8px; }
+.continent-selector button { flex: 1; border: 1px solid #47616a; border-radius: 4px; padding: 10px 6px; background: rgba(8,33,47,.88); color: #b4c8c8; cursor: pointer; }
+.continent-selector button span { display: block; font-size: 14px; }
+.continent-selector button small { display: block; margin-top: 4px; font: 8px ui-monospace,monospace; letter-spacing: .08em; }
+.continent-selector button[aria-pressed="true"] { background: #d9c58e; color: #18343c; border-color: #d9c58e; }
+.continent-selector button:hover { border-color: #d9c58e; }
+.earth-nodes { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.earth-node { position: absolute; top: 0; left: 0; pointer-events: auto; cursor: pointer; padding: 6px 11px; min-height: 32px; color: #ffedb3; border: 1px solid rgba(236,210,139,.7); border-radius: 20px; background: rgba(8,36,46,.85); box-shadow: 0 0 16px rgba(232,197,104,.18); font-size: 12px; white-space: nowrap; }
+.earth-node:hover { color: #17303b; background: #ecd392; }
+.world-location { position: absolute; z-index: 8; top: 57px; left: 20px; display: flex; align-items: center; gap: 8px; color: #e6ecd7; }
+.world-location > span { background: rgba(24,49,57,.76); border-radius: 4px; padding: 7px 10px; font-size: 12px; }
+.world-location button { border: 1px solid rgba(244,237,218,.4); border-radius: 4px; color: #f1e6bd; background: rgba(24,49,57,.76); padding: 7px 10px; font-size: 12px; cursor: pointer; }
+@media (max-width: 760px) {
+  .intro-logo { top: 62px; left: 18px; transform: none; text-align: left; }
+  .intro-logo > p { font-size: 8px; margin-bottom: 10px; }
+  .intro-logo h1 { display: flex; gap: 6px; line-height: 1; }
+  .intro-logo h1 span,.intro-logo h1 strong,.intro-logo h1 em { font-size: 27px; margin: 0; letter-spacing: -.06em; text-shadow: 2px 2px 0 #17343e; }
+  .continent-info { left: 22px; top: auto; bottom: 215px; width: calc(100% - 44px); text-align: center; }
+  .continent-info > span { display: none; }
+  .continent-info h2 { font-size: 20px; margin: 0 0 5px; }
+  .continent-info p { font-size: 11px; margin-bottom: 5px; line-height: 1.5; }
+  .continent-info small { font-size: 10px; }
+  .intro-screen .enter-button { left: 50%; bottom: 155px; min-width: 200px; transform: translateX(-50%); font-size: 14px; padding: 10px 18px; }
+  .intro-screen .enter-button:hover { transform: translate(-50%,-2px); }
+  .intro-screen .intro-tip { left: 16px; bottom: 128px; width: calc(100% - 32px); font-size: 8px; text-align: center; }
+  .continent-selector { left: 12px; right: 12px; bottom: max(12px,env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; }
+  .continent-selector button { min-height: 40px; padding: 7px 3px; }
+  .continent-selector button span { font-size: 12px; }
+  .continent-selector button small { display: none; }
+  .earth-node { font-size: 10px; min-height: 28px; padding: 4px 8px; }
+  .world-location { top: 108px; left: 12px; gap: 5px; }
+  .world-location > span,.world-location button { font-size: 10px; padding: 6px 8px; }
+}

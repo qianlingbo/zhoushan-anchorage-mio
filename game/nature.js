@@ -3,7 +3,11 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.m
 export const natureUniforms = {
   time: { value: 0 },
   wind: { value: 1 },
-  player: { value: new THREE.Vector3() }
+  player: { value: new THREE.Vector3() },
+  dark: { value: new THREE.Color(.07, .16, .025) },
+  light: { value: new THREE.Color(.22, .34, .065) },
+  dry: { value: new THREE.Color(.40, .36, .12) },
+  sand: { value: new THREE.Color(.78, .67, .44) }
 };
 
 const noiseGLSL = `
@@ -51,20 +55,21 @@ export function terrainMaterial(kind) {
     bumpMap: surfaceTexture("stone"), bumpScale: kind === "grass" ? .018 : .035
   });
   material.onBeforeCompile = (shader) => {
+    Object.assign(shader.uniforms, { groundDark: natureUniforms.dark, groundLight: natureUniforms.light, groundDry: natureUniforms.dry, groundSand: natureUniforms.sand });
     shader.vertexShader = shader.vertexShader.replace("#include <common>", "#include <common>\nvarying vec3 vGround;")
       .replace("#include <begin_vertex>", "#include <begin_vertex>\nvGround = position;");
-    shader.fragmentShader = shader.fragmentShader.replace("#include <common>", `#include <common>\nvarying vec3 vGround;\n${noiseGLSL}`)
+    shader.fragmentShader = shader.fragmentShader.replace("#include <common>", `#include <common>\nvarying vec3 vGround;\nuniform vec3 groundDark; uniform vec3 groundLight; uniform vec3 groundDry; uniform vec3 groundSand;\n${noiseGLSL}`)
       .replace("#include <color_fragment>", `#include <color_fragment>
         float patches = fbm(vGround.xz * .36);
         float detail = noise21(vGround.xz * 26.0);
         ${kind === "grass" ? `
-          vec3 darkGrass = vec3(.07,.16,.025);
-          vec3 lightGrass = vec3(.22,.34,.065);
-          vec3 dryGrass = vec3(.40,.36,.12);
+          vec3 darkGrass = groundDark;
+          vec3 lightGrass = groundLight;
+          vec3 dryGrass = groundDry;
           vec3 groundColor = mix(darkGrass,lightGrass,smoothstep(.19,.74,patches));
           groundColor = mix(groundColor,dryGrass,smoothstep(.65,.87,patches)*.75);
         ` : kind === "sand" ? `
-          vec3 groundColor = mix(vec3(.48,.39,.25),vec3(.78,.67,.44),patches);
+          vec3 groundColor = mix(groundSand*.63,groundSand,patches);
         ` : `
           vec3 groundColor = mix(vec3(.24,.25,.22),vec3(.46,.43,.34),patches);
         `}
@@ -177,7 +182,7 @@ function windMaterial(parameters, strength, grass = false) {
   return material;
 }
 
-export function makeMeadow(frameAt, isClear, random) {
+export function makeMeadow(frameAt, isClear, random, tint, density = 1) {
   const positions = [], uvs = [], indices = [];
   for (let blade = 0; blade < 3; blade += 1) {
     const angle = blade * 2.4, height = [.11,.15,.125][blade];
@@ -194,7 +199,7 @@ export function makeMeadow(frameAt, isClear, random) {
   geometry.setIndex(indices);
   geometry.computeVertexNormals();
   const material = windMaterial({ color: 0xffffff, roughness: .9, side: THREE.DoubleSide }, .025, true);
-  const count = window.innerWidth < 760 ? 10000 : 32000;
+  const count = Math.floor((window.innerWidth < 760 ? 10000 : 32000) * density);
   const meadow = new THREE.InstancedMesh(geometry, material, count);
   const dummy = new THREE.Object3D();
   const color = new THREE.Color();
@@ -211,7 +216,8 @@ export function makeMeadow(frameAt, isClear, random) {
     dummy.scale.set(width,.6+random()*.55,width);
     dummy.updateMatrix();
     meadow.setMatrixAt(planted,dummy.matrix);
-    color.setHSL(.22+random()*.035,.42+random()*.14,.26+random()*.08);
+    if (tint) color.copy(tint).multiplyScalar(.65 + random() * .5);
+    else color.setHSL(.22+random()*.035,.42+random()*.14,.26+random()*.08);
     meadow.setColorAt(planted,color);
     planted += 1;
   }
@@ -272,7 +278,8 @@ export function makeNaturalTree(random, scale = 1, autumn = false) {
 // A proportioned, articulated civilian character. Knees and elbows are pivots,
 // rather than rotating whole legs and arms as rigid sticks.
 export function makeNaturalPerson(options, markerFactory) {
-  const {jacket=0xb9653e,trousers=0x293c46,skin=0xd7a17a,hair=0x34261f,hat=false,bag=true,marker=false}=options;
+  const {jacket=0xb9653e,trousers=0x293c46,skin=0xd7a17a,hair=0x34261f,hat=false,bag=true,marker=false,face="general",hairStyle="short"}=options;
+  const eastAsian=face==="east-asian";
   const root=new THREE.Group(),rig=new THREE.Group(); root.add(rig);
   const materials={};
   const mat=(color,fabric=false)=>{
@@ -299,14 +306,23 @@ export function makeNaturalPerson(options, markerFactory) {
   mesh(head,new THREE.SphereGeometry(1,18,12),skin,[0,-.065,.026],[.087,.08,.087]);
   [-1,1].forEach(side=>{
     mesh(head,new THREE.SphereGeometry(.022,10,8),skin,[side*.114,-.005,0],[.7,1.25,.65]);
-    mesh(head,new THREE.SphereGeometry(.011,12,8),0xf6ebd9,[side*.043,.025,.099],[1.2,.6,.4]);
-    mesh(head,new THREE.SphereGeometry(.0055,10,8),0x342b24,[side*.043,.025,.103]);
+    mesh(head,new THREE.SphereGeometry(.011,12,8),0xf6ebd9,[side*.043,.025,.099],[eastAsian?1.45:1.2,eastAsian?.42:.6,.4]);
+    mesh(head,new THREE.SphereGeometry(.0055,10,8),0x342b24,[side*.043,.025,.103],[1,eastAsian?.8:1,.6]);
+    if(eastAsian){
+      const lid=new THREE.QuadraticBezierCurve3(new THREE.Vector3(side*.027,.025,.104),new THREE.Vector3(side*.042,.033,.108),new THREE.Vector3(side*.06,.027,.099));
+      mesh(head,new THREE.TubeGeometry(lid,8,.0018,5,false),skin,[0,0,0]);
+      mesh(head,new THREE.SphereGeometry(1,16,12),skin,[side*.063,-.016,.066],[.026,.028,.027]);
+    }
     const brow=mesh(head,new THREE.BoxGeometry(.032,.006,.008),hair,[side*.043,.047,.096]);brow.rotation.z=side*.08;
   });
-  mesh(head,new THREE.SphereGeometry(.023,12,8),skin,[0,-.011,.112],[.55,1.3,.9]);
+  mesh(head,new THREE.SphereGeometry(.023,12,8),skin,[0,-.011,eastAsian?.106:.112],[.55,1.3,eastAsian?.68:.9]);
   mesh(head,new THREE.BoxGeometry(.036,.004,.008),0x925e4c,[0,-.068,.096]);
   mesh(head,new THREE.SphereGeometry(.116,22,16,0,Math.PI*2,0,Math.PI*.56),hair,[0,.04,-.013],[1,1.08,.94]);
-  for(let i=0;i<5;i+=1){const lock=mesh(head,new THREE.SphereGeometry(.049,12,8),hair,[-.085+i*.039,.084,.075],[.7,.72,1.05]);lock.rotation.z=-.35;}
+  if(hairStyle==="curly"){
+    for(let i=0;i<15;i+=1){const angle=i*2.4;mesh(head,new THREE.SphereGeometry(.029,12,8),hair,[Math.cos(angle)*.075,.092+Math.sin(i*.9)*.036,Math.sin(angle)*.072],[1,1.15,1]);}
+  }else{
+    for(let i=0;i<5;i+=1){const lock=mesh(head,new THREE.SphereGeometry(.049,12,8),hair,[-.085+i*.039,.084,.075],[.7,.72,1.05]);lock.rotation.z=-.35;}
+  }
   if(hat){
     mesh(head,new THREE.SphereGeometry(.132,20,12,0,Math.PI*2,0,Math.PI/2),0xd5aa42,[0,.058,0],[1,.72,1]);
     mesh(head,new THREE.CylinderGeometry(.142,.142,.025,24),0xd5aa42,[0,.05,.014]);

@@ -1,6 +1,12 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js";
-import { natureUniforms, surfaceTexture, terrainMaterial, makeSky, makeOcean, makeMeadow, makeNaturalTree, makeNaturalPerson, animateNaturalPerson } from "./nature.js?v=20261001-natural-island-4";
-import { loadAgentCharacter } from "./character.js?v=20261001-natural-island-8";
+import { natureUniforms, surfaceTexture, terrainMaterial, makeSky, makeOcean, makeMeadow, makeNaturalTree, makeNaturalPerson, animateNaturalPerson } from "./nature.js?v=20261001-world-1";
+import { loadAgentCharacter } from "./character.js?v=20261001-world-1";
+import { EarthAtlas } from "./earth.js?v=20261001-world-3";
+import { continents, makeRegionLandmark, createRegionalVegetation } from "./regions.js?v=20261001-world-1";
+
+let currentRegion = continents[0];
+let selectedContinent = currentRegion.id;
+const regionProgress = new Map();
 
 const TAU = Math.PI * 2;
 const WORLD_SCALE = 3;
@@ -28,6 +34,7 @@ const locations = [
   { id: "cargo", name: "件杂货码头", person: "现场理货员", short: "装卸码头", kind: "cargo", color: COLORS.rust, position: [4.7, -11], interact: [2.8, -8.9] },
   { id: "anchorage", name: "锚地交通艇码头", person: "艇长", short: "锚地", kind: "anchorage", color: 0x4d8585, position: [-11.2, -10], interact: [-9.1, -7.9] }
 ];
+const homeLocations = locations.map((location) => ({ ...location }));
 
 const discoveryNotes = {
   office: ["值班电台", "每一段现场奔波，都从一声呼叫开始。"],
@@ -205,7 +212,7 @@ function seededRandom(seed = 7823) {
   };
 }
 
-const random = seededRandom();
+let random = seededRandom();
 
 function formatTime(total) {
   return `${String(Math.floor(total / 60) % 24).padStart(2, "0")}:${String(Math.floor(total % 60)).padStart(2, "0")}`;
@@ -223,7 +230,7 @@ function terrainHeight(x, z) {
     + 1.55 * Math.exp(-((x - 9) ** 2 + (z - 11.5) ** 2) / 20)
     + .8 * Math.exp(-((x + 15) ** 2 + (z + 1.5) ** 2) / 16);
   const detail = (Math.sin(x * .48) * Math.cos(z * .37) + Math.sin((x + z) * .26)) * .18 * edge;
-  return globeHeight(x, z) + .22 + hill + detail;
+  return globeHeight(x, z) + .22 + hill * currentRegion.heightScale + detail;
 }
 
 function globeFrame(x, z, offset = 0) {
@@ -308,7 +315,8 @@ function animatePerson(person, phase, amount, time) {
 }
 
 function makeTree(scale = 1) {
-  return makeNaturalTree(random, scale, random() > .46);
+  return createRegionalVegetation(currentRegion, random, scale)
+    || makeNaturalTree(random, scale, currentRegion.id === "asia" && random() > .46);
 }
 
 function makeLabel(text, accent) {
@@ -329,6 +337,7 @@ function makeLabel(text, accent) {
   ctx.fillText(text, 274, 66);
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
+  texture.userData.regionOwned = true;
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: true, depthWrite: false }));
   sprite.scale.set(1.62, 0.41, 1);
   return sprite;
@@ -581,6 +590,7 @@ class PortWorld {
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       this.renderers.set(name, renderer);
     });
+    this.atlas = new EarthAtlas(continents);
     const hemisphere = new THREE.HemisphereLight(0xddeef8, 0x687044, 1.6);
     this.scene.add(hemisphere);
     const sun = new THREE.DirectionalLight(0xffe8bf, 3.2);
@@ -603,7 +613,7 @@ class PortWorld {
     this.roadPaths = [];
     this.birds = [];
     this.boats = [];
-    this.player = makePerson({ jacket: COLORS.orange, trousers: COLORS.navy, skin: COLORS.skinC, hair: 0x4a2d28, bag: true });
+    this.player = makePerson({ jacket: 0x294a66, trousers: COLORS.navy, skin: 0xd5a57f, hair: 0x151b20, face: "east-asian", hairStyle: "short", bag: true });
     this.world.add(this.player);
     this.guideSpirit = makeGuideSpirit();
     this.guideSpirit.visible = false;
@@ -622,8 +632,38 @@ class PortWorld {
     });
     this.moveMarker.visible = false;
     this.world.add(this.moveMarker);
-    this.buildWorld();
+    this.setRegion(currentRegion);
     this.resize();
+  }
+
+  setRegion(region) {
+    const persistent = new Set([this.player, this.guideSpirit, this.moveMarker]);
+    const geometries = new Set(), materials = new Set(), textures = new Set();
+    const remove = (object) => {
+      object.traverse((part) => {
+        if (part.geometry) geometries.add(part.geometry);
+        if (part.isInstancedMesh) part.dispose();
+        if (part.material) (Array.isArray(part.material) ? part.material : [part.material]).forEach((material) => {
+          materials.add(material);
+          if (material.map?.userData.regionOwned) textures.add(material.map);
+        });
+      });
+      object.removeFromParent();
+    };
+    [...this.world.children].filter((object) => !persistent.has(object)).forEach(remove);
+    this.birds.forEach(remove);
+    geometries.forEach((geometry) => geometry.dispose());
+    const sharedMaterials = new Set(materialCache.values());
+    materials.forEach((material) => { if (!sharedMaterials.has(material)) material.dispose(); });
+    textures.forEach((texture) => texture.dispose());
+    this.locationGroups.clear(); this.collectibles.clear();
+    this.ambientPeople = []; this.walkSurfaces = []; this.craneMotions = [];
+    this.roadPaths = []; this.birds = []; this.boats = [];
+    colliders.length = 0;
+    random = seededRandom(7823 + continents.indexOf(region) * 137);
+    Object.entries(region.ground).forEach(([name, color]) => natureUniforms[name].value.set(color).convertLinearToSRGB());
+    this.scene.fog.color.set(region.climate === "polar" ? 0xcddde3 : COLORS.sky);
+    this.buildWorld();
   }
 
   makeIsland(radius, kind, offset, scaleZ = PLANET_Z_SCALE) {
@@ -709,10 +749,9 @@ class PortWorld {
       label.scale.multiplyScalar(.55);
       placeOnGlobe(label, x, z, 0, 2.9);
       this.world.add(label);
-      const skinTones = [COLORS.skinA, COLORS.skinB, COLORS.skinC];
+      const personStyle = currentRegion.people[index % currentRegion.people.length];
       const npc = makePerson({
-        jacket: location.color, trousers: index % 2 ? COLORS.navy : 0x48504b, skin: skinTones[index % skinTones.length],
-        hair: index % 3 === 1 ? 0x211e1e : 0x4a3028, bag: index % 2 === 0,
+        ...personStyle, jacket: location.color, bag: index % 2 === 0,
         hat: ["shipyard", "container", "cargo"].includes(location.kind), marker: true
       });
       const [npcX, npcZ] = location.interact;
@@ -787,9 +826,10 @@ class PortWorld {
       this.world.add(tree);
       colliders.push({ x, z, radius: .12 * scale });
     });
-    const clearMeadow = (x, z) => !colliders.some((item) => Math.hypot(x - item.x, z - item.z) < item.radius + .65)
+    const clearMeadow = (x, z) => Math.hypot(x + 6.5, z + 5.8) > .9
+      && !colliders.some((item) => Math.hypot(x - item.x, z - item.z) < item.radius + .65)
       && !this.roadPaths.some(({ path, width }) => path.some((point) => Math.hypot(x - point.x, z - point.y) < width + .15));
-    this.world.add(makeMeadow(globeFrame, clearMeadow, random));
+    if (currentRegion.climate !== "polar") this.world.add(makeMeadow(globeFrame, clearMeadow, random, natureUniforms.light.value, currentRegion.climate === "arid" ? .18 : 1));
     for (let index = 0; index < 20; index += 1) {
       const x = -11 + random() * 22, z = 10 + random() * 6;
       if (!insideIsland(x, z) || !clearMeadow(x, z)) continue;
@@ -803,7 +843,7 @@ class PortWorld {
       const radius = 8 + random() * 11.5;
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius * .72;
-      if (!clearMeadow(x, z) || Math.hypot(x - state.position.x, z - state.position.z) < 1.2
+      if (!clearMeadow(x, z) || Math.hypot(x + 8.1, z + 4.2) < 1.2
         || locations.some((location) => Math.hypot(x - location.interact[0], z - location.interact[1]) < 1.3)) continue;
       const rock = new THREE.Group();
       const radiusRock = .16 + random() * .27;
@@ -816,8 +856,7 @@ class PortWorld {
       const angle = index / 10 * TAU;
       const radius = 10.5 + (index % 3) * 2.8;
       const person = makePerson({
-        jacket: [0x9c6654, 0x56796e, 0xc48a4a][index % 3], trousers: COLORS.navy,
-        skin: [COLORS.skinA, COLORS.skinB, COLORS.skinC][index % 3], hair: index % 2 ? 0x292424 : 0x5c3a2c, bag: index % 3 === 0
+        ...currentRegion.people[(index + 2) % currentRegion.people.length], bag: index % 3 === 0
       });
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius * .68;
@@ -847,6 +886,24 @@ class PortWorld {
       this.world.add(island);
     });
     this.addPortDetails();
+    const landmark = makeRegionLandmark(currentRegion);
+    placeOnGlobe(landmark, -5, 13, .2);
+    this.world.add(landmark);
+    colliders.push({ x: -5, z: 13, radius: 1.55 });
+    const landmarkLabel = makeLabel(currentRegion.landmarkName, currentRegion.color);
+    placeOnGlobe(landmarkLabel, -5, 13, 0, 4.2);
+    landmarkLabel.scale.multiplyScalar(.9);
+    this.world.add(landmarkLabel);
+    this.portal = new THREE.Group();
+    const portalRing = new THREE.Mesh(new THREE.TorusGeometry(.58, .045, 8, 48), new THREE.MeshStandardMaterial({ color: 0xe4c47c, emissive: 0x806731, emissiveIntensity: .8, roughness: .25, metalness: .6 }));
+    portalRing.position.y = .7;
+    this.portal.add(portalRing);
+    addMesh(this.portal, new THREE.CylinderGeometry(.7, .75, .08, 32), 0x456774, { position: [0, .02, 0] });
+    const portalLabel = makeLabel("环球传送", 0xd5ad54);
+    portalLabel.position.y = 1.55; portalLabel.scale.multiplyScalar(.6);
+    this.portal.add(portalLabel);
+    placeOnGlobe(this.portal, -6.5, -5.8, .85);
+    this.world.add(this.portal);
     this.collectibles.forEach((item) => {
       if (!collides(item.x, item.z)) return;
       const npc = this.locationGroups.get(item.location.id).npc;
@@ -970,6 +1027,16 @@ class PortWorld {
   }
 
   render(time, delta) {
+    if (state.mode === "intro") {
+      this.atlas.render(this.renderers.get("intro"), reducedMotion.matches ? 0 : time, reducedMotion.matches ? 1 : delta, window.innerWidth, window.innerHeight);
+      this.atlas.getNodeScreenPositions(window.innerWidth, window.innerHeight).forEach(({ id, x, y, visible }) => {
+        const button = document.querySelector(`[data-earth-node="${id}"]`);
+        if (!button) return;
+        button.hidden = !visible;
+        button.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+      });
+      return;
+    }
     natureUniforms.time.value = time;
     natureUniforms.wind.value = reducedMotion.matches ? 0 : 1;
     natureUniforms.player.value.copy(this.player.getWorldPosition(new THREE.Vector3()));
@@ -1077,16 +1144,7 @@ class PortWorld {
         this.moveMarker.scale.setScalar(1);
       }
       state.cameraSnap = false;
-    } else {
-      const mobile = window.innerWidth < 760;
-      const orbit = reducedMotion.matches ? .72 : .72 + time * .018;
-      const distance = (mobile ? 53 : 48) * WORLD_SCALE;
-      this.camera.up.set(0, 1, 0);
-      this.camera.position.set(Math.sin(orbit) * distance, (mobile ? 46 : 33) * WORLD_SCALE, Math.cos(orbit) * distance);
-      this.camera.lookAt(0, (mobile ? -6 : -4) * WORLD_SCALE, 0);
     }
-    this.scene.fog.near = state.mode === "intro" ? 180 : 65;
-    this.scene.fog.far = state.mode === "intro" ? 480 : 240;
     this.sky.position.copy(this.camera.position);
     this.renderers.get(state.mode).render(this.scene, this.camera);
   }
@@ -1096,8 +1154,72 @@ let stage;
 
 function setMode(mode) {
   state.mode = mode;
+  document.body.dataset.mode = mode;
   elements.intro.classList.toggle("is-active", mode === "intro");
   elements.play.classList.toggle("is-active", mode === "play");
+}
+
+function selectContinent(id) {
+  const region = continents.find((item) => item.id === id);
+  if (!region) return;
+  selectedContinent = id;
+  stage?.atlas.select(id);
+  document.querySelectorAll("button[data-continent]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.continent === id)));
+  $("continent-title").textContent = `${region.label} · ${region.landmarkName}`;
+  $("continent-description").textContent = region.description;
+  $("continent-progress").textContent = `${regionProgress.get(id)?.discoveries.size || 0}/9 地标已发现`;
+  if (!elements.start.disabled) elements.start.textContent = `探索${region.label} →`;
+}
+
+function saveRegionProgress() {
+  regionProgress.set(currentRegion.id, {
+    position: state.position.clone(), facing: state.facing, discoveries: new Set(state.discoveries),
+    minutes: state.minutes, trust: state.trust, encounterCount: state.encounterCount,
+    lastEncounter: new Map(state.lastEncounter)
+  });
+}
+
+function returnToEarth() {
+  if (state.mode !== "play") return;
+  saveRegionProgress();
+  state.velocity.set(0, 0, 0); state.destination = null; state.waypoints = [];
+  state.pendingInteractId = null; state.keys.clear();
+  Object.keys(state.holds).forEach((key) => { state.holds[key] = false; });
+  elements.dialog.close(); elements.help.close();
+  clearTimeout(state.toastTimer); elements.toast.classList.remove("is-visible");
+  setMode("intro");
+  selectContinent(currentRegion.id);
+  elements.start.focus();
+}
+
+function enterContinent(id) {
+  const region = continents.find((item) => item.id === id);
+  if (!region || !stage || elements.start.disabled) return;
+  if (state.mode === "play") saveRegionProgress();
+  if (currentRegion.id !== id) {
+    currentRegion = region;
+    locations.forEach((location, index) => {
+      Object.assign(location, homeLocations[index]);
+      if (id !== "asia") {
+        const names = ["船代联络站", "国际机场", "出入境窗口", "海关", "港航中心", "修造船厂", "集装箱码头", "货运码头", "海上交通站"];
+        location.name = `${region.label} · ${names[index]}`;
+        location.person = ["港口调度", "接班旅客", "口岸工作人员", "海关关员", "港航协调员", "船厂工程师", "堆场调度", "现场理货员", "交通艇船员"][index];
+      }
+    });
+    stage.setRegion(region);
+  }
+  resetGame();
+  const saved = regionProgress.get(id);
+  if (saved) {
+    state.position.copy(saved.position); state.facing = saved.facing;
+    state.discoveries = new Set(saved.discoveries); state.minutes = saved.minutes;
+    state.trust = saved.trust; state.encounterCount = saved.encounterCount;
+    state.lastEncounter = new Map(saved.lastEncounter); stage.cameraYaw = saved.facing;
+    updateHud(); drawMinimap();
+  }
+  $("current-continent").textContent = region.label;
+  elements.worldCanvas.dataset.continent = id;
+  showToast(`${region.label} · ${region.landmarkName} · 靠近金色圆环可以返回地球`);
 }
 
 function updateHud() {
@@ -1193,6 +1315,13 @@ function setDestination(point, pendingInteractId = null) {
 
 function moveFromPointer(clientX, clientY) {
   if (state.mode !== "play" || elements.dialog.open || elements.help.open) return;
+  const portalScreen = stage.portal.localToWorld(new THREE.Vector3(0, .7, 0)).project(stage.camera);
+  const portalX = (portalScreen.x + 1) * window.innerWidth / 2, portalY = (1 - portalScreen.y) * window.innerHeight / 2;
+  if (portalScreen.z > -1 && portalScreen.z < 1 && Math.hypot(clientX - portalX, clientY - portalY) < 40) {
+    if (Math.hypot(state.position.x + 6.5, state.position.z + 5.8) < 1) returnToEarth();
+    else setDestination(new THREE.Vector3(-6.5, 0, -5.8), "world-gate");
+    return;
+  }
   const clickedLocation = stage.clickedLocation(clientX, clientY);
   if (clickedLocation) {
     const group = stage.locationGroups.get(clickedLocation.id);
@@ -1350,9 +1479,13 @@ function updateNearby() {
     if (distance < nearestDistance) { nearest = location; nearestDistance = distance; }
   });
   state.nearbyId = nearestDistance < 1.35 ? nearest.id : null;
+  if (Math.hypot(state.position.x + 6.5, state.position.z + 5.8) < 1) {
+    state.nearbyId = "world-gate";
+    elements.locationName.textContent = "环球传送节点 · 返回地球选择大洲";
+  }
   elements.locationHint.hidden = !state.nearbyId;
   elements.mobileAction.classList.toggle("is-ready", Boolean(state.nearbyId));
-  if (state.nearbyId) elements.locationName.textContent = `${nearest.name} · ${nearest.person}`;
+  if (state.nearbyId && state.nearbyId !== "world-gate") elements.locationName.textContent = `${nearest.name} · ${nearest.person}`;
   collectNearbyDiscoveries();
 }
 
@@ -1401,7 +1534,8 @@ function interact() {
     showToast("靠近带 ◇ 标记的人物再交互");
     return;
   }
-  openEncounter(state.nearbyId);
+  if (state.nearbyId === "world-gate") returnToEarth();
+  else openEncounter(state.nearbyId);
 }
 
 function openEncounter(locationId) {
@@ -1556,7 +1690,42 @@ function bindHold(button, direction) {
   button.addEventListener("lostpointercapture", stop);
 }
 
-elements.start.addEventListener("click", resetGame);
+elements.start.addEventListener("click", () => enterContinent(selectedContinent));
+$("earth-button").addEventListener("click", returnToEarth);
+continents.forEach((region) => {
+  const button = document.createElement("button");
+  button.type = "button"; button.dataset.continent = region.id;
+  button.innerHTML = `<span>${region.label}</span><small>${region.en}</small>`;
+  button.addEventListener("click", () => selectContinent(region.id));
+  $("continent-selector").appendChild(button);
+  const node = document.createElement("button");
+  node.type = "button"; node.dataset.earthNode = region.id; node.className = "earth-node";
+  node.setAttribute("aria-label", `传送到${region.label}`);
+  node.textContent = region.label;
+  node.addEventListener("click", () => enterContinent(region.id));
+  $("earth-nodes").appendChild(node);
+});
+let earthPointer = null;
+elements.titleCanvas.addEventListener("pointerdown", (event) => {
+  if (event.button !== 0) return;
+  earthPointer = { x: event.clientX, y: event.clientY, lastX: event.clientX, lastY: event.clientY, moved: false };
+  elements.titleCanvas.setPointerCapture(event.pointerId);
+});
+elements.titleCanvas.addEventListener("pointermove", (event) => {
+  if (!earthPointer) return;
+  if (Math.hypot(event.clientX - earthPointer.x, event.clientY - earthPointer.y) > 7) earthPointer.moved = true;
+  if (earthPointer.moved) stage.atlas.drag(event.clientX - earthPointer.lastX, event.clientY - earthPointer.lastY);
+  earthPointer.lastX = event.clientX; earthPointer.lastY = event.clientY;
+});
+elements.titleCanvas.addEventListener("pointerup", (event) => {
+  if (!earthPointer) return;
+  if (!earthPointer.moved) {
+    const id = stage.atlas.pick(event.clientX, event.clientY, elements.titleCanvas.getBoundingClientRect());
+    if (id) enterContinent(id);
+  }
+  earthPointer = null;
+});
+elements.titleCanvas.addEventListener("pointercancel", () => { earthPointer = null; });
 elements.interact.addEventListener("click", interact);
 elements.mobileAction.addEventListener("click", interact);
 elements.complete.addEventListener("click", closeEncounter);
@@ -1645,8 +1814,16 @@ try {
     console.warn("角色模型加载失败，使用内置角色", error);
   });
   setCameraMode("third");
-  elements.start.disabled = false;
-  elements.start.textContent = "BEGIN";
+  setMode("intro");
+  selectContinent("asia");
+  stage.atlas.textureReady.then(() => {
+    elements.start.disabled = false;
+    selectContinent(selectedContinent);
+  }).catch((error) => {
+    console.error("地球地图加载失败", error);
+    elements.start.textContent = "地图加载失败";
+    elements.intro.querySelector(".intro-tip").textContent = "请刷新页面重新加载地球地图。";
+  });
   updateHud();
   drawMinimap();
   requestAnimationFrame(frame);
