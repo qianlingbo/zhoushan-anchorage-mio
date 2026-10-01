@@ -547,6 +547,22 @@ function makeCollectible(location, index) {
   return group;
 }
 
+function makeMoveMarker() {
+  const marker = new THREE.Group();
+  const ring = new THREE.Mesh(
+    new THREE.RingGeometry(.10, .135, 32),
+    new THREE.MeshBasicMaterial({ color: COLORS.orange, transparent: true, opacity: .88, side: THREE.DoubleSide, depthWrite: false })
+  );
+  ring.rotation.x = -Math.PI / 2;
+  marker.add(ring);
+  [-1, 1].forEach((direction) => {
+    const stroke = new THREE.Mesh(new THREE.BoxGeometry(.09, .018, .018), new THREE.MeshBasicMaterial({ color: COLORS.ink }));
+    stroke.rotation.y = Math.PI / 4 * direction;
+    marker.add(stroke);
+  });
+  return marker;
+}
+
 function makeGuideSpirit() {
   const group = new THREE.Group();
   group.name = "sea-breeze-bird";
@@ -663,18 +679,7 @@ class PortWorld {
     this.guideSpirit = makeGuideSpirit();
     this.guideSpirit.visible = false;
     this.world.add(this.guideSpirit);
-    this.moveMarker = new THREE.Group();
-    const targetRing = new THREE.Mesh(
-      new THREE.RingGeometry(.3, .38, 32),
-      new THREE.MeshBasicMaterial({ color: COLORS.orange, transparent: true, opacity: .88, side: THREE.DoubleSide, depthWrite: false })
-    );
-    targetRing.rotation.x = -Math.PI / 2;
-    this.moveMarker.add(targetRing);
-    [-1, 1].forEach((direction) => {
-      const stroke = new THREE.Mesh(new THREE.BoxGeometry(.24, .035, .035), new THREE.MeshBasicMaterial({ color: COLORS.ink }));
-      stroke.rotation.y = Math.PI / 4 * direction;
-      this.moveMarker.add(stroke);
-    });
+    this.moveMarker = makeMoveMarker();
     this.moveMarker.visible = false;
     this.world.add(this.moveMarker);
     this.setRegion(currentRegion);
