@@ -23,3 +23,9 @@ reduced-motion poses, rather than checking source-text contents.
 Browser QA is still required for appearance, first/third-person cameras, clicking
 to run, guide routing and switching continents. These CPU tests do not establish
 visual quality or whole-application coverage.
+
+For raw execution-range evidence, set `NODE_V8_COVERAGE` to a temporary directory
+when running the command. V8 records both the dynamically imported character
+module and the executed game-function declarations. Node's formatted
+`--experimental-test-coverage` report may omit these dynamic scripts; an empty
+file table showing “100%” is not valid production coverage evidence.
