@@ -29,3 +29,15 @@ when running the command. V8 records both the dynamically imported character
 module and the executed game-function declarations. Node's formatted
 `--experimental-test-coverage` report may omit these dynamic scripts; an empty
 file table showing “100%” is not valid production coverage evidence.
+
+## Growth wardrobe
+
+```sh
+node --test game/tests/wardrobe.test.cjs
+```
+
+Wardrobe tests require no external dependency. They import the real progression
+module and verify unique discovery/encounter XP, all seven regional unlocks in
+free visiting order, growth-tier upgrades, manual regional selection and
+validated version-one JSON saves. Stored XP and unlocked lists are never a
+source of authority. The actual border-control location ID is `immigration`.

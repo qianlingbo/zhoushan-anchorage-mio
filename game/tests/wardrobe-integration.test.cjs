@@ -1,0 +1,210 @@
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const vm = require("node:vm");
+const { pathToFileURL } = require("node:url");
+const THREE = require("three");
+
+const gameDirectory = path.resolve(__dirname, "..");
+const gameFilename = path.join(gameDirectory, "game.js");
+
+class Element {
+  constructor(tagName = "div") {
+    this.tagName = tagName.toUpperCase();
+    this.children = [];
+    this.dataset = {};
+    this.attributes = {};
+    this.listeners = new Map();
+    this.open = false;
+    this.disabled = false;
+    this.hidden = false;
+    this.textContent = "";
+    this._html = "";
+    const classes = new Set();
+    this.classList = {
+      add: (...names) => names.forEach((name) => classes.add(name)),
+      remove: (...names) => names.forEach((name) => classes.delete(name)),
+      contains: (name) => classes.has(name),
+      toggle: (name, enabled = !classes.has(name)) => { if (enabled) classes.add(name); else classes.delete(name); }
+    };
+    this.style = { setProperty() {} };
+  }
+  set innerHTML(value) { this._html = value; this.children = []; }
+  get innerHTML() { return this._html; }
+  appendChild(child) { this.children.push(child); return child; }
+  append(...children) { this.children.push(...children); }
+  addEventListener(name, callback) { this.listeners.set(name, callback); }
+  setAttribute(name, value) { this.attributes[name] = String(value); }
+  getAttribute(name) { return this.attributes[name]; }
+  showModal() { this.open = true; }
+  close() { this.open = false; }
+  focus() { this.focused = true; }
+  click() { if (!this.disabled) this.listeners.get("click")?.({ target: this, preventDefault() {} }); }
+  querySelectorAll(selector) {
+    const result = [];
+    const visit = (item) => {
+      item.children.forEach((child) => {
+        if (selector === "button" && child.tagName === "BUTTON") result.push(child);
+        visit(child);
+      });
+    };
+    visit(this);
+    return result;
+  }
+  querySelector(selector) { return this.querySelectorAll(selector)[0] || new Element(); }
+}
+
+function productionAPI(dependencies = {}, storage = {}) {
+  const elementsById = new Map();
+  const document = {
+    getElementById(id) {
+      if (!elementsById.has(id)) elementsById.set(id, new Element());
+      return elementsById.get(id);
+    },
+    createElement: (tagName) => new Element(tagName),
+    querySelectorAll: () => [],
+    body: { dataset: {} }
+  };
+  const writes = [];
+  const localStorage = {
+    getItem: storage.getItem || (() => null),
+    setItem: storage.setItem || ((key, value) => writes.push({ key, value }))
+  };
+  const context = vm.createContext({
+    THREE, ...dependencies, performance, console, document, localStorage,
+    continents: [{ id: "asia", label: "亚洲" }, { id: "europe", label: "欧洲" }],
+    window: { matchMedia: () => ({ matches: false }), setTimeout: () => 1, innerWidth: 1280, innerHeight: 720, localStorage },
+    clearTimeout() {}, surfaceTexture: () => null
+  });
+  let original = fs.readFileSync(gameFilename, "utf8");
+  const characterCallback = original.match(/loadAgentCharacter\(\)\.then\(\(character\) => \{([\s\S]*?)\n\s*\}\)\.catch/);
+  let source = original.replace(/^import .*;\r?\n/gm, "\n");
+  const startup = source.indexOf('elements.start.addEventListener("click"');
+  assert.ok(startup > 0, "Production browser startup boundary must be found");
+  source = source.slice(0, startup);
+  source += `
+globalThis.wardrobeIntegration = {
+  readWardrobeSave: typeof readWardrobeSave === "function" ? readWardrobeSave : undefined,
+  saveWardrobe: typeof saveWardrobe === "function" ? saveWardrobe : undefined,
+  applyEquippedOutfit: typeof applyEquippedOutfit === "function" ? applyEquippedOutfit : undefined,
+  updateWardrobeStatus: typeof updateWardrobeStatus === "function" ? updateWardrobeStatus : undefined,
+  gainExperience: typeof gainExperience === "function" ? gainExperience : undefined,
+  openWardrobe: typeof openWardrobe === "function" ? openWardrobe : undefined,
+  hasOpenDialog: typeof hasOpenDialog === "function" ? hasOpenDialog : undefined,
+  renderWardrobe: typeof renderWardrobe === "function" ? renderWardrobe : undefined,
+  collectNearbyDiscoveries, answerEncounter, jump, callGuide, moveFromPointer, interact, update,
+  state, elements, locations,
+  setContext(values) {
+    if ("progress" in values) wardrobeProgress = values.progress;
+    if ("region" in values) currentRegion = values.region;
+    if ("stage" in values) stage = values.stage;
+    if ("pointer" in values) canvasPointerStart = values.pointer;
+  },
+  getProgress() { return typeof wardrobeProgress === "undefined" ? undefined : wardrobeProgress; },
+  storageAvailable() { return typeof wardrobeStorageAvailable === "undefined" ? undefined : wardrobeStorageAvailable; },
+  pointer() { return typeof canvasPointerStart === "undefined" ? undefined : canvasPointerStart; },
+  finishModelLoad(character) { ${characterCallback?.[1] || "throw new Error('Production model callback missing');"} }
+};`;
+  vm.runInContext(source, context, { filename: gameFilename, timeout: 5000 });
+  return { api: context.wardrobeIntegration, context, elementsById, writes };
+}
+
+async function wardrobeDependencies() {
+  const filename = path.join(gameDirectory, "wardrobe.js");
+  if (!fs.existsSync(filename)) return {};
+  return import(`${pathToFileURL(filename).href}?integration=${fs.statSync(filename).mtimeMs}`);
+}
+
+async function integration(storage) {
+  const dependencies = await wardrobeDependencies();
+  const harness = productionAPI(dependencies, storage);
+  for (const name of ["readWardrobeSave", "saveWardrobe", "applyEquippedOutfit", "updateWardrobeStatus", "gainExperience", "openWardrobe", "hasOpenDialog", "renderWardrobe"]) {
+    assert.equal(typeof harness.api[name], "function", `Production ${name} has not been implemented`);
+  }
+  return { ...harness, dependencies };
+}
+
+test("wardrobe production integration exposes its persistence, progression and modal APIs", async () => {
+  await integration();
+});
+
+test("real discovery and interaction callbacks award and persist unique experience", async () => {
+  const { api, dependencies, writes } = await integration();
+  const progress = dependencies.createWardrobeProgress();
+  const applied = [];
+  api.setContext({ progress, stage: { agentCharacter: { setOutfit: (outfit) => applied.push(outfit.id) }, collectibles: new Map() } });
+  const office = api.locations.find((item) => item.id === "office");
+  const object = { visible: true };
+  api.setContext({ stage: { agentCharacter: { setOutfit: (outfit) => applied.push(outfit.id) }, collectibles: new Map([["office", { location: office, object, x: -8.1, z: -4.2 }]]) } });
+  api.collectNearbyDiscoveries();
+  assert.equal(dependencies.wardrobeXP(progress), 2);
+  assert.equal(object.visible, false);
+  api.state.activeEncounter = { location: office, encounter: { choices: [["选择", "结果", 3, 8]] } };
+  api.answerEncounter(0);
+  api.answerEncounter(0);
+  assert.equal(dependencies.wardrobeXP(progress), 5);
+  assert.ok(writes.length >= 2);
+  assert.equal(JSON.parse(writes.at(-1).value).discoveries[0], "asia:office");
+  assert.equal(applied.at(-1), "basic");
+});
+
+test("growth upgrades apply immediately and the async model uses the latest outfit", async () => {
+  const { api, dependencies } = await integration();
+  const progress = dependencies.createWardrobeProgress();
+  const applied = [];
+  const stage = { agentCharacter: { setOutfit: (outfit) => applied.push(outfit.id) }, player: { add() {}, userData: { rig: {} } } };
+  api.setContext({ progress, stage });
+  for (const id of ["office", "airport", "immigration", "customs", "msa", "shipyard"]) api.gainExperience("discovery", id);
+  assert.equal(progress.equipped, "voyager");
+  assert.equal(applied.at(-1), "voyager");
+  assert.match(api.elements.wardrobeButton.textContent, /Lv.?2/);
+  dependencies.equipOutfit(progress, "basic");
+  api.finishModelLoad({ object: {}, setOutfit: (outfit) => applied.push(outfit.id) });
+  assert.equal(applied.at(-1), "basic");
+  assert.equal(api.elements.worldCanvas.dataset.outfit, "basic");
+});
+
+test("blocked storage and malformed JSON do not prevent dressing or exploration", async () => {
+  const { api, dependencies } = await integration({ getItem() { return "not json"; }, setItem() { throw new Error("Storage blocked"); } });
+  assert.equal(api.readWardrobeSave(), undefined);
+  api.setContext({ progress: dependencies.createWardrobeProgress(), stage: { agentCharacter: { setOutfit() {} } } });
+  assert.doesNotThrow(() => api.gainExperience("discovery", "office"));
+  assert.equal(api.storageAvailable(), false);
+  assert.equal(dependencies.wardrobeXP(api.getProgress()), 2);
+});
+
+test("opening the wardrobe pauses held inputs and guards game actions", async () => {
+  const { api, dependencies } = await integration();
+  api.setContext({ progress: dependencies.createWardrobeProgress(), stage: {}, pointer: { x: 10 } });
+  api.state.mode = "play";
+  api.state.keys.add("KeyW"); api.state.holds.up = true; api.state.velocity.set(1, 0, 1);
+  api.openWardrobe();
+  assert.equal(api.hasOpenDialog(), true);
+  assert.equal(api.state.keys.size, 0);
+  assert.equal(api.state.holds.up, false);
+  assert.equal(api.state.velocity.length(), 0);
+  assert.equal(api.pointer(), null);
+  for (const action of [() => api.jump(), () => api.callGuide(), () => api.moveFromPointer(10, 10), () => api.interact(), () => api.update(.05)]) assert.doesNotThrow(action);
+  assert.equal(api.state.grounded, true);
+});
+
+test("wardrobe cards disable locked clothes and equip unlocked clothes with a saved selection", async () => {
+  const { api, dependencies, writes } = await integration();
+  const progress = dependencies.createWardrobeProgress();
+  for (const id of ["office", "airport", "immigration"]) dependencies.recordWardrobeProgress(progress, "discovery", "asia", id);
+  dependencies.recordWardrobeProgress(progress, "encounter", "asia", "office");
+  const applied = [];
+  api.setContext({ progress, stage: { agentCharacter: { setOutfit: (outfit) => applied.push(outfit.id) } } });
+  api.renderWardrobe();
+  const cards = api.elements.wardrobeList.children;
+  assert.equal(cards.length, 10);
+  const buttons = api.elements.wardrobeList.querySelectorAll("button");
+  const asia = buttons.find((button) => button.dataset.outfit === "asia");
+  const master = buttons.find((button) => button.dataset.outfit === "master");
+  assert.equal(master.disabled, true);
+  asia.click();
+  assert.equal(progress.equipped, "asia");
+  assert.equal(applied.at(-1), "asia");
+  assert.equal(JSON.parse(writes.at(-1).value).equipped, "asia");
+});
