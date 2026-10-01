@@ -65,7 +65,7 @@ function guideAPI() {
   const startup = source.indexOf('elements.start.addEventListener("click"');
   assert.ok(startup > 0, "Browser startup boundary must be found");
   source = source.slice(0, startup);
-  source += "\nglobalThis.guideAPI = { makeGuideSpirit, animateGuideSpirit: typeof animateGuideSpirit === 'function' ? animateGuideSpirit : undefined };";
+  source += "\nglobalThis.guideAPI = { makeGuideSpirit, animateGuideSpirit: typeof animateGuideSpirit === 'function' ? animateGuideSpirit : undefined, makeMoveMarker: typeof makeMoveMarker === 'function' ? makeMoveMarker : undefined };";
   const context = {
     THREE, continents: [{ id: "asia" }], performance,
     document: { getElementById: () => ({}) },
@@ -105,6 +105,44 @@ function pose(object) {
   return values;
 }
 
+const outfitColors = { jacket: 0x487b91, trousers: 0x394854, shoes: 0xd0dce0, trim: 0xc8dcdf, accent: 0xd69d4f };
+const outfitFixtures = [
+  { id: "basic", style: "hoodie", ...outfitColors },
+  { id: "voyager", style: "traveler", ...outfitColors, jacket: 0x52765e, trim: 0xd5b686, accent: 0xa56b43 },
+  { id: "master", style: "ceremonial", ...outfitColors, jacket: 0x27384f, trim: 0xe8c369, accent: 0xa9cee1 },
+  ...["asia", "africa", "europe", "north-america", "south-america", "oceania", "antarctica"].map((region, index) => ({
+    id: `regional-${region}`, style: "regional", region, ...outfitColors,
+    jacket: 0x426579 + index * 0x050402, trim: 0xd4b98d - index * 0x020103, accent: 0x996745 + index * 0x020705
+  }))
+];
+
+function visibleMeshes(object) {
+  const meshes = [];
+  object.traverse((part) => {
+    if (!part.isMesh) return;
+    for (let parent = part; parent; parent = parent.parent) if (!parent.visible) return;
+    meshes.push(part);
+  });
+  return meshes;
+}
+
+function characterResources(object) {
+  const objects = new Set(), geometries = new Set(), materials = new Set();
+  object.traverse((part) => {
+    objects.add(part);
+    if (part.geometry) geometries.add(part.geometry);
+    if (part.material) for (const material of Array.isArray(part.material) ? part.material : [part.material]) materials.add(material);
+  });
+  return { objects, geometries, materials };
+}
+
+function visibleShapeSignature(object) {
+  return visibleMeshes(object).map((part) => [
+    part.geometry.type, part.geometry.attributes.position.count,
+    ...part.position.toArray(), ...part.scale.toArray()
+  ].join(":")).sort().join("|");
+}
+
 test("the actual skinned protagonist has a teenager-sized standing silhouette", async () => {
   const character = await loadCharacter();
   const height = bounds(character).getSize(new THREE.Vector3()).y;
@@ -131,6 +169,111 @@ test("airborne locomotion still produces a finite centered character", async () 
     const box = bounds(character);
     assertFiniteTransforms(character.object);
     assert.ok(box.min.y > -.25 && box.max.y < 1.9, "Jump animation must not stretch the body or move it off the player root");
+  }
+});
+
+test("all ten outfits change clothing while preserving the Asian teenager's skin and black hair", async () => {
+  const character = await loadCharacter();
+  assert.equal(typeof character.setOutfit, "function", "Character wardrobe API has not been implemented");
+  let body;
+  character.object.traverse((part) => { if (part.isSkinnedMesh) body = part; });
+  const skin = new THREE.Color(0xd5a57f).toArray();
+  const colors = body.geometry.attributes.color;
+  const skinVertices = [];
+  for (let index = 0; index < colors.count; index++) {
+    if (skin.every((value, channel) => Math.abs(colors.array[index * 3 + channel] - value) < 1e-6)) skinVertices.push(index);
+  }
+  assert.ok(skinVertices.length > 100, "The real character must have identifiable skin vertices");
+  const head = character.object.getObjectByName("mixamorigHead");
+  const faceMaterials = new Map();
+  head.traverse((part) => { if (part.isMesh) faceMaterials.set(part, part.material.color.getHex()); });
+  assert.ok([...faceMaterials.values()].includes(0x151b20), "The actual face must retain black hair");
+  const bodyPositions = [...body.geometry.attributes.position.array];
+  const scale = character.object.scale.toArray();
+  let previousClothes;
+  for (const outfit of outfitFixtures) {
+    character.setOutfit(outfit);
+    for (const index of skinVertices) for (let channel = 0; channel < 3; channel++) {
+      assert.ok(Math.abs(colors.array[index * 3 + channel] - skin[channel]) < 1e-6, `${outfit.id} recolored skin`);
+    }
+    for (const [part, color] of faceMaterials) assert.equal(part.material.color.getHex(), color, `${outfit.id} changed the face / hair`);
+    const jacket = new THREE.Color(outfit.jacket).toArray();
+    assert.ok(Array.from({ length: colors.count }, (_, index) => index).some((index) => jacket.every((value, channel) => Math.abs(colors.array[index * 3 + channel] - value) < 1e-6)), `${outfit.id} must actually change the jacket's rendered vertex colors`);
+    if (previousClothes) assert.notDeepEqual([...colors.array], previousClothes, `${outfit.id} did not change actual clothing colors`);
+    previousClothes = [...colors.array];
+    assert.deepEqual([...body.geometry.attributes.position.array], bodyPositions, "Equipping clothing must not reshape the teenager or skeleton");
+    assert.deepEqual(character.object.scale.toArray(), scale, "Equipping clothing must not change character stature");
+  }
+});
+
+test("advanced and regional outfits add visible garment shapes, not only color swaps", async () => {
+  const character = await loadCharacter();
+  assert.equal(typeof character.setOutfit, "function", "Character wardrobe API has not been implemented");
+  character.setOutfit(outfitFixtures[0]);
+  const basicMeshes = new Set(visibleMeshes(character.object));
+  const basicShape = visibleShapeSignature(character.object);
+  for (const outfit of outfitFixtures.slice(1, 3)) {
+    character.setOutfit(outfit);
+    const added = visibleMeshes(character.object).filter((part) => !basicMeshes.has(part));
+    assert.ok(added.length >= 3, `${outfit.id} must include a scarf / coat or shoulder cape / trim geometry`);
+    assert.notEqual(visibleShapeSignature(character.object), basicShape, `${outfit.id} must visibly change garment shapes`);
+  }
+  const regionalShapes = new Set();
+  for (const outfit of outfitFixtures.slice(3)) {
+    character.setOutfit(outfit);
+    assert.ok(visibleMeshes(character.object).some((part) => !basicMeshes.has(part)), `${outfit.id} must have a real local travel decoration`);
+    regionalShapes.add(visibleShapeSignature(character.object));
+  }
+  assert.equal(regionalShapes.size, 7, "Each continent must have an original distinct travel decoration layout");
+});
+
+test("repeated advanced outfit changes keep a finite character-owned resource pool", async () => {
+  const character = await loadCharacter();
+  assert.equal(typeof character.setOutfit, "function", "Character wardrobe API has not been implemented");
+  character.setOutfit(outfitFixtures[2]);
+  const initial = characterResources(character.object);
+  for (let repeat = 0; repeat < 30; repeat++) {
+    for (const outfit of outfitFixtures) {
+      character.setOutfit(outfit);
+      const current = characterResources(character.object);
+      assert.deepEqual(current.objects, initial.objects, "Changing outfits must not keep adding scene objects");
+      assert.deepEqual(current.geometries, initial.geometries, "Changing outfits must reuse geometry");
+      assert.deepEqual(current.materials, initial.materials, "Changing outfits must reuse materials");
+    }
+  }
+});
+
+test("every outfit preserves finite centered idle, walk, run and airborne animation", async () => {
+  const character = await loadCharacter();
+  assert.equal(typeof character.setOutfit, "function", "Character wardrobe API has not been implemented");
+  for (const outfit of outfitFixtures) {
+    character.setOutfit(outfit);
+    for (const [movement, airborne] of [[0, false], [.4, false], [1, false], [1, true]]) {
+      for (let sample = 0; sample < 15; sample++) {
+        character.update(.05, movement, airborne);
+        const box = bounds(character);
+        assertFiniteTransforms(character.object);
+        assert.ok(box.min.y > -.25 && box.max.y < 1.9, `${outfit.id} distorted the teenage animation bounds`);
+        assert.ok(Math.max(Math.abs(box.min.x), Math.abs(box.max.x), Math.abs(box.min.z), Math.abs(box.max.z)) < 1.5, `${outfit.id} drifted away from the player root`);
+      }
+    }
+  }
+});
+
+test("the click-to-run marker is a small real ring and cross", () => {
+  const { makeMoveMarker } = guideAPI();
+  assert.equal(typeof makeMoveMarker, "function", "Move marker factory has not been implemented");
+  const marker = makeMoveMarker();
+  assert.ok(marker.isGroup, "Move marker must be an actual Three Group");
+  const meshes = visibleMeshes(marker);
+  const ring = meshes.find((part) => part.geometry.type === "RingGeometry");
+  const bars = meshes.filter((part) => part.geometry.type === "BoxGeometry");
+  assert.ok(ring, "Move marker must have a visible ring");
+  assert.ok(ring.geometry.parameters.outerRadius <= .15, "Move marker ring must be smaller than the old .38 radius ring");
+  assert.ok(bars.length >= 2, "Move marker must have two visible cross bars");
+  for (const bar of bars) {
+    const { width, height, depth } = bar.geometry.parameters;
+    assert.ok(Math.max(width, height, depth) <= .11, "Move marker cross bars must be shorter than the old .24 bars");
   }
 });
 
