@@ -41,3 +41,24 @@ module and verify unique discovery/encounter XP, all seven regional unlocks in
 free visiting order, growth-tier upgrades, manual regional selection and
 validated version-one JSON saves. Stored XP and unlocked lists are never a
 source of authority. The actual border-control location ID is `immigration`.
+
+Run all progression, integration and real-model tests:
+
+```sh
+NODE_PATH=/private/tmp/ship-character-runtime/node_modules node --test game/tests/*.test.cjs
+node --test --experimental-test-coverage game/tests/wardrobe.test.cjs
+```
+
+The progression module reports 100% line/function coverage and over 98% branch
+coverage. This is scoped to `wardrobe.js`, not the whole 3D application.
+Integration tests execute the real game callbacks, clothing application,
+storage failure handling and modal input guards. Actual model tests check ten
+outfits, unchanged facial materials / skeleton, finite locomotion and a fixed
+resource pool after 300 equipment changes.
+
+Mobile visual regression check: enter Asia, open the wardrobe, equip the unlocked
+Asia outfit and let the list scroll to its card. The close button must remain
+inside the visible dialog; measure its DOM rectangle against the dialog bounds.
+Before the sticky-button fix this check fails (`closeTop=-356`, `dialogTop=14`).
+Also verify the saved outfit and discoveries survive a reload, and that selecting
+a different continent leaves the equipped outfit unchanged.
