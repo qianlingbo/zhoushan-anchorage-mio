@@ -1,6 +1,6 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js";
 import { natureUniforms, surfaceTexture, terrainMaterial, makeSky, makeOcean, makeMeadow, makeNaturalTree, makeNaturalPerson, animateNaturalPerson } from "./nature.js?v=20261001-world-1";
-import { loadAgentCharacter } from "./character.js?v=20261001-world-1";
+import { loadAgentCharacter } from "./character.js?v=20261001-youth-bird-3";
 import { EarthAtlas } from "./earth.js?v=20261001-world-3";
 import { continents, makeRegionLandmark, createRegionalVegetation } from "./regions.js?v=20261001-world-1";
 
@@ -549,20 +549,63 @@ function makeCollectible(location, index) {
 
 function makeGuideSpirit() {
   const group = new THREE.Group();
-  addMesh(group, new THREE.IcosahedronGeometry(.28, 1), COLORS.cream, { outlineScale: 1.055, shadow: false });
-  addMesh(group, new THREE.SphereGeometry(.045, 8, 6), COLORS.ink, { position: [-.09, .035, .25], outline: false, shadow: false });
-  addMesh(group, new THREE.SphereGeometry(.045, 8, 6), COLORS.ink, { position: [.09, .035, .25], outline: false, shadow: false });
-  [-1, 1].forEach((side) => addMesh(group, new THREE.ConeGeometry(.11, .34, 5), COLORS.yellow, {
-    position: [side * .37, 0, 0], rotation: [0, 0, side * -Math.PI / 2], outlineScale: 1.04, shadow: false
-  }));
-  const ring = new THREE.Mesh(
-    new THREE.TorusGeometry(.47, .022, 6, 28),
-    new THREE.MeshBasicMaterial({ color: 0xffe7a3, transparent: true, opacity: .8, depthWrite: false })
-  );
-  ring.rotation.x = Math.PI / 2;
-  group.add(ring);
-  group.userData.ring = ring;
+  group.name = "sea-breeze-bird";
+  const materials = new Map();
+  const feather = (parent, color, position, scale) => {
+    if (!materials.has(color)) materials.set(color, new THREE.MeshStandardMaterial({ color, roughness: .76 }));
+    const part = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 14), materials.get(color));
+    part.position.set(...position); part.scale.set(...scale);
+    part.castShadow = part.receiveShadow = true;
+    parent.add(part);
+    return part;
+  };
+  const body = new THREE.Group(); group.add(body);
+  feather(body, 0xe9efdf, [0, 0, -.025], [.205, .225, .235]);
+  feather(body, 0xfff4dc, [0, -.02, .14], [.16, .17, .12]);
+  feather(body, 0xe9efdf, [0, .15, .075], [.182, .18, .173]);
+  const eyes = [], eyeHighlights = [];
+  [-1, 1].forEach((side) => {
+    const eye = feather(body, 0x202f35, [side * .083, .18, .224], [.028, .034, .017]);
+    eyes.push(eye);
+    eyeHighlights.push(feather(body, 0xffffff, [side * .08 - .007, .19, .239], [.007, .008, .004]));
+    feather(body, 0xe6a69b, [side * .12, .115, .215], [.031, .016, .01]);
+    const crest = feather(body, 0x75a8a4, [side * .032, .322, .045], [.028, .065, .035]);
+    crest.rotation.z = side * -.3;
+    feather(body, 0xdca75f, [side * .065, -.23, .02], [.036, .022, .066]);
+  });
+  const beak = new THREE.Mesh(new THREE.ConeGeometry(.043, .09, 16), new THREE.MeshStandardMaterial({ color: 0xe4ad58, roughness: .55 }));
+  beak.position.set(0, .137, .264); beak.rotation.x = Math.PI / 2;
+  body.add(beak);
+  const wings = [];
+  [-1, 1].forEach((side) => {
+    const wing = new THREE.Group(); wing.position.set(side * .17, .04, -.025); group.add(wing);
+    feather(wing, 0x79aaa5, [side * .125, -.01, -.025], [.18, .054, .15]);
+    for (let index = 0; index < 3; index++) {
+      const plume = feather(wing, index % 2 ? 0xa5c6b8 : 0x649995,
+        [side * (.24 - index * .035), -.008, -.09 + index * .088], [.145 - index * .018, .027, .052]);
+      plume.rotation.y = side * (.18 + index * .12);
+    }
+    wings.push(wing);
+  });
+  const tailFeathers = [-1, 0, 1].map((side) => {
+    const tail = feather(group, side ? 0x79aaa5 : 0xa5c6b8, [side * .065, -.05, -.267], [.048, .028, .145]);
+    tail.rotation.y = side * -.28;
+    return tail;
+  });
+  Object.assign(group.userData, { body, eyes, eyeHighlights, beak, leftWing: wings[0], rightWing: wings[1], tailFeathers, followPosition: new THREE.Vector2() });
   return group;
+}
+
+function animateGuideSpirit(bird, time, movement = 0, reduceMotion = false) {
+  const { body, eyes, eyeHighlights, leftWing, rightWing, tailFeathers } = bird.userData;
+  const flap = reduceMotion ? .16 : .16 + Math.sin(time * (8 + movement * 3)) * .5;
+  leftWing.rotation.z = -flap; rightWing.rotation.z = flap;
+  body.rotation.x = reduceMotion ? 0 : -movement * .1;
+  body.rotation.z = reduceMotion ? 0 : Math.sin(time * 2) * .025;
+  tailFeathers.forEach((tail) => { tail.rotation.x = reduceMotion ? 0 : Math.sin(time * 3.2) * .08; });
+  const blink = !reduceMotion && time % 5.7 > 5.55;
+  eyes.forEach((eye) => { eye.scale.y = blink ? .004 : .034; });
+  eyeHighlights.forEach((highlight) => { highlight.visible = !blink; });
 }
 
 class PortWorld {
@@ -613,7 +656,9 @@ class PortWorld {
     this.roadPaths = [];
     this.birds = [];
     this.boats = [];
-    this.player = makePerson({ jacket: 0x294a66, trousers: COLORS.navy, skin: 0xd5a57f, hair: 0x151b20, face: "east-asian", hairStyle: "short", bag: true });
+    this.player = makePerson({ jacket: 0x598486, trousers: 0x3b4c60, skin: 0xe0b38e, hair: 0x151b20, face: "east-asian", hairStyle: "short", bag: true });
+    this.player.userData.rig.scale.setScalar(.86);
+    this.player.userData.head.scale.setScalar(1.08);
     this.world.add(this.player);
     this.guideSpirit = makeGuideSpirit();
     this.guideSpirit.visible = false;
@@ -1077,18 +1122,21 @@ class PortWorld {
       const guideAngle = guideTarget
         ? Math.atan2(guideTarget.interact[0] - state.position.x, guideTarget.interact[1] - state.position.z)
         : state.facing + .85;
-      let guideX = state.position.x + Math.sin(guideAngle) * 1.15;
-      let guideZ = state.position.z + Math.cos(guideAngle) * 1.15;
+      const guideDistance = guideTarget ? .9 : .6;
+      let guideX = state.position.x + Math.sin(guideAngle) * guideDistance;
+      let guideZ = state.position.z + Math.cos(guideAngle) * guideDistance;
       if (!insideIsland(guideX, guideZ)) {
         guideX = state.position.x - Math.sin(guideAngle) * .85;
         guideZ = state.position.z - Math.cos(guideAngle) * .85;
       }
-      const guideLift = .72 + (reducedMotion.matches ? 0 : Math.sin(time * 3.1) * .04);
-      placeOnGlobe(this.guideSpirit, guideX, guideZ, state.facing + Math.PI, guideLift);
-      this.guideSpirit.userData.ring.rotation.z = reducedMotion.matches ? 0 : time * 1.4;
-      const guidePulse = state.guideTargetId && !reducedMotion.matches ? 1 + Math.sin(time * 4.2) * .1 : 1;
-      this.guideSpirit.scale.setScalar(guidePulse / WORLD_SCALE);
       const movement = Math.min(state.velocity.length() / 1.75, 1);
+      const guideFollow = this.guideSpirit.userData.followPosition;
+      if (state.cameraSnap || reducedMotion.matches) guideFollow.set(guideX, guideZ);
+      else guideFollow.lerp(new THREE.Vector2(guideX, guideZ), 1 - Math.exp(-7.2 * delta));
+      const guideLift = .5 + state.jumpHeight / WORLD_SCALE * .4 + (reducedMotion.matches ? 0 : Math.sin(time * 3.1) * .025);
+      placeOnGlobe(this.guideSpirit, guideFollow.x, guideFollow.y, guideTarget ? guideAngle : state.facing + Math.PI, guideLift);
+      this.guideSpirit.scale.setScalar(.9 / WORLD_SCALE);
+      animateGuideSpirit(this.guideSpirit, time, movement, reducedMotion.matches);
       animatePerson(this.player, state.runPhase, movement, time);
       this.agentCharacter?.update(delta, movement, !state.grounded);
       if (!state.grounded) {
@@ -1111,7 +1159,7 @@ class PortWorld {
       const cameraLerp = state.cameraSnap || reducedMotion.matches ? 1 : 1 - Math.exp(-7.2 * delta);
       this.camera.up.lerp(surface.normal, cameraLerp).normalize();
       if (state.cameraMode === "first") {
-        const eye = surface.point.clone().addScaledVector(surface.normal, 1.68).addScaledVector(forward, .08);
+        const eye = surface.point.clone().addScaledVector(surface.normal, 1.48).addScaledVector(forward, .08);
         this.camera.position.lerp(eye, cameraLerp);
         this.camera.lookAt(eye.clone().addScaledVector(forward, Math.cos(state.cameraPitch) * 14).addScaledVector(surface.normal, Math.sin(state.cameraPitch) * 14));
         this.player.visible = false;
@@ -1276,7 +1324,7 @@ function callGuide() {
   const collectible = stage.collectibles.get(target.id);
   state.guideTargetId = target.id;
   setDestination(new THREE.Vector3(collectible.x, 0, collectible.z));
-  showToast(`引路精灵发现了线索 · 正在前往 ${target.name}`);
+  showToast(`小飞鸟发现了线索 · 正在前往 ${target.name}`);
 }
 
 function setCameraMode(mode) {

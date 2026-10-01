@@ -1,11 +1,14 @@
-# Updated port agent
+# Teenage explorer
 
-The East Asian-styled face, short black hair, navy uniform color layout and
-identification badge are original geometry / material work for this game. The
-original Michelle head geometry is removed from the rendered mesh; this is not
-only a recoloring of the original character's face.
+The youthful East Asian-styled face, tousled black hair, blue-gray hoodie with
+hood / drawstrings / pocket, casual trousers and light sneakers are original
+geometry / material work for this game. The original Michelle head geometry
+is removed from the rendered mesh. The bind-pose body vertices are reshaped
+with narrower hips and a straighter chest / waist silhouette; the teenage
+character is not solely a smaller or recolored adult model. The visible standing
+silhouette is approximately 1.55 meters in the idle animation pose.
 
-The civilian body and bone rig remain the embedded Adobe / Mixamo reference,
+The original body topology and bone rig remain the embedded Adobe / Mixamo reference,
 with the existing Idle / Walk / Run animation transfer. See [CREDITS.md](CREDITS.md)
 for the original asset sources and third-party usage terms.
 

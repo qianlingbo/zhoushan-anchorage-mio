@@ -61,7 +61,7 @@ function loadCharacter() {
 // omit browser event binding/startup. No WebGL renderer or browser is required.
 function guideAPI() {
   let source = fs.readFileSync(path.join(gameDirectory, "game.js"), "utf8");
-  source = source.replace(/^import .*;\r?\n/gm, "");
+  source = source.replace(/^import .*;\r?\n/gm, "\n");
   const startup = source.indexOf('elements.start.addEventListener("click"');
   assert.ok(startup > 0, "Browser startup boundary must be found");
   source = source.slice(0, startup);
@@ -72,7 +72,7 @@ function guideAPI() {
     window: { matchMedia: () => ({ matches: false }) },
     surfaceTexture: () => null
   };
-  vm.runInNewContext(source, context, { filename: "game.js", timeout: 5000 });
+  vm.runInNewContext(source, context, { filename: path.join(gameDirectory, "game.js"), timeout: 5000 });
   return context.guideAPI;
 }
 
@@ -151,7 +151,7 @@ test("normal companion flight moves the wings without invalid transforms", () =>
   const bird = makeGuideSpirit();
   animateGuideSpirit(bird, 0, .7, false);
   const initial = pose(bird);
-  for (const time of [.017, .25, .61, 5, 10000]) {
+  for (const time of [.017, .25, .61, 5, 5.6, 5.71, 10000]) {
     animateGuideSpirit(bird, time, .7, false);
     assertFiniteTransforms(bird);
   }
