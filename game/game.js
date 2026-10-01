@@ -1,12 +1,16 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js";
 import { natureUniforms, surfaceTexture, terrainMaterial, makeSky, makeOcean, makeMeadow, makeNaturalTree, makeNaturalPerson, animateNaturalPerson } from "./nature.js?v=20261001-world-1";
-import { loadAgentCharacter } from "./character.js?v=20261001-youth-bird-3";
+import { loadAgentCharacter } from "./character.js?v=20261001-wardrobe-1";
 import { EarthAtlas } from "./earth.js?v=20261001-world-3";
 import { continents, makeRegionLandmark, createRegionalVegetation } from "./regions.js?v=20261001-world-1";
+import { OUTFITS, createWardrobeProgress, recordWardrobeProgress, wardrobeXP, isOutfitUnlocked, equipOutfit, serializeWardrobeProgress } from "./wardrobe.js?v=20261001-wardrobe-1";
 
 let currentRegion = continents[0];
 let selectedContinent = currentRegion.id;
 const regionProgress = new Map();
+let wardrobeProgress;
+let wardrobeStorageAvailable = true;
+const wardrobeStorageKey = "port-agent-wardrobe-v1";
 
 const TAU = Math.PI * 2;
 const WORLD_SCALE = 3;
@@ -178,7 +182,9 @@ const elements = {
   discoveryCard: $("discovery-card"), discoveryName: $("discovery-name"), discoveryDescription: $("discovery-description"),
   dialog: $("scene-dialog"), sceneVisual: $("scene-visual"), sceneCode: $("scene-code"), sceneLocation: $("scene-location"), sceneTitle: $("scene-title"),
   sceneStory: $("scene-story"), sceneChoices: $("scene-choices"), sceneResult: $("scene-result"), resultTitle: $("result-title"), resultText: $("result-text"),
-  complete: $("complete-button"), dialogClose: $("dialog-close"), help: $("help-dialog"), helpButton: $("help-button"), helpClose: $("help-close")
+  complete: $("complete-button"), dialogClose: $("dialog-close"), help: $("help-dialog"), helpButton: $("help-button"), helpClose: $("help-close"),
+  wardrobe: $("wardrobe-dialog"), wardrobeButton: $("wardrobe-button"), wardrobeClose: $("wardrobe-close"), wardrobeList: $("wardrobe-list"),
+  wardrobeSummary: $("wardrobe-summary"), wardrobeMeter: $("wardrobe-meter"), wardrobeStorageNote: $("wardrobe-storage-note")
 };
 
 const state = {
@@ -186,7 +192,7 @@ const state = {
   keys: new Set(), holds: { up: false, down: false, left: false, right: false }, minutes: 445, trust: 72, encounterCount: 0,
   nearbyId: null, activeEncounter: null, activeChoice: false, runPhase: 0, distanceWalked: 0, nextAmbientAt: 28,
   lastEncounter: new Map(), discoveries: new Set(), lastFrame: performance.now(), toastTimer: 0, discoveryTimer: 0, destination: null, waypoints: [], pendingInteractId: null,
-  guideTargetId: null,
+  guideTargetId: null, outfitUnlocks: [],
   cameraMode: "third", cameraDistance: 11.5, cameraPitch: .36, orbitHoldUntil: 0, cameraSnap: true,
   jumpHeight: 0, jumpVelocity: 0, grounded: true
 };
@@ -1204,6 +1210,90 @@ class PortWorld {
 }
 
 let stage;
+let canvasPointerStart = null;
+
+function hasOpenDialog() {
+  return elements.dialog.open || elements.help.open || elements.wardrobe.open;
+}
+
+function readWardrobeSave() {
+  try { return JSON.parse(window.localStorage.getItem(wardrobeStorageKey)) || undefined; }
+  catch { return undefined; }
+}
+
+function saveWardrobe() {
+  try {
+    window.localStorage.setItem(wardrobeStorageKey, JSON.stringify(serializeWardrobeProgress(wardrobeProgress)));
+    wardrobeStorageAvailable = true;
+  } catch { wardrobeStorageAvailable = false; }
+}
+
+function applyEquippedOutfit() {
+  const outfit = OUTFITS.find((item) => item.id === wardrobeProgress.equipped);
+  stage?.agentCharacter?.setOutfit(outfit);
+  elements.worldCanvas.dataset.outfit = outfit.id;
+}
+
+function updateWardrobeStatus() {
+  const xp = wardrobeXP(wardrobeProgress);
+  elements.wardrobeButton.textContent = `衣橱 · Lv${xp >= 36 ? 3 : xp >= 12 ? 2 : 1}`;
+}
+
+function gainExperience(kind, locationId) {
+  const previousXP = wardrobeXP(wardrobeProgress);
+  const unlocked = recordWardrobeProgress(wardrobeProgress, kind, currentRegion.id, locationId);
+  if (wardrobeXP(wardrobeProgress) !== previousXP) {
+    saveWardrobe(); applyEquippedOutfit(); updateWardrobeStatus();
+  }
+  return unlocked;
+}
+
+function renderWardrobe() {
+  const xp = wardrobeXP(wardrobeProgress);
+  const owned = OUTFITS.filter((outfit) => isOutfitUnlocked(wardrobeProgress, outfit)).length;
+  const current = OUTFITS.find((outfit) => outfit.id === wardrobeProgress.equipped);
+  elements.wardrobeSummary.textContent = `${xp} 阅历 · ${owned}/10 件收藏 · 当前：${current.name}`;
+  elements.wardrobeMeter.max = xp < 12 ? 12 : 36;
+  elements.wardrobeMeter.value = Math.min(xp, elements.wardrobeMeter.max);
+  elements.wardrobeStorageNote.textContent = wardrobeStorageAvailable
+    ? "收藏与装扮保存在当前浏览器；不与其他设备同步。各洲服饰是原创旅行设计。"
+    : "浏览器未允许保存：收藏仅在本次游玩中保留。";
+  elements.wardrobeList.innerHTML = "";
+  OUTFITS.forEach((outfit) => {
+    const unlocked = isOutfitUnlocked(wardrobeProgress, outfit);
+    const equipped = wardrobeProgress.equipped === outfit.id;
+    const card = document.createElement("article");
+    card.className = `outfit-card${unlocked ? "" : " is-locked"}${equipped ? " is-equipped" : ""}`;
+    card.dataset.outfit = outfit.id;
+    const hex = (color) => `#${color.toString(16).padStart(6, "0")}`;
+    const region = continents.find((item) => item.id === outfit.region);
+    const discovered = [...wardrobeProgress.discoveries].filter((key) => key.startsWith(`${outfit.region}:`)).length;
+    const interacted = [...wardrobeProgress.encounters].filter((key) => key.startsWith(`${outfit.region}:`)).length;
+    const requirement = outfit.region ? `${region.label}：地标 ${Math.min(discovered, 3)}/3 · 互动 ${Math.min(interacted, 1)}/1`
+      : outfit.requiredXP ? `${Math.min(xp, outfit.requiredXP)}/${outfit.requiredXP} 阅历` : "出发即拥有";
+    card.innerHTML = `<div class="outfit-sketch" data-style="${outfit.style}" style="--cloth:${hex(outfit.jacket)};--trim:${hex(outfit.trim)};--accent:${hex(outfit.accent)}" aria-hidden="true"><svg viewBox="0 0 100 110"><path class="outfit-sleeves" d="M30 18 12 29 4 62 18 68 27 46 24 98 76 98 73 46 82 68 96 62 88 29 70 18Z"/><path class="outfit-front" d="M30 18 40 12 60 12 70 18 73 96 27 96Z"/><path class="outfit-collar" d="M32 19 40 12 60 12 68 19 60 35 40 35Z"/><path class="outfit-detail" d="M39 36 39 89 M61 36 61 89 M28 91 72 91"/><circle class="outfit-badge" cx="62" cy="44" r="5"/></svg></div><div class="outfit-copy"><small>${outfit.region ? "WORLD COLLECTION" : "GROWTH EQUIPMENT"}</small><h3>${outfit.name}</h3><p>${outfit.description}</p><span class="outfit-requirement">${unlocked ? "已收藏 · " : "解锁条件 · "}${requirement}</span></div>`;
+    const button = document.createElement("button");
+    button.type = "button"; button.dataset.outfit = outfit.id;
+    button.disabled = !unlocked;
+    button.textContent = equipped ? "正在穿着" : unlocked ? "换上这件" : "尚未解锁";
+    button.setAttribute("aria-label", `${outfit.name} · ${button.textContent}`);
+    button.setAttribute("aria-pressed", String(equipped));
+    button.addEventListener("click", () => {
+      if (!equipOutfit(wardrobeProgress, outfit.id)) return;
+      saveWardrobe(); applyEquippedOutfit(); updateWardrobeStatus(); renderWardrobe();
+      elements.wardrobeList.querySelector(`button[data-outfit="${outfit.id}"]`)?.focus();
+    });
+    card.appendChild(button); elements.wardrobeList.appendChild(card);
+  });
+}
+
+function openWardrobe() {
+  if (state.mode !== "play" || hasOpenDialog()) return;
+  state.keys.clear(); state.velocity.set(0, 0, 0);
+  Object.keys(state.holds).forEach((key) => { state.holds[key] = false; });
+  canvasPointerStart = null;
+  renderWardrobe(); elements.wardrobe.showModal();
+}
 
 function setMode(mode) {
   state.mode = mode;
@@ -1220,7 +1310,8 @@ function selectContinent(id) {
   document.querySelectorAll("button[data-continent]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.continent === id)));
   $("continent-title").textContent = `${region.label} · ${region.landmarkName}`;
   $("continent-description").textContent = region.description;
-  $("continent-progress").textContent = `${regionProgress.get(id)?.discoveries.size || 0}/9 地标已发现`;
+  const discovered = [...wardrobeProgress.discoveries].filter((key) => key.startsWith(`${id}:`)).length;
+  $("continent-progress").textContent = `${regionProgress.get(id)?.discoveries.size || discovered}/9 地标已发现`;
   if (!elements.start.disabled) elements.start.textContent = `探索${region.label} →`;
 }
 
@@ -1238,7 +1329,7 @@ function returnToEarth() {
   state.velocity.set(0, 0, 0); state.destination = null; state.waypoints = [];
   state.pendingInteractId = null; state.keys.clear();
   Object.keys(state.holds).forEach((key) => { state.holds[key] = false; });
-  elements.dialog.close(); elements.help.close();
+  elements.dialog.close(); elements.help.close(); elements.wardrobe.close();
   clearTimeout(state.toastTimer); elements.toast.classList.remove("is-visible");
   setMode("intro");
   selectContinent(currentRegion.id);
@@ -1270,6 +1361,10 @@ function enterContinent(id) {
     state.lastEncounter = new Map(saved.lastEncounter); stage.cameraYaw = saved.facing;
     updateHud(); drawMinimap();
   }
+  wardrobeProgress.discoveries.forEach((key) => {
+    if (key.startsWith(`${id}:`)) state.discoveries.add(key.split(":")[1]);
+  });
+  applyEquippedOutfit(); updateHud(); drawMinimap();
   $("current-continent").textContent = region.label;
   elements.worldCanvas.dataset.continent = id;
   showToast(`${region.label} · ${region.landmarkName} · 靠近金色圆环可以返回地球`);
@@ -1307,12 +1402,13 @@ function collectNearbyDiscoveries() {
     if (state.guideTargetId === id) state.guideTargetId = null;
     updateHud();
     showDiscovery(location);
-    showToast(`发现 ${discoveryNotes[id][0]} · 已收入船代旅行箱`);
+    const unlocked = gainExperience("discovery", id);
+    showToast(unlocked.length ? `解锁 ${unlocked.map((outfit) => outfit.name).join("、")} · 在衣橱查看` : `发现 ${discoveryNotes[id][0]} · 已收入船代旅行箱`);
   });
 }
 
 function callGuide() {
-  if (state.mode !== "play" || elements.dialog.open || elements.help.open) return;
+  if (state.mode !== "play" || hasOpenDialog()) return;
   const candidates = locations
     .filter((location) => !state.discoveries.has(location.id))
     .sort((a, b) => {
@@ -1348,7 +1444,7 @@ function toggleCameraMode() {
 }
 
 function jump() {
-  if (state.mode !== "play" || !state.grounded || elements.dialog.open || elements.help.open) return;
+  if (state.mode !== "play" || !state.grounded || hasOpenDialog()) return;
   state.grounded = false;
   state.jumpVelocity = 6.15;
 }
@@ -1367,7 +1463,7 @@ function setDestination(point, pendingInteractId = null) {
 }
 
 function moveFromPointer(clientX, clientY) {
-  if (state.mode !== "play" || elements.dialog.open || elements.help.open) return;
+  if (state.mode !== "play" || hasOpenDialog()) return;
   const portalScreen = stage.portal.localToWorld(new THREE.Vector3(0, .7, 0)).project(stage.camera);
   const portalX = (portalScreen.x + 1) * window.innerWidth / 2, portalY = (1 - portalScreen.y) * window.innerHeight / 2;
   if (portalScreen.z > -1 && portalScreen.z < 1 && Math.hypot(clientX - portalX, clientY - portalY) < 40) {
@@ -1582,7 +1678,7 @@ function chooseEncounter(locationId) {
 }
 
 function interact() {
-  if (state.mode !== "play" || elements.dialog.open || elements.help.open) return;
+  if (state.mode !== "play" || hasOpenDialog()) return;
   if (!state.nearbyId) {
     showToast("靠近带 ◇ 标记的人物再交互");
     return;
@@ -1628,13 +1724,14 @@ function answerEncounter(index) {
   state.trust = Math.max(0, Math.min(100, state.trust + trustDelta));
   state.minutes += minutes;
   state.encounterCount += 1;
+  state.outfitUnlocks = gainExperience("encounter", state.activeEncounter.location.id);
   [...elements.sceneChoices.querySelectorAll("button")].forEach((button, buttonIndex) => {
     button.disabled = true;
     button.classList.toggle("is-chosen", buttonIndex === index);
   });
   const sign = trustDelta > 0 ? "+" : "";
   elements.resultTitle.textContent = trustDelta > 0 ? `处理稳妥 · 信任 ${sign}${trustDelta}` : trustDelta < 0 ? `现场变复杂 · 信任 ${trustDelta}` : "事情暂时过去了";
-  elements.resultText.textContent = `${label}。${result}`;
+  elements.resultText.textContent = `${label}。${result}${state.outfitUnlocks.length ? ` 新装扮已解锁：${state.outfitUnlocks.map((outfit) => outfit.name).join("、")}。可在衣橱换装。` : ""}`;
   elements.sceneResult.classList.toggle("is-warning", trustDelta < 0);
   elements.sceneResult.hidden = false;
   elements.complete.hidden = false;
@@ -1652,11 +1749,12 @@ function closeEncounter() {
   elements.noteFooter.textContent = "下一件事，会在你靠近某个人时发生";
   state.activeEncounter = null;
   state.activeChoice = false;
-  showToast("现场告一段落。接下来往哪走，由你决定。");
+  showToast(state.outfitUnlocks.length ? "新装扮已收入衣橱 · 继续探索，收集世界的颜色" : "现场告一段落。接下来往哪走，由你决定。");
+  state.outfitUnlocks = [];
 }
 
 function update(delta) {
-  if (state.mode !== "play" || elements.dialog.open || elements.help.open) return;
+  if (state.mode !== "play" || hasOpenDialog()) return;
   const axes = movementAxes();
   const desired = new THREE.Vector3(
     -Math.sin(stage.cameraYaw) * axes.z - Math.cos(stage.cameraYaw) * axes.x,
@@ -1744,6 +1842,11 @@ function bindHold(button, direction) {
 }
 
 elements.start.addEventListener("click", () => enterContinent(selectedContinent));
+wardrobeProgress = createWardrobeProgress(readWardrobeSave());
+updateWardrobeStatus();
+elements.wardrobeButton.addEventListener("click", openWardrobe);
+elements.wardrobeClose.addEventListener("click", () => elements.wardrobe.close());
+elements.wardrobe.addEventListener("click", (event) => { if (event.target === elements.wardrobe) elements.wardrobe.close(); });
 $("earth-button").addEventListener("click", returnToEarth);
 continents.forEach((region) => {
   const button = document.createElement("button");
@@ -1795,14 +1898,13 @@ bindHold(elements.runDown, "down");
 bindHold(elements.runLeft, "left");
 bindHold(elements.runRight, "right");
 
-let canvasPointerStart = null;
 elements.worldCanvas.addEventListener("pointerdown", (event) => {
-  if (event.button !== 0) return;
+  if (event.button !== 0 || hasOpenDialog()) return;
   canvasPointerStart = { x: event.clientX, y: event.clientY, lastX: event.clientX, lastY: event.clientY, moved: false, time: performance.now() };
   elements.worldCanvas.setPointerCapture(event.pointerId);
 });
 elements.worldCanvas.addEventListener("pointermove", (event) => {
-  if (!canvasPointerStart || state.mode !== "play" || elements.dialog.open || elements.help.open) return;
+  if (!canvasPointerStart || state.mode !== "play" || hasOpenDialog()) return;
   const distance = Math.hypot(event.clientX - canvasPointerStart.x, event.clientY - canvasPointerStart.y);
   if (distance > 7) canvasPointerStart.moved = true;
   if (canvasPointerStart.moved) {
@@ -1828,13 +1930,14 @@ elements.worldCanvas.addEventListener("pointerup", (event) => {
 elements.worldCanvas.addEventListener("pointercancel", () => { canvasPointerStart = null; });
 elements.worldCanvas.addEventListener("contextmenu", (event) => event.preventDefault());
 elements.worldCanvas.addEventListener("wheel", (event) => {
-  if (state.cameraMode !== "third" || state.mode !== "play") return;
+  if (state.cameraMode !== "third" || state.mode !== "play" || hasOpenDialog()) return;
   event.preventDefault();
   state.cameraDistance = THREE.MathUtils.clamp(state.cameraDistance + Math.sign(event.deltaY) * .8, 3.4, 55);
 }, { passive: false });
 
 const moveCodes = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyA", "KeyS", "KeyD"];
 window.addEventListener("keydown", (event) => {
+  if (elements.wardrobe.open) return;
   if (moveCodes.includes(event.code)) {
     event.preventDefault();
     state.keys.add(event.code);
@@ -1863,6 +1966,7 @@ try {
     stage.player.add(character.object);
     stage.player.userData.rig.visible = false;
     elements.worldCanvas.dataset.character = "skinned";
+    applyEquippedOutfit();
   }).catch((error) => {
     console.warn("角色模型加载失败，使用内置角色", error);
   });

@@ -7,7 +7,7 @@
   <meta name="description" content="从地球上的七洲节点出发，与亚洲少年和小飞鸟伙伴探索各地港区、不同气候与多样人群。" />
   <title>船代跑现场 · 舟山船舶代理笔记</title>
   <link rel="icon" href="/favicon.svg" />
-  <link rel="stylesheet" href="./styles.css?v=20261001-world-1" />
+  <link rel="stylesheet" href="./styles.css?v=20261001-wardrobe-1" />
 </head>
 <body>
   <a class="site-back" href="/">← 舟山港航工具</a>
@@ -34,7 +34,7 @@
 
     <section class="screen play-screen" id="play-screen" aria-label="船代港区游戏区域">
       <canvas id="world-canvas" aria-label="可自由探索的三维港区"></canvas>
-      <div class="world-location"><span id="current-continent">亚洲</span><button id="earth-button" type="button">◎ 返回地球</button></div>
+      <div class="world-location"><span id="current-continent">亚洲</span><button id="earth-button" type="button">◎ 返回地球</button><button id="wardrobe-button" type="button" aria-haspopup="dialog">衣橱 · Lv1</button></div>
 
       <header class="game-header">
         <div class="game-mark">
@@ -116,6 +116,19 @@
     </div>
   </dialog>
 
+  <dialog class="wardrobe-dialog" id="wardrobe-dialog" aria-labelledby="wardrobe-title">
+    <button class="dialog-close" id="wardrobe-close" type="button" aria-label="关闭衣橱">×</button>
+    <header class="wardrobe-heading">
+      <p>THE TRAVELER'S WARDROBE</p>
+      <h2 id="wardrobe-title">把世界，穿在身上。</h2>
+      <p id="wardrobe-summary" role="status" aria-live="polite"></p>
+      <progress id="wardrobe-meter" value="0" max="12" aria-label="外套成长阅历"></progress>
+      <small>新地标 +2 · 首次地点互动 +3 · 12 阅历升级旅行装 · 36 阅历解锁金绣礼装</small>
+    </header>
+    <div class="wardrobe-list" id="wardrobe-list" aria-label="已收藏和待解锁的旅行装扮"></div>
+    <p class="wardrobe-storage-note" id="wardrobe-storage-note"></p>
+  </dialog>
+
   <dialog class="help-dialog" id="help-dialog">
     <button class="dialog-close" id="help-close" type="button" aria-label="关闭玩法说明">×</button>
     <p>HOW TO WANDER THE PORT</p>
@@ -128,6 +141,7 @@
       <div><dt>探索</dt><dd>沙滩、机场、边防、海关、船厂、堆场、岸吊码头和锚地没有先后顺序，想去哪里就去哪里。</dd></div>
       <div><dt>伙伴</dt><dd>小飞鸟会陪在少年身旁。按 <kbd>G</kbd> 或点击“呼叫小飞鸟”，它会寻找一处尚未发现纪念物的地标并带你前往。</dd></div>
       <div><dt>收藏</dt><dd>九个地标各藏有一件船代纪念物。靠近即可收进口袋，不需要按顺序寻找。</dd></div>
+      <div><dt>成长</dt><dd>发现新地标加 2 阅历、首次地点互动加 3 阅历；12、36 阅历升级外套。每洲发现 3 个地标并完成 1 次互动，解锁当地旅行装。点击“衣橱”自由换装，收藏保存在当前浏览器。</dd></div>
       <div><dt>现场</dt><dd>靠近带 ◇ 标记的人物按 <kbd>E</kbd>。同一地点再次来访，也可能遇见另一件事。</dd></div>
       <div><dt>说明</dt><dd>这是游戏化体验，场景经过简化，不作为实际申报或办证清单。</dd></div>
     </dl>
@@ -139,6 +153,6 @@
       "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
     } }
   </script>
-  <script type="module" src="./game.js?v=20261001-youth-bird-3"></script>
+  <script type="module" src="./game.js?v=20261001-wardrobe-1"></script>
 </body>
 </html>

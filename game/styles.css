@@ -664,6 +664,47 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
 .help-dialog dt { font-weight: 800; }
 .help-dialog dd { margin: 0; color: var(--ink-soft); font-family: "Songti SC", serif; font-size: 13px; line-height: 1.55; }
 
+.wardrobe-dialog { width: min(960px, calc(100vw - 28px)); max-height: calc(100dvh - 28px); border: 1px solid var(--line); padding: 30px; background: var(--paper-bright); box-shadow: 8px 9px 0 rgba(23,44,50,.25); overflow: auto; }
+.wardrobe-heading { padding-right: 30px; }
+.wardrobe-heading > p:first-child { margin: 0 0 12px; color: var(--orange); font: 800 9px ui-monospace, monospace; letter-spacing: .16em; }
+.wardrobe-heading h2 { margin: 0; font-size: clamp(28px, 4vw, 42px); font-weight: 700; }
+#wardrobe-summary { margin: 12px 0 8px; font-size: 13px; color: var(--sea-deep); }
+#wardrobe-meter { appearance: none; display: block; width: 100%; height: 5px; border: 0; background: var(--paper); accent-color: var(--yellow); }
+#wardrobe-meter::-webkit-progress-bar { background: var(--paper); }
+#wardrobe-meter::-webkit-progress-value { background: var(--yellow); }
+.wardrobe-heading > small { display: block; margin: 10px 0 22px; color: var(--ink-soft); font-size: 11px; line-height: 1.6; }
+.wardrobe-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.outfit-card { display: grid; grid-template-columns: 66px 1fr; gap: 10px; padding: 14px; border: 1px solid var(--line); background: #eee8d8; }
+.outfit-card.is-equipped { border-color: var(--sea-deep); background: #e3e8dc; }
+.outfit-card.is-locked { background: #f1eddf; }
+.outfit-sketch { align-self: center; }
+.outfit-sketch svg { display: block; width: 66px; height: 78px; }
+.outfit-sleeves { fill: var(--cloth); stroke: var(--ink); stroke-width: 1.2; }
+.outfit-front { fill: var(--cloth); }
+.outfit-collar { fill: var(--accent); }
+.outfit-detail { fill: none; stroke: var(--trim); stroke-width: 2.5; }
+.outfit-badge { fill: var(--trim); }
+.outfit-sketch[data-style="hoodie"] .outfit-detail { opacity: .2; }
+.outfit-sketch[data-style="ceremonial"] .outfit-detail { stroke-width: 5; }
+.is-locked .outfit-sketch { opacity: .55; }
+.outfit-copy small { color: var(--sea-deep); font: 700 7px ui-monospace, monospace; letter-spacing: .1em; }
+.outfit-copy h3 { margin: 5px 0; font-size: 16px; line-height: 1.3; }
+.outfit-copy p { margin: 0 0 8px; font-size: 11px; color: var(--ink-soft); line-height: 1.5; }
+.outfit-requirement { display: block; color: var(--ink-soft); font-size: 10px; line-height: 1.5; }
+.outfit-card > button { grid-column: 1 / -1; min-height: 32px; border: 1px solid var(--line); color: var(--ink); background: var(--paper-bright); font-size: 12px; cursor: pointer; }
+.outfit-card > button[aria-pressed="true"] { color: var(--paper-bright); background: var(--sea-deep); }
+.outfit-card > button:disabled { color: #7b7d72; background: transparent; cursor: default; }
+.outfit-card > button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.wardrobe-storage-note { margin: 18px 0 0; font-size: 10px; line-height: 1.5; color: var(--ink-soft); }
+@media (max-width: 760px) {
+  .wardrobe-dialog { padding: 25px 18px 18px; }
+  .wardrobe-heading { padding-right: 20px; }
+  .wardrobe-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .outfit-card { grid-template-columns: 1fr; gap: 6px; padding: 12px; }
+  .outfit-sketch svg { width: 54px; height: 61px; margin: auto; }
+  .outfit-copy h3 { font-size: 15px; }
+}
+
 @keyframes pop { from { opacity: 0; transform: translate(-50%, 8px) rotate(-1deg) scale(.96); } }
 @keyframes dialog-in { from { opacity: 0; transform: translateY(18px) scale(.98); } }
 @keyframes discovery-in { from { opacity: 0; transform: translateY(14px) rotate(-.8deg) scale(.96); } }

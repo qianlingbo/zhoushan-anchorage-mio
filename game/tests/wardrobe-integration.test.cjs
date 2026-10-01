@@ -73,7 +73,7 @@ function productionAPI(dependencies = {}, storage = {}) {
   };
   const context = vm.createContext({
     THREE, ...dependencies, performance, console, document, localStorage,
-    continents: [{ id: "asia", label: "亚洲" }, { id: "europe", label: "欧洲" }],
+    continents: ["asia", "europe", "africa", "north-america", "south-america", "oceania", "antarctica"].map((id, index) => ({ id, label: ["亚洲", "欧洲", "非洲", "北美洲", "南美洲", "大洋洲", "南极洲"][index] })),
     window: { matchMedia: () => ({ matches: false }), setTimeout: () => 1, innerWidth: 1280, innerHeight: 720, localStorage },
     clearTimeout() {}, surfaceTexture: () => null
   });
