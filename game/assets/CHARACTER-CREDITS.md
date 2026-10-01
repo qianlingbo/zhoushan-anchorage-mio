@@ -15,3 +15,10 @@ for the original asset sources and third-party usage terms.
 Procedural NPCs can select individual skin tones, face styling, clothing colors
 and short / curly hairstyles. Region palettes are art direction, not a claim
 that a continent has only one ethnic group or skin color.
+
+Growth and regional clothing decorations are original procedural geometry:
+scarves, coat lapels, shoulder capes, piping, badges and woven-color panels.
+All clothing variants reuse a fixed character-owned set of geometry/materials;
+equipping outfits does not modify the face, skin color, stature or animation rig.
+The seven regional travel outfits are fictional port-inspired designs, not
+representations of an entire continent's traditional dress.
