@@ -38,7 +38,7 @@ export function createWardrobeProgress(saved) {
   for (const kind of ["discoveries", "encounters"]) {
     if (Array.isArray(saved[kind])) progress[kind] = new Set(saved[kind].filter(validRecord));
   }
-  progress.equipped = isOutfitUnlocked(progress, saved.equipped) ? saved.equipped
+  progress.equipped = typeof saved.equipped === "string" && isOutfitUnlocked(progress, saved.equipped) ? saved.equipped
     : wardrobeXP(progress) >= 36 ? "master" : wardrobeXP(progress) >= 12 ? "voyager" : "basic";
   return progress;
 }
