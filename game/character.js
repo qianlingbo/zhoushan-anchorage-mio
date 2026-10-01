@@ -51,6 +51,7 @@ function dressPortAgent(agent, target) {
   const geometry = target.geometry;
   const position = geometry.attributes.position;
   const colors = new Float32Array(position.count * 3);
+  const clothingParts = new Uint8Array(position.count);
   const skin = new THREE.Color(0xd5a57f), jacket = new THREE.Color(0x487b91);
   const trousers = new THREE.Color(0x394854), shoes = new THREE.Color(0xd0dce0);
   const sole = new THREE.Color(0x647680);
@@ -67,6 +68,7 @@ function dressPortAgent(agent, target) {
     vertex.fromBufferAttribute(position, index);
     const color = vertex.y < .027 ? sole : vertex.y < .105 ? shoes : vertex.y < .92 ? trousers
       : Math.abs(vertex.x) > .54 || (vertex.y > 1.28 && Math.abs(vertex.x) < .105) ? skin : jacket;
+    clothingParts[index] = color === jacket ? 1 : color === trousers ? 2 : color === shoes ? 3 : 0;
     colors.set(color.toArray(), index * 3);
     const hip = Math.exp(-Math.pow((vertex.y - .87) / .16, 2));
     vertex.x *= 1 - .17 * hip;
@@ -104,6 +106,76 @@ function dressPortAgent(agent, target) {
     cord.position.set(side * .028, .036, .073); hoodie.add(cord);
   }
   mount("mixamorigSpine2", hoodie, [0, 1.16, 0]);
+  const accent = new THREE.MeshStandardMaterial({ color: 0xd69d4f, roughness: .65 });
+  const decorations = new THREE.Group();
+  mount("mixamorigSpine2", decorations, [0, 1.16, 0]);
+  const add = (group, geometry, material, at, scale = [1, 1, 1]) => {
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(...at); mesh.scale.set(...scale);
+    mesh.castShadow = mesh.receiveShadow = true;
+    group.add(mesh); return mesh;
+  };
+  const layer = () => { const group = new THREE.Group(); group.visible = false; decorations.add(group); return group; };
+  const scarf = layer();
+  const collar = add(scarf, new THREE.TorusGeometry(.077, .015, 8, 24), accent, [0, .123, 0], [1, 1, .7]);
+  collar.rotation.x = Math.PI / 2;
+  add(scarf, new THREE.BoxGeometry(.035, .17, .012), accent, [.047, .036, .085]);
+  const badge = add(scarf, new THREE.CylinderGeometry(.015, .015, .006, 16), trim, [-.066, .046, .083]);
+  badge.rotation.x = Math.PI / 2;
+  const coat = layer();
+  for (const side of [-1, 1]) {
+    add(coat, new THREE.BoxGeometry(.044, .23, .016), cloth, [side * .084, -.055, .075]);
+    add(coat, new THREE.BoxGeometry(.004, .225, .008), trim, [side * .063, -.055, .085]);
+  }
+  const ceremonial = layer();
+  for (const side of [-1, 1]) {
+    add(ceremonial, new THREE.SphereGeometry(1, 16, 12), cloth, [side * .102, .107, -.011], [.061, .025, .084]);
+    add(ceremonial, new THREE.BoxGeometry(.073, .009, .13), trim, [side * .10, .096, -.006]);
+    add(ceremonial, new THREE.BoxGeometry(.006, .19, .009), trim, [side * .041, -.018, .087]);
+    for (let index = 0; index < 3; index++) {
+      add(ceremonial, new THREE.SphereGeometry(.005, 8, 6), trim, [side * .052, .04 - index * .031, .091]);
+    }
+  }
+  add(ceremonial, new THREE.BoxGeometry(.18, .006, .012), trim, [0, -.12, .078]);
+  const regional = new Map();
+  ["asia", "europe", "africa", "north-america", "south-america", "oceania", "antarctica"].forEach((region, index) => {
+    const group = layer(); regional.set(region, group);
+    const cape = add(group, new THREE.SphereGeometry(1, 20, 12, 0, Math.PI * 2, 0, Math.PI * .6), cloth,
+      [0, .048 - index * .004, -.056], [.122 + index * .003, .09 + index * .008, .073]);
+    cape.rotation.x = -.24;
+    for (let stripe = 0; stripe <= index; stripe++) {
+      const ornament = add(group, new THREE.BoxGeometry(.022, .009, .008), stripe % 2 ? trim : accent,
+        [-.066 + stripe * .018, .065 - stripe * .012, .09]);
+      ornament.rotation.z = (index % 3 - 1) * .4;
+    }
+    if (["europe", "oceania", "antarctica"].includes(region)) {
+      const neck = add(group, new THREE.TorusGeometry(.077, region === "antarctica" ? .023 : .013, 8, 24), accent, [0, .123, 0]);
+      neck.rotation.x = Math.PI / 2;
+      add(group, new THREE.BoxGeometry(.039, .15 + index * .005, .016), accent, [.052, .016, .085]);
+    }
+    if (["asia", "africa", "south-america"].includes(region)) {
+      add(group, new THREE.BoxGeometry(.183, .019, .012), accent, [0, -.102, .078]);
+    }
+    if (region === "north-america") {
+      const sash = add(group, new THREE.BoxGeometry(.025, .2, .012), accent, [0, -.015, .088]);
+      sash.rotation.z = -.6;
+    }
+  });
+  return (outfit) => {
+    const palette = [null, new THREE.Color(outfit.jacket), new THREE.Color(outfit.trousers), new THREE.Color(outfit.shoes)];
+    for (let index = 0; index < position.count; index++) {
+      if (clothingParts[index]) colors.set(palette[clothingParts[index]].toArray(), index * 3);
+    }
+    geometry.attributes.color.needsUpdate = true;
+    cloth.color.setHex(outfit.jacket); trim.color.setHex(outfit.trim); accent.color.setHex(outfit.accent);
+    trim.metalness = outfit.style === "ceremonial" ? .35 : .08;
+    hoodie.visible = outfit.style === "hoodie" || outfit.style === "traveler";
+    scarf.visible = outfit.style === "traveler";
+    coat.visible = outfit.style === "traveler" || outfit.style === "ceremonial";
+    ceremonial.visible = outfit.style === "ceremonial";
+    regional.forEach((group, region) => { group.visible = outfit.style === "regional" && outfit.region === region; });
+    agent.scene.userData.outfitId = outfit.id;
+  };
 }
 
 function locomotionClips(agent, locomotion, target, source, heightRatio) {
@@ -199,7 +271,7 @@ export async function loadAgentCharacter() {
   locomotion.scene.updateMatrixWorld(true);
   const height = new THREE.Box3().setFromObject(agent.scene).getSize(new THREE.Vector3()).y;
   const sourceHeight = new THREE.Box3().setFromObject(locomotion.scene).getSize(new THREE.Vector3()).y;
-  dressPortAgent(agent, target);
+  const setOutfit = dressPortAgent(agent, target);
   // Preserve the existing bind scale and proven animation transfer. The mesh
   // has already been reshaped; this normalization sets its teenage stature.
   const clips = locomotionClips(agent, locomotion, target, source, height / sourceHeight);
@@ -216,6 +288,7 @@ export async function loadAgentCharacter() {
   agent.scene.position.y -= new THREE.Box3().setFromObject(agent.scene).min.y;
   return {
     object: agent.scene,
+    setOutfit,
     update(delta, movement, airborne) {
       const running = THREE.MathUtils.smoothstep(movement, .35, .85);
       actions[0].setEffectiveWeight(1 - THREE.MathUtils.smoothstep(movement, 0, .3));
