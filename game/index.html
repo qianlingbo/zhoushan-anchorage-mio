@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#9eb3aa" />
-  <meta name="description" content="在球状水墨港岛穿过沙滩、边防、海关、集装箱堆场与岸吊码头，随机遇见船舶代理现场事件。" />
+  <meta name="theme-color" content="#345861" />
+  <meta name="description" content="在秋日球状海岛自由探索草坡、沙滩、边检、海关与港口码头，以第一或第三人称遇见船舶代理现场。" />
   <title>船代跑现场 · 舟山船舶代理笔记</title>
   <link rel="icon" href="/favicon.svg" />
-  <link rel="stylesheet" href="./styles.css?v=20260923-guides-collectibles-1" />
+  <link rel="stylesheet" href="./styles.css?v=20261001-natural-island-4" />
 </head>
 <body>
   <a class="site-back" href="/">← 舟山港航工具</a>
@@ -20,9 +20,9 @@
         <h1 id="game-title"><span>舟山</span><strong>船代</strong><em>跑现场</em></h1>
       </div>
       <button class="enter-button" id="start-button" type="button" disabled>LOADING</button>
-      <p class="intro-tip">点击地面自动奔跑 · <kbd>Space</kbd> 跳跃 · <kbd>V</kbd> 切换视角</p>
+      <p class="intro-tip">点击地面奔跑 · 拖动画面环视 · <kbd>Space</kbd> 跳跃 · <kbd>V</kbd> 切换视角</p>
       <p class="intro-edition">NO ROUTE · NO CHECKLIST<br />ZHOUSHAN · 2026</p>
-      <p class="renderer-badge">THREE.JS · FOLLOW CAMERA · LIVING PORT</p>
+      <p class="renderer-badge">秋日海风 · 舟山群岛 · 自由漫游</p>
     </section>
 
     <section class="screen play-screen" id="play-screen" aria-label="船代港区游戏区域">
@@ -33,14 +33,14 @@
           <strong>船代跑现场</strong>
           <span>PORT AGENT ON THE RUN</span>
         </div>
-        <div class="status-strip" aria-live="polite">
+        <div class="status-strip" aria-label="时间、信任和探索进度">
           <div><span>TIME</span><strong id="clock-value">07:20</strong></div>
           <div><span>TRUST</span><strong id="energy-value">72</strong></div>
           <div><span>ENCOUNTERS</span><strong><b id="completed-value">0</b></strong></div>
           <div><span>DISCOVERIES</span><strong><b id="discoveries-value">0/9</b></strong></div>
         </div>
         <div class="camera-tools">
-          <button class="guide-button" id="guide-button" type="button"><span>呼叫引路精灵</span><small>G</small></button>
+          <button class="guide-button" id="guide-button" type="button" aria-label="呼叫引路精灵"><span>呼叫引路精灵</span><small>G</small></button>
           <button class="view-switch" id="view-switch" type="button" aria-pressed="false"><span>第三人称</span><small>V</small></button>
           <button class="jump-button" id="jump-button" type="button"><span>跳跃</span><small>Space</small></button>
           <button class="round-button" id="help-button" type="button" aria-label="查看玩法">?</button>
@@ -83,7 +83,7 @@
         <button class="action-button" id="mobile-action" type="button">交互</button>
       </div>
 
-      <p class="route-caption">点击地面奔跑 · 空格跳跃 · V 切换第一 / 第三人称 · 滚轮调节距离</p>
+      <p class="route-caption">点击奔跑 · 拖拽环视 · 空格跳跃 · V 切换视角 · 滚轮拉近 / 拉远</p>
     </section>
   </main>
 
@@ -113,9 +113,9 @@
     <p>HOW TO WANDER THE PORT</p>
     <h2>别等任务，去碰见现场。</h2>
     <dl>
-      <div><dt>奔跑</dt><dd>直接点击地面，人物会自动跑向目标；也保留 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 作为补充。</dd></div>
+      <div><dt>奔跑</dt><dd>点击或轻触地面，人物会自动绕开建筑奔跑；也保留 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 作为补充。</dd></div>
       <div><dt>跳跃</dt><dd>按 <kbd>Space</kbd> 或屏幕“跳”按钮。奔跑途中也能起跳。</dd></div>
-      <div><dt>视角</dt><dd>按 <kbd>V</kbd> 或右上角按钮切换第一、第三人称；第三人称可用滚轮调节距离。</dd></div>
+      <div><dt>视角</dt><dd>拖动画面可以环视四周、调整高低。按 <kbd>V</kbd> 切换第一、第三人称；第三人称用滚轮拉近或拉远。</dd></div>
       <div><dt>探索</dt><dd>沙滩、机场、边防、海关、船厂、堆场、岸吊码头和锚地没有先后顺序，想去哪里就去哪里。</dd></div>
       <div><dt>引路</dt><dd>按 <kbd>G</kbd> 或点击“呼叫引路精灵”，它会寻找一处尚未发现纪念物的地标并带你前往。</dd></div>
       <div><dt>收藏</dt><dd>九个地标各藏有一件船代纪念物。靠近即可收进口袋，不需要按顺序寻找。</dd></div>
@@ -124,6 +124,12 @@
     </dl>
   </dialog>
 
-  <script type="module" src="./game.js?v=20260923-guides-collectibles-1"></script>
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    } }
+  </script>
+  <script type="module" src="./game.js?v=20261001-natural-island-8"></script>
 </body>
 </html>
