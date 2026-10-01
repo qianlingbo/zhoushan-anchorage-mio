@@ -200,3 +200,9 @@ test("unsupported saves and invalid collection types produce a clean starter war
     assert.equal(progress.equipped, "basic");
   }
 });
+
+test("a damaged non-string saved outfit cannot become the equipped ID", async () => {
+  const api = await wardrobe();
+  const progress = api.createWardrobeProgress({ version: 1, equipped: { id: "basic" }, discoveries: [], encounters: [] });
+  assert.equal(progress.equipped, "basic");
+});
