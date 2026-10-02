@@ -93,6 +93,8 @@ globalThis.wardrobeIntegration = {
   openWardrobe: typeof openWardrobe === "function" ? openWardrobe : undefined,
   hasOpenDialog: typeof hasOpenDialog === "function" ? hasOpenDialog : undefined,
   renderWardrobe: typeof renderWardrobe === "function" ? renderWardrobe : undefined,
+  previewClothing: typeof previewClothing === "function" ? previewClothing : undefined,
+  finishClothingPreview: typeof finishClothingPreview === "function" ? finishClothingPreview : undefined,
   collectNearbyDiscoveries, answerEncounter, jump, callGuide, moveFromPointer, interact, update,
   state, elements, locations,
   setContext(values) {
@@ -207,4 +209,53 @@ test("wardrobe cards disable locked clothes and equip unlocked clothes with a sa
   assert.equal(progress.equipped, "asia");
   assert.equal(applied.at(-1), "asia");
   assert.equal(JSON.parse(writes.at(-1).value).equipped, "asia");
+});
+
+test("clothing preview shows the actual protagonist from the front without earning XP", async () => {
+  const { api, dependencies, writes } = await integration();
+  assert.equal(typeof api.previewClothing, "function", "Near-field clothing preview is missing");
+  const progress = dependencies.createWardrobeProgress();
+  const stage = { cameraYaw: .7, moveMarker: { visible: true } };
+  api.setContext({ progress, stage });
+  api.state.mode = "play"; api.state.facing = .85;
+  api.state.destination = new THREE.Vector3(4, 0, 8);
+  api.state.velocity.set(1, 0, 1); api.state.keys.add("KeyW"); api.state.holds.up = true;
+  api.elements.wardrobe.open = true;
+  api.previewClothing();
+  assert.equal(api.elements.wardrobe.open, false);
+  assert.equal(api.elements.outfitPreview.hidden, false);
+  assert.equal(api.state.cameraMode, "third");
+  assert.ok(api.state.cameraDistance <= 4.4);
+  assert.ok(Math.abs(stage.cameraYaw - api.state.facing - Math.PI) < 1e-6);
+  assert.equal(api.state.destination, null);
+  assert.equal(api.state.velocity.length(), 0);
+  assert.equal(api.state.keys.size, 0);
+  assert.equal(api.state.holds.up, false);
+  assert.equal(stage.moveMarker.visible, false);
+  assert.match(api.elements.outfitPreviewName.textContent, /初行/);
+  assert.doesNotThrow(() => api.update(.05));
+  assert.equal(dependencies.wardrobeXP(progress), 0);
+  assert.equal(writes.length, 0);
+});
+
+test("ending and reopening preview restore the previous view without overwriting it", async () => {
+  const { api, dependencies } = await integration();
+  assert.equal(typeof api.previewClothing, "function", "Near-field clothing preview is missing");
+  assert.equal(typeof api.finishClothingPreview, "function", "Preview camera restoration is missing");
+  const stage = { cameraYaw: 1.7, moveMarker: { visible: false } };
+  api.setContext({ progress: dependencies.createWardrobeProgress(), stage });
+  api.state.mode = "play"; api.state.cameraMode = "first"; api.state.cameraDistance = 17;
+  api.state.cameraPitch = .28; api.state.orbitHoldUntil = 1234;
+  api.previewClothing(); api.previewClothing();
+  api.finishClothingPreview();
+  assert.equal(api.state.cameraMode, "first");
+  assert.equal(api.state.cameraDistance, 17);
+  assert.equal(api.state.cameraPitch, .28);
+  assert.equal(stage.cameraYaw, 1.7);
+  assert.equal(api.state.orbitHoldUntil, 1234);
+  assert.equal(api.elements.outfitPreview.hidden, true);
+  assert.equal(api.state.outfitPreview, null);
+  assert.doesNotThrow(() => api.finishClothingPreview());
+  api.state.mode = "intro"; api.previewClothing();
+  assert.equal(api.state.outfitPreview, null);
 });
