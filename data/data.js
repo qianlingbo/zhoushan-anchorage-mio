@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-10-02 18:30:11",
-  "lastChecked": "2026-10-02 18:30:11",
-  "lastSuccessfulFetch": "2026-10-02 18:30:11",
-  "updateWindow": "2026-10-02T18:00+08:00",
-  "publishTime": "2026年10月02日15时",
-  "publishCode": "2026100215",
+  "lastUpdated": "2026-10-03 00:15:38",
+  "lastChecked": "2026-10-03 00:15:38",
+  "lastSuccessfulFetch": "2026-10-03 00:15:38",
+  "updateWindow": "2026-10-03T00:00+08:00",
+  "publishTime": "2026年10月02日20时",
+  "publishCode": "2026100220",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴，局部阵雨。明天阴有时有阵雨。后天阴有阵雨。5日阴局部小雨转多云。6日多云。<br><br>",
-      "Time": "2026100215",
-      "PreciseForecastTime": "2026年10月02日15时"
+      "Time": "2026100220",
+      "PreciseForecastTime": "2026年10月02日20时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴，局部阵雨。明天阴到多云，有时有阵雨。后天阴有阵雨。5日阴局部小雨转多云。6日多云。<br><br>",
-      "Time": "2026100215",
-      "PreciseForecastTime": "2026年10月02日15时"
+      "Time": "2026100220",
+      "PreciseForecastTime": "2026年10月02日20时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴，局部阵雨。明天阴有时有阵雨。后天阴有阵雨。5日阴局部小雨转多云。6日多云。<br><br>",
-      "Time": "2026100215",
-      "PreciseForecastTime": "2026年10月02日15时"
+      "Time": "2026100220",
+      "PreciseForecastTime": "2026年10月02日20时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴，局部阵雨。明天阴到多云，有时有阵雨。后天阴有阵雨。5日阴局部小雨转多云。6日多云。<br><br>",
-      "Time": "2026100215",
-      "PreciseForecastTime": "2026年10月02日15时"
+      "Time": "2026100220",
+      "PreciseForecastTime": "2026年10月02日20时"
     }
   }
 };
