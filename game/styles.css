@@ -772,6 +772,14 @@ dialog::backdrop { background: rgba(16,38,43,.58); backdrop-filter: blur(6px); }
   *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 100ms !important; }
 }
 
+.outfit-preview { position: fixed; z-index: 15; bottom: 24px; left: 50%; transform: translateX(-50%); text-align: center; color: #efe4c6; background: rgba(18,40,46,.9); border: 1px solid #998768; border-radius: 8px; padding: 16px 24px; width: min(340px,calc(100% - 32px)); box-sizing: border-box; }
+.outfit-preview[hidden] { display: none; }
+.outfit-preview small { font: 9px ui-monospace,monospace; letter-spacing: .2em; color: #c9b889; }
+.outfit-preview h2 { margin: 7px 0; font: 24px "Songti SC",serif; }
+.outfit-preview p { margin: 8px 0; font-size: 11px; }
+.outfit-preview button,.wardrobe-preview-button { min-height: 44px; padding: 10px 20px; color: #20383e; background: #dfcb96; border: 1px solid #c1aa72; border-radius: 4px; cursor: pointer; }
+.wardrobe-preview-button { margin: 0 0 18px; }
+
 /* The atlas keeps its navigation outside the globe's drag surface. */
 body[data-mode="intro"] .site-back { color: #d9e9e8; }
 .intro-screen { background: #071b28; }

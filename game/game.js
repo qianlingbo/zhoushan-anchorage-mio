@@ -184,7 +184,8 @@ const elements = {
   sceneStory: $("scene-story"), sceneChoices: $("scene-choices"), sceneResult: $("scene-result"), resultTitle: $("result-title"), resultText: $("result-text"),
   complete: $("complete-button"), dialogClose: $("dialog-close"), help: $("help-dialog"), helpButton: $("help-button"), helpClose: $("help-close"),
   wardrobe: $("wardrobe-dialog"), wardrobeButton: $("wardrobe-button"), wardrobeClose: $("wardrobe-close"), wardrobeList: $("wardrobe-list"),
-  wardrobeSummary: $("wardrobe-summary"), wardrobeMeter: $("wardrobe-meter"), wardrobeStorageNote: $("wardrobe-storage-note")
+  wardrobeSummary: $("wardrobe-summary"), wardrobeMeter: $("wardrobe-meter"), wardrobeStorageNote: $("wardrobe-storage-note"),
+  outfitPreview: $("outfit-preview"), outfitPreviewName: $("outfit-preview-name")
 };
 
 const state = {
@@ -192,7 +193,7 @@ const state = {
   keys: new Set(), holds: { up: false, down: false, left: false, right: false }, minutes: 445, trust: 72, encounterCount: 0,
   nearbyId: null, activeEncounter: null, activeChoice: false, runPhase: 0, distanceWalked: 0, nextAmbientAt: 28,
   lastEncounter: new Map(), discoveries: new Set(), lastFrame: performance.now(), toastTimer: 0, discoveryTimer: 0, destination: null, waypoints: [], pendingInteractId: null,
-  guideTargetId: null, outfitUnlocks: [],
+  guideTargetId: null, outfitUnlocks: [], outfitPreview: null,
   cameraMode: "third", cameraDistance: 11.5, cameraPitch: .36, orbitHoldUntil: 0, cameraSnap: true,
   jumpHeight: 0, jumpVelocity: 0, grounded: true
 };
@@ -1176,13 +1177,13 @@ class PortWorld {
         this.player.visible = false;
       } else {
         const mobile = window.innerWidth < 760;
-        const distance = mobile ? state.cameraDistance + 1.1 : state.cameraDistance;
+        const distance = mobile && !state.outfitPreview ? state.cameraDistance + 1.1 : state.cameraDistance;
         const desired = surface.point.clone()
           .addScaledVector(forward, -Math.cos(state.cameraPitch) * distance)
           .addScaledVector(surface.normal, Math.sin(state.cameraPitch) * distance + 1.7);
         const focus = surface.point.clone()
-          .addScaledVector(surface.normal, 1.1)
-          .addScaledVector(forward, 1.4);
+          .addScaledVector(surface.normal, state.outfitPreview ? .9 : 1.1)
+          .addScaledVector(forward, state.outfitPreview ? 0 : 1.4);
         if (Math.hypot(desired.x, desired.z / PLANET_Z_SCALE) < 28 * WORLD_SCALE) {
           desired.y = Math.max(desired.y, (terrainHeight(desired.x / WORLD_SCALE, desired.z / WORLD_SCALE) + .13) * WORLD_SCALE + .65);
         }
@@ -1289,10 +1290,35 @@ function renderWardrobe() {
 
 function openWardrobe() {
   if (state.mode !== "play" || hasOpenDialog()) return;
+  finishClothingPreview();
   state.keys.clear(); state.velocity.set(0, 0, 0);
   Object.keys(state.holds).forEach((key) => { state.holds[key] = false; });
   canvasPointerStart = null;
   renderWardrobe(); elements.wardrobe.showModal();
+}
+
+function previewClothing() {
+  if (state.mode !== "play" || state.outfitPreview || elements.dialog.open || elements.help.open) return;
+  state.outfitPreview = { cameraMode: state.cameraMode, cameraDistance: state.cameraDistance,
+    cameraPitch: state.cameraPitch, cameraYaw: stage.cameraYaw, orbitHoldUntil: state.orbitHoldUntil };
+  elements.wardrobe.close();
+  state.keys.clear(); state.velocity.set(0, 0, 0);
+  Object.keys(state.holds).forEach((key) => { state.holds[key] = false; });
+  state.destination = null; state.waypoints = []; state.pendingInteractId = null;
+  canvasPointerStart = null; stage.moveMarker.visible = false;
+  setCameraMode("third"); state.cameraDistance = 3.4; state.cameraPitch = -.05;
+  stage.cameraYaw = state.facing + Math.PI; state.orbitHoldUntil = Infinity;
+  elements.outfitPreviewName.textContent = OUTFITS.find((outfit) => outfit.id === wardrobeProgress.equipped).name;
+  elements.outfitPreview.hidden = false;
+}
+
+function finishClothingPreview() {
+  if (!state.outfitPreview) return;
+  const previous = state.outfitPreview;
+  setCameraMode(previous.cameraMode);
+  state.cameraDistance = previous.cameraDistance; state.cameraPitch = previous.cameraPitch;
+  stage.cameraYaw = previous.cameraYaw; state.orbitHoldUntil = previous.orbitHoldUntil;
+  state.outfitPreview = null; elements.outfitPreview.hidden = true;
 }
 
 function setMode(mode) {
@@ -1325,6 +1351,7 @@ function saveRegionProgress() {
 
 function returnToEarth() {
   if (state.mode !== "play") return;
+  finishClothingPreview();
   saveRegionProgress();
   state.velocity.set(0, 0, 0); state.destination = null; state.waypoints = [];
   state.pendingInteractId = null; state.keys.clear();
@@ -1439,12 +1466,14 @@ function setCameraMode(mode) {
 }
 
 function toggleCameraMode() {
+  finishClothingPreview();
   setCameraMode(state.cameraMode === "third" ? "first" : "third");
   showToast(state.cameraMode === "first" ? "第一人称 · 点击前方地面继续跑" : "第三人称 · 现在可以看见自己");
 }
 
 function jump() {
   if (state.mode !== "play" || !state.grounded || hasOpenDialog()) return;
+  finishClothingPreview();
   state.grounded = false;
   state.jumpVelocity = 6.15;
 }
@@ -1464,6 +1493,7 @@ function setDestination(point, pendingInteractId = null) {
 
 function moveFromPointer(clientX, clientY) {
   if (state.mode !== "play" || hasOpenDialog()) return;
+  finishClothingPreview();
   const portalScreen = stage.portal.localToWorld(new THREE.Vector3(0, .7, 0)).project(stage.camera);
   const portalX = (portalScreen.x + 1) * window.innerWidth / 2, portalY = (1 - portalScreen.y) * window.innerHeight / 2;
   if (portalScreen.z > -1 && portalScreen.z < 1 && Math.hypot(clientX - portalX, clientY - portalY) < 40) {
@@ -1754,7 +1784,7 @@ function closeEncounter() {
 }
 
 function update(delta) {
-  if (state.mode !== "play" || hasOpenDialog()) return;
+  if (state.mode !== "play" || hasOpenDialog() || state.outfitPreview) return;
   const axes = movementAxes();
   const desired = new THREE.Vector3(
     -Math.sin(stage.cameraYaw) * axes.z - Math.cos(stage.cameraYaw) * axes.x,
@@ -1845,6 +1875,8 @@ elements.start.addEventListener("click", () => enterContinent(selectedContinent)
 wardrobeProgress = createWardrobeProgress(readWardrobeSave());
 updateWardrobeStatus();
 elements.wardrobeButton.addEventListener("click", openWardrobe);
+$("wardrobe-preview").addEventListener("click", previewClothing);
+$("outfit-preview-close").addEventListener("click", finishClothingPreview);
 elements.wardrobeClose.addEventListener("click", () => elements.wardrobe.close());
 elements.wardrobe.addEventListener("click", (event) => { if (event.target === elements.wardrobe) elements.wardrobe.close(); });
 $("earth-button").addEventListener("click", returnToEarth);
@@ -1913,7 +1945,7 @@ elements.worldCanvas.addEventListener("pointermove", (event) => {
     state.cameraPitch = state.cameraMode === "first"
       ? THREE.MathUtils.clamp(state.cameraPitch - dy * .005, -1.2, 1.2)
       : THREE.MathUtils.clamp(state.cameraPitch + dy * .005, -.18, 1.12);
-    state.orbitHoldUntil = performance.now() + 4000;
+    state.orbitHoldUntil = state.outfitPreview ? Infinity : performance.now() + 4000;
     if (state.cameraMode === "first") state.facing = stage.cameraYaw;
   }
   canvasPointerStart.lastX = event.clientX;
@@ -1940,6 +1972,7 @@ window.addEventListener("keydown", (event) => {
   if (elements.wardrobe.open) return;
   if (moveCodes.includes(event.code)) {
     event.preventDefault();
+    finishClothingPreview();
     state.keys.add(event.code);
   }
   if (event.code === "Space" && !event.repeat) { event.preventDefault(); jump(); }
@@ -1948,6 +1981,7 @@ window.addEventListener("keydown", (event) => {
   if (event.code === "KeyE" && !event.repeat && !elements.dialog.open && !elements.help.open) interact();
   if (event.key === "?" && !elements.help.open) elements.help.showModal();
   if (event.code === "Escape") {
+    finishClothingPreview();
     if (elements.dialog.open) elements.dialog.close();
     if (elements.help.open) elements.help.close();
   }

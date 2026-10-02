@@ -116,6 +116,11 @@
     </div>
   </dialog>
 
+  <aside class="outfit-preview" id="outfit-preview" hidden aria-label="查看当前穿着">
+    <small>THE TRAVELER</small><h2 id="outfit-preview-name"></h2>
+    <p>拖动画面绕着看 · 滚轮调整远近</p>
+    <button id="outfit-preview-close" type="button">继续探索</button>
+  </aside>
   <dialog class="wardrobe-dialog" id="wardrobe-dialog" aria-labelledby="wardrobe-title">
     <button class="dialog-close" id="wardrobe-close" type="button" aria-label="关闭衣橱">×</button>
     <header class="wardrobe-heading">
@@ -125,6 +130,7 @@
       <progress id="wardrobe-meter" value="0" max="12" aria-label="外套成长阅历"></progress>
       <small>新地标 +2 · 首次地点互动 +3 · 12 阅历升级旅行装 · 36 阅历解锁金绣礼装</small>
     </header>
+    <button class="wardrobe-preview-button" id="wardrobe-preview" type="button">近距离查看穿着 ↗</button>
     <div class="wardrobe-list" id="wardrobe-list" aria-label="已收藏和待解锁的旅行装扮"></div>
     <p class="wardrobe-storage-note" id="wardrobe-storage-note"></p>
   </dialog>
