@@ -73,6 +73,10 @@ function dressPortAgent(agent, target) {
   const trousers = new THREE.Color(0x394854), shoes = new THREE.Color(0xd0dce0);
   const sole = new THREE.Color(0x647680);
   const vertex = new THREE.Vector3();
+  const legAxes = ["Right", "Left"].map((side) => ({
+    knee: agent.scene.worldToLocal(target.skeleton.getBoneByName(`mixamorig${side}Leg`).getWorldPosition(new THREE.Vector3())),
+    ankle: agent.scene.worldToLocal(target.skeleton.getBoneByName(`mixamorig${side}Foot`).getWorldPosition(new THREE.Vector3()))
+  }));
   const bodyIndices = [];
   const indices = geometry.index.array;
   for (let index = 0; index < indices.length; index += 3) {
@@ -84,11 +88,21 @@ function dressPortAgent(agent, target) {
   for (let index = 0; index < position.count; index++) {
     vertex.fromBufferAttribute(position, index);
     const color = vertex.y < .027 ? sole : vertex.y < .105 ? shoes : vertex.y < .92 ? trousers
-      : Math.abs(vertex.x) > .54 || (vertex.y > 1.28 && Math.abs(vertex.x) < .105) ? skin : jacket;
+      : Math.abs(vertex.x) > .54 || (vertex.y > 1.325 && Math.abs(vertex.x) < .085) ? skin : jacket;
     clothingParts[index] = color === jacket ? 1 : color === trousers ? 2 : color === shoes ? 3 : 0;
     colors.set(color.toArray(), index * 3);
     const hip = Math.exp(-Math.pow((vertex.y - .87) / .16, 2));
     vertex.x *= 1 - .17 * hip;
+    if (vertex.y > .105 && vertex.y < .68) {
+      // Taper the source balloon trousers around each lower-leg axis, not
+      // toward the body centre; shoes, knees and the rig stay unchanged.
+      const axis = legAxes[vertex.x < 0 ? 0 : 1];
+      const height = THREE.MathUtils.clamp((vertex.y - axis.ankle.y) / (axis.knee.y - axis.ankle.y), 0, 1);
+      const centre = axis.ankle.clone().lerp(axis.knee, height);
+      const taper = .55 + .45 * THREE.MathUtils.smoothstep(vertex.y, .35, .68);
+      vertex.x = centre.x + (vertex.x - centre.x) * taper;
+      vertex.z = centre.z + (vertex.z - centre.z) * taper;
+    }
     if (vertex.y > .98 && vertex.y < 1.29 && Math.abs(vertex.x) < .19) {
       // Remove the source adult chest contour and broaden its very pinched
       // waist into the straighter silhouette of a loose teenage hoodie.
