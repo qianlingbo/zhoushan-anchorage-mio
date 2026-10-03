@@ -321,7 +321,7 @@ test("clothing inspection has a camera-side fill light that switches off during 
   assert.ok(stage.portraitLight?.isDirectionalLight, "Shadowed facial features need a soft camera-side fill during inspection");
   assert.equal(stage.portraitLight.castShadow, false, "Do not allocate another shadow-map pass");
   assert.equal(stage.portraitLight.visible, false);
-  api.setContext({ progress: dependencies.createWardrobeProgress(), stage });
+  api.setContext({ progress: dependencies.createWardrobeProgress(), stage, region: { id: "asia", heightScale: 1 } });
   api.state.mode = "play"; api.previewClothing(); stage.render(1, .016);
   assert.equal(stage.portraitLight.visible, true);
   assert.ok(stage.portraitLight.position.distanceTo(stage.camera.position) < 1e-6);

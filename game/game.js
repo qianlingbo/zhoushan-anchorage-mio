@@ -683,6 +683,9 @@ class PortWorld {
     this.player.userData.rig.scale.setScalar(.86);
     this.player.userData.head.scale.setScalar(1.08);
     this.world.add(this.player);
+    this.portraitLight = new THREE.DirectionalLight(0xdbe9f4, 1.25);
+    this.portraitLight.visible = false;
+    this.scene.add(this.portraitLight, this.portraitLight.target);
     this.guideSpirit = makeGuideSpirit();
     this.guideSpirit.visible = false;
     this.world.add(this.guideSpirit);
@@ -1205,6 +1208,11 @@ class PortWorld {
         this.moveMarker.scale.setScalar(1);
       }
       state.cameraSnap = false;
+      this.portraitLight.visible = !!state.outfitPreview;
+      if (state.outfitPreview) {
+        this.portraitLight.position.copy(this.camera.position);
+        this.portraitLight.target.position.copy(surface.point).addScaledVector(surface.normal, .9);
+      }
     }
     this.sky.position.copy(this.camera.position);
     this.renderers.get(state.mode).render(this.scene, this.camera);
