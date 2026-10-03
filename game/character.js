@@ -16,26 +16,43 @@ function makeAgentHead() {
     mesh.castShadow = mesh.receiveShadow = true;
     head.add(mesh); return mesh;
   };
-  add(new THREE.SphereGeometry(1, 36, 28), skin, [0, 0, -.008], [.106, .136, .099]);
-  add(new THREE.SphereGeometry(1, 28, 20), skin, [0, -.054, .017], [.084, .071, .078]);
+  const faceGeometry = new THREE.SphereGeometry(1, 36, 28);
+  const facePosition = faceGeometry.attributes.position;
+  for (let index = 0; index < facePosition.count; index++) {
+    const jaw = THREE.MathUtils.clamp((-facePosition.getY(index) - .45) / .55, 0, 1);
+    facePosition.setX(index, facePosition.getX(index) * (1 - .22 * jaw));
+  }
+  faceGeometry.computeVertexNormals();
+  add(faceGeometry, skin, [0, 0, -.008], [.106, .136, .099]);
+  const faceFront = (x, y) => -.008 + .099 * Math.sqrt(Math.max(0, 1 - (x / .106) ** 2 - (y / .136) ** 2));
   for (const side of [-1, 1]) {
     add(new THREE.SphereGeometry(1, 20, 14), skin, [side * .101, -.010, -.005], [.014, .025, .014]);
-    add(new THREE.SphereGeometry(1, 20, 14), skin, [side * .056, -.015, .061], [.035, .034, .033]);
-    add(new THREE.SphereGeometry(1, 20, 14), eyeWhite, [side * .040, .024, .081], [.020, .0075, .007]);
-    add(new THREE.SphereGeometry(1, 18, 12), iris, [side * .040, .024, .087], [.0067, .0067, .002]);
+    const eyeShape = new THREE.Shape();
+    eyeShape.moveTo(-.019, 0);
+    eyeShape.quadraticCurveTo(0, .010, .019, 0);
+    eyeShape.quadraticCurveTo(0, -.007, -.019, 0);
+    const eyeGeometry = new THREE.ShapeGeometry(eyeShape, 20);
+    const eyePosition = eyeGeometry.attributes.position;
+    for (let index = 0; index < eyePosition.count; index++) {
+      const x = eyePosition.getX(index) + side * .040, y = eyePosition.getY(index) + .024;
+      eyePosition.setXYZ(index, x, y, faceFront(x, y) + .0007);
+    }
+    eyeGeometry.computeVertexNormals();
+    add(eyeGeometry, eyeWhite, [0, 0, 0]);
+    add(new THREE.SphereGeometry(1, 18, 12), iris, [side * .040, .024, faceFront(side * .040, .024) + .0014], [.0058, .0058, .001]);
     const eyelid = new THREE.QuadraticBezierCurve3(
-      new THREE.Vector3(side * .021, .023, .087),
-      new THREE.Vector3(side * .038, .034, .092),
-      new THREE.Vector3(side * .059, .026, .082)
+      new THREE.Vector3(side * .021, .024, faceFront(side * .021, .024) + .0007),
+      new THREE.Vector3(side * .040, .034, faceFront(side * .040, .034) + .0007),
+      new THREE.Vector3(side * .059, .024, faceFront(side * .059, .024) + .0007)
     );
-    add(new THREE.TubeGeometry(eyelid, 10, .0018, 5, false), skin, [0, 0, 0]);
+    add(new THREE.TubeGeometry(eyelid, 10, .0013, 5, false), skin, [0, 0, 0]);
     const brow = add(new THREE.CapsuleGeometry(.0028, .029, 4, 8), hair, [side * .040, .045, .082]);
     brow.rotation.z = side * 1.48;
   }
-  add(new THREE.SphereGeometry(1, 24, 16), skin, [0, .006, .089], [.011, .026, .014]);
-  add(new THREE.SphereGeometry(1, 20, 14), skin, [0, -.014, .100], [.015, .010, .012]);
-  add(new THREE.SphereGeometry(1, 24, 12), lip, [0, -.056, .088], [.022, .0026, .004]);
-  add(new THREE.SphereGeometry(1, 24, 12), lip, [0, -.061, .087], [.018, .0035, .004]);
+  add(new THREE.SphereGeometry(1, 24, 16), skin, [0, .006, .079], [.010, .024, .012]);
+  add(new THREE.SphereGeometry(1, 20, 14), skin, [0, -.014, .089], [.013, .009, .010]);
+  add(new THREE.SphereGeometry(1, 24, 12), lip, [0, -.056, .083], [.021, .0023, .0016]);
+  add(new THREE.SphereGeometry(1, 24, 12), lip, [0, -.061, .081], [.017, .0031, .0016]);
   add(new THREE.SphereGeometry(.109, 32, 22, 0, Math.PI * 2, 0, Math.PI * .56), hair, [0, .031, -.015], [1, 1.06, .97]);
   // Tousled short black hair, softer jaw and a shorter nose distinguish the
   // teenager from the previous adult, rather than merely reducing root scale.
@@ -210,6 +227,29 @@ function locomotionClips(agent, locomotion, target, source, heightRatio) {
   };
   const clips = ["Idle", "Walk", "Run"].map((name) => {
     const reference = THREE.AnimationClip.findByName(locomotion.animations, name).clone();
+    if (name === "Idle") {
+      // The source idle is a staggered, twisted swagger. A planted neutral
+      // stance fits quiet exploration and close-up clothing inspection.
+      const times = [0, .25, .5, .75, 1].map((fraction) => fraction * reference.duration);
+      const tracks = targetBones.map((bone) => {
+        const rest = bind.get(bone.name);
+        const relaxed = rest.quaternion.clone();
+        if (["mixamorigLeftArm", "mixamorigRightArm"].includes(bone.name)) {
+          const side = bone.name === "mixamorigLeftArm" ? -1 : 1;
+          rotation.setFromAxisAngle(new THREE.Vector3(0, 0, 1), side * 1.40).multiply(rest.world);
+          bone.parent.getWorldQuaternion(parentRotation).invert();
+          relaxed.copy(parentRotation.multiply(rotation));
+        }
+        const values = times.flatMap((time) => {
+          const pose = relaxed.clone();
+          if (bone.name === "mixamorigSpine2") pose.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.sin(time / reference.duration * Math.PI * 2) * .006));
+          return pose.toArray();
+        });
+        return new THREE.QuaternionKeyframeTrack(`${bone.name}.quaternion`, times, values);
+      });
+      tracks.push(new THREE.VectorKeyframeTrack(`${targetHip.name}.position`, times, times.flatMap(() => bind.get(targetHip.name).position.toArray())));
+      return new THREE.AnimationClip(name, reference.duration, tracks);
+    }
     reference.tracks = reference.tracks.filter((track) => sourceBones.has(track.name.split(".")[0]));
     const action = sourceMixer.clipAction(reference).play();
     const times = [];
