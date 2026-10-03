@@ -289,3 +289,17 @@ test("preview provides a keyboard exit and restores focus when that exit is hidd
   api.finishClothingPreview();
   assert.equal(context.document.activeElement, api.elements.wardrobeButton);
 });
+
+test("foreground NPCs do not cover the clothing portrait and recover their original visibility", async () => {
+  const { api, dependencies } = await integration();
+  const npc = new THREE.Group(), pedestrian = new THREE.Group(), hidden = new THREE.Group();
+  hidden.visible = false;
+  const stage = { cameraYaw: .7, moveMarker: { visible: false },
+    locationGroups: new Map([["office", { npc }], ["customs", { npc: hidden }]]), ambientPeople: [pedestrian] };
+  api.setContext({ progress: dependencies.createWardrobeProgress(), stage });
+  api.state.mode = "play"; api.previewClothing();
+  assert.equal(npc.visible, false, "A roaming NPC can cover the main character in close-up");
+  assert.equal(pedestrian.visible, false);
+  api.finishClothingPreview();
+  assert.equal(npc.visible, true); assert.equal(pedestrian.visible, true); assert.equal(hidden.visible, false);
+});
