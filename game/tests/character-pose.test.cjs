@@ -142,3 +142,51 @@ test("relaxed idle has lowered arms and retains finite walk/run/jump articulatio
   }
   assert.ok(animated, "Walking/running must still move the real skinned character");
 });
+
+test("standing travel trousers taper at the calves while leaving knee room", async () => {
+  const agent = await character();
+  let body;
+  agent.object.traverse((part) => { if (part.isSkinnedMesh) body = part; });
+  const position = body.geometry.attributes.position;
+  const vertex = new agent.THREE.Vector3();
+  const span = (height, side) => {
+    const points = [];
+    for (let index = 0; index < position.count; index++) {
+      if (Math.abs(position.getY(index) - height) > .025 || Math.sign(position.getX(index)) !== side) continue;
+      body.getVertexPosition(index, vertex); body.localToWorld(vertex); points.push(vertex.clone());
+    }
+    assert.ok(points.length >= 8, "The measured trouser band must contain actual standing mesh vertices");
+    return new agent.THREE.Box3().setFromPoints(points).getSize(new agent.THREE.Vector3());
+  };
+  for (const side of [-1, 1]) {
+    for (const height of [.35, .45]) {
+      const calf = span(height, side);
+      assert.ok(calf.x <= .12 && calf.z <= .12, `Lower trousers are ballooned at ${height} m: ${calf.x.toFixed(3)} × ${calf.z.toFixed(3)} m`);
+      assert.ok(calf.x >= .045 && calf.z >= .06, "The tapered lower trousers must still have human leg volume");
+    }
+    const knee = span(.65, side);
+    assert.ok(knee.x >= .12 && knee.x <= .16 && knee.z >= .12 && knee.z <= .16, "Tapering must preserve room at the knees");
+  }
+});
+
+test("hoodie covers the shoulder band while leaving the upper neck and hands as skin", async () => {
+  const agent = await character();
+  let body;
+  agent.object.traverse((part) => { if (part.isSkinnedMesh) body = part; });
+  const position = body.geometry.attributes.position, colors = body.geometry.attributes.color;
+  const shoulder = [], exposed = [];
+  for (let index = 0; index < position.count; index++) {
+    const x = Math.abs(position.getX(index)), y = position.getY(index), z = position.getZ(index);
+    if (x >= .065 && x < .105 && y >= 1.28 && y < 1.325 && z > .015) shoulder.push(index);
+    if ((x < .035 && y >= 1.345 && y < 1.375) || x > .54) exposed.push(index);
+  }
+  assert.ok(shoulder.length >= 20 && exposed.length > 100, "Tests must measure the actual shoulder and exposed skin vertices");
+  const equal = (index, color) => color.every((value, channel) => Math.abs(colors.array[index * 3 + channel] - value) < 1e-6);
+  const skin = new agent.THREE.Color(0xd5a57f).toArray();
+  for (const [id, jacket] of [["basic", 0x487b91], ["voyager", 0x52765e], ["master", 0x27384f]]) {
+    agent.setOutfit({ id, style: "hoodie", jacket, trousers: 0x394854, shoes: 0xd0dce0, trim: 0xc8dcdf, accent: 0xd69d4f });
+    const cloth = new agent.THREE.Color(jacket).toArray();
+    assert.ok(shoulder.every((index) => equal(index, cloth)), `${id} leaves a bare skin band across the hoodie shoulders`);
+    assert.ok(exposed.every((index) => equal(index, skin)), "Covering the shoulders must not recolor the upper neck or hands");
+  }
+});
