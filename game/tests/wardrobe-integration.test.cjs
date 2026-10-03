@@ -96,7 +96,7 @@ globalThis.wardrobeIntegration = {
   previewClothing: typeof previewClothing === "function" ? previewClothing : undefined,
   finishClothingPreview: typeof finishClothingPreview === "function" ? finishClothingPreview : undefined,
   collectNearbyDiscoveries, answerEncounter, jump, callGuide, moveFromPointer, interact, update,
-  state, elements, locations,
+  state, elements, locations, PortWorld,
   setContext(values) {
     if ("progress" in values) wardrobeProgress = values.progress;
     if ("region" in values) currentRegion = values.region;
@@ -302,4 +302,31 @@ test("foreground NPCs do not cover the clothing portrait and recover their origi
   assert.equal(pedestrian.visible, false);
   api.finishClothingPreview();
   assert.equal(npc.visible, true); assert.equal(pedestrian.visible, true); assert.equal(hidden.visible, false);
+});
+
+test("clothing inspection has a camera-side fill light that switches off during normal exploration", async () => {
+  class Renderer {
+    constructor() { this.shadowMap = {}; }
+    setPixelRatio() {}
+    render() {}
+  }
+  const dependencies = await wardrobeDependencies();
+  const { api } = productionAPI({ ...dependencies, THREE: { ...THREE, WebGLRenderer: Renderer },
+    EarthAtlas: class {}, makeSky: () => new THREE.Group(), animateNaturalPerson() {},
+    natureUniforms: { time: { value: 0 }, wind: { value: 1 }, player: { value: new THREE.Vector3() } },
+    makeNaturalPerson() { const person = new THREE.Group(); person.userData.rig = new THREE.Group(); person.userData.head = new THREE.Group(); return person; }
+  });
+  class PortraitWorld extends api.PortWorld { setRegion() {} resize() {} }
+  const stage = new PortraitWorld();
+  assert.ok(stage.portraitLight?.isDirectionalLight, "Shadowed facial features need a soft camera-side fill during inspection");
+  assert.equal(stage.portraitLight.castShadow, false, "Do not allocate another shadow-map pass");
+  assert.equal(stage.portraitLight.visible, false);
+  api.setContext({ progress: dependencies.createWardrobeProgress(), stage });
+  api.state.mode = "play"; api.previewClothing(); stage.render(1, .016);
+  assert.equal(stage.portraitLight.visible, true);
+  assert.ok(stage.portraitLight.position.distanceTo(stage.camera.position) < 1e-6);
+  const target = stage.portraitLight.target.getWorldPosition(new THREE.Vector3());
+  assert.ok(target.distanceTo(stage.player.getWorldPosition(new THREE.Vector3())) < 1.5);
+  api.finishClothingPreview(); stage.render(1.02, .016);
+  assert.equal(stage.portraitLight.visible, false, "Portrait lighting must not change the normal world lighting");
 });
