@@ -179,7 +179,10 @@ function windMaterial(parameters, strength, grass = false) {
       `);
     if (grass) {
       shader.fragmentShader = shader.fragmentShader.replace("#include <common>", "#include <common>\nvarying float vBladeHeight;")
-        .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb*=mix(vec3(.58,.69,.42),vec3(1.08,1.13,.72),vBladeHeight);");
+        .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb*=mix(vec3(.78,.86,.60),vec3(1.08,1.13,.82),vBladeHeight);")
+        // A low-cost thin-leaf scattering approximation keeps back-facing
+        // blades readable without flattening the directional shadows.
+        .replace("#include <lights_fragment_end>", "#include <lights_fragment_end>\nreflectedLight.indirectDiffuse += diffuseColor.rgb * .12;");
     }
   };
   material.customProgramCacheKey = () => `wind-${strength}-${grass}`;
