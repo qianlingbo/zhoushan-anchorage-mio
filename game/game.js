@@ -185,7 +185,7 @@ const elements = {
   complete: $("complete-button"), dialogClose: $("dialog-close"), help: $("help-dialog"), helpButton: $("help-button"), helpClose: $("help-close"),
   wardrobe: $("wardrobe-dialog"), wardrobeButton: $("wardrobe-button"), wardrobeClose: $("wardrobe-close"), wardrobeList: $("wardrobe-list"),
   wardrobeSummary: $("wardrobe-summary"), wardrobeMeter: $("wardrobe-meter"), wardrobeStorageNote: $("wardrobe-storage-note"),
-  outfitPreview: $("outfit-preview"), outfitPreviewName: $("outfit-preview-name")
+  outfitPreview: $("outfit-preview"), outfitPreviewName: $("outfit-preview-name"), outfitPreviewClose: $("outfit-preview-close")
 };
 
 const state = {
@@ -1311,6 +1311,7 @@ function previewClothing() {
   stage.cameraYaw = state.facing + Math.PI; state.orbitHoldUntil = Infinity;
   elements.outfitPreviewName.textContent = OUTFITS.find((outfit) => outfit.id === wardrobeProgress.equipped).name;
   elements.outfitPreview.hidden = false;
+  elements.outfitPreviewClose.focus();
 }
 
 function finishClothingPreview() {
@@ -1320,6 +1321,7 @@ function finishClothingPreview() {
   state.cameraDistance = previous.cameraDistance; state.cameraPitch = previous.cameraPitch;
   stage.cameraYaw = previous.cameraYaw; state.orbitHoldUntil = previous.orbitHoldUntil;
   state.outfitPreview = null; elements.outfitPreview.hidden = true;
+  if (document.activeElement === elements.outfitPreviewClose) elements.wardrobeButton.focus();
 }
 
 function setMode(mode) {
@@ -1437,6 +1439,7 @@ function collectNearbyDiscoveries() {
 
 function callGuide() {
   if (state.mode !== "play" || hasOpenDialog()) return;
+  finishClothingPreview();
   const candidates = locations
     .filter((location) => !state.discoveries.has(location.id))
     .sort((a, b) => {
@@ -1714,6 +1717,7 @@ function interact() {
     showToast("靠近带 ◇ 标记的人物再交互");
     return;
   }
+  finishClothingPreview();
   if (state.nearbyId === "world-gate") returnToEarth();
   else openEncounter(state.nearbyId);
 }
