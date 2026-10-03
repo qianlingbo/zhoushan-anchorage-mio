@@ -53,7 +53,7 @@ function makeAgentHead() {
   add(new THREE.SphereGeometry(1, 20, 14), skin, [0, -.014, .089], [.013, .009, .010]);
   add(new THREE.SphereGeometry(1, 24, 12), lip, [0, -.056, .083], [.021, .0023, .0016]);
   add(new THREE.SphereGeometry(1, 24, 12), lip, [0, -.061, .081], [.017, .0031, .0016]);
-  add(new THREE.SphereGeometry(.109, 32, 22, 0, Math.PI * 2, 0, Math.PI * .56), hair, [0, .031, -.015], [1, 1.06, .97]);
+  add(new THREE.SphereGeometry(.109, 32, 22, 0, Math.PI * 2, 0, Math.PI * .46), hair, [0, .031, -.015], [1, 1.06, .97]);
   // Tousled short black hair, softer jaw and a shorter nose distinguish the
   // teenager from the previous adult, rather than merely reducing root scale.
   for (let index = 0; index < 7; index++) {
