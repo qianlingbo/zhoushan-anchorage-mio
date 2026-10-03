@@ -39,7 +39,7 @@ class Element {
   getAttribute(name) { return this.attributes[name]; }
   showModal() { this.open = true; }
   close() { this.open = false; }
-  focus() { this.focused = true; }
+  focus() { this.focused = true; if (this.ownerDocument) this.ownerDocument.activeElement = this; }
   click() { if (!this.disabled) this.listeners.get("click")?.({ target: this, preventDefault() {} }); }
   querySelectorAll(selector) {
     const result = [];
@@ -59,7 +59,7 @@ function productionAPI(dependencies = {}, storage = {}) {
   const elementsById = new Map();
   const document = {
     getElementById(id) {
-      if (!elementsById.has(id)) elementsById.set(id, new Element());
+      if (!elementsById.has(id)) { const element = new Element(); element.ownerDocument = document; elementsById.set(id, element); }
       return elementsById.get(id);
     },
     createElement: (tagName) => new Element(tagName),
@@ -258,4 +258,34 @@ test("ending and reopening preview restore the previous view without overwriting
   assert.doesNotThrow(() => api.finishClothingPreview());
   api.state.mode = "intro"; api.previewClothing();
   assert.equal(api.state.outfitPreview, null);
+});
+
+test("calling the guide leaves close-up mode instead of queuing movement behind a frozen preview", async () => {
+  const { api, dependencies } = await integration();
+  api.setContext({ progress: dependencies.createWardrobeProgress(), stage: { cameraYaw: .7, moveMarker: { visible: false } } });
+  api.state.mode = "play"; api.previewClothing();
+  api.locations.forEach(({ id }) => api.state.discoveries.add(id));
+  api.callGuide();
+  assert.equal(api.state.outfitPreview, null);
+  assert.equal(api.elements.outfitPreview.hidden, true);
+});
+
+test("an actual nearby NPC interaction restores the exploration camera before opening its dialogue", async () => {
+  const { api, dependencies } = await integration();
+  api.setContext({ progress: dependencies.createWardrobeProgress(), stage: { cameraYaw: .7, moveMarker: { visible: false } } });
+  api.state.mode = "play"; api.state.cameraMode = "first"; api.previewClothing();
+  api.state.nearbyId = "office"; api.interact();
+  assert.equal(api.elements.dialog.open, true);
+  assert.equal(api.state.outfitPreview, null);
+  assert.equal(api.state.cameraMode, "first");
+});
+
+test("preview provides a keyboard exit and restores focus when that exit is hidden", async () => {
+  const { api, dependencies, context } = await integration();
+  api.setContext({ progress: dependencies.createWardrobeProgress(), stage: { cameraYaw: .7, moveMarker: { visible: false } } });
+  api.state.mode = "play"; api.previewClothing();
+  assert.ok(api.elements.outfitPreviewClose?.focused, "The visible preview exit needs keyboard focus");
+  assert.equal(context.document.activeElement, api.elements.outfitPreviewClose);
+  api.finishClothingPreview();
+  assert.equal(context.document.activeElement, api.elements.wardrobeButton);
 });
