@@ -62,3 +62,19 @@ inside the visible dialog; measure its DOM rectangle against the dialog bounds.
 Before the sticky-button fix this check fails (`closeTop=-356`, `dialogTop=14`).
 Also verify the saved outfit and discoveries survive a reload, and that selecting
 a different continent leaves the equipped outfit unchanged.
+
+## Character stance and atmosphere
+
+`character-pose.test.cjs` checks the actual shipped skinned character: idle shoes
+meet the ground, the torso faces forward, arms rest below the shoulders, facial
+layers follow the cheek surface, and walk/run/jump articulation stays finite.
+`atmosphere.test.cjs` checks linear regional color values, matched sky/fog colors,
+and the thin-grass shader contribution without increasing the geometry budget.
+CPU shader checks do not compile GLSL: verify the real WebGL scene and console
+in the browser, on both desktop and mobile sizes.
+
+Close-up browser checks: wardrobe → near-field preview → continue; repeat from
+first-person and verify it is restored. Drag to orbit and press Escape to exit.
+Calling the bird or interacting with a nearby NPC must exit the preview rather
+than freeze an otherwise active route/dialogue. The visible continue button must
+receive keyboard focus; closing it must not leave focus on a hidden element.
