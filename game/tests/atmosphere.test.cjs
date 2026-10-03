@@ -8,10 +8,10 @@ const gameDirectory = path.resolve(__dirname, "..");
 
 function environment() {
   const context = { THREE, continents: [{ id: "asia" }], performance,
-    document: { getElementById: () => ({}) }, window: { matchMedia: () => ({ matches: false }) } };
+    document: { getElementById: () => ({}) }, window: { innerWidth: 1280, matchMedia: () => ({ matches: false }) } };
   const nature = fs.readFileSync(path.join(gameDirectory, "nature.js"), "utf8")
     .replace(/^import .*;\r?\n/gm, "").replace(/^export /gm, "");
-  vm.runInNewContext(`${nature}\nglobalThis.nature = { makeSky, natureUniforms };`, context);
+  vm.runInNewContext(`${nature}\nglobalThis.nature = { makeSky, makeMeadow, natureUniforms };`, context);
   const source = fs.readFileSync(path.join(gameDirectory, "game.js"), "utf8").replace(/^import .*;\r?\n/gm, "");
   vm.runInNewContext(`${source.slice(0, source.indexOf('elements.start.addEventListener("click"'))}\nglobalThis.PortWorld = PortWorld;`, context);
   return context;
@@ -29,6 +29,20 @@ test("the sky uses linear blue colors instead of a bright grey shader palette", 
   assert.match(sky.material.fragmentShader, /mix\(uHorizon,uZenith/);
   assert.match(sky.material.fragmentShader, /tonemapping_fragment/);
   assert.match(sky.material.fragmentShader, /colorspace_fragment/);
+});
+
+test("thin grass blades retain a small scattered-light contribution without extra geometry", () => {
+  const { nature } = environment();
+  const meadow = nature.makeMeadow(() => ({ point: new THREE.Vector3(), quaternion: new THREE.Quaternion() }),
+    () => true, () => .4, new THREE.Color(0x7b964a), .0001);
+  const shader = { uniforms: {}, vertexShader: "#include <common>\n#include <begin_vertex>",
+    fragmentShader: "#include <common>\n#include <color_fragment>\n#include <lights_fragment_end>" };
+  meadow.material.onBeforeCompile(shader);
+  assert.match(shader.fragmentShader, /reflectedLight\.indirectDiffuse\s*\+=\s*diffuseColor\.rgb/, "Grass backfaces still render as black paper cutouts");
+  assert.ok(meadow.count > 0 && meadow.geometry.attributes.position.count === 15, "Keep the original instanced blade budget");
+  assert.equal(shader.uniforms.uNatureTime, nature.natureUniforms.time);
+  assert.equal(shader.uniforms.uWind, nature.natureUniforms.wind);
+  assert.equal(shader.uniforms.uPlayer, nature.natureUniforms.player);
 });
 
 test("regional ground colors stay linear and the sky horizon matches the regional fog", () => {
