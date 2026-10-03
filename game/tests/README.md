@@ -68,6 +68,9 @@ a different continent leaves the equipped outfit unchanged.
 `character-pose.test.cjs` checks the actual shipped skinned character: idle shoes
 meet the ground, the torso faces forward, arms rest below the shoulders, facial
 layers follow the cheek surface, and walk/run/jump articulation stays finite.
+Calf cross-sections must taper without shrinking the knees, and the hoodie must
+cover the shoulder band while keeping the upper neck and hands as skin in every
+outfit. Eye visibility is ray-tested against the real hair and skin geometry.
 `atmosphere.test.cjs` checks linear regional color values, matched sky/fog colors,
 and the thin-grass shader contribution without increasing the geometry budget.
 CPU shader checks do not compile GLSL: verify the real WebGL scene and console
@@ -78,3 +81,7 @@ first-person and verify it is restored. Drag to orbit and press Escape to exit.
 Calling the bird or interacting with a nearby NPC must exit the preview rather
 than freeze an otherwise active route/dialogue. The visible continue button must
 receive keyboard focus; closing it must not leave focus on a hidden element.
+Inspect the face from the front and by dragging to orbit: the camera-side fill
+must reveal the facial features only during inspection. Continue exploring,
+click to run and jump to verify that the normal world lighting and locomotion
+remain intact. This is still a stylized model, not a realistic human asset.

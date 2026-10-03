@@ -1,6 +1,6 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js";
 import { natureUniforms, surfaceTexture, terrainMaterial, makeSky, makeOcean, makeMeadow, makeNaturalTree, makeNaturalPerson, animateNaturalPerson } from "./nature.js?v=20261003-polish-1";
-import { loadAgentCharacter } from "./character.js?v=20261003-polish-1";
+import { loadAgentCharacter } from "./character.js?v=20261003-human-2";
 import { EarthAtlas } from "./earth.js?v=20261001-world-3";
 import { continents, makeRegionLandmark, createRegionalVegetation } from "./regions.js?v=20261001-world-1";
 import { OUTFITS, createWardrobeProgress, recordWardrobeProgress, wardrobeXP, isOutfitUnlocked, equipOutfit, serializeWardrobeProgress } from "./wardrobe.js?v=20261001-wardrobe-1";
