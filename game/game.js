@@ -1134,7 +1134,7 @@ class PortWorld {
       const guideTarget = state.guideTargetId ? locations.find((location) => location.id === state.guideTargetId) : null;
       const guideAngle = guideTarget
         ? Math.atan2(guideTarget.interact[0] - state.position.x, guideTarget.interact[1] - state.position.z)
-        : state.facing + .85;
+        : state.facing + .85 + (state.outfitPreview ? Math.PI : 0);
       const guideDistance = guideTarget ? .9 : .6;
       let guideX = state.position.x + Math.sin(guideAngle) * guideDistance;
       let guideZ = state.position.z + Math.cos(guideAngle) * guideDistance;
@@ -1301,7 +1301,10 @@ function openWardrobe() {
 function previewClothing() {
   if (state.mode !== "play" || state.outfitPreview || elements.dialog.open || elements.help.open) return;
   state.outfitPreview = { cameraMode: state.cameraMode, cameraDistance: state.cameraDistance,
-    cameraPitch: state.cameraPitch, cameraYaw: stage.cameraYaw, orbitHoldUntil: state.orbitHoldUntil };
+    cameraPitch: state.cameraPitch, cameraYaw: stage.cameraYaw, orbitHoldUntil: state.orbitHoldUntil,
+    people: [...(stage.locationGroups?.values() || [])].map(({ npc }) => [npc, npc.visible])
+      .concat((stage.ambientPeople || []).map((person) => [person, person.visible])) };
+  state.outfitPreview.people.forEach(([person]) => { person.visible = false; });
   elements.wardrobe.close();
   state.keys.clear(); state.velocity.set(0, 0, 0);
   Object.keys(state.holds).forEach((key) => { state.holds[key] = false; });
@@ -1320,6 +1323,7 @@ function finishClothingPreview() {
   setCameraMode(previous.cameraMode);
   state.cameraDistance = previous.cameraDistance; state.cameraPitch = previous.cameraPitch;
   stage.cameraYaw = previous.cameraYaw; state.orbitHoldUntil = previous.orbitHoldUntil;
+  previous.people.forEach(([person, visible]) => { person.visible = visible; });
   state.outfitPreview = null; elements.outfitPreview.hidden = true;
   if (document.activeElement === elements.outfitPreviewClose) elements.wardrobeButton.focus();
 }
