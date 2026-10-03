@@ -97,6 +97,29 @@ test("the close-up face has inset eyes and a continuous cheek surface", async ()
   }
 });
 
+test("both inset eyes face the viewer and are visible in front of the hair and skin", async () => {
+  const agent = await character();
+  const headBone = agent.object.getObjectByName("mixamorigHead");
+  const head = headBone.children.find((part) => part.isGroup && part.children.some((mesh) => mesh.material?.color.getHex() === 0xe9e0d1)).clone(true);
+  head.position.set(0, 0, 0); head.quaternion.identity(); head.scale.setScalar(1); head.updateMatrixWorld(true);
+  const whites = head.children.filter((mesh) => mesh.material?.color.getHex() === 0xe9e0d1);
+  assert.equal(whites.length, 2, "Both eyes must have actual white geometry");
+  for (const eye of whites) {
+    const normals = eye.geometry.attributes.normal;
+    assert.ok(Array.from({ length: normals.count }, (_, index) => normals.getZ(index)).every((normal) => normal > .5), "The curved eye surface must face forward rather than be culled");
+  }
+  for (const side of [-1, 1]) {
+    const visible = [];
+    for (const dx of [-.012, -.006, 0, .006, .012]) {
+      const ray = new agent.THREE.Raycaster(new agent.THREE.Vector3(side * .040 + dx, .024, 1), new agent.THREE.Vector3(0, 0, -1));
+      const hit = ray.intersectObject(head, true)[0];
+      if (hit) visible.push(hit.object.material.color.getHex());
+    }
+    assert.ok(visible.filter((color) => color === 0xe9e0d1).length >= 3, `${side < 0 ? "Right" : "Left"} eye white is mostly hidden behind hair / skin`);
+    assert.ok(visible.includes(0x29221d), `${side < 0 ? "Right" : "Left"} iris is hidden behind hair / skin`);
+  }
+});
+
 test("relaxed idle has lowered arms and retains finite walk/run/jump articulation", async () => {
   const agent = await character();
   for (const side of ["Left", "Right"]) {
