@@ -20,7 +20,7 @@ const PLANET_RADIUS = 32;
 const PLANET_Z_SCALE = ISLAND_Z / ISLAND_X;
 const PLANET_CENTER_Y = .38 - PLANET_RADIUS;
 const COLORS = {
-  ink: 0x182d35, cream: 0xf2eddb, paper: 0xe5ddc9, sky: 0xb9d8df,
+  ink: 0x182d35, cream: 0xf2eddb, paper: 0xe5ddc9, sky: 0x98c6d4,
   sea: 0x3d9d9f, seaDeep: 0x164961, grass: 0x809645, grassLight: 0xa4b667,
   grassDark: 0x456338, cliff: 0x8b8877, sand: 0xd9c79b, road: 0xb7ad90,
   orange: 0xb7623c, yellow: 0xd5ad54, blue: 0x547c95, navy: 0x293c46,
@@ -634,7 +634,7 @@ function animateGuideSpirit(bird, time, movement = 0, reduceMotion = false) {
 class PortWorld {
   constructor() {
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.Fog(COLORS.sky, 65, 240);
+    this.scene.fog = new THREE.Fog(COLORS.sky, 105, 320);
     this.sky = makeSky();
     this.scene.add(this.sky);
     this.world = new THREE.Group();
@@ -657,9 +657,9 @@ class PortWorld {
       this.renderers.set(name, renderer);
     });
     this.atlas = new EarthAtlas(continents);
-    const hemisphere = new THREE.HemisphereLight(0xddeef8, 0x687044, 1.6);
+    const hemisphere = new THREE.HemisphereLight(0xb9d8ee, 0x655b40, 1.15);
     this.scene.add(hemisphere);
-    const sun = new THREE.DirectionalLight(0xffe8bf, 3.2);
+    const sun = new THREE.DirectionalLight(0xffe4b5, 2.8);
     sun.position.set(-24, 32, 23).multiplyScalar(WORLD_SCALE);
     sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);
@@ -718,8 +718,9 @@ class PortWorld {
     this.roadPaths = []; this.birds = []; this.boats = [];
     colliders.length = 0;
     random = seededRandom(7823 + continents.indexOf(region) * 137);
-    Object.entries(region.ground).forEach(([name, color]) => natureUniforms[name].value.set(color).convertLinearToSRGB());
+    Object.entries(region.ground).forEach(([name, color]) => natureUniforms[name].value.set(color));
     this.scene.fog.color.set(region.climate === "polar" ? 0xcddde3 : COLORS.sky);
+    this.sky.material.uniforms.uHorizon.value.copy(this.scene.fog.color);
     this.buildWorld();
   }
 

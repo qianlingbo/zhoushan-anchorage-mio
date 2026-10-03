@@ -83,14 +83,18 @@ export function terrainMaterial(kind) {
 export function makeSky() {
   return new THREE.Mesh(new THREE.SphereGeometry(450, 32, 20), new THREE.ShaderMaterial({
     side: THREE.BackSide, depthWrite: false,
-    uniforms: { uTime: natureUniforms.time },
+    uniforms: { uTime: natureUniforms.time,
+      uHorizon: { value: new THREE.Color(0x98c6d4) },
+      uZenith: { value: new THREE.Color(0x347cae) },
+      uCloud: { value: new THREE.Color(0xf3eee0) } },
     vertexShader: `varying vec3 vDirection; void main(){ vDirection=position; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
     fragmentShader: `
-      uniform float uTime; varying vec3 vDirection; ${noiseGLSL}
+      uniform float uTime; uniform vec3 uHorizon; uniform vec3 uZenith; uniform vec3 uCloud;
+      varying vec3 vDirection; ${noiseGLSL}
       void main() {
         vec3 d=normalize(vDirection); vec3 sun=normalize(vec3(-.56,.66,.48));
         float elevation=max(d.y,0.);
-        vec3 color=mix(vec3(.60,.75,.83),vec3(.15,.39,.66),pow(elevation,.45));
+        vec3 color=mix(uHorizon,uZenith,pow(elevation,.38));
         float glow=pow(max(dot(d,sun),0.),14.);
         color+=vec3(.14,.10,.045)*glow;
         float disc=smoothstep(.9994,.9998,dot(d,sun));
@@ -98,7 +102,7 @@ export function makeSky() {
         vec2 cloudUV=d.xz/(max(d.y,.08))*.75+vec2(uTime*.005,0.);
         float clouds=smoothstep(.56,.79,fbm(cloudUV*2.));
         clouds*=smoothstep(.01,.18,d.y)*(1.-smoothstep(.75,.98,d.y));
-        color=mix(color,vec3(.86,.90,.90),clouds*.68);
+        color=mix(color,uCloud,clouds*.72);
         gl_FragColor=vec4(color,1.);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
