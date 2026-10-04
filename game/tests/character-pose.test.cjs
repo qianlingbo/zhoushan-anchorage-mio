@@ -257,9 +257,15 @@ test("head and short hair have natural teenage proportions with the chin connect
     body.getVertexPosition(index, vertex); body.localToWorld(vertex);
     neckTop = Math.max(neckTop, vertex.y); samples++;
   }
-  assert.ok(samples > 20, "Neck contact must be measured against visible shipped mesh vertices");
   const connectedNeck = agent.object.getObjectByName("agent-neck");
-  if (connectedNeck) neckTop = Math.max(neckTop, new agent.THREE.Box3().setFromObject(connectedNeck).max.y);
+  if (connectedNeck) {
+    const position = connectedNeck.geometry.attributes.position;
+    for (let index = 0; index < position.count; index++) {
+      vertex.fromBufferAttribute(position, index); connectedNeck.localToWorld(vertex);
+      neckTop = Math.max(neckTop, vertex.y); samples++;
+    }
+  }
+  assert.ok(samples > 20, "Neck contact must be measured against actual visible neck mesh vertices");
   assert.ok(chin <= neckTop + .005 && chin >= neckTop - .035, `The resized chin must join the neck rather than hover: chin ${chin}, neck ${neckTop}`);
 });
 

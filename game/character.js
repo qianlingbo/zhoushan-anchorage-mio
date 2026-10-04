@@ -120,9 +120,17 @@ function dressPortAgent(agent, target) {
   }));
   const bodyIndices = [];
   const indices = geometry.index.array;
+  const headIndex = target.skeleton.bones.findIndex((bone) => bone.name === "mixamorigHead");
+  const skinIndices = geometry.attributes.skinIndex.array, skinWeights = geometry.attributes.skinWeight.array;
+  const originalHead = (vertexIndex) => {
+    let weight = 0;
+    for (let channel = 0; channel < 4; channel++) if (skinIndices[vertexIndex * 4 + channel] === headIndex) weight += skinWeights[vertexIndex * 4 + channel];
+    return weight > .1;
+  };
   for (let index = 0; index < indices.length; index += 3) {
-    // The existing adult head and hairstyle are removed, not covered.
-    if ([indices[index], indices[index + 1], indices[index + 2]].every((vertexIndex) => position.getY(vertexIndex) < 1.375)) {
+    // The source jaw extends below the old height cut. Its actual head-bone
+    // ownership removes those fragments without clipping shoulders or hands.
+    if ([indices[index], indices[index + 1], indices[index + 2]].every((vertexIndex) => position.getY(vertexIndex) < 1.375 && !originalHead(vertexIndex))) {
       bodyIndices.push(indices[index], indices[index + 1], indices[index + 2]);
     }
   }
@@ -166,6 +174,11 @@ function dressPortAgent(agent, target) {
     object.applyMatrix4(transform); bone.add(object);
   };
   mount("mixamorigHead", makeAgentHead(), [0, 1.485, -.008]);
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(.037, .043, .09, 28, 3),
+    new THREE.MeshStandardMaterial({ color: 0xd5a57f, roughness: .64 }));
+  neck.name = "agent-neck"; neck.scale.z = .78;
+  neck.castShadow = neck.receiveShadow = true;
+  mount("mixamorigNeck", neck, [0, 1.339, -.012]);
   const hoodie = new THREE.Group();
   const cloth = new THREE.MeshStandardMaterial({ color: 0x487b91, roughness: .9 });
   const trim = new THREE.MeshStandardMaterial({ color: 0xc8dcdf, roughness: .82 });
