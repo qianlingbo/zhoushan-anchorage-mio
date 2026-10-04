@@ -330,6 +330,10 @@ test("clothing inspection has a camera-side fill light that switches off during 
   assert.ok(stage.portraitLight.position.distanceTo(stage.camera.position) < 1e-6);
   const target = stage.portraitLight.target.getWorldPosition(new THREE.Vector3());
   assert.ok(target.distanceTo(stage.player.getWorldPosition(new THREE.Vector3())) < 1.5);
+  api.state.cameraDistance = 1.8; api.state.cameraSnap = true; stage.render(1.01, .016);
+  stage.camera.updateMatrixWorld(true);
+  const face = stage.player.getWorldPosition(new THREE.Vector3()).addScaledVector(stage.camera.up, 1.44).project(stage.camera);
+  assert.ok(Math.abs(face.y) < .35, "Facial inspection must lift the focal point so the face remains near the centre of the view");
   api.finishClothingPreview(); stage.render(1.02, .016);
   assert.equal(stage.portraitLight.visible, false, "Portrait lighting must not change the normal world lighting");
 });
