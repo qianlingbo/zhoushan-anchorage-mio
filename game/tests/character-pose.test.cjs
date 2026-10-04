@@ -292,7 +292,8 @@ test("front and side rays see continuous skin from the collar to the new chin", 
     return true;
   };
   const isSkin = (hit) => {
-    if (hit.object.material.color.getHex() === 0xd5a57f) return true;
+    const material = Array.isArray(hit.object.material) ? hit.object.material[hit.face.materialIndex] : hit.object.material;
+    if (material.color.getHex() === 0xd5a57f) return true;
     const colors = hit.object.geometry.attributes.color;
     return colors && [hit.face.a, hit.face.b, hit.face.c].every((index) => skin.every((value, channel) => Math.abs(colors.array[index * 3 + channel] - value) < 1e-6));
   };
@@ -313,4 +314,102 @@ test("front and side rays see continuous skin from the collar to the new chin", 
       }
     }
   }
+});
+
+function texturePool(agent) {
+  const pool = new Set();
+  agent.object.traverse((part) => {
+    if (!part.isMesh) return;
+    for (const material of Array.isArray(part.material) ? part.material : [part.material]) {
+      for (const key of ["map", "bumpMap", "roughnessMap"]) if (material[key]) pool.add(material[key]);
+    }
+  });
+  return pool;
+}
+
+test("actual skin and clothing use separate matte micro-surfaces without weaving the hands", async () => {
+  const agent = await character();
+  let body;
+  agent.object.traverse((part) => { if (part.isSkinnedMesh) body = part; });
+  assert.ok(Array.isArray(body.material) && body.material.length === 2, "The mixed skin/clothing body needs two actual material regions");
+  const [fabric, skin] = body.material;
+  assert.ok(fabric.isMeshPhysicalMaterial && skin.isMeshPhysicalMaterial, "Cloth and skin need independent physical response");
+  assert.ok(fabric.sheen > .1 && fabric.sheenColor.getHex() !== 0 && fabric.roughness >= .85, "Clothing needs a restrained woven/fibre sheen rather than plastic shine");
+  assert.ok(skin.specularIntensity <= .45 && skin.roughness >= .75 && skin.sheen === 0 && skin.clearcoat === 0, "Skin must remain matte instead of receiving cloth/clearcoat highlights");
+  assert.ok(fabric.bumpMap?.isDataTexture && skin.bumpMap?.isDataTexture && fabric.bumpMap !== skin.bumpMap, "Hands and clothing must sample distinct original surface textures");
+  assert.equal(fabric.bumpMap.name, "agent-cloth-body");
+  assert.equal(skin.bumpMap.name, "agent-skin-body");
+  const indices = body.geometry.index.array, colors = body.geometry.attributes.color;
+  const skinColor = new agent.THREE.Color(0xd5a57f).toArray();
+  const isSkin = (vertex) => skinColor.every((value, channel) => Math.abs(colors.array[vertex * 3 + channel] - value) < 1e-6);
+  let covered = 0, skinTriangles = 0, clothingTriangles = 0;
+  for (const group of body.geometry.groups) {
+    assert.equal(group.start, covered, "Material regions must cover the existing render index without gaps or overlaps");
+    assert.equal(group.count % 3, 0, "Material ownership must follow complete original triangles");
+    for (let index = group.start; index < group.start + group.count; index += 3) {
+      const count = [indices[index], indices[index + 1], indices[index + 2]].filter(isSkin).length;
+      if (count === 3) { assert.equal(group.materialIndex, 1, "Bare neck/hands must not receive fabric weave or sheen"); skinTriangles++; }
+      if (count === 0) { assert.equal(group.materialIndex, 0, "Clothing must actually use the woven material"); clothingTriangles++; }
+    }
+    covered += group.count;
+  }
+  assert.equal(covered, indices.length);
+  assert.ok(skinTriangles > 100 && clothingTriangles > 1000, "Both material regions must own actual shipped body triangles");
+  const head = agent.object.getObjectByName("mixamorigHead");
+  const face = head.children.find((part) => part.isGroup).children.find((mesh) => mesh.material?.color.getHex() === 0xd5a57f && mesh.scale.y > .13);
+  assert.ok(face.material.isMeshPhysicalMaterial && face.material.bumpMap?.isDataTexture, "The visible face must get the original skin micro-surface too");
+  assert.equal(face.material.bumpMap, agent.object.getObjectByName("agent-neck").material.bumpMap, "Head and neck should share the same skin grain source");
+});
+
+test("black hair has directional strand response while brows and eye whites stay clean", async () => {
+  const agent = await character();
+  const head = agent.object.getObjectByName("mixamorigHead").children.find((part) => part.isGroup);
+  const hair = head.children.find((mesh) => mesh.material?.color.getHex() === 0x151b20 && mesh.geometry.type === "SphereGeometry").material;
+  assert.ok(hair.isMeshPhysicalMaterial && hair.anisotropy >= .2, "The real black hair needs directional highlights");
+  assert.ok(Math.abs(hair.anisotropyRotation - Math.PI / 2) < 1e-6, "Hair response must align with strands running from crown to edge");
+  const texture = hair.bumpMap;
+  assert.ok(texture?.isDataTexture && texture.name === "agent-hair-strands", "Hair needs an actual generated strand height surface");
+  const { data, width, height } = texture.image;
+  let horizontal = 0, vertical = 0, minimum = 255, maximum = 0;
+  for (let y = 0; y < height - 1; y++) for (let x = 0; x < width - 1; x++) {
+    const index = (y * width + x) * 4, value = data[index];
+    horizontal += Math.abs(value - data[index + 4]);
+    vertical += Math.abs(value - data[index + width * 4]);
+    minimum = Math.min(minimum, value); maximum = Math.max(maximum, value);
+  }
+  assert.ok(horizontal > vertical * 5, "The actual height pixels must form directional strands, not isotropic noise");
+  assert.ok(maximum - minimum >= 30 && maximum - minimum <= 100, "Strands need readable but restrained contrast");
+  const brows = head.children.filter((mesh) => mesh.geometry.type === "CapsuleGeometry" && mesh.material.color.getHex() === 0x151b20);
+  assert.equal(brows.length, 2);
+  for (const brow of brows) assert.ok(brow.material !== hair && !brow.material.bumpMap, "Brows must not inherit coarse hair-bundle bumps");
+  for (const eye of head.children.filter((mesh) => mesh.material.color.getHex() === 0xe9e0d1)) assert.ok(!eye.material.bumpMap && !eye.material.map, "Eye whites must remain clear and unchanged");
+});
+
+test("all generated surface textures are deterministic, UV-safe and reused across ten outfits", async () => {
+  const agent = await character();
+  const initial = texturePool(agent);
+  assert.ok(initial.size >= 3 && initial.size <= 6, "The character needs a small fixed original texture pool");
+  for (const texture of initial) {
+    assert.equal(texture.colorSpace, agent.THREE.NoColorSpace, "Height/roughness textures must not receive color decoding");
+    assert.equal(texture.wrapS, agent.THREE.RepeatWrapping); assert.equal(texture.wrapT, agent.THREE.RepeatWrapping);
+    assert.equal(texture.magFilter, agent.THREE.LinearFilter); assert.equal(texture.minFilter, agent.THREE.LinearMipmapLinearFilter);
+    assert.equal(texture.generateMipmaps, true, "Repeating fine textures need mipmaps to avoid sparkle");
+    assert.ok(texture.image.width <= 128 && texture.image.height <= 128 && texture.image.data.length === texture.image.width * texture.image.height * 4, "Texture pixels must be small real RGBA buffers");
+  }
+  agent.object.traverse((part) => {
+    if (!part.isMesh) return;
+    for (const material of Array.isArray(part.material) ? part.material : [part.material]) if (material.bumpMap) assert.ok(part.geometry.attributes.uv?.count === part.geometry.attributes.position.count, "Every mapped real mesh must have matching UVs");
+  });
+  const headColors = new Map();
+  agent.object.getObjectByName("mixamorigHead").traverse((part) => { if (part.isMesh) headColors.set(part, part.material.color.getHex()); });
+  const outfits = [{ id: "basic", style: "hoodie" }, { id: "voyager", style: "traveler" }, { id: "master", style: "ceremonial" },
+    ...["asia", "europe", "africa", "north-america", "south-america", "oceania", "antarctica"].map((region) => ({ id: `regional-${region}`, style: "regional", region }))];
+  for (let repeat = 0; repeat < 5; repeat++) for (const outfit of outfits) {
+    agent.setOutfit({ ...outfit, jacket: 0x487b91, trousers: 0x394854, shoes: 0xd0dce0, trim: 0xc8dcdf, accent: 0xd69d4f });
+    assert.deepEqual(texturePool(agent), initial, "Changing outfits must keep the same texture objects/UUIDs");
+    for (const [mesh, color] of headColors) assert.equal(mesh.material.color.getHex(), color, "Changing outfit must preserve face and black-hair base colors");
+  }
+  const again = await character();
+  const second = new Map([...texturePool(again)].map((texture) => [texture.name, texture]));
+  for (const texture of initial) assert.deepEqual(texture.image.data, second.get(texture.name)?.image.data, "Original surface pixels must be repeatable, not random per session");
 });
