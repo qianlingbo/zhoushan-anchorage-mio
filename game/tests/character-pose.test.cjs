@@ -78,11 +78,20 @@ test("neutral idle faces forward with planted feet rather than a staggered swagg
 test("the close-up face has inset eyes and a continuous cheek surface", async () => {
   const agent = await character();
   const headBone = agent.object.getObjectByName("mixamorigHead");
-  const head = headBone.children.find((part) => part.isGroup && part.children.some((mesh) => mesh.material?.color.getHex() === 0xe9e0d1));
+  const head = headBone.children.find((part) => part.isGroup && part.children.some((mesh) => mesh.material?.color.getHex() === 0xe9e0d1)).clone(true);
   assert.ok(head, "The actual teenage face must be present");
+  head.position.set(0, 0, 0); head.quaternion.identity(); head.scale.setScalar(1); head.updateMatrixWorld(true);
   const skull = head.children.find((mesh) => mesh.material?.color.getHex() === 0xd5a57f && mesh.scale.y > .13);
   assert.ok(skull, "The face must retain a smooth base head shape");
-  const surface = (x, y) => skull.position.z + skull.scale.z * Math.sqrt(Math.max(0, 1 - (x / skull.scale.x) ** 2 - (y / skull.scale.y) ** 2));
+  // Measure the actual skin mesh rather than assume that a sculpted face is
+  // still an ellipsoid. The same 4 mm inset/protrusion limit remains in force.
+  const ray = new agent.THREE.Raycaster(new agent.THREE.Vector3(), new agent.THREE.Vector3(0, 0, -1));
+  const surface = (x, y) => {
+    ray.ray.origin.set(x, y, 1);
+    const hit = ray.intersectObject(skull)[0];
+    assert.ok(hit, "Each measured facial feature must have an actual skin surface behind it");
+    return hit.point.z;
+  };
   const vertex = new agent.THREE.Vector3();
   for (const mesh of head.children) {
     const color = mesh.material?.color.getHex();
@@ -189,4 +198,65 @@ test("hoodie covers the shoulder band while leaving the upper neck and hands as 
     assert.ok(shoulder.every((index) => equal(index, cloth)), `${id} leaves a bare skin band across the hoodie shoulders`);
     assert.ok(exposed.every((index) => equal(index, skin)), "Covering the shoulders must not recolor the upper neck or hands");
   }
+});
+
+test("nose bridge, nose wings and cheek transitions belong to one continuous sculpted skin surface", async () => {
+  const agent = await character();
+  const head = agent.object.getObjectByName("mixamorigHead").children.find((part) => part.isGroup && part.children.some((mesh) => mesh.material?.color.getHex() === 0xe9e0d1)).clone(true);
+  head.position.set(0, 0, 0); head.quaternion.identity(); head.scale.setScalar(1); head.updateMatrixWorld(true);
+  const skull = head.children.find((mesh) => mesh.material?.color.getHex() === 0xd5a57f && mesh.scale.y > .13);
+  const ray = new agent.THREE.Raycaster(new agent.THREE.Vector3(), new agent.THREE.Vector3(0, 0, -1));
+  const surface = (x, y) => {
+    ray.ray.origin.set(x, y, 1);
+    const hit = ray.intersectObject(skull)[0];
+    assert.ok(hit, "The facial landmarks must lie on the main skin surface");
+    return hit.point.z;
+  };
+  assert.ok(surface(0, -.014) - surface(.024, -.014) >= .008, "The main face mesh must form a nose tip, not rely on a separate sphere");
+  assert.ok(surface(0, .013) - surface(.020, .013) >= .003, "The nose bridge must blend continuously into the face");
+  assert.ok(surface(.014, -.022) - surface(.030, -.022) >= .004, "The nose wings must have a continuous transition into the cheeks");
+  assert.ok(surface(.050, -.015) - surface(.050, .025) >= .004, "The cheek surface must transition into a gentle eye socket rather than remain a featureless ball");
+  for (const y of [-.022, -.014, .006, .020]) {
+    ray.ray.origin.set(0, y, 1);
+    const skin = ray.intersectObject(head, true).find((hit) => hit.object.material?.color.getHex() === 0xd5a57f);
+    assert.equal(skin?.object, skull, "The visible nose must be part of the base skin mesh, not an intersecting skin sphere");
+  }
+  const colors = skull.geometry.attributes.color;
+  assert.ok(skull.material.vertexColors && colors?.count === skull.geometry.attributes.position.count, "The face must have restrained per-vertex skin tone variation");
+  assert.ok(Math.max(...colors.array) - Math.min(...colors.array) > .005 && Math.max(...colors.array) <= 1, "Skin tones must vary subtly without replacing the base skin color");
+  const vertex = new agent.THREE.Vector3();
+  for (const lip of head.children.filter((mesh) => mesh.material?.color.getHex() === 0xa26959)) {
+    lip.updateMatrix();
+    const position = lip.geometry.attributes.position;
+    for (let index = 0; index < position.count; index++) {
+      vertex.fromBufferAttribute(position, index).applyMatrix4(lip.matrix);
+      const gap = vertex.z - surface(vertex.x, vertex.y);
+      assert.ok(gap >= -.001 && gap <= .003, `Lips must follow the skin surface, not float or sink away from it (${gap.toFixed(4)} m)`);
+    }
+  }
+});
+
+test("head and short hair have natural teenage proportions with the chin connected to the neck", async () => {
+  const agent = await character();
+  agent.object.updateMatrixWorld(true);
+  const head = agent.object.getObjectByName("mixamorigHead").children.find((part) => part.isGroup && part.children.some((mesh) => mesh.material?.color.getHex() === 0xe9e0d1));
+  let body;
+  agent.object.traverse((part) => { if (part.isSkinnedMesh) body = part; });
+  body.computeBoundingBox();
+  const height = new agent.THREE.Box3().setFromObject(agent.object).getSize(new agent.THREE.Vector3()).y;
+  const headHeight = new agent.THREE.Box3().setFromObject(head).getSize(new agent.THREE.Vector3()).y;
+  const ratio = height / headHeight;
+  assert.ok(ratio >= 6.5 && ratio <= 7.2, `Expected a teenage 6.5–7.2 head-height silhouette, got ${ratio.toFixed(2)}`);
+  const skull = head.children.find((mesh) => mesh.material?.color.getHex() === 0xd5a57f && mesh.scale.y > .13);
+  const chin = new agent.THREE.Box3().setFromObject(skull).min.y;
+  const visibleVertices = new Set(body.geometry.index.array), position = body.geometry.attributes.position;
+  const vertex = new agent.THREE.Vector3();
+  let neckTop = -Infinity, samples = 0;
+  for (const index of visibleVertices) {
+    if (Math.abs(position.getX(index)) >= .085 || position.getY(index) < 1.33 || position.getY(index) >= 1.375) continue;
+    body.getVertexPosition(index, vertex); body.localToWorld(vertex);
+    neckTop = Math.max(neckTop, vertex.y); samples++;
+  }
+  assert.ok(samples > 20, "Neck contact must be measured against visible shipped mesh vertices");
+  assert.ok(chin <= neckTop + .005 && chin >= neckTop - .035, `The resized chin must join the neck rather than hover: chin ${chin}, neck ${neckTop}`);
 });
