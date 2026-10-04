@@ -95,3 +95,13 @@ Scroll inward twice during inspection to reach facial view: the face must stay
 near the centre, and Escape/continue must restore the original exploration view.
 Normal exploration keeps its established zoom limits, and first-person/dialogs
 must not respond to the portrait zoom gesture.
+
+Surface tests inspect the actual skin / cloth draw groups, physical materials
+and generated texture pixels. They verify directional hair strands, clean brows
+and eye whites, linear data-texture sampling with mipmaps, deterministic pixel
+sources and a fixed texture pool across all ten outfits. The portrait fill is
+offset beside and above the camera and targets the face, rather than lighting
+the torso from the camera position. CPU tests do not establish visible texture
+quality or compile material shaders. Browser QA must inspect front / side facial
+views, changed outfits, click-to-run / jump, restored first-person view and the
+390×844 mobile wardrobe / preview without WebGL warnings or errors.

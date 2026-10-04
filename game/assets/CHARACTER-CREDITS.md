@@ -16,6 +16,15 @@ Source head-weighted triangles, including lower-jaw remnants, are removed from
 the rendered index. An original tapered neck is attached to the neck bone to
 connect the new head and collar without changing the animation skeleton.
 
+Skin micro-grain, directional hair strands and cloth weave are original,
+deterministic 128×128 data textures. They use Three.js built-in physical
+materials, not a custom shader or downloaded photographic textures. Skin and
+clothing have separate body draw groups so hands are not woven fabric; brows
+and eye whites retain their untextured materials. Five fixed texture objects
+share three pixel sources (approximately 192 KiB of uncompressed source data).
+Outfit changes reuse these resources. The body split adds one draw call without
+adding meshes or changing geometry, skin weights or animation transforms.
+
 The original body topology and bone rig remain the embedded Adobe / Mixamo reference,
 with the existing Idle / Walk / Run animation transfer. See [CREDITS.md](CREDITS.md)
 for the original asset sources and third-party usage terms.
