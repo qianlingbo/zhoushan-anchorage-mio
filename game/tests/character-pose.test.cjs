@@ -287,6 +287,10 @@ test("front and side rays see continuous skin from the collar to the new chin", 
   const agent = await character();
   const skin = new agent.THREE.Color(0xd5a57f).toArray();
   const ray = new agent.THREE.Raycaster();
+  const rendered = (hit) => {
+    for (let part = hit.object; part; part = part.parent) if (!part.visible) return false;
+    return true;
+  };
   const isSkin = (hit) => {
     if (hit.object.material.color.getHex() === 0xd5a57f) return true;
     const colors = hit.object.geometry.attributes.color;
@@ -299,12 +303,12 @@ test("front and side rays see continuous skin from the collar to the new chin", 
       const height = neck.y + offset;
       for (const x of [-.014, 0, .014]) {
         ray.set(new agent.THREE.Vector3(x, height, 1), new agent.THREE.Vector3(0, 0, -1));
-        const hit = ray.intersectObject(agent.object, true).find((hit) => hit.object.visible);
+        const hit = ray.intersectObject(agent.object, true).find(rendered);
         assert.ok(hit && isSkin(hit), `Front neck skin has a rendered gap at x=${x}, y=${height.toFixed(4)}`);
       }
       for (const side of [-1, 1]) {
         ray.set(new agent.THREE.Vector3(side, height, -.015), new agent.THREE.Vector3(-side, 0, 0));
-        const hit = ray.intersectObject(agent.object, true).find((hit) => hit.object.visible);
+        const hit = ray.intersectObject(agent.object, true).find(rendered);
         assert.ok(hit && isSkin(hit), `Side neck skin has a rendered gap at y=${height.toFixed(4)}`);
       }
     }
