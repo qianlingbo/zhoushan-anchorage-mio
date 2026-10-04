@@ -1211,8 +1211,9 @@ class PortWorld {
       state.cameraSnap = false;
       this.portraitLight.visible = !!state.outfitPreview;
       if (state.outfitPreview) {
-        this.portraitLight.position.copy(this.camera.position);
-        this.portraitLight.target.position.copy(surface.point).addScaledVector(surface.normal, .9);
+        const lightSide = forward.clone().cross(surface.normal).normalize();
+        this.portraitLight.position.copy(this.camera.position).addScaledVector(lightSide, .65).addScaledVector(surface.normal, .5);
+        this.portraitLight.target.position.copy(surface.point).addScaledVector(surface.normal, 1.3);
       }
     }
     this.sky.position.copy(this.camera.position);
