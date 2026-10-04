@@ -1182,11 +1182,12 @@ class PortWorld {
       } else {
         const mobile = window.innerWidth < 760;
         const distance = mobile && !state.outfitPreview ? state.cameraDistance + 1.1 : state.cameraDistance;
+        const portraitHeight = .9 + THREE.MathUtils.clamp((3.4 - distance) / 1.6, 0, 1) * .4;
         const desired = surface.point.clone()
           .addScaledVector(forward, -Math.cos(state.cameraPitch) * distance)
           .addScaledVector(surface.normal, Math.sin(state.cameraPitch) * distance + 1.7);
         const focus = surface.point.clone()
-          .addScaledVector(surface.normal, state.outfitPreview ? .9 : 1.1)
+          .addScaledVector(surface.normal, state.outfitPreview ? portraitHeight : 1.1)
           .addScaledVector(forward, state.outfitPreview ? 0 : 1.4);
         if (Math.hypot(desired.x, desired.z / PLANET_Z_SCALE) < 28 * WORLD_SCALE) {
           desired.y = Math.max(desired.y, (terrainHeight(desired.x / WORLD_SCALE, desired.z / WORLD_SCALE) + .13) * WORLD_SCALE + .65);
@@ -1981,7 +1982,7 @@ elements.worldCanvas.addEventListener("contextmenu", (event) => event.preventDef
 elements.worldCanvas.addEventListener("wheel", (event) => {
   if (state.cameraMode !== "third" || state.mode !== "play" || hasOpenDialog()) return;
   event.preventDefault();
-  state.cameraDistance = THREE.MathUtils.clamp(state.cameraDistance + Math.sign(event.deltaY) * .8, 3.4, 55);
+  state.cameraDistance = THREE.MathUtils.clamp(state.cameraDistance + Math.sign(event.deltaY) * .8, state.outfitPreview ? 1.8 : 3.4, 55);
 }, { passive: false });
 
 const moveCodes = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyA", "KeyS", "KeyD"];
