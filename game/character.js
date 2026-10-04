@@ -16,15 +16,37 @@ function makeAgentHead() {
     mesh.castShadow = mesh.receiveShadow = true;
     head.add(mesh); return mesh;
   };
-  const faceGeometry = new THREE.SphereGeometry(1, 36, 28);
+  const bump = (x, y, cx, cy, width, height) => Math.exp(-(((x - cx) / width) ** 2 + ((y - cy) / height) ** 2));
+  const features = (x, y) => .008 * bump(x, y, 0, .012, .010, .035)
+    + .014 * bump(x, y, 0, -.014, .014, .013)
+    + .0035 * bump(Math.abs(x), y, .014, -.022, .006, .007)
+    + .0045 * bump(Math.abs(x), y, .054, -.015, .026, .028)
+    - .0025 * bump(Math.abs(x), y, .040, .024, .022, .014)
+    + .005 * bump(x, y, 0, -.103, .028, .019);
+  const faceFront = (x, y) => {
+    const height = y / .136;
+    const originalHeight = height < -.72 ? -.72 + (height + .72) / .60 : height;
+    const jaw = THREE.MathUtils.clamp((-originalHeight - .35) / .65, 0, 1);
+    const width = x / (.106 * (1 - .18 * jaw));
+    return -.008 + .099 * Math.sqrt(Math.max(0, 1 - width ** 2 - originalHeight ** 2)) + features(x, y);
+  };
+  const faceGeometry = new THREE.SphereGeometry(1, 72, 64);
   const facePosition = faceGeometry.attributes.position;
+  const tones = new Float32Array(facePosition.count * 3);
   for (let index = 0; index < facePosition.count; index++) {
-    const jaw = THREE.MathUtils.clamp((-facePosition.getY(index) - .45) / .55, 0, 1);
-    facePosition.setX(index, facePosition.getX(index) * (1 - .22 * jaw));
+    const originalHeight = facePosition.getY(index);
+    const jaw = THREE.MathUtils.clamp((-originalHeight - .35) / .65, 0, 1);
+    const x = facePosition.getX(index) * (1 - .18 * jaw);
+    const y = originalHeight < -.72 ? -.72 + (originalHeight + .72) * .60 : originalHeight;
+    const z = facePosition.getZ(index);
+    facePosition.setXYZ(index, x, y, z + (z > 0 ? features(x * .106, y * .136) / .099 : 0));
+    const warmth = z > 0 ? bump(Math.abs(x * .106), y * .136, .048, -.018, .033, .035) : 0;
+    tones.set([.99 + .01 * warmth, .99 - .035 * warmth, .985 - .05 * warmth], index * 3);
   }
+  faceGeometry.setAttribute("color", new THREE.BufferAttribute(tones, 3));
   faceGeometry.computeVertexNormals();
-  add(faceGeometry, skin, [0, 0, -.008], [.106, .136, .099]);
-  const faceFront = (x, y) => -.008 + .099 * Math.sqrt(Math.max(0, 1 - (x / .106) ** 2 - (y / .136) ** 2));
+  const faceSkin = skin.clone(); faceSkin.vertexColors = true;
+  add(faceGeometry, faceSkin, [0, 0, -.008], [.106, .136, .099]);
   for (const side of [-1, 1]) {
     add(new THREE.SphereGeometry(1, 20, 14), skin, [side * .101, -.010, -.005], [.014, .025, .014]);
     const eyeShape = new THREE.Shape();
@@ -49,10 +71,28 @@ function makeAgentHead() {
     const brow = add(new THREE.CapsuleGeometry(.0028, .029, 4, 8), hair, [side * .040, .045, .082]);
     brow.rotation.z = side * 1.48;
   }
-  add(new THREE.SphereGeometry(1, 24, 16), skin, [0, .006, .079], [.010, .024, .012]);
-  add(new THREE.SphereGeometry(1, 20, 14), skin, [0, -.014, .089], [.013, .009, .010]);
-  add(new THREE.SphereGeometry(1, 24, 12), lip, [0, -.056, .083], [.021, .0023, .0016]);
-  add(new THREE.SphereGeometry(1, 24, 12), lip, [0, -.061, .081], [.017, .0031, .0016]);
+  for (const upper of [true, false]) {
+    const shape = new THREE.Shape();
+    if (upper) {
+      shape.moveTo(-.021, 0);
+      shape.quadraticCurveTo(-.010, .0038, -.004, .0025);
+      shape.quadraticCurveTo(0, .0012, .004, .0025);
+      shape.quadraticCurveTo(.010, .0038, .021, 0);
+      shape.quadraticCurveTo(0, -.0009, -.021, 0);
+    } else {
+      shape.moveTo(-.019, 0);
+      shape.quadraticCurveTo(0, -.0045, .019, 0);
+      shape.quadraticCurveTo(0, .0007, -.019, 0);
+    }
+    const geometry = new THREE.ShapeGeometry(shape, 20);
+    const position = geometry.attributes.position;
+    for (let index = 0; index < position.count; index++) {
+      const x = position.getX(index), y = position.getY(index) + (upper ? -.055 : -.058);
+      position.setXYZ(index, x, y, faceFront(x, y) + .0016);
+    }
+    geometry.computeVertexNormals();
+    add(geometry, lip, [0, 0, 0]);
+  }
   add(new THREE.SphereGeometry(.109, 32, 22, 0, Math.PI * 2, 0, Math.PI * .46), hair, [0, .031, -.015], [1, 1.06, .97]);
   // Tousled short black hair, softer jaw and a shorter nose distinguish the
   // teenager from the previous adult, rather than merely reducing root scale.
@@ -61,6 +101,7 @@ function makeAgentHead() {
     lock.rotation.z = -.32 + Math.sin(index) * .24;
   }
   for (const side of [-1, 1]) add(new THREE.SphereGeometry(1, 16, 12), hair, [side * .092, .018, -.031], [.015, .059, .052]);
+  head.scale.setScalar(.93);
   return head;
 }
 
@@ -124,7 +165,7 @@ function dressPortAgent(agent, target) {
     transform.premultiply(bone.matrixWorld.clone().invert());
     object.applyMatrix4(transform); bone.add(object);
   };
-  mount("mixamorigHead", makeAgentHead(), [0, 1.495, -.008]);
+  mount("mixamorigHead", makeAgentHead(), [0, 1.485, -.008]);
   const hoodie = new THREE.Group();
   const cloth = new THREE.MeshStandardMaterial({ color: 0x487b91, roughness: .9 });
   const trim = new THREE.MeshStandardMaterial({ color: 0xc8dcdf, roughness: .82 });
