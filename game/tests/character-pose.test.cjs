@@ -258,5 +258,49 @@ test("head and short hair have natural teenage proportions with the chin connect
     neckTop = Math.max(neckTop, vertex.y); samples++;
   }
   assert.ok(samples > 20, "Neck contact must be measured against visible shipped mesh vertices");
+  const connectedNeck = agent.object.getObjectByName("agent-neck");
+  if (connectedNeck) neckTop = Math.max(neckTop, new agent.THREE.Box3().setFromObject(connectedNeck).max.y);
   assert.ok(chin <= neckTop + .005 && chin >= neckTop - .035, `The resized chin must join the neck rather than hover: chin ${chin}, neck ${neckTop}`);
+});
+
+test("the rendered body index contains no leftover source adult jaw or cheek triangles", async () => {
+  const agent = await character();
+  let body;
+  agent.object.traverse((part) => { if (part.isSkinnedMesh) body = part; });
+  const headIndex = body.skeleton.bones.findIndex((bone) => bone.name === "mixamorigHead");
+  assert.ok(headIndex >= 0, "The shipped skeleton must be measured");
+  const indices = body.geometry.attributes.skinIndex, weights = body.geometry.attributes.skinWeight;
+  for (const vertex of new Set(body.geometry.index.array)) {
+    let headWeight = 0;
+    for (let channel = 0; channel < 4; channel++) if (indices.array[vertex * 4 + channel] === headIndex) headWeight += weights.array[vertex * 4 + channel];
+    assert.ok(headWeight <= .1, `Rendered source vertex ${vertex} retains ${(headWeight * 100).toFixed(1)}% adult-head weight`);
+  }
+});
+
+test("front and side rays see continuous skin from the collar to the new chin", async () => {
+  const agent = await character();
+  const skin = new agent.THREE.Color(0xd5a57f).toArray();
+  const ray = new agent.THREE.Raycaster();
+  const isSkin = (hit) => {
+    if (hit.object.material.color.getHex() === 0xd5a57f) return true;
+    const colors = hit.object.geometry.attributes.color;
+    return colors && [hit.face.a, hit.face.b, hit.face.c].every((index) => skin.every((value, channel) => Math.abs(colors.array[index * 3 + channel] - value) < 1e-6));
+  };
+  for (const time of [0, .3, .9]) {
+    agent.update(time, 0, false); agent.object.updateMatrixWorld(true);
+    const neck = point(agent, "Neck");
+    for (const offset of [.034, .041, .048, .055, .062, .069, .076]) {
+      const height = neck.y + offset;
+      for (const x of [-.014, 0, .014]) {
+        ray.set(new agent.THREE.Vector3(x, height, 1), new agent.THREE.Vector3(0, 0, -1));
+        const hit = ray.intersectObject(agent.object, true).find((hit) => hit.object.visible);
+        assert.ok(hit && isSkin(hit), `Front neck skin has a rendered gap at x=${x}, y=${height.toFixed(4)}`);
+      }
+      for (const side of [-1, 1]) {
+        ray.set(new agent.THREE.Vector3(side, height, -.015), new agent.THREE.Vector3(-side, 0, 0));
+        const hit = ray.intersectObject(agent.object, true).find((hit) => hit.object.visible);
+        assert.ok(hit && isSkin(hit), `Side neck skin has a rendered gap at y=${height.toFixed(4)}`);
+      }
+    }
+  }
 });
