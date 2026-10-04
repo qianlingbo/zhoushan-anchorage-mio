@@ -327,9 +327,12 @@ test("clothing inspection has a camera-side fill light that switches off during 
   api.setContext({ progress: dependencies.createWardrobeProgress(), stage, region: { id: "asia", heightScale: 1 } });
   api.state.mode = "play"; api.previewClothing(); stage.render(1, .016);
   assert.equal(stage.portraitLight.visible, true);
-  assert.ok(stage.portraitLight.position.distanceTo(stage.camera.position) < 1e-6);
+  const lightOffset = stage.portraitLight.position.clone().sub(stage.camera.position);
+  assert.ok(lightOffset.length() > .6 && lightOffset.length() < 1, "Portrait light should come from the side rather than flatten the face like a camera flash");
+  assert.ok(Math.abs(lightOffset.dot(stage.camera.up) - .5) < 1e-6, "The portrait light should remain above the camera on curved terrain");
   const target = stage.portraitLight.target.getWorldPosition(new THREE.Vector3());
-  assert.ok(target.distanceTo(stage.player.getWorldPosition(new THREE.Vector3())) < 1.5);
+  const faceHeight = target.clone().sub(stage.player.getWorldPosition(new THREE.Vector3())).dot(stage.camera.up);
+  assert.ok(Math.abs(faceHeight - 1.3) < 1e-6, "The portrait fill should aim at the face rather than the torso");
   api.state.cameraDistance = 1.8; api.state.cameraSnap = true; stage.render(1.01, .016);
   stage.camera.updateMatrixWorld(true);
   const face = stage.player.getWorldPosition(new THREE.Vector3()).addScaledVector(stage.camera.up, 1.44).project(stage.camera);
