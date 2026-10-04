@@ -1,12 +1,43 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
+function makeCharacterSurfaces() {
+  const surfaces = {};
+  for (const kind of ["skin", "hair", "cloth"]) {
+    const pixels = new Uint8Array(128 * 128 * 4);
+    for (let y = 0; y < 128; y++) for (let x = 0; x < 128; x++) {
+      const noise = ((Math.imul(x + 1, 73856093) ^ Math.imul(y + 1, 19349663)) >>> 0) % 251 / 250 - .5;
+      const strand = Math.sin(x * Math.PI / 2 + .18 * Math.sin(y * Math.PI / 64));
+      const weave = Math.sin(x * Math.PI / 2) * Math.sin(y * Math.PI / 2);
+      const height = kind === "skin" ? 128 + noise * 28
+        : kind === "hair" ? 128 + strand * 30 + Math.sin(x * Math.PI / 6.5) * 4
+        : 128 + weave * 18 + Math.sin(x * Math.PI / 8) * 6;
+      const roughness = kind === "skin" ? 211 + noise * 34 : kind === "hair" ? 212 + strand * 18 : 232 + weave * 12;
+      pixels.set([Math.round(height), Math.round(roughness), 128, 255], (y * 128 + x) * 4);
+    }
+    const texture = new THREE.DataTexture(pixels, 128, 128, THREE.RGBAFormat);
+    texture.name = `agent-${kind === "skin" ? "skin-grain" : kind === "hair" ? "hair-strands" : "cloth-weave"}`;
+    texture.colorSpace = THREE.NoColorSpace;
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.magFilter = THREE.LinearFilter; texture.minFilter = THREE.LinearMipmapLinearFilter;
+    texture.generateMipmaps = true; texture.anisotropy = 4;
+    texture.repeat.setScalar(kind === "hair" ? 1 : 2); texture.needsUpdate = true;
+    surfaces[kind] = texture;
+  }
+  surfaces.bodyCloth = surfaces.cloth.clone(); surfaces.bodyCloth.name = "agent-cloth-body"; surfaces.bodyCloth.repeat.setScalar(16);
+  surfaces.bodySkin = surfaces.skin.clone(); surfaces.bodySkin.name = "agent-skin-body"; surfaces.bodySkin.repeat.setScalar(8);
+  return surfaces;
+}
+
 // Original teenage facial geometry and reshaped clothing; the civilian body
 // topology and animation skeleton come from the embedded Mixamo reference.
-function makeAgentHead() {
+function makeAgentHead(surfaces) {
   const head = new THREE.Group();
-  const skin = new THREE.MeshStandardMaterial({ color: 0xd5a57f, roughness: .64 });
-  const hair = new THREE.MeshStandardMaterial({ color: 0x151b20, roughness: .9 });
+  const skin = new THREE.MeshPhysicalMaterial({ color: 0xd5a57f, roughness: .92, specularIntensity: .38,
+    bumpMap: surfaces.skin, roughnessMap: surfaces.skin, bumpScale: .08 });
+  const hair = new THREE.MeshPhysicalMaterial({ color: 0x151b20, roughness: .72, specularIntensity: .6,
+    anisotropy: .35, anisotropyRotation: Math.PI / 2, bumpMap: surfaces.hair, roughnessMap: surfaces.hair, bumpScale: .24 });
+  const brows = new THREE.MeshStandardMaterial({ color: 0x151b20, roughness: .9 });
   const eyeWhite = new THREE.MeshStandardMaterial({ color: 0xe9e0d1, roughness: .4 });
   const iris = new THREE.MeshStandardMaterial({ color: 0x29221d, roughness: .42 });
   const lip = new THREE.MeshStandardMaterial({ color: 0xa26959, roughness: .75 });
@@ -68,7 +99,7 @@ function makeAgentHead() {
       new THREE.Vector3(side * .059, .024, faceFront(side * .059, .024) + .0007)
     );
     add(new THREE.TubeGeometry(eyelid, 10, .0013, 5, false), skin, [0, 0, 0]);
-    const brow = add(new THREE.CapsuleGeometry(.0028, .029, 4, 8), hair, [side * .040, .045, .082]);
+    const brow = add(new THREE.CapsuleGeometry(.0028, .029, 4, 8), brows, [side * .040, .045, .082]);
     brow.rotation.z = side * 1.48;
   }
   for (const upper of [true, false]) {
@@ -106,6 +137,7 @@ function makeAgentHead() {
 }
 
 function dressPortAgent(agent, target) {
+  const surfaces = makeCharacterSurfaces();
   const geometry = target.geometry;
   const position = geometry.attributes.position;
   const colors = new Float32Array(position.count * 3);
@@ -163,24 +195,38 @@ function dressPortAgent(agent, target) {
     position.setXYZ(index, vertex.x, vertex.y, vertex.z);
   }
   geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-  geometry.setIndex(bodyIndices);
+  const wearIndices = [], exposedIndices = [];
+  for (let index = 0; index < bodyIndices.length; index += 3) {
+    const triangle = bodyIndices.slice(index, index + 3);
+    const skinCount = triangle.filter((vertexIndex) => !clothingParts[vertexIndex] && position.getY(vertexIndex) > .105).length;
+    (skinCount >= 2 ? exposedIndices : wearIndices).push(...triangle);
+  }
+  geometry.setIndex([...wearIndices, ...exposedIndices]);
+  geometry.clearGroups(); geometry.addGroup(0, wearIndices.length, 0); geometry.addGroup(wearIndices.length, exposedIndices.length, 1);
   geometry.computeVertexNormals();
   position.needsUpdate = true;
-  target.material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .82 });
+  target.material = [
+    new THREE.MeshPhysicalMaterial({ vertexColors: true, roughness: .92, specularIntensity: .3, sheen: .18,
+      sheenColor: 0xffffff, sheenRoughness: .9, bumpMap: surfaces.bodyCloth, roughnessMap: surfaces.bodyCloth, bumpScale: .16 }),
+    new THREE.MeshPhysicalMaterial({ vertexColors: true, roughness: .92, specularIntensity: .38,
+      bumpMap: surfaces.bodySkin, roughnessMap: surfaces.bodySkin, bumpScale: .08 })
+  ];
   const mount = (boneName, object, worldPosition) => {
     const bone = agent.scene.getObjectByName(boneName);
     const transform = new THREE.Matrix4().makeTranslation(...worldPosition);
     transform.premultiply(bone.matrixWorld.clone().invert());
     object.applyMatrix4(transform); bone.add(object);
   };
-  mount("mixamorigHead", makeAgentHead(), [0, 1.485, -.008]);
+  mount("mixamorigHead", makeAgentHead(surfaces), [0, 1.485, -.008]);
   const neck = new THREE.Mesh(new THREE.CylinderGeometry(.037, .043, .09, 28, 3),
-    new THREE.MeshStandardMaterial({ color: 0xd5a57f, roughness: .64 }));
+    new THREE.MeshPhysicalMaterial({ color: 0xd5a57f, roughness: .92, specularIntensity: .38,
+      bumpMap: surfaces.skin, roughnessMap: surfaces.skin, bumpScale: .08 }));
   neck.name = "agent-neck"; neck.scale.z = .78;
   neck.castShadow = neck.receiveShadow = true;
   mount("mixamorigNeck", neck, [0, 1.339, -.012]);
   const hoodie = new THREE.Group();
-  const cloth = new THREE.MeshStandardMaterial({ color: 0x487b91, roughness: .9 });
+  const cloth = new THREE.MeshPhysicalMaterial({ color: 0x487b91, roughness: .92, specularIntensity: .3, sheen: .18,
+    sheenColor: 0x487b91, sheenRoughness: .9, bumpMap: surfaces.cloth, roughnessMap: surfaces.cloth, bumpScale: .16 });
   const trim = new THREE.MeshStandardMaterial({ color: 0xc8dcdf, roughness: .82 });
   const hood = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 16), cloth);
   hood.position.set(0, .108, -.063); hood.scale.set(.109, .077, .044); hoodie.add(hood);
@@ -253,6 +299,7 @@ function dressPortAgent(agent, target) {
     }
     geometry.attributes.color.needsUpdate = true;
     cloth.color.setHex(outfit.jacket); trim.color.setHex(outfit.trim); accent.color.setHex(outfit.accent);
+    cloth.sheenColor.setHex(outfit.jacket);
     trim.metalness = outfit.style === "ceremonial" ? .35 : .08;
     hoodie.visible = outfit.style === "hoodie" || outfit.style === "traveler";
     scarf.visible = outfit.style === "traveler";
