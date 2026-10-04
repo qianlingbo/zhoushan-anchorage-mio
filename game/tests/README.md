@@ -71,6 +71,12 @@ layers follow the cheek surface, and walk/run/jump articulation stays finite.
 Calf cross-sections must taper without shrinking the knees, and the hoodie must
 cover the shoulder band while keeping the upper neck and hands as skin in every
 outfit. Eye visibility is ray-tested against the real hair and skin geometry.
+The main skin mesh must form the nose bridge, wings, sockets and cheeks itself;
+lips must follow that real surface. Head-and-hair proportions and the actual
+visible neck connection are checked separately from the nominal object bounds.
+The rendered body index must contain no source head-weighted face fragments.
+Front and side rays sample multiple neck heights and idle times; hidden outfit
+children are excluded by checking the visibility of every ancestor.
 `atmosphere.test.cjs` checks linear regional color values, matched sky/fog colors,
 and the thin-grass shader contribution without increasing the geometry budget.
 CPU shader checks do not compile GLSL: verify the real WebGL scene and console
@@ -85,3 +91,7 @@ Inspect the face from the front and by dragging to orbit: the camera-side fill
 must reveal the facial features only during inspection. Continue exploring,
 click to run and jump to verify that the normal world lighting and locomotion
 remain intact. This is still a stylized model, not a realistic human asset.
+Scroll inward twice during inspection to reach facial view: the face must stay
+near the centre, and Escape/continue must restore the original exploration view.
+Normal exploration keeps its established zoom limits, and first-person/dialogs
+must not respond to the portrait zoom gesture.
