@@ -79,10 +79,13 @@ function productionAPI(dependencies = {}, storage = {}) {
   });
   let original = fs.readFileSync(gameFilename, "utf8");
   const characterCallback = original.match(/loadAgentCharacter\(\)\.then\(\(character\) => \{([\s\S]*?)\n\s*\}\)\.catch/);
+  const wheelListener = original.match(/elements\.worldCanvas\.addEventListener\("wheel",[\s\S]*?\}, \{ passive: false \}\);/);
+  assert.ok(wheelListener, "The actual production zoom listener must be registered");
   let source = original.replace(/^import .*;\r?\n/gm, "\n");
   const startup = source.indexOf('elements.start.addEventListener("click"');
   assert.ok(startup > 0, "Production browser startup boundary must be found");
   source = source.slice(0, startup);
+  source += `\n${wheelListener[0]}\n`;
   source += `
 globalThis.wardrobeIntegration = {
   readWardrobeSave: typeof readWardrobeSave === "function" ? readWardrobeSave : undefined,
@@ -329,4 +332,27 @@ test("clothing inspection has a camera-side fill light that switches off during 
   assert.ok(target.distanceTo(stage.player.getWorldPosition(new THREE.Vector3())) < 1.5);
   api.finishClothingPreview(); stage.render(1.02, .016);
   assert.equal(stage.portraitLight.visible, false, "Portrait lighting must not change the normal world lighting");
+});
+
+test("inspection can zoom in on the face without changing exploration zoom or the saved view", async () => {
+  const { api, dependencies } = await integration();
+  api.setContext({ progress: dependencies.createWardrobeProgress(), stage: { cameraYaw: .7, moveMarker: { visible: false } } });
+  api.state.mode = "play"; api.state.cameraDistance = 11.5;
+  const zoom = api.elements.worldCanvas.listeners.get("wheel");
+  let prevented = 0;
+  const wheel = (deltaY) => zoom({ deltaY, preventDefault() { prevented++; } });
+  api.previewClothing();
+  for (let step = 0; step < 5; step++) wheel(-1);
+  assert.equal(api.state.cameraDistance, 1.8, "The face must be inspectable closer than the full-body view");
+  api.finishClothingPreview();
+  assert.equal(api.state.cameraDistance, 11.5, "Close-up zoom must not overwrite the saved exploration view");
+  for (let step = 0; step < 20; step++) wheel(-1);
+  assert.equal(api.state.cameraDistance, 3.4, "Normal exploration must keep its established minimum distance");
+  wheel(1);
+  assert.equal(api.state.cameraDistance, 4.2);
+  api.elements.wardrobe.showModal(); wheel(-1);
+  assert.equal(api.state.cameraDistance, 4.2, "An open dialog must still block camera zoom");
+  api.elements.wardrobe.close(); api.state.cameraMode = "first"; wheel(-1);
+  assert.equal(api.state.cameraDistance, 4.2, "First-person must not change third-person zoom");
+  assert.equal(prevented, 26);
 });
