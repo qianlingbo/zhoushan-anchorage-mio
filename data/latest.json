@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-10-05 09:59:55",
-  "lastChecked": "2026-10-05 09:59:55",
-  "lastSuccessfulFetch": "2026-10-05 09:59:55",
-  "updateWindow": "2026-10-05T09:00+08:00",
-  "publishTime": "2026年10月05日07时",
-  "publishCode": "2026100507",
+  "lastUpdated": "2026-10-05 15:00:48",
+  "lastChecked": "2026-10-05 15:00:48",
+  "lastSuccessfulFetch": "2026-10-05 15:00:48",
+  "updateWindow": "2026-10-05T15:00+08:00",
+  "publishTime": "2026年10月05日14时",
+  "publishCode": "2026100514",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -254,9 +254,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴局部小雨，上午转多云。明天多云。后天晴到多云。8日多云。9日多云到阴<br><br>",
-      "Time": "2026100507",
-      "PreciseForecastTime": "2026年10月05日07时"
+      "Text": "天气预报：今天多云。明天多云。后天晴到多云。8日多云。9日多云到阴<br><br>",
+      "Time": "2026100514",
+      "PreciseForecastTime": "2026年10月05日14时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -502,9 +502,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴局部小雨，上午转多云。明天多云。后天晴到多云。8日多云。9日多云到阴<br><br>",
-      "Time": "2026100507",
-      "PreciseForecastTime": "2026年10月05日07时"
+      "Text": "天气预报：今天多云。明天多云。后天晴到多云。8日多云。9日多云到阴<br><br>",
+      "Time": "2026100514",
+      "PreciseForecastTime": "2026年10月05日14时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,9 +750,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴局部小雨，上午转多云。明天多云。后天晴到多云。8日多云。9日多云到阴<br><br>",
-      "Time": "2026100507",
-      "PreciseForecastTime": "2026年10月05日07时"
+      "Text": "天气预报：今天多云。明天多云。后天晴到多云。8日多云。9日多云到阴<br><br>",
+      "Time": "2026100514",
+      "PreciseForecastTime": "2026年10月05日14时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -998,9 +998,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴转多云。明天多云。后天晴到多云。8日多云。9日多云到阴<br><br>",
-      "Time": "2026100507",
-      "PreciseForecastTime": "2026年10月05日07时"
+      "Text": "天气预报：今天多云。明天多云。后天晴到多云。8日多云。9日多云到阴<br><br>",
+      "Time": "2026100514",
+      "PreciseForecastTime": "2026年10月05日14时"
     }
   }
 }
