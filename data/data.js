@@ -1,9 +1,9 @@
 window.__ANCHOR_DATA__ = {
   "status": "沿用上次数据",
-  "lastUpdated": "2026-10-12 20:07:05",
-  "lastChecked": "2026-10-12 20:07:05",
+  "lastUpdated": "2026-10-13 03:56:23",
+  "lastChecked": "2026-10-13 03:56:23",
   "lastSuccessfulFetch": "2026-10-12 15:19:46",
-  "updateWindow": "2026-10-12T18:00+08:00",
+  "updateWindow": "2026-10-13T03:00+08:00",
   "publishTime": "2026年10月12日14时",
   "publishCode": "2026101214",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
