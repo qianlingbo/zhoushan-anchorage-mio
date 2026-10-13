@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-10-13 11:33:10",
-  "lastChecked": "2026-10-13 11:33:10",
-  "lastSuccessfulFetch": "2026-10-13 11:33:10",
-  "updateWindow": "2026-10-13T09:00+08:00",
-  "publishTime": "2026年10月13日11时",
-  "publishCode": "2026101311",
+  "lastUpdated": "2026-10-13 19:47:34",
+  "lastChecked": "2026-10-13 19:47:34",
+  "lastSuccessfulFetch": "2026-10-13 19:47:34",
+  "updateWindow": "2026-10-13T18:00+08:00",
+  "publishTime": "2026年10月13日15时",
+  "publishCode": "2026101315",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -35,8 +35,8 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 13.6,
           "WindSpeedAvg": "10.2",
           "Time": "13日14时-17时",
@@ -45,8 +45,8 @@
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 12.9,
           "WindSpeedAvg": "9.7",
           "Time": "13日17时-20时",
@@ -55,8 +55,8 @@
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 12.8,
           "WindSpeedAvg": "9.6",
           "Time": "13日20时-23时",
@@ -255,8 +255,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云，夜里起局部小雨。明天多云到阴，局部小雨，上午转多云。后天多云到阴。16日多云到阴，局部小雨。17日雨止上午转多云。<br><br>",
-      "Time": "2026101311",
-      "PreciseForecastTime": "2026年10月13日11时"
+      "Time": "2026101315",
+      "PreciseForecastTime": "2026年10月13日15时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -283,8 +283,8 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 13.6,
           "WindSpeedAvg": "10.2",
           "Time": "13日14时-17时",
@@ -293,8 +293,8 @@
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 13.5,
           "WindSpeedAvg": "10.1",
           "Time": "13日17时-20时",
@@ -303,8 +303,8 @@
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
           "WindSpeed": 12.9,
           "WindSpeedAvg": "9.7",
           "Time": "13日20时-23时",
@@ -503,8 +503,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云，夜里起局部小雨。明天多云到阴，局部小雨，上午转多云。后天多云到阴。16日多云到阴。17日雨止上午转多云。<br><br>",
-      "Time": "2026101311",
-      "PreciseForecastTime": "2026年10月13日11时"
+      "Time": "2026101315",
+      "PreciseForecastTime": "2026年10月13日15时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云，夜里起局部小雨。明天多云到阴，局部小雨，上午转多云。后天多云到阴。16日多云到阴，局部小雨。17日雨止上午转多云。<br><br>",
-      "Time": "2026101311",
-      "PreciseForecastTime": "2026年10月13日11时"
+      "Time": "2026101315",
+      "PreciseForecastTime": "2026年10月13日15时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -779,10 +779,10 @@
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "3 4 4 3",
-          "WindSpeed": 12.8,
-          "WindSpeedAvg": "9.6",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "3 4 2 2",
+          "WindSpeed": 11.8,
+          "WindSpeedAvg": "8.9",
           "Time": "13日14时-17时",
           "WindDirect": "偏北风"
         },
@@ -999,8 +999,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云，夜里起局部小雨。明天多云到阴，局部小雨，上午转多云。后天多云到阴。16日多云到阴，局部小雨。17日雨止上午转多云。<br><br>",
-      "Time": "2026101311",
-      "PreciseForecastTime": "2026年10月13日11时"
+      "Time": "2026101315",
+      "PreciseForecastTime": "2026年10月13日15时"
     }
   }
 }
