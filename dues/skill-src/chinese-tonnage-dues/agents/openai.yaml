@@ -1,0 +1,4 @@
+interface:
+  display_name: "中国船舶吨税"
+  short_description: "按船籍、净吨位和期限计算应缴吨税"
+  default_prompt: "Use $chinese-tonnage-dues to calculate the Chinese tonnage dues for a country, net tonnage, licence duration, and vessel type. Default to China, 30 days, preferential rate, and ordinary vessel when omitted."

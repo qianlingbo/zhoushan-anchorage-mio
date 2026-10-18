@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#345861" />
+  <meta name="description" content="从地球上的七洲节点出发，与亚洲少年和小飞鸟伙伴探索各地港区、不同气候与多样人群。" />
+  <title>船代跑现场 · 舟山船舶代理笔记</title>
+  <link rel="icon" href="/favicon.svg" />
+  <link rel="stylesheet" href="./styles.css?v=20261003-polish-1" />
+</head>
+<body>
+  <a class="site-back" href="/">← 舟山港航工具</a>
+
+  <main class="game-shell">
+    <section class="screen intro-screen is-active" id="intro-screen" aria-labelledby="game-title">
+      <canvas id="title-canvas" aria-hidden="true"></canvas>
+      <div class="intro-logo">
+        <p>ONE EARTH · SEVEN CONTINENTS</p>
+        <h1 id="game-title"><span>船代</span><strong>环球</strong><em>漫游</em></h1>
+      </div>
+      <div class="earth-nodes" id="earth-nodes" aria-label="地球上的洲际传送节点"></div>
+      <aside class="continent-info" aria-live="polite">
+        <span>CHOOSE YOUR NEXT SHORE</span>
+        <h2 id="continent-title">亚洲 · 舟山海港</h2>
+        <p id="continent-description">从家乡海港出发，去遇见世界。</p>
+        <small id="continent-progress">0/9 地标已发现</small>
+      </aside>
+      <button class="enter-button" id="start-button" type="button" disabled>LOADING</button>
+      <p class="intro-tip">拖动地球环视 · 点击发光节点传送 · 或选择下方大洲</p>
+      <nav class="continent-selector" id="continent-selector" aria-label="选择探索的大洲"></nav>
+      <p class="intro-edition">NO ROUTE · NO CHECKLIST<br />WORLD PORTS · 2026</p>
+    </section>
+
+    <section class="screen play-screen" id="play-screen" aria-label="船代港区游戏区域">
+      <canvas id="world-canvas" aria-label="可自由探索的三维港区"></canvas>
+      <div class="world-location"><span id="current-continent">亚洲</span><button id="earth-button" type="button">◎ 返回地球</button><button id="wardrobe-button" type="button" aria-haspopup="dialog">衣橱 · Lv1</button></div>
+
+      <header class="game-header">
+        <div class="game-mark">
+          <strong>船代跑现场</strong>
+          <span>PORT AGENT ON THE RUN</span>
+        </div>
+        <div class="status-strip" aria-label="时间、信任和探索进度">
+          <div><span>TIME</span><strong id="clock-value">07:20</strong></div>
+          <div><span>TRUST</span><strong id="energy-value">72</strong></div>
+          <div><span>ENCOUNTERS</span><strong><b id="completed-value">0</b></strong></div>
+          <div><span>DISCOVERIES</span><strong><b id="discoveries-value">0/9</b></strong></div>
+        </div>
+        <div class="camera-tools">
+          <button class="guide-button" id="guide-button" type="button" aria-label="呼叫小飞鸟"><span>呼叫小飞鸟</span><small>G</small></button>
+          <button class="view-switch" id="view-switch" type="button" aria-pressed="false"><span>第三人称</span><small>V</small></button>
+          <button class="jump-button" id="jump-button" type="button"><span>跳跃</span><small>Space</small></button>
+          <button class="round-button" id="help-button" type="button" aria-label="查看玩法">?</button>
+        </div>
+      </header>
+
+      <aside class="roam-note" id="mission-note">
+        <span id="task-sequence">FREE ROAM</span>
+        <p id="task-deadline">没有固定路线</p>
+        <h2 id="task-title">今天会遇见什么？</h2>
+        <p id="task-description">沿球面道路穿过沙滩、海关、边防和集装箱码头。每个人、每个地点都可能出现不同现场。</p>
+        <strong id="task-destination">靠近有 ◇ 标记的人物</strong>
+      </aside>
+
+      <aside class="mini-map" aria-label="港区小地图">
+        <canvas id="minimap-canvas" width="180" height="140" aria-hidden="true"></canvas>
+        <span>PORT MAP</span>
+      </aside>
+
+      <div class="location-hint" id="location-hint" hidden>
+        <span id="location-name">普陀山机场</span>
+        <button id="interact-button" type="button"><kbd>E</kbd> 交互</button>
+      </div>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+      <aside class="discovery-card" id="discovery-card" hidden aria-live="polite">
+        <span>LANDMARK DISCOVERY</span>
+        <strong id="discovery-name">港区纪念物</strong>
+        <p id="discovery-description">已经放进船代旅行箱。</p>
+      </aside>
+
+      <div class="run-controls" aria-label="移动控制">
+        <div class="move-pad">
+          <button id="run-up" type="button" aria-label="向前走">↑</button>
+          <button id="run-left" type="button" aria-label="向左走">←</button>
+          <button id="run-down" type="button" aria-label="向后走">↓</button>
+          <button id="run-right" type="button" aria-label="向右走">→</button>
+        </div>
+        <button class="action-button" id="mobile-action" type="button">交互</button>
+      </div>
+
+      <p class="route-caption">点击奔跑 · 拖拽环视 · 空格跳跃 · V 切换视角 · 滚轮拉近 / 拉远</p>
+    </section>
+  </main>
+
+  <dialog class="scene-dialog" id="scene-dialog">
+    <div class="scene-visual" id="scene-visual" aria-hidden="true">
+      <span id="scene-code">RANDOM ENCOUNTER</span>
+      <div class="scene-sketch"></div>
+    </div>
+    <div class="scene-content">
+      <button class="dialog-close" id="dialog-close" type="button" aria-label="暂时离开">×</button>
+      <p class="scene-location" id="scene-location">普陀山机场 · 到达大厅</p>
+      <h2 id="scene-title">四名接班船员已经到了</h2>
+      <p class="scene-story" id="scene-story"></p>
+      <fieldset id="scene-choices">
+        <legend id="scene-question">离开机场前，最稳妥的第一步是？</legend>
+      </fieldset>
+      <div class="scene-result" id="scene-result" hidden>
+        <strong id="result-title"></strong>
+        <p id="result-text"></p>
+      </div>
+      <button class="complete-button" id="complete-button" type="button" hidden>记下结果，继续赶路 →</button>
+    </div>
+  </dialog>
+
+  <aside class="outfit-preview" id="outfit-preview" hidden aria-label="查看当前穿着">
+    <small>THE TRAVELER</small><h2 id="outfit-preview-name"></h2>
+    <p>拖动画面绕着看 · 滚轮调整远近</p>
+    <button id="outfit-preview-close" type="button">继续探索</button>
+  </aside>
+  <dialog class="wardrobe-dialog" id="wardrobe-dialog" aria-labelledby="wardrobe-title">
+    <button class="dialog-close" id="wardrobe-close" type="button" aria-label="关闭衣橱">×</button>
+    <header class="wardrobe-heading">
+      <p>THE TRAVELER'S WARDROBE</p>
+      <h2 id="wardrobe-title">把世界，穿在身上。</h2>
+      <p id="wardrobe-summary" role="status" aria-live="polite"></p>
+      <progress id="wardrobe-meter" value="0" max="12" aria-label="外套成长阅历"></progress>
+      <small>新地标 +2 · 首次地点互动 +3 · 12 阅历升级旅行装 · 36 阅历解锁金绣礼装</small>
+    </header>
+    <button class="wardrobe-preview-button" id="wardrobe-preview" type="button">近距离查看穿着 ↗</button>
+    <div class="wardrobe-list" id="wardrobe-list" aria-label="已收藏和待解锁的旅行装扮"></div>
+    <p class="wardrobe-storage-note" id="wardrobe-storage-note"></p>
+  </dialog>
+
+  <dialog class="help-dialog" id="help-dialog">
+    <button class="dialog-close" id="help-close" type="button" aria-label="关闭玩法说明">×</button>
+    <p>HOW TO WANDER THE PORT</p>
+    <h2>别等任务，去碰见现场。</h2>
+    <dl>
+      <div><dt>环球</dt><dd>开场拖动地球，点击发光节点或选择大洲出发。港区金色圆环与“返回地球”按钮可以开启下一段旅程；各洲进度在本次游玩中分别保留。</dd></div>
+      <div><dt>奔跑</dt><dd>点击或轻触地面，人物会自动绕开建筑奔跑；也保留 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 作为补充。</dd></div>
+      <div><dt>跳跃</dt><dd>按 <kbd>Space</kbd> 或屏幕“跳”按钮。奔跑途中也能起跳。</dd></div>
+      <div><dt>视角</dt><dd>拖动画面可以环视四周、调整高低。按 <kbd>V</kbd> 切换第一、第三人称；第三人称用滚轮拉近或拉远。</dd></div>
+      <div><dt>探索</dt><dd>沙滩、机场、边防、海关、船厂、堆场、岸吊码头和锚地没有先后顺序，想去哪里就去哪里。</dd></div>
+      <div><dt>伙伴</dt><dd>小飞鸟会陪在少年身旁。按 <kbd>G</kbd> 或点击“呼叫小飞鸟”，它会寻找一处尚未发现纪念物的地标并带你前往。</dd></div>
+      <div><dt>收藏</dt><dd>九个地标各藏有一件船代纪念物。靠近即可收进口袋，不需要按顺序寻找。</dd></div>
+      <div><dt>成长</dt><dd>发现新地标加 2 阅历、首次地点互动加 3 阅历；12、36 阅历升级外套。每洲发现 3 个地标并完成 1 次互动，解锁当地旅行装。点击“衣橱”自由换装，收藏保存在当前浏览器。</dd></div>
+      <div><dt>现场</dt><dd>靠近带 ◇ 标记的人物按 <kbd>E</kbd>。同一地点再次来访，也可能遇见另一件事。</dd></div>
+      <div><dt>说明</dt><dd>这是游戏化体验，场景经过简化，不作为实际申报或办证清单。</dd></div>
+    </dl>
+  </dialog>
+
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    } }
+  </script>
+  <script type="module" src="./game.js?v=20261004-material-1"></script>
+</body>
+</html>
