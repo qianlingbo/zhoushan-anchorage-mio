@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-10-20 17:24:54",
-  "lastChecked": "2026-10-20 17:24:54",
-  "lastSuccessfulFetch": "2026-10-20 17:24:54",
-  "updateWindow": "2026-10-20T15:00+08:00",
-  "publishTime": "2026年10月20日16时",
-  "publishCode": "2026102016",
+  "lastUpdated": "2026-10-20 23:02:51",
+  "lastChecked": "2026-10-20 23:02:51",
+  "lastSuccessfulFetch": "2026-10-20 23:02:51",
+  "updateWindow": "2026-10-20T21:00+08:00",
+  "publishTime": "2026年10月20日20时",
+  "publishCode": "2026102020",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -15,7 +15,7 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "3 4 4 3",
           "WindSpeed": 10.9,
           "WindSpeedAvg": "8.2",
@@ -45,7 +45,7 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.3,
           "WindSpeedAvg": "7.7",
@@ -55,7 +55,7 @@
         {
           "wd_en": "PSW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.2,
           "WindSpeedAvg": "7.7",
@@ -254,9 +254,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云，夜里转阴到多云，有时有小雨。明天多云到阴，偶有小雨，下午转多云。后天多云。23日阴有阵雨。24日阴有时有阵雨。<br><br>",
-      "Time": "2026102016",
-      "PreciseForecastTime": "2026年10月20日16时"
+      "Text": "天气预报：今天阴到多云，有时有小雨。明天多云到阴，偶有小雨，下午转多云。后天多云。23日阴有阵雨。24日阴有时有阵雨。<br><br>",
+      "Time": "2026102020",
+      "PreciseForecastTime": "2026年10月20日20时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -303,7 +303,7 @@
         {
           "wd_en": "PSW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.4,
           "WindSpeedAvg": "7.8",
@@ -502,9 +502,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云，夜里转阴到多云，有时有小雨。明天多云到阴，偶有小雨，下午转多云。后天多云。23日阴有阵雨。24日阴有时有阵雨。<br><br>",
-      "Time": "2026102016",
-      "PreciseForecastTime": "2026年10月20日16时"
+      "Text": "天气预报：今天阴到多云，有时有小雨。明天多云到阴，偶有小雨，下午转多云。后天多云。23日阴有阵雨。24日阴有时有阵雨。<br><br>",
+      "Time": "2026102020",
+      "PreciseForecastTime": "2026年10月20日20时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,16 +750,16 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云，夜里转阴到多云，有时有小雨。明天多云到阴，偶有小雨，下午转多云。后天多云。23日阴有阵雨。24日阴有时有阵雨。<br><br>",
-      "Time": "2026102016",
-      "PreciseForecastTime": "2026年10月20日16时"
+      "Text": "天气预报：今天阴到多云，有时有小雨。明天多云到阴，偶有小雨，下午转多云。后天多云。23日阴有阵雨。24日阴有时有阵雨。<br><br>",
+      "Time": "2026102020",
+      "PreciseForecastTime": "2026年10月20日20时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
         {
           "wd_en": "SSW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.0,
           "WindSpeedAvg": "7.5",
@@ -769,7 +769,7 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 7.5,
           "WindSpeedAvg": "5.6",
@@ -779,7 +779,7 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.7,
           "WindSpeedAvg": "8.0",
@@ -789,7 +789,7 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 9.1,
           "WindSpeedAvg": "6.8",
@@ -799,7 +799,7 @@
         {
           "wd_en": "PPW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 8.1,
           "WindSpeedAvg": "6.1",
@@ -809,7 +809,7 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "2 4 4 2",
           "WindSpeed": 14.1,
           "WindSpeedAvg": "10.6",
@@ -819,7 +819,7 @@
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "1 4 4 1",
           "WindSpeed": 17.4,
           "WindSpeedAvg": "13.1",
@@ -998,9 +998,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云，夜里转阴到多云，有时有小雨。明天多云到阴，偶有小雨，下午转多云。后天多云。23日阴有阵雨。24日阴有时有阵雨。<br><br>",
-      "Time": "2026102016",
-      "PreciseForecastTime": "2026年10月20日16时"
+      "Text": "天气预报：今天阴到多云，有时有小雨。明天多云到阴，偶有小雨，下午转多云。后天多云。23日阴有阵雨。24日阴有时有阵雨。<br><br>",
+      "Time": "2026102020",
+      "PreciseForecastTime": "2026年10月20日20时"
     }
   }
 }
