@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-10-21 09:34:38",
-  "lastChecked": "2026-10-21 09:34:38",
-  "lastSuccessfulFetch": "2026-10-21 09:34:38",
-  "updateWindow": "2026-10-21T09:00+08:00",
-  "publishTime": "2026年10月21日07时",
-  "publishCode": "2026102107",
+  "lastUpdated": "2026-10-21 14:00:45",
+  "lastChecked": "2026-10-21 14:00:45",
+  "lastSuccessfulFetch": "2026-10-21 14:00:45",
+  "updateWindow": "2026-10-21T12:00+08:00",
+  "publishTime": "2026年10月21日11时",
+  "publishCode": "2026102111",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -254,9 +254,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云到阴，偶有小雨，下午转多云。明天多云。后天阴有阵雨。24-25日阴有阵雨。<br><br>",
-      "Time": "2026102107",
-      "PreciseForecastTime": "2026年10月21日07时"
+      "Text": "天气预报：今天多云到阴，有时有小雨，下午转多云。明天多云。后天阴有阵雨。24-25日阴有阵雨。<br><br>",
+      "Time": "2026102111",
+      "PreciseForecastTime": "2026年10月21日11时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -502,9 +502,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云到阴，偶有小雨，下午转多云。明天多云。后天阴有阵雨。24-25日阴有阵雨。<br><br>",
-      "Time": "2026102107",
-      "PreciseForecastTime": "2026年10月21日07时"
+      "Text": "天气预报：今天多云到阴，有时有小雨，下午转多云。明天多云。后天阴有阵雨。24-25日阴有阵雨。<br><br>",
+      "Time": "2026102111",
+      "PreciseForecastTime": "2026年10月21日11时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,9 +750,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云到阴，偶有小雨，下午转多云。明天多云。后天阴有阵雨。24-25日阴有阵雨。<br><br>",
-      "Time": "2026102107",
-      "PreciseForecastTime": "2026年10月21日07时"
+      "Text": "天气预报：今天多云到阴，有时有小雨，下午转多云。明天多云。后天阴有阵雨。24-25日阴有阵雨。<br><br>",
+      "Time": "2026102111",
+      "PreciseForecastTime": "2026年10月21日11时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -998,9 +998,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天多云到阴，偶有小雨，下午转多云。明天多云。后天阴有阵雨。24-25日阴有阵雨。<br><br>",
-      "Time": "2026102107",
-      "PreciseForecastTime": "2026年10月21日07时"
+      "Text": "天气预报：今天多云到阴，有时有小雨，下午转多云。明天多云。后天阴有阵雨。24-25日阴有阵雨。<br><br>",
+      "Time": "2026102111",
+      "PreciseForecastTime": "2026年10月21日11时"
     }
   }
 }
