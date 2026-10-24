@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="舟山船舶港口费用报价：引航、拖轮、吨税与靠泊费自动计算，导出中文 PDF。">
+  <meta name="description" content="舟山船舶港口费用报价：引航、拖轮、吨税、靠泊与自定义费用自动汇总，导出中英文 PDF。">
   <meta name="theme-color" content="#142d38"><title>舟港 · 船舶自动报价</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23142d38'/%3E%3Cpath d='M16 37h32l-5 11H22zM28 18h9v19M22 29h21M15 52q8 5 16 0 8 5 17 0' stroke='%237edbc5' stroke-width='3' fill='none'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
@@ -23,7 +23,7 @@
   <main id="top">
     <header class="topbar"><span>业务工具 <span class="slash">/</span> <b>船舶报价</b></span><span class="device-save" id="save-status">数据仅保存在当前设备</span></header>
     <div class="workspace">
-      <div class="page-heading"><div><div class="eyebrow">VESSEL DISBURSEMENT ESTIMATE</div><h1>船舶港口费用报价<span class="edition">试用版</span></h1><p>录入船舶资料，自动计算费用，一键生成 PDF 报价单。</p></div><div class="heading-actions"><button id="example" type="button" class="button secondary">载入示例 <span>↗</span></button><button type="button" class="button icon-button" id="reset" aria-label="清空报价" title="清空报价">↺</button></div></div>
+      <div class="page-heading"><div><div class="eyebrow">VESSEL DISBURSEMENT ESTIMATE</div><h1>船舶港口费用报价<span class="edition">试用版</span></h1><p>录入船舶资料，自动汇总费用，导出中英文表格报价单。</p></div><div class="heading-actions"><button id="example" type="button" class="button secondary">载入示例 <span>↗</span></button><button type="button" class="button icon-button" id="reset" aria-label="清空报价" title="清空报价">↺</button></div></div>
       <form id="quote-form" novalidate>
         <section class="panel vessel-panel" id="vessel">
           <div class="panel-title"><div><span class="section-number">01</span><h2>船舶资料</h2></div><div class="trade-switch" role="group" aria-label="贸易类型"><button type="button" data-trade="foreign" class="selected" aria-pressed="true">外贸</button><button type="button" data-trade="domestic" aria-pressed="false">内贸</button></div></div>
@@ -33,7 +33,7 @@
             <label>净吨 <span class="required">*</span><div class="input-unit"><input name="nt" id="nt" type="number" required min="0.01" step="any" inputmode="decimal" placeholder="如：18,000"><span>NT</span></div></label>
             <label>船舶长度 <span class="required">*</span><div class="input-unit"><input name="length" id="length" type="number" required min="0.01" step="any" inputmode="decimal" placeholder="如：200"><span>米</span></div></label>
             <label>汇率 <span class="required">*</span><div class="input-unit"><input name="exchangeRate" id="exchangeRate" type="number" required min="0.000001" step="any" inputmode="decimal" placeholder="1 USD = ?"><span>CNY</span></div><small>1 美元折合人民币，手动录入</small></label>
-            <label>码头或船厂 <span class="required">*</span><input name="portName" id="portName" required maxlength="150" placeholder="输入码头或船厂名称"></label>
+            <label>码头或船厂 <span class="required">*</span><input name="portName" id="portName" required list="terminals" maxlength="150" autocomplete="off" placeholder="输入或选择官网列出的码头 / 船厂"><datalist id="terminals"></datalist><small id="port-hint">可从官网码头 / 船厂名单选择，也可自行输入</small></label>
           </div>
           <div class="vessel-footer"><span class="tiny-anchor">⚓</span><span>默认按外贸航线报价；船长用于匹配拖轮单价与建议艘数。</span><span id="demo-badge" class="demo-badge" hidden>当前为示例数据</span></div>
         </section>
@@ -80,6 +80,11 @@
                 <label class="full">报价备注（选填）<textarea name="notes" id="notes" maxlength="2000" rows="3" placeholder="补充本次报价的约定与说明"></textarea></label>
               </div>
             </section>
+            <section class="panel" id="extra-fees-section">
+              <div class="panel-title"><div><span class="section-number">04</span><h2>其他费用</h2></div><button type="button" id="add-extra-fee" class="button secondary">＋ 添加费用</button></div>
+              <p class="extra-fee-help">可自由添加费用名称和人民币金额，自动计入报价合计。英文名称用于英文版 PDF。</p>
+              <div id="extra-fee-fields" class="extra-fee-fields"></div>
+            </section>
           </div>
           <aside class="quote-column" id="estimate">
             <section class="estimate-panel"><div class="estimate-heading"><span class="live-dot"></span>实时报价<span class="currency-label">CNY 人民币</span></div><div class="estimate-vessel"><h2 id="preview-vessel">等待录入船舶</h2><p id="preview-meta">填写上方船舶资料，开始计算</p></div>
@@ -88,11 +93,12 @@
                 <div class="fee-row"><span class="fee-icon">拖</span><div><h3>拖轮费<span>TOWAGE</span></h3><p id="tug-detail">按船长与载况计算</p></div><strong id="tug-amount">—</strong></div>
                 <div class="fee-row"><span class="fee-icon">税</span><div><h3>船舶吨税<span>TONNAGE DUES</span></h3><p id="tax-detail">按净吨、税率与期限计算</p></div><strong id="tax-amount">—</strong></div>
                 <div class="fee-row"><span class="fee-icon">泊</span><div><h3>靠泊费<span>BERTHAGE</span></h3><p id="berth-detail">0.25 × 净吨 × 天数</p></div><strong id="berth-amount">—</strong></div>
+                <div id="extra-fee-preview"></div>
               </div>
               <div class="total-block"><div><span>费用合计</span><span class="total-currency">CNY</span></div><strong id="total-amount">—<small>.—</small></strong><div class="usd-line"><span>折合美元 <b id="usd-amount">—</b></span><span id="fx-label">请填写汇率</span></div></div>
               <p class="validation-message" id="validation-message" aria-live="polite">填写船名、国籍、净吨、船长、汇率与码头后即可导出。</p>
               <div id="quote-warnings" class="quote-warnings" hidden></div>
-              <button id="export" type="submit" class="button primary"><span>↓</span> 导出 PDF 报价单 <span>↗</span></button><p class="export-caption">中文报价单 · 含计费明细与计算依据</p>
+              <div class="export-actions"><button id="export-zh" type="submit" data-export-language="zh" class="button primary">↓ 导出中文 PDF</button><button id="export-en" type="submit" data-export-language="en" class="button secondary">↓ Export English PDF</button></div><p class="export-caption">表格报价单 · 费率说明仅在网页查看</p>
             </section>
             <div class="basis-note"><span>⌁</span><div><h3>每笔费用，均可追溯</h3><p>引航官网费率 · 拖轮收费资料<br>吨税参考站 · 自定义靠泊天数</p><button type="button" class="text-button" data-open-rates>查看费率与计算口径 <span>↗</span></button></div></div>
           </aside>
@@ -106,6 +112,7 @@
     <article><h3>02 拖轮费</h3><p>采用你提供的《拖轮收费.doc》，按船长、船型、国内/国际航线匹配元/拖轮艘次。费用 = 单价 ×（靠泊艘数 × 作业次数 + 离泊艘数 × 作业次数）。装货默认空载靠、重载离；卸货默认重载靠、空载离；均可调整。</p><div class="source-issue">原件费率区间端点未明确，首版采用“80米及以下首档、其余各档上限包含”。配置表首行“80＜L 不配置”与后文冲突，80米以下暂按0艘。档位边界及实际艘数请核对，系统支持手动修改单价、艘数和次数。</div><div class="table-scroll"><table id="tug-rate-table"><thead><tr><th>船长（米）</th><th>集装箱 / 滚装 / 客船</th><th>油 / 化学 / 液化气</th><th>散货 / 杂货 / 其他</th></tr></thead><tbody></tbody></table></div><small>表格随主页面外贸 / 内贸选项切换；单位：元/拖轮艘次。</small></article>
     <article><h3>03 船舶吨税</h3><p>费率与<a href="https://www.zsagent01.com/dues/" target="_blank" rel="noopener">指定吨税计算器</a>一致，按整船净吨所在档位计算，非累进。支持普通/优惠税率及30、90、365日。国籍输入中文后按参考站名单推荐税率，仍可手动更改。不因切换内贸而自动免税；不需要本次缴纳时，请关闭“计入吨税”。利比里亚优惠来源标注有效至2029年12月10日。</p></article>
     <article><h3>04 靠泊费与汇率</h3><p>靠泊费按你的公式：0.25 × 实际净吨 × 靠泊天数。天数按输入值计费，支持小数，不自动进整。各项金额保留两位小数后相加；汇率为用户输入的“1美元 = 多少人民币”，美元合计 = 人民币合计 ÷ 汇率。系统不获取实时汇率，也不另加未提供的税费或代理费。</p></article>
+    <article><h3>05 其他费用与 PDF</h3><p>可自行添加费用名称与人民币金额，自动计入总额；英文名称用于英文报价单。中文和英文 PDF 均采用表格格式，仅列船舶资料、费用与合计。费率依据和计算说明保留在本页面。</p></article>
     <article><h3>码头区域资料</h3><p>所提供《引航收费.pdf》实际是《码头统计表（20201118）》，107条北/中/南区域记录已整理为本地参考数据，首版不将2020年名单作为自动映射。后续补充确认后的码头/船厂所属区域即可接入。</p></article>
   </div></dialog>
   <div id="toast" role="status" hidden></div>

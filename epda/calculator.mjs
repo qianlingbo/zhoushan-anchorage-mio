@@ -107,6 +107,19 @@ export function calculateQuote(state) {
   const tugAmount = round2(tugRate * (tugInCount * tugInOps + tugOutCount * tugOutOps));
   const taxAmount = state.taxEnabled ? round2(nt * taxRate * taxFactor) : 0;
   const berthAmount = round2(0.25 * nt * berthDays);
+  if (state.extraFees !== undefined && !Array.isArray(state.extraFees)) throw new Error('额外费用格式无效。');
+  const extraFees = [];
+  for (const fee of state.extraFees || []) {
+    if (!fee || typeof fee !== 'object') throw new Error('额外费用格式无效。');
+    const nameZh = String(fee.nameZh ?? '').trim();
+    const nameEn = String(fee.nameEn ?? '').trim();
+    const amountText = String(fee.amount ?? '').trim();
+    if (!nameZh && !nameEn && !amountText) continue;
+    if (!nameZh && !nameEn) throw new Error('额外费用请填写名称。');
+    const amount = round2(numeric(amountText, '额外费用金额'));
+    extraFees.push({ nameZh, nameEn, amount });
+  }
+  const extraTotal = round2(extraFees.reduce((sum, fee) => sum + fee.amount, 0));
   const warnings = [];
   if (TUG_RATE_BANDS.some((row) => row.max === length && length !== 80)) {
     warnings.push('船长位于拖轮费率档位边界，初版按上限包含匹配，请核对执行档位。');
@@ -133,7 +146,8 @@ export function calculateQuote(state) {
       description: state.taxEnabled ? `${fmt(nt)} 净吨 × ${fmt(taxRate)} 元/净吨 × ${fmt(taxFactor * 100)}%；${state.taxDays} 日${state.taxRegime === 'preferential' ? '优惠' : '普通'}税率。` : '本次报价不计入吨税。',
     },
     berth: { amount: berthAmount, description: `0.25 元/净吨·天 × ${fmt(nt)} 净吨 × ${fmt(berthDays)} 天。` },
-    total: round2(pilotAmount + tugAmount + taxAmount + berthAmount),
+    extraFees,
+    total: round2(pilotAmount + tugAmount + taxAmount + berthAmount + extraTotal),
     warnings,
   };
 }

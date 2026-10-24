@@ -7,15 +7,74 @@ let commonFontPromise;
 const money = (value) => new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2, maximumFractionDigits: 2,
 }).format(Number(value));
-const number = (value) => new Intl.NumberFormat('zh-CN', {
+const number = (value) => new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 4,
 }).format(Number(value));
-const shipNames = {
-  container: '集装箱船 / 滚装船 / 客船',
-  tanker: '油船 / 化学品船 / 液化气体船',
-  bulk: '散货船 / 杂货船 / 其他',
+
+const COPY = {
+  zh: {
+    title: '船舶港口费用报价单',
+    continuation: '船舶港口费用报价单（续页）',
+    vessel: '船名',
+    nationality: '国籍',
+    netTonnage: '净吨',
+    length: '船舶长度',
+    exchangeRate: '汇率',
+    terminal: '码头或船厂',
+    quoteNo: '报价编号',
+    date: '报价日期',
+    client: '客户',
+    trade: '贸易类型',
+    berthDays: '靠泊天数',
+    foreign: '外贸',
+    domestic: '内贸',
+    feeNo: '序号',
+    feeName: '费用项目',
+    amount: '金额 (CNY)',
+    pilot: '引航费',
+    tug: '拖轮费',
+    tax: '船舶吨税',
+    berth: '码头靠泊费',
+    total: '费用合计 (CNY)',
+    usd: '折合美元 (USD)',
+    notes: '备注',
+    page: '第',
+    pageOf: '页 / 共',
+    pageEnd: '页',
+    untitled: '未命名船舶',
+  },
+  en: {
+    title: 'PORT DISBURSEMENT ESTIMATE',
+    continuation: 'PORT DISBURSEMENT ESTIMATE (CONTINUED)',
+    vessel: 'Vessel',
+    nationality: 'Flag',
+    netTonnage: 'Net tonnage',
+    length: 'Vessel length',
+    exchangeRate: 'Exchange rate',
+    terminal: 'Terminal / shipyard',
+    quoteNo: 'Quotation No.',
+    date: 'Date',
+    client: 'Client',
+    trade: 'Trade',
+    berthDays: 'Berth days',
+    foreign: 'International',
+    domestic: 'Domestic',
+    feeNo: 'No.',
+    feeName: 'Charge item',
+    amount: 'Amount (CNY)',
+    pilot: 'Pilotage',
+    tug: 'Tug assistance',
+    tax: 'Tonnage dues',
+    berth: 'Berth charges',
+    total: 'TOTAL (CNY)',
+    usd: 'Equivalent (USD)',
+    notes: 'Notes',
+    page: 'Page',
+    pageOf: 'of',
+    pageEnd: '',
+    untitled: 'Unnamed vessel',
+  },
 };
-const loadNames = { laden: '重载', half: '半载', ballast: '空载' };
 
 async function fetchFontBytes(url) {
   const response = await fetch(url);
@@ -49,7 +108,7 @@ async function loadCommonFont() {
   return { bytes, characters: new Set(globalThis.fontkit.create(bytes).characterSet) };
 }
 
-async function loadFontBytes(state, result) {
+async function loadFontBytes(visibleText) {
   if (!commonFontPromise) {
     commonFontPromise = loadCommonFont().catch((error) => {
       commonFontPromise = undefined;
@@ -62,13 +121,18 @@ async function loadFontBytes(state, result) {
   } catch {
     return loadFullFontBytes();
   }
-  for (const char of JSON.stringify({ state, result })) {
+  for (const char of visibleText) {
     if (!common.characters.has(char.codePointAt(0))) return loadFullFontBytes();
   }
   return common.bytes;
 }
 
-export async function buildQuotePdf(state, result) {
+function clean(value) {
+  return String(value ?? '').replace(/\r\n?/g, '\n').replace(/\t/g, '  ')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '');
+}
+
+export async function buildQuotePdf(state, result, language = 'zh') {
   const { PDFDocument, StandardFonts, rgb } = globalThis.PDFLib || {};
   if (!PDFDocument || !globalThis.fontkit) {
     throw new Error('PDF 组件尚未就绪，请刷新页面后重试。');
@@ -77,66 +141,90 @@ export async function buildQuotePdf(state, result) {
   if (!Number.isFinite(exchangeRate) || exchangeRate <= 0) {
     throw new Error('汇率必须为大于 0 的有效数字。');
   }
+  const lang = language === 'en' ? 'en' : 'zh';
+  const copy = COPY[lang];
+  const fields = [
+    [copy.vessel, state.vesselName || '—'],
+    [copy.nationality, state.nationality || '—'],
+    [copy.netTonnage, number(state.nt) + ' NT'],
+    [copy.length, number(state.length) + ' m'],
+    [copy.exchangeRate, '1 USD = ' + number(exchangeRate) + ' CNY'],
+    [copy.terminal, state.portName || '—'],
+    [copy.quoteNo, state.quotationNo || '—'],
+    [copy.date, state.quoteDate || '—'],
+    [copy.trade, state.trade === 'domestic' ? copy.domestic : copy.foreign],
+    [copy.berthDays, number(state.berthDays) + (lang === 'zh' ? ' 天' : ' days')],
+  ];
+  if (String(state.client || '').trim()) fields.push([copy.client, state.client]);
+  const fees = [
+    { name: copy.pilot, amount: result.pilot.amount },
+    { name: copy.tug, amount: result.tug.amount },
+    { name: copy.tax, amount: result.tax.amount },
+    { name: copy.berth, amount: result.berth.amount },
+    ...(result.extraFees || []).map((fee) => ({
+      name: lang === 'en' ? fee.nameEn || fee.nameZh : fee.nameZh || fee.nameEn,
+      amount: fee.amount,
+    })),
+  ];
+  const notes = clean(state.notes).trim();
+  const visibleText = [
+    ...Object.values(copy),
+    ...fields.flat(),
+    ...fees.map((fee) => fee.name),
+    notes,
+  ].join('');
+
   const doc = await PDFDocument.create();
   doc.registerFontkit(globalThis.fontkit);
-  const [font, latin, latinBold] = await Promise.all([
-    // 此中文字体经 fontkit 子集化会漏字；完整嵌入确保 PDF 实际可见。
-    doc.embedFont(await loadFontBytes(state, result), { subset: false }),
+  const [cjk, latin, latinBold] = await Promise.all([
+    // The source font loses glyphs with pdf-lib subsetting, so embed its compact complete font.
+    doc.embedFont(await loadFontBytes(visibleText), { subset: false }),
     doc.embedFont(StandardFonts.Helvetica),
     doc.embedFont(StandardFonts.HelveticaBold),
   ]);
-  doc.setTitle(`船舶港口费用报价单 - ${state.vesselName || '未命名船舶'}`);
+  doc.setTitle(copy.title + ' - ' + (state.vesselName || copy.untitled));
   doc.setSubject('Port Disbursement Estimate / CNY / USD');
   doc.setCreator('舟山船舶自动报价系统');
   doc.setProducer('舟山船舶自动报价系统 / pdf-lib');
 
   const W = 595.28;
   const H = 841.89;
-  const M = 43;
-  const CW = W - M * 2;
-  const bottom = 57;
-  const colors = {
-    navy: rgb(0.055, 0.15, 0.20), teal: rgb(0.0, 0.47, 0.43),
-    text: rgb(0.13, 0.20, 0.23), muted: rgb(0.40, 0.47, 0.49),
-    line: rgb(0.85, 0.89, 0.89), pale: rgb(0.94, 0.97, 0.96),
-    white: rgb(1, 1, 1), amber: rgb(0.51, 0.33, 0.10),
+  const M = 40;
+  const CW = W - 2 * M;
+  const BOTTOM = 55;
+  const palette = {
+    ink: rgb(0.11, 0.20, 0.23),
+    dark: rgb(0.05, 0.18, 0.21),
+    teal: rgb(0.00, 0.45, 0.42),
+    muted: rgb(0.35, 0.42, 0.44),
+    grid: rgb(0.73, 0.79, 0.80),
+    stripe: rgb(0.965, 0.978, 0.975),
+    total: rgb(0.89, 0.95, 0.93),
+    white: rgb(1, 1, 1),
   };
-  const supported = new Set(font.getCharacterSet());
-  const safe = (value) => Array.from(String(value ?? '').replace(/\r\n?/g, '\n')
-    .replace(/\t/g, '  ').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, ''))
-    .map((char) => char === '\n' || supported.has(char.codePointAt(0)) ? char : '□').join('');
+  const supported = new Set(cjk.getCharacterSet());
   let page;
   let y;
-  function draw(text, x, baseline, size = 9, color = colors.text, selectedFont = font) {
-    page.drawText(selectedFont === font ? safe(text) : String(text), {
-      x, y: baseline, size, font: selectedFont, color,
-    });
+
+  function textFont(value) {
+    return /^[\x20-\x7E\n]*$/.test(clean(value)) ? latin : cjk;
   }
-  function newPage(first = false) {
-    page = doc.addPage([W, H]);
-    if (first) {
-      page.drawRectangle({ x: 0, y: H - 112, width: W, height: 112, color: colors.navy });
-      page.drawRectangle({ x: M, y: H - 31, width: 28, height: 3, color: colors.teal });
-      draw('船舶港口费用报价单', M, H - 63, 21, colors.white);
-      draw('PORT DISBURSEMENT ESTIMATE', M, H - 84, 8.5, colors.white, latin);
-      draw('舟山港', W - M - 48, H - 49, 12, colors.white);
-      draw('CNY', W - M - 24, H - 77, 10, colors.white, latinBold);
-      y = H - 137;
-    } else {
-      draw('船舶港口费用报价单 / 续页', M, H - 37, 10, colors.navy);
-      page.drawLine({ start: { x: M, y: H - 48 }, end: { x: W - M, y: H - 48 }, color: colors.line, thickness: 0.7 });
-      y = H - 68;
-    }
+  function safe(value, selectedFont) {
+    const cleaned = clean(value);
+    if (selectedFont !== cjk) return cleaned;
+    return Array.from(cleaned).map((char) => (
+      char === '\n' || supported.has(char.codePointAt(0)) ? char : '□'
+    )).join('');
   }
-  function ensure(height) {
-    if (y - height < bottom) newPage();
+  function draw(value, x, baseline, size = 9, color = palette.ink, selectedFont = textFont(value)) {
+    const content = safe(value, selectedFont);
+    if (content) page.drawText(content, { x, y: baseline, size, font: selectedFont, color });
   }
-  function wrap(value, width, size = 9, selectedFont = font) {
-    const text = selectedFont === font ? safe(value) : String(value ?? '');
+  function wrap(value, width, size = 9, selectedFont = textFont(value)) {
     const lines = [];
     let line = '';
     let lineWidth = 0;
-    for (const char of text) {
+    for (const char of safe(value, selectedFont)) {
       if (char === '\n') {
         lines.push(line);
         line = '';
@@ -156,138 +244,137 @@ export async function buildQuotePdf(state, result) {
     lines.push(line);
     return lines;
   }
-  function paragraph(value, { size = 8.5, color = colors.muted, indent = 0, gap = 5 } = {}) {
-    for (const line of wrap(value, CW - indent, size)) {
-      ensure(size + 6);
-      draw(line, M + indent, y, size, color);
-      y -= size + 5;
+  function rule(x1, y1, x2, y2, thickness = 0.5, color = palette.grid) {
+    page.drawLine({ start: { x: x1, y: y1 }, end: { x: x2, y: y2 }, thickness, color });
+  }
+  function cell(x, top, width, height, fill = palette.white) {
+    page.drawRectangle({
+      x, y: top - height, width, height,
+      color: fill, borderColor: palette.grid, borderWidth: 0.5,
+    });
+  }
+  function newPage(first = false) {
+    page = doc.addPage([W, H]);
+    const title = first ? copy.title : copy.continuation;
+    const titleFont = lang === 'zh' ? cjk : latinBold;
+    draw(title, M, H - 44, first ? 16 : 11, palette.dark, titleFont);
+    rule(M, H - 59, W - M, H - 59, 1.2, palette.teal);
+    y = H - 76;
+  }
+  function ensure(height) {
+    if (y - height < BOTTOM) newPage();
+  }
+  function fieldRow(label, value, stripe = false) {
+    const LABEL_W = 137;
+    const labelFont = textFont(label);
+    const valueFont = textFont(value);
+    const labelLines = wrap(label, LABEL_W - 14, 8.6, labelFont);
+    const valueLines = wrap(value, CW - LABEL_W - 16, 9.2, valueFont);
+    const height = Math.max(27, Math.max(labelLines.length, valueLines.length) * 12 + 11);
+    ensure(height);
+    cell(M, y, CW, height, stripe ? palette.stripe : palette.white);
+    rule(M + LABEL_W, y, M + LABEL_W, y - height);
+    labelLines.forEach((line, index) => draw(line, M + 8, y - 17 - index * 12, 8.6, palette.muted, labelFont));
+    valueLines.forEach((line, index) => draw(line, M + LABEL_W + 8, y - 17 - index * 12, 9.2, palette.ink, valueFont));
+    y -= height;
+  }
+  function feeHeader() {
+    const height = 29;
+    ensure(height);
+    cell(M, y, CW, height, palette.dark);
+    const amountX = W - M - 145;
+    rule(M + 43, y, M + 43, y - height, 0.5, palette.grid);
+    rule(amountX, y, amountX, y - height, 0.5, palette.grid);
+    draw(copy.feeNo, M + 11, y - 18, 8.5, palette.white, textFont(copy.feeNo));
+    draw(copy.feeName, M + 52, y - 18, 8.5, palette.white, textFont(copy.feeName));
+    draw(copy.amount, amountX + 10, y - 18, 8.5, palette.white, textFont(copy.amount));
+    y -= height;
+  }
+  function ensureFee(height) {
+    if (y - height < BOTTOM) {
+      newPage();
+      feeHeader();
     }
-    y -= gap;
   }
-  function section(label) {
-    ensure(39);
-    y -= 9;
-    page.drawRectangle({ x: M, y: y - 1, width: 3, height: 11, color: colors.teal });
-    draw(label, M + 12, y, 10.5, colors.navy);
-    y -= 23;
+  function feeRow(index, fee) {
+    const amountX = W - M - 145;
+    const name = fee.name || (lang === 'zh' ? '其他费用' : 'Other charge');
+    const nameFont = textFont(name);
+    const nameLines = wrap(name, amountX - M - 43 - 17, 9.2, nameFont);
+    const height = Math.max(29, nameLines.length * 12 + 11);
+    ensureFee(height);
+    cell(M, y, CW, height, index % 2 ? palette.stripe : palette.white);
+    rule(M + 43, y, M + 43, y - height);
+    rule(amountX, y, amountX, y - height);
+    draw(String(index + 1), M + 14, y - 18, 9, palette.muted, latin);
+    nameLines.forEach((line, lineIndex) => {
+      draw(line, M + 52, y - 18 - lineIndex * 12, 9.2, palette.ink, nameFont);
+    });
+    const amount = money(fee.amount);
+    draw(amount, W - M - 10 - latinBold.widthOfTextAtSize(amount, 9.5), y - 18, 9.5, palette.ink, latinBold);
+    y -= height;
   }
-  function field(label, value) {
-    const lines = wrap(value || '未填写', CW - 73, 9);
-    for (let index = 0; index < lines.length; index += 1) {
-      ensure(17);
-      if (index === 0) draw(label, M, y, 8, colors.muted);
-      draw(lines[index], M + 73, y, 9);
-      y -= 15;
-    }
-    y -= 3;
+  function totalRow(label, amount, primary = false) {
+    const height = primary ? 34 : 31;
+    ensureFee(height);
+    const amountX = W - M - 145;
+    cell(M, y, CW, height, primary ? palette.total : palette.white);
+    rule(amountX, y, amountX, y - height);
+    draw(label, M + 11, y - 21, primary ? 10 : 9, primary ? palette.dark : palette.muted, textFont(label));
+    const value = money(amount);
+    const size = primary ? 12 : 10;
+    draw(value, W - M - 10 - latinBold.widthOfTextAtSize(value, size), y - 21, size,
+      primary ? palette.teal : palette.ink, latinBold);
+    y -= height;
   }
-  function fee(label, english, amount, description) {
-    const lines = wrap(description, CW, 8);
-    ensure(31 + Math.min(lines.length, 4) * 12);
-    draw(label, M, y, 10.5, colors.navy);
-    draw(english, M + 96, y + 1, 7.5, colors.muted, latin);
-    const amountText = money(amount);
-    let amountSize = 13;
-    while (latinBold.widthOfTextAtSize(amountText, amountSize) > 200) amountSize -= 0.5;
-    draw(amountText, W - M - latinBold.widthOfTextAtSize(amountText, amountSize), y, amountSize, colors.navy, latinBold);
-    y -= 19;
+  function noteRows() {
+    if (!notes) return;
+    const lines = wrap(notes, CW - 18, 9);
+    ensure(27);
+    cell(M, y, CW, 27, palette.stripe);
+    draw(copy.notes, M + 9, y - 18, 9, palette.dark, textFont(copy.notes));
+    y -= 27;
     for (const line of lines) {
-      ensure(14);
-      draw(line, M, y, 8, colors.muted);
-      y -= 12;
+      ensure(20);
+      cell(M, y, CW, 20);
+      draw(line, M + 9, y - 14, 9);
+      y -= 20;
     }
-    y -= 4;
-    page.drawLine({ start: { x: M, y }, end: { x: W - M, y }, thickness: 0.6, color: colors.line });
-    y -= 18;
   }
 
   newPage(true);
-  field('船舶名称', state.vesselName);
-  field('国籍', state.nationality);
-  field('净吨', `${number(state.nt)} NT`);
-  field('船舶长度', `${number(state.length)} 米`);
-  field('汇率', `1 USD = ${exchangeRate} CNY（用户输入）`);
-  field('码头或船厂', state.portName);
-  field('报价编号', state.quotationNo);
-  field('报价日期', state.quoteDate);
-  field('客户名称', state.client);
-
-  section('船舶及作业信息');
-  field('贸易 / 船型', `${state.trade === 'domestic' ? '内贸 / 国内航线' : '外贸 / 国际航线'}；${shipNames[state.shipType] || state.shipType}`);
-  field('靠泊 / 区域', `${number(state.berthDays)} 天；${state.area || '区域未填写'}${state.routeName ? `；${state.routeName}` : ''}`);
-  field('载况 / 拖轮', `靠泊${loadNames[state.inLoad] || state.inLoad} ${state.tugInCount}艘 × ${state.tugInOps}次；离泊${loadNames[state.outLoad] || state.outLoad} ${state.tugOutCount}艘 × ${state.tugOutOps}次`);
-
-  section('费用明细');
-  const pilotDescription = `${result.pilot.description} 进港 ${money(result.pilot.inAmount)} 元；出港 ${money(result.pilot.outAmount)} 元。`;
-  fee('引航费', 'PILOTAGE', result.pilot.amount, pilotDescription);
-  fee('拖轮费', 'TUG ASSISTANCE', result.tug.amount, result.tug.description);
-  fee('船舶吨税', 'TONNAGE DUES', result.tax.amount, result.tax.description);
-  fee('码头靠泊费', 'BERTH CHARGES', result.berth.amount, result.berth.description);
-
-  ensure(82);
-  page.drawRectangle({ x: M, y: y - 64, width: CW, height: 76, color: colors.pale });
-  draw('费用合计', M + 15, y - 10, 11, colors.navy);
-  draw('TOTAL ESTIMATE', M + 15, y - 28, 7.5, colors.muted, latin);
-  draw('按用户输入汇率折算', M + 15, y - 47, 7.5, colors.muted);
-  const totalText = money(result.total);
-  let totalSize = 22;
-  while (latinBold.widthOfTextAtSize(totalText, totalSize) > 290) totalSize -= 0.5;
-  const totalX = W - M - 15 - latinBold.widthOfTextAtSize(totalText, totalSize);
-  draw('CNY', totalX - 28, y - 17, 7.5, colors.teal, latin);
-  draw(totalText, totalX, y - 21, totalSize, colors.teal, latinBold);
-  const usdText = `USD ${money(result.total / exchangeRate)}`;
-  draw(usdText, W - M - 15 - latin.widthOfTextAtSize(usdText, 12), y - 46, 12, colors.navy, latin);
-  y -= 84;
-
-  newPage();
-  section('计费口径');
-  if (state.inBoarding || state.outBoarding) {
-    paragraph(`引航路线：进港 ${state.inBoarding || '未填写'}，${number(state.inDistance)} 海里 × ${state.pilotInCount} 次；出港 ${state.outBoarding || '未填写'}，${number(state.outDistance)} 海里 × ${state.pilotOutCount} 次。`);
-  }
-  for (const segment of result.pilot.segments || []) {
-    paragraph(`${segment.label}：${number(segment.tonnage)} 净吨 × ${number(segment.baseRate)} 元/净吨。`, { size: 8, gap: 2 });
-  }
-  if (result.pilot.baseFee !== undefined) {
-    paragraph(`单次引航基本费 ${money(result.pilot.baseFee)} 元；非基本港附加 ${money(result.pilot.portSurcharge)} 元；进港超程 ${money(result.pilot.inDistanceFee)} 元，出港超程 ${money(result.pilot.outDistanceFee)} 元。`, { size: 8, gap: 2 });
-  }
-  if (state.taxEnabled) {
-    paragraph(`吨税选项：${state.taxDays} 日${state.taxRegime === 'ordinary' ? '普通' : '优惠'}税率；船型系数 ${number(state.taxFactor)}。`, { size: 8, gap: 2 });
-  }
-  paragraph('拖轮艘数采用报价录入值，可人工调整；实际配置以作业安排为准。', { size: 8, gap: 2 });
-  for (const warning of result.warnings || []) {
-    paragraph(`核对事项：${warning}`, { size: 8, color: colors.amber, gap: 2 });
-  }
-  if (String(state.notes || '').trim()) {
-    section('报价备注');
-    paragraph(state.notes, { size: 8.5, color: colors.text });
-  }
-  section('费率依据');
-  paragraph('引航：zspilot.com.cn/news_viewn.asp?newsid=603（2023费率）；吨税：zsagent01.com/dues/。', { size: 7.5, gap: 2 });
-  if (state.pilotInNight || state.pilotOutNight || state.pilotInHoliday || state.pilotOutHoliday) {
-    paragraph('引航夜班及节假日附加：zspilot.com.cn/news_viewn.asp?newsid=2362。', { size: 7.5, gap: 2 });
-  }
-  paragraph('拖轮：用户提供《拖轮收费.doc》，费率档位端点暂按上限包含；80米以下配置原件有歧义。靠泊：0.25 × 净吨 × 天数（用户规则）。', { size: 7.5, gap: 2 });
-  paragraph('本报价为费用预估，最终以实际作业及结算为准。', { size: 7.5, gap: 0 });
+  fields.forEach(([label, value], index) => fieldRow(label, value, index % 2 === 1));
+  y -= 16;
+  feeHeader();
+  fees.forEach((fee, index) => feeRow(index, fee));
+  totalRow(copy.total, result.total, true);
+  totalRow(copy.usd, Number(result.total) / exchangeRate);
+  y -= 13;
+  noteRows();
 
   const pages = doc.getPages();
   pages.forEach((current, index) => {
     page = current;
-    page.drawLine({ start: { x: M, y: 41 }, end: { x: W - M, y: 41 }, color: colors.line, thickness: 0.6 });
-    draw('ZHOUSHAN / PORT DISBURSEMENT ESTIMATE', M, 27, 6.5, colors.muted, latin);
-    const pageText = `第 ${index + 1} / ${pages.length} 页`;
-    draw(pageText, W - M - font.widthOfTextAtSize(pageText, 7), 27, 7, colors.muted);
+    rule(M, 40, W - M, 40, 0.6, palette.grid);
+    const pageLabel = lang === 'zh'
+      ? copy.page + (index + 1) + copy.pageOf + pages.length + copy.pageEnd
+      : copy.page + ' ' + (index + 1) + ' ' + copy.pageOf + ' ' + pages.length;
+    draw(pageLabel, W - M - textFont(pageLabel).widthOfTextAtSize(pageLabel, 8), 25, 8, palette.muted);
   });
   return doc.save();
 }
 
-export async function downloadQuotePdf(state, result) {
-  const bytes = await buildQuotePdf(state, result);
+export async function downloadQuotePdf(state, result, language = 'zh') {
+  const lang = language === 'en' ? 'en' : 'zh';
+  const bytes = await buildQuotePdf(state, result, lang);
   const blob = new Blob([bytes], { type: 'application/pdf' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
-  const vesselName = String(state.vesselName || '未命名船舶').replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_').slice(0, 80);
+  const vesselName = String(state.vesselName || COPY[lang].untitled)
+    .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_').slice(0, 80);
+  const suffix = lang === 'zh' ? '港口费用报价_中文' : 'Port_Quotation_English';
   anchor.href = url;
-  anchor.download = `${vesselName}_港口费用报价_${String(state.quoteDate || '').replace(/[^0-9-]/g, '')}.pdf`;
+  anchor.download = vesselName + '_' + suffix + '_' + String(state.quoteDate || '').replace(/[^0-9-]/g, '') + '.pdf';
   document.body.append(anchor);
   anchor.click();
   anchor.remove();

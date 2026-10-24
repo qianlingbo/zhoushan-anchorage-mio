@@ -1,6 +1,7 @@
 import { calculateQuote, getTugCount } from './calculator.mjs';
 import { PREFERENTIAL_COUNTRIES, CHINA_ALIASES, TUG_RATE_BANDS } from './rates-data.mjs';
 import { ROUTES } from './routes.mjs';
+import { TERMINALS } from './terminal-data.mjs';
 import { downloadQuotePdf } from './pdf-export.mjs';
 
 const $ = (id) => document.getElementById(id);
@@ -19,7 +20,7 @@ const newState = () => ({
   taxEnabled: true, taxDays: '30', taxRegime: 'preferential', taxFactor: '1',
   pilotInNight: false, pilotOutNight: false, pilotInHoliday: false, pilotOutHoliday: false,
   quoteDate: today(), quotationNo: `ZS-${today().replaceAll('-', '')}-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`,
-  client: '', notes: '', demo: false, manualIn: false, manualOut: false,
+  client: '', notes: '', extraFees: [], demo: false, manualIn: false, manualOut: false,
 });
 let state = newState();
 let result = null;
@@ -43,6 +44,14 @@ function safeRestore() {
     const saved = JSON.parse(raw);
     if (saved?.version !== 1 || !saved.data || typeof saved.data !== 'object') return;
     for (const key of Object.keys(state)) {
+      if (key === 'extraFees') {
+        if (Array.isArray(saved.data.extraFees)) state.extraFees = saved.data.extraFees.filter((fee) => fee && typeof fee === 'object').map((fee) => ({
+          nameZh: typeof fee.nameZh === 'string' ? fee.nameZh : '',
+          nameEn: typeof fee.nameEn === 'string' ? fee.nameEn : '',
+          amount: typeof fee.amount === 'string' ? fee.amount : '',
+        }));
+        continue;
+      }
       if (typeof saved.data[key] === typeof state[key]) state[key] = saved.data[key];
     }
     $('save-status').textContent = '已恢复此设备上的草稿';
@@ -69,10 +78,12 @@ function readForm() {
 
 function writeForm() {
   restoring = true;
+  rebuildRouteOptions();
   for (const key of fields) {
     if (booleanFields.includes(key)) $(key).checked = state[key];
     else $(key).value = state[key];
   }
+  renderExtraFeeInputs();
   restoring = false;
   updateTrade();
 }
@@ -120,6 +131,91 @@ function routeInfo() {
   };
 }
 
+function selectedTerminal() {
+  return TERMINALS.find((item) => item.name === state.portName.trim());
+}
+
+function rebuildRouteOptions() {
+  const terminal = selectedTerminal();
+  const allowed = terminal ? new Set(terminal.routeIds) : null;
+  const select = $('routeId');
+  const custom = document.createElement('option'); custom.value = 'custom'; custom.textContent = '自定义引航距离';
+  select.replaceChildren(custom);
+  const groups = new Map();
+  for (const route of ROUTES) {
+    if (allowed && !allowed.has(route.id)) continue;
+    if (!groups.has(route.port)) {
+      const group = document.createElement('optgroup'); group.label = route.port; groups.set(route.port, group); select.append(group);
+    }
+    const option = document.createElement('option'); option.value = route.id;
+    option.textContent = `${route.workArea} ← ${route.boarding} · ${number(route.distance)} 海里`;
+    const ambiguous = ROUTES.some((other) => other.id !== route.id && other.port === route.port && other.workArea === route.workArea && other.boarding === route.boarding && other.sites !== route.sites);
+    if (ambiguous) option.textContent = `${route.workArea} · ${route.sites} ← ${route.boarding} · ${number(route.distance)} 海里`;
+    groups.get(route.port).append(option);
+  }
+  if (allowed && state.routeId !== 'custom' && !allowed.has(state.routeId)) {
+    state.routeId = 'custom';
+    state.inDistance = state.outDistance = '';
+  }
+  select.value = state.routeId;
+}
+
+function useTerminalSelection() {
+  const terminal = selectedTerminal();
+  let autoRoute = false;
+  if (terminal && !terminal.routeIds.includes(state.routeId)) {
+    state.routeId = terminal.routeIds.length === 1 ? terminal.routeIds[0] : 'custom';
+    autoRoute = state.routeId !== 'custom';
+    if (!autoRoute) state.inDistance = state.outDistance = '';
+  } else if (!terminal && state.routeId !== 'custom') {
+    state.routeId = 'custom';
+    state.inDistance = state.outDistance = '';
+  }
+  rebuildRouteOptions();
+  const route = ROUTES.find((row) => row.id === state.routeId);
+  if (autoRoute && route) state.inDistance = state.outDistance = String(route.distance);
+  $('inDistance').value = state.inDistance;
+  $('outDistance').value = state.outDistance;
+}
+
+function renderExtraFeeInputs() {
+  const rows = state.extraFees.map((fee, index) => {
+    const row = document.createElement('div'); row.className = 'extra-fee-entry';
+    for (const [field, label] of [['nameZh', '中文名称'], ['nameEn', '英文名称（选填）'], ['amount', '人民币金额']]) {
+      const wrapper = document.createElement('label'); wrapper.textContent = label;
+      const input = document.createElement('input');
+      input.dataset.extraField = field; input.dataset.index = String(index); input.value = fee[field];
+      if (field === 'amount') {
+        input.type = 'number'; input.min = '0'; input.step = 'any'; input.inputMode = 'decimal'; input.required = true; input.placeholder = '0.00';
+      } else { input.type = 'text'; input.maxLength = 100; input.placeholder = field === 'nameZh' ? '如：代理费' : 'e.g. Agency fee'; }
+      wrapper.append(input); row.append(wrapper);
+    }
+    const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'extra-fee-remove';
+    remove.dataset.removeExtraFee = String(index); remove.setAttribute('aria-label', `删除第 ${index + 1} 项费用`); remove.title = '删除费用'; remove.textContent = '×';
+    row.append(remove);
+    return row;
+  });
+  if (!rows.length) {
+    const empty = document.createElement('p'); empty.className = 'extra-fee-help'; empty.textContent = '尚未添加额外费用。'; rows.push(empty);
+  }
+  $('extra-fee-fields').replaceChildren(...rows);
+}
+
+function renderExtraFeePreview(fees) {
+  const rows = fees.map((fee) => {
+    const row = document.createElement('div'); row.className = 'fee-row';
+    const icon = document.createElement('span'); icon.className = 'fee-icon'; icon.textContent = '＋';
+    const content = document.createElement('div');
+    const heading = document.createElement('h3'); heading.textContent = fee.nameZh || fee.nameEn;
+    if (fee.nameZh && fee.nameEn) { const english = document.createElement('span'); english.textContent = fee.nameEn; heading.append(english); }
+    content.append(heading);
+    const amount = document.createElement('strong'); amount.textContent = money(fee.amount);
+    row.append(icon, content, amount);
+    return row;
+  });
+  $('extra-fee-preview').replaceChildren(...rows);
+}
+
 function calculationState() {
   return { ...state, ...routeInfo(), tugRateOverride: state.tugRateOverride.trim() === '' ? null : state.tugRateOverride };
 }
@@ -132,6 +228,7 @@ function clearResult() {
   $('berth-detail').textContent = '0.25 × 净吨 × 天数';
   $('total-amount').textContent = '—';
   $('usd-amount').textContent = '—';
+  $('extra-fee-preview').replaceChildren();
   $('quote-warnings').hidden = true;
 }
 
@@ -142,7 +239,9 @@ function render() {
   const rate = Number(state.exchangeRate);
   $('fx-label').textContent = state.exchangeRate && Number.isFinite(rate) && rate > 0 ? `1 USD = ${number(rate)} CNY` : '请填写汇率';
   const route = ROUTES.find((row) => row.id === state.routeId);
-  $('route-hint').textContent = route ? `${route.sites}；登离轮点：${route.boarding}，官网距离 ${number(route.distance)} 海里。实际进出港距离可修改。${route.note ? ` ${route.note}` : ''}` : '可选择官网路线带入距离，也可分别修改进出港距离。区域不会自动决定距离。';
+  const terminal = selectedTerminal();
+  $('port-hint').textContent = terminal ? `官网名单：${terminal.port} / ${terminal.workArea}；请核对引航登离轮点` : '可从官网码头 / 船厂名单选择，也可自行输入';
+  $('route-hint').textContent = route ? `${route.sites}；登离轮点：${route.boarding}，官网距离 ${number(route.distance)} 海里。实际进出港距离可修改。${route.note ? ` ${route.note}` : ''}` : terminal ? `该码头 / 船厂对应 ${terminal.routeIds.length} 条官网路线，请选择登离轮点和距离。` : '可选择官网路线带入距离，也可分别修改进出港距离。区域不会自动决定距离。';
   const countries = [...CHINA_ALIASES, ...PREFERENTIAL_COUNTRIES];
   $('tax-country-hint').textContent = state.nationality ? `${countries.includes(state.nationality.trim()) ? '该船籍在参考站优惠名单' : '该船籍不在参考站优惠名单'}；当前按${state.taxRegime === 'preferential' ? '优惠' : '普通'}税率` : '按船籍推荐，可手动调整';
   ['taxDays', 'taxRegime', 'taxFactor'].forEach((id) => { $(id).disabled = !state.taxEnabled; });
@@ -150,6 +249,7 @@ function render() {
     result = calculateQuote(calculationState());
     lastError = '';
     for (const key of ['pilot', 'tug', 'tax', 'berth']) $(`${key}-amount`).textContent = money(result[key].amount);
+    renderExtraFeePreview(result.extraFees || []);
     $('pilot-detail').textContent = `进 ${number(state.inDistance)} / 出 ${number(state.outDistance)} 海里 · ${state.pilotInCount}+${state.pilotOutCount} 次`;
     $('tug-detail').textContent = `${number(result.tug.rate)} 元/艘次 · 靠${state.tugInCount} / 离${state.tugOutCount}艘${state.tugRateOverride ? ' · 手动单价' : ''}`;
     $('tax-detail').textContent = state.taxEnabled ? `${state.taxDays}日 · ${state.taxRegime === 'preferential' ? '优惠' : '普通'} · ${result.tax.rate}元/净吨${Number(state.taxFactor) === .5 ? ' · 50%' : ''}` : '本航次不计入吨税';
@@ -161,6 +261,7 @@ function render() {
     const warnings = [...result.warnings];
     if (state.manualIn || state.manualOut) warnings.push('拖轮艘数已手动调整，以当前输入计费。');
     if (state.area === '待确认') warnings.push('码头所属区域尚待确认；引航按当前距离计算。');
+    if (terminal && state.routeId === 'custom') warnings.push('所选码头 / 船厂有官网路线，请核对登离轮点及进出港距离。');
     if (state.demo) warnings.push('当前为示例船舶和示例汇率，请替换为实际资料。');
     if (state.nationality === '利比里亚' && state.quoteDate > '2029-12-10') warnings.push('利比里亚已超出参考站标注优惠有效期，请核实适用税率。');
     result.warnings = warnings;
@@ -197,18 +298,19 @@ function updateRateTable() {
 for (const country of ['中国', '巴拿马', '马绍尔群岛', ...PREFERENTIAL_COUNTRIES]) {
   const option = document.createElement('option'); option.value = country; $('nationalities').append(option);
 }
-const portGroups = new Map();
-for (const route of ROUTES) {
-  if (!portGroups.has(route.port)) {
-    const group = document.createElement('optgroup'); group.label = route.port; portGroups.set(route.port, group); $('routeId').append(group);
-  }
-  const option = document.createElement('option'); option.value = route.id; option.textContent = `${route.workArea} ← ${route.boarding} · ${number(route.distance)} 海里`;
-  const ambiguous = ROUTES.some((other) => other.id !== route.id && other.port === route.port && other.workArea === route.workArea && other.boarding === route.boarding && other.sites !== route.sites);
-  if (ambiguous) option.textContent = `${route.workArea} · ${route.sites} ← ${route.boarding} · ${number(route.distance)} 海里`;
-  portGroups.get(route.port).append(option);
+for (const terminal of TERMINALS) {
+  const option = document.createElement('option'); option.value = terminal.name; option.label = `${terminal.port} / ${terminal.workArea}`;
+  $('terminals').append(option);
 }
 
 form.addEventListener('input', (event) => {
+  if (event.target.dataset.extraField) {
+    const fee = state.extraFees[Number(event.target.dataset.index)];
+    if (!fee) return;
+    fee[event.target.dataset.extraField] = event.target.value;
+    event.target.classList.remove('invalid');
+    render(); save(); return;
+  }
   if (restoring || !fields.includes(event.target.id)) return;
   readForm();
   event.target.classList.remove('invalid');
@@ -241,6 +343,24 @@ form.addEventListener('input', (event) => {
   render(); save();
 });
 
+form.addEventListener('change', (event) => {
+  if (event.target.id !== 'portName') return;
+  readForm(); useTerminalSelection(); render(); save();
+});
+
+$('add-extra-fee').addEventListener('click', () => {
+  state.extraFees.push({ nameZh: '其他费用', nameEn: 'Other charge', amount: '0' });
+  renderExtraFeeInputs(); render(); save();
+  const input = $('extra-fee-fields').querySelectorAll('[data-extra-field="nameZh"]')[state.extraFees.length - 1];
+  input?.focus(); input?.select();
+});
+$('extra-fee-fields').addEventListener('click', (event) => {
+  const button = event.target.closest('[data-remove-extra-fee]');
+  if (!button) return;
+  state.extraFees.splice(Number(button.dataset.removeExtraFee), 1);
+  renderExtraFeeInputs(); render(); save();
+});
+
 document.querySelectorAll('[data-trade]').forEach((button) => button.addEventListener('click', () => {
   state.trade = button.dataset.trade; updateTrade(); render(); save();
 }));
@@ -259,6 +379,7 @@ $('rates-dialog').addEventListener('click', (event) => { if (event.target === $(
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault(); readForm(); render();
+  const language = event.submitter?.dataset.exportLanguage === 'en' ? 'en' : 'zh';
   const blankText = ['vesselName', 'nationality', 'portName', 'quotationNo'].find((key) => !state[key].trim());
   if (blankText) { $(blankText).classList.add('invalid'); $(blankText).focus(); toast('船名、国籍、码头和报价编号不得为空'); return; }
   const inputs = [...form.querySelectorAll('input,select,textarea')].filter((input) => !input.disabled);
@@ -268,15 +389,16 @@ form.addEventListener('submit', async (event) => {
   }
   const fx = Number(state.exchangeRate);
   if (!result || !Number.isFinite(fx) || fx <= 0 || !Number.isFinite(result.total / fx)) { toast(lastError || '请检查汇率和报价参数'); return; }
-  const button = $('export'); button.disabled = true; button.textContent = '正在生成 PDF…';
+  const buttons = [...form.querySelectorAll('[data-export-language]')];
+  const labels = buttons.map((button) => button.textContent);
+  buttons.forEach((button) => { button.disabled = true; });
+  const button = event.submitter || $('export-zh'); button.textContent = '正在生成 PDF…';
   try {
-    await downloadQuotePdf(calculationState(), result);
-    toast('PDF 报价单已生成并下载');
+    await downloadQuotePdf(calculationState(), result, language);
+    toast(`${language === 'en' ? '英文' : '中文'} PDF 报价单已生成并下载`);
   } catch (error) { toast(`PDF 生成失败：${error.message}`); }
   finally {
-    button.disabled = false; button.replaceChildren();
-    const icon = document.createElement('span'); icon.textContent = '↓'; const arrow = document.createElement('span'); arrow.textContent = '↗';
-    button.append(icon, document.createTextNode(' 导出 PDF 报价单 '), arrow);
+    buttons.forEach((item, index) => { item.disabled = false; item.textContent = labels[index]; });
   }
 });
 
