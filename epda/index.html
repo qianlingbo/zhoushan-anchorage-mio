@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="舟山船舶港口费用报价：引航、拖轮、吨税与靠泊费自动计算，导出中文 PDF。">
+  <meta name="theme-color" content="#142d38"><title>舟港 · 船舶自动报价</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23142d38'/%3E%3Cpath d='M16 37h32l-5 11H22zM28 18h9v19M22 29h21M15 52q8 5 16 0 8 5 17 0' stroke='%237edbc5' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="assets/pdf-lib.min.js"></script><script defer src="assets/fontkit.umd.min.js"></script>
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#top"><span class="brand-symbol">舟</span><span>舟港<span class="brand-en">PORT QUOTATION</span></span></a>
+    <div class="nav-label">业务工作台</div>
+    <nav aria-label="页面导航">
+      <a class="nav-item active" href="#top"><span>▤</span> 船舶报价 <span class="nav-dot"></span></a>
+      <a class="nav-item" href="#voyage"><span>⚑</span> 航次与作业</a>
+      <button class="nav-item" type="button" data-open-rates><span>≡</span> 费率与计算口径</button>
+    </nav>
+    <div class="sidebar-bottom"><div class="mini-compass">N<span>✦</span></div><div class="port-location">舟山港 · ZHOUSHAN</div><p>从船舶资料到费用报价<br>让每笔费用都有依据。</p><span class="version">首版工作台 <b>V1.0</b></span></div>
+  </aside>
+  <main id="top">
+    <header class="topbar"><span>业务工具 <span class="slash">/</span> <b>船舶报价</b></span><span class="device-save" id="save-status">数据仅保存在当前设备</span></header>
+    <div class="workspace">
+      <div class="page-heading"><div><div class="eyebrow">VESSEL DISBURSEMENT ESTIMATE</div><h1>船舶港口费用报价<span class="edition">试用版</span></h1><p>录入船舶资料，自动计算费用，一键生成 PDF 报价单。</p></div><div class="heading-actions"><button id="example" type="button" class="button secondary">载入示例 <span>↗</span></button><button type="button" class="button icon-button" id="reset" aria-label="清空报价" title="清空报价">↺</button></div></div>
+      <form id="quote-form" novalidate>
+        <section class="panel vessel-panel" id="vessel">
+          <div class="panel-title"><div><span class="section-number">01</span><h2>船舶资料</h2></div><div class="trade-switch" role="group" aria-label="贸易类型"><button type="button" data-trade="foreign" class="selected" aria-pressed="true">外贸</button><button type="button" data-trade="domestic" aria-pressed="false">内贸</button></div></div>
+          <div class="vessel-grid">
+            <label>船名 <span class="required">*</span><input name="vesselName" id="vesselName" required maxlength="100" autocomplete="off" placeholder="输入中英文船名"></label>
+            <label>国籍 / 船籍 <span class="required">*</span><input name="nationality" id="nationality" required list="nationalities" maxlength="60" placeholder="如：新加坡"><datalist id="nationalities"></datalist></label>
+            <label>净吨 <span class="required">*</span><div class="input-unit"><input name="nt" id="nt" type="number" required min="0.01" step="any" inputmode="decimal" placeholder="如：18,000"><span>NT</span></div></label>
+            <label>船舶长度 <span class="required">*</span><div class="input-unit"><input name="length" id="length" type="number" required min="0.01" step="any" inputmode="decimal" placeholder="如：200"><span>米</span></div></label>
+            <label>汇率 <span class="required">*</span><div class="input-unit"><input name="exchangeRate" id="exchangeRate" type="number" required min="0.000001" step="any" inputmode="decimal" placeholder="1 USD = ?"><span>CNY</span></div><small>1 美元折合人民币，手动录入</small></label>
+            <label>码头或船厂 <span class="required">*</span><input name="portName" id="portName" required maxlength="150" placeholder="输入码头或船厂名称"></label>
+          </div>
+          <div class="vessel-footer"><span class="tiny-anchor">⚓</span><span>默认按外贸航线报价；船长用于匹配拖轮单价与建议艘数。</span><span id="demo-badge" class="demo-badge" hidden>当前为示例数据</span></div>
+        </section>
+        <div class="working-grid">
+          <div class="form-stack">
+            <section class="panel" id="voyage">
+              <div class="panel-title"><div><span class="section-number">02</span><h2>航次与作业</h2></div><span class="panel-caption">作业参数</span></div>
+              <div class="field-grid">
+                <label>船型<select name="shipType" id="shipType"><option value="bulk">散货船 / 杂货船 / 其他</option><option value="tanker">油船 / 化学品船 / 液化气体船</option><option value="container">集装箱船 / 滚装船 / 客船</option></select></label>
+                <label>作业类型<select name="operation" id="operation"><option value="unload">卸货 · 重载靠泊，空载离泊</option><option value="load">装货 · 空载靠泊，重载离泊</option><option value="custom">自定义靠离泊载况</option></select></label>
+                <label>所属区域<select name="area" id="area"><option value="待确认">待确认 / 尚未配置</option><option>北部港区</option><option>中部港区</option><option>南部港区</option></select><small>区域暂手选，后续可补充码头映射</small></label>
+                <label>靠泊天数<div class="input-unit"><input name="berthDays" id="berthDays" type="number" min="0.01" step="any" required><span>天</span></div><small>靠泊费 = 0.25 × 净吨 × 天数</small></label>
+                <label class="full">引航路线参考<select name="routeId" id="routeId"><option value="custom">自定义引航距离</option></select><small id="route-hint">可选择官网路线带入距离，也可分别修改进出港距离。区域不会自动决定距离。</small></label>
+              </div>
+              <div class="direction-grid">
+                <div class="direction-card"><h3><span class="direction-dot in"></span>进港 / 靠泊<span>ARRIVAL</span></h3><div class="field-grid compact">
+                  <label>引航距离<div class="input-unit"><input name="inDistance" id="inDistance" type="number" min="0" step="any" required><span>海里</span></div></label>
+                  <label>引航次数<div class="input-unit"><input name="pilotInCount" id="pilotInCount" type="number" min="0" step="1" required><span>次</span></div></label>
+                  <label>靠泊载况<select name="inLoad" id="inLoad"><option value="laden">重载</option><option value="half">半载</option><option value="ballast">空载</option></select></label>
+                  <label>拖轮艘数<div class="input-unit"><input name="tugInCount" id="tugInCount" type="number" min="0" step="1" required><span>艘</span></div></label>
+                  <label class="full">拖轮作业次数<div class="input-unit"><input name="tugInOps" id="tugInOps" type="number" min="0" step="1" required><span>次</span></div></label>
+                </div><div class="check-line"><label><input type="checkbox" name="pilotInNight" id="pilotInNight">符合夜班附加条件</label><label><input type="checkbox" name="pilotInHoliday" id="pilotInHoliday">节假日</label></div></div>
+                <div class="direction-card"><h3><span class="direction-dot out"></span>出港 / 离泊<span>DEPARTURE</span></h3><div class="field-grid compact">
+                  <label>引航距离<div class="input-unit"><input name="outDistance" id="outDistance" type="number" min="0" step="any" required><span>海里</span></div></label>
+                  <label>引航次数<div class="input-unit"><input name="pilotOutCount" id="pilotOutCount" type="number" min="0" step="1" required><span>次</span></div></label>
+                  <label>离泊载况<select name="outLoad" id="outLoad"><option value="laden">重载</option><option value="half">半载</option><option value="ballast">空载</option></select></label>
+                  <label>拖轮艘数<div class="input-unit"><input name="tugOutCount" id="tugOutCount" type="number" min="0" step="1" required><span>艘</span></div></label>
+                  <label class="full">拖轮作业次数<div class="input-unit"><input name="tugOutOps" id="tugOutOps" type="number" min="0" step="1" required><span>次</span></div></label>
+                </div><div class="check-line"><label><input type="checkbox" name="pilotOutNight" id="pilotOutNight">符合夜班附加条件</label><label><input type="checkbox" name="pilotOutHoliday" id="pilotOutHoliday">节假日</label></div></div>
+              </div>
+              <div class="inline-note"><span>ⓘ</span><p id="tug-suggestion">填写船长后自动建议拖轮艘数；可手动修改。</p><button type="button" id="auto-tugs" class="text-button">恢复建议</button></div>
+              <details class="advanced"><summary>调整拖轮单价 / 查看夜班口径 <span>＋</span></summary><div class="field-grid"><label>手动拖轮单价（选填）<div class="input-unit"><input name="tugRateOverride" id="tugRateOverride" type="number" min="0" step="0.01" placeholder="留空则按船长与船型匹配"><span>元/艘次</span></div></label><p class="help-text">夜班 22:00–06:00，国际航线符合条件时加收基准费 45%；节假日加收 45%，同时满足为 90%。非基本港附加不参与加成。国内航线不加收。<button type="button" data-open-rates class="text-button">查看依据</button></p></div></details>
+            </section>
+            <section class="panel" id="tax-section">
+              <div class="panel-title"><div><span class="section-number">03</span><h2>吨税与报价信息</h2></div><label class="switch-label"><input name="taxEnabled" id="taxEnabled" type="checkbox"><span class="switch-track"></span>计入吨税</label></div>
+              <div class="field-grid" id="tax-fields">
+                <label>吨税期限<select name="taxDays" id="taxDays"><option value="30">30 日</option><option value="90">90 日</option><option value="365">365 日</option></select></label>
+                <label>税率类型<select name="taxRegime" id="taxRegime"><option value="preferential">优惠税率</option><option value="ordinary">普通税率</option></select><small id="tax-country-hint">按船籍推荐，可手动调整</small></label>
+                <label class="full">吨税船型<select name="taxFactor" id="taxFactor"><option value="1">普通船舶 · 系数 100%</option><option value="0.5">被征税船舶为拖船 / 非机动驳船 · 系数 50%</option></select><small>此处船型指被征税船舶，与协助靠离泊的拖轮无关。持有效吨税执照等不需缴纳时，可关闭“计入吨税”。</small></label>
+              </div>
+              <div class="form-divider"></div><div class="field-grid">
+                <label>报价日期<input name="quoteDate" id="quoteDate" type="date" required></label><label>报价编号<input name="quotationNo" id="quotationNo" maxlength="60" required></label>
+                <label class="full">客户 / 委托方（选填）<input name="client" id="client" maxlength="120" placeholder="客户或公司名称"></label>
+                <label class="full">报价备注（选填）<textarea name="notes" id="notes" maxlength="2000" rows="3" placeholder="补充本次报价的约定与说明"></textarea></label>
+              </div>
+            </section>
+          </div>
+          <aside class="quote-column" id="estimate">
+            <section class="estimate-panel"><div class="estimate-heading"><span class="live-dot"></span>实时报价<span class="currency-label">CNY 人民币</span></div><div class="estimate-vessel"><h2 id="preview-vessel">等待录入船舶</h2><p id="preview-meta">填写上方船舶资料，开始计算</p></div>
+              <div class="fee-list">
+                <div class="fee-row"><span class="fee-icon">引</span><div><h3>引航费<span>PILOTAGE</span></h3><p id="pilot-detail">进港 + 出港引航</p></div><strong id="pilot-amount">—</strong></div>
+                <div class="fee-row"><span class="fee-icon">拖</span><div><h3>拖轮费<span>TOWAGE</span></h3><p id="tug-detail">按船长与载况计算</p></div><strong id="tug-amount">—</strong></div>
+                <div class="fee-row"><span class="fee-icon">税</span><div><h3>船舶吨税<span>TONNAGE DUES</span></h3><p id="tax-detail">按净吨、税率与期限计算</p></div><strong id="tax-amount">—</strong></div>
+                <div class="fee-row"><span class="fee-icon">泊</span><div><h3>靠泊费<span>BERTHAGE</span></h3><p id="berth-detail">0.25 × 净吨 × 天数</p></div><strong id="berth-amount">—</strong></div>
+              </div>
+              <div class="total-block"><div><span>费用合计</span><span class="total-currency">CNY</span></div><strong id="total-amount">—<small>.—</small></strong><div class="usd-line"><span>折合美元 <b id="usd-amount">—</b></span><span id="fx-label">请填写汇率</span></div></div>
+              <p class="validation-message" id="validation-message" aria-live="polite">填写船名、国籍、净吨、船长、汇率与码头后即可导出。</p>
+              <div id="quote-warnings" class="quote-warnings" hidden></div>
+              <button id="export" type="submit" class="button primary"><span>↓</span> 导出 PDF 报价单 <span>↗</span></button><p class="export-caption">中文报价单 · 含计费明细与计算依据</p>
+            </section>
+            <div class="basis-note"><span>⌁</span><div><h3>每笔费用，均可追溯</h3><p>引航官网费率 · 拖轮收费资料<br>吨税参考站 · 自定义靠泊天数</p><button type="button" class="text-button" data-open-rates>查看费率与计算口径 <span>↗</span></button></div></div>
+          </aside>
+        </div>
+      </form>
+      <footer class="page-footer"><span>舟港报价工作台</span><span>币种：人民币 / 美元折算 · 费用按输入条件估算</span></footer>
+    </div>
+  </main>
+  <dialog id="rates-dialog"><div class="dialog-header"><div><div class="eyebrow">RATE REFERENCES</div><h2>费率与计算口径</h2></div><button type="button" id="close-rates" class="button icon-button" aria-label="关闭费率说明">×</button></div><div class="dialog-body">
+    <article><h3>01 引航费</h3><p>按<a href="https://www.zspilot.com.cn/news_viewn.asp?newsid=603&LM=150" target="_blank" rel="noopener">指定的舟山引航站费率表（2023年9月实行）</a>设置基础费率与75条常规路线；夜班及节假日参考<a href="https://www.zspilot.com.cn/news_viewn.asp?newsid=2362&lm=150" target="_blank" rel="noopener">2024年官网补充表</a>。</p><p>外贸基本费分段：前40,000净吨 × 0.405，次40,000 × 0.36，再40,000 × 0.3375；基本费最高44,100元。另加非基本港附加0.27 × 计费净吨，以及超出10海里部分 × 0.004 × 计费净吨。内贸：计费净吨 × [0.18 + 超出10海里部分 × 0.0018]。</p><p>按<a href="https://zj.singlewindow.cn/pen-portal/guide/announce/hz/admiralty.jspa" target="_blank" rel="noopener">舟山收费公示</a>及<a href="https://jtyst.fj.gov.cn/mzwgk/zcfg/gz/201910/t20191021_5071052.htm" target="_blank" rel="noopener">港口收费计费办法</a>，引航净吨与海里向上进整，外贸最低2,000计费吨、国内沿海最低500计费吨。首次进港与最后出港分别计算。夜班或节假日达到作业时间一半，或达0.5小时，才勾选附加；国际航线每项加45%，两项合计90%，非基本港0.27附加不参加加成。</p><p>首版覆盖常规进出港引航，不包含移泊、超范围引航及其他未列项目。所属北/中/南区域由用户手选，不直接推断引航距离。</p></article>
+    <article><h3>02 拖轮费</h3><p>采用你提供的《拖轮收费.doc》，按船长、船型、国内/国际航线匹配元/拖轮艘次。费用 = 单价 ×（靠泊艘数 × 作业次数 + 离泊艘数 × 作业次数）。装货默认空载靠、重载离；卸货默认重载靠、空载离；均可调整。</p><div class="source-issue">原件费率区间端点未明确，首版采用“80米及以下首档、其余各档上限包含”。配置表首行“80＜L 不配置”与后文冲突，80米以下暂按0艘。档位边界及实际艘数请核对，系统支持手动修改单价、艘数和次数。</div><div class="table-scroll"><table id="tug-rate-table"><thead><tr><th>船长（米）</th><th>集装箱 / 滚装 / 客船</th><th>油 / 化学 / 液化气</th><th>散货 / 杂货 / 其他</th></tr></thead><tbody></tbody></table></div><small>表格随主页面外贸 / 内贸选项切换；单位：元/拖轮艘次。</small></article>
+    <article><h3>03 船舶吨税</h3><p>费率与<a href="https://www.zsagent01.com/dues/" target="_blank" rel="noopener">指定吨税计算器</a>一致，按整船净吨所在档位计算，非累进。支持普通/优惠税率及30、90、365日。国籍输入中文后按参考站名单推荐税率，仍可手动更改。不因切换内贸而自动免税；不需要本次缴纳时，请关闭“计入吨税”。利比里亚优惠来源标注有效至2029年12月10日。</p></article>
+    <article><h3>04 靠泊费与汇率</h3><p>靠泊费按你的公式：0.25 × 实际净吨 × 靠泊天数。天数按输入值计费，支持小数，不自动进整。各项金额保留两位小数后相加；汇率为用户输入的“1美元 = 多少人民币”，美元合计 = 人民币合计 ÷ 汇率。系统不获取实时汇率，也不另加未提供的税费或代理费。</p></article>
+    <article><h3>码头区域资料</h3><p>所提供《引航收费.pdf》实际是《码头统计表（20201118）》，107条北/中/南区域记录已整理为本地参考数据，首版不将2020年名单作为自动映射。后续补充确认后的码头/船厂所属区域即可接入。</p></article>
+  </div></dialog>
+  <div id="toast" role="status" hidden></div>
+</body></html>
