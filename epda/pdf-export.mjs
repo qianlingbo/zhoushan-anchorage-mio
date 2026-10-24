@@ -1,5 +1,8 @@
 const FONT_URL = new URL('./assets/NotoSansSC-Regular.ttf', import.meta.url);
+const COMMON_FONT_URL = new URL('./assets/NotoSansSC-Common.ttf', import.meta.url);
+const COMMON_FONT_GZIP_URL = new URL('./assets/NotoSansSC-Common.ttf.gz', import.meta.url);
 let fontBytesPromise;
+let commonFontPromise;
 
 const money = (value) => new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2, maximumFractionDigits: 2,
@@ -14,17 +17,55 @@ const shipNames = {
 };
 const loadNames = { laden: '重载', half: '半载', ballast: '空载' };
 
-async function loadFontBytes() {
+async function fetchFontBytes(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error('中文 PDF 字体加载失败，请刷新页面后重试。');
+  return new Uint8Array(await response.arrayBuffer());
+}
+
+async function loadFullFontBytes() {
   if (!fontBytesPromise) {
-    fontBytesPromise = fetch(FONT_URL).then(async (response) => {
-      if (!response.ok) throw new Error('中文 PDF 字体加载失败，请刷新页面后重试。');
-      return new Uint8Array(await response.arrayBuffer());
-    }).catch((error) => {
+    fontBytesPromise = fetchFontBytes(FONT_URL).catch((error) => {
       fontBytesPromise = undefined;
       throw error;
     });
   }
   return fontBytesPromise;
+}
+
+async function loadCommonFont() {
+  let bytes;
+  if (typeof globalThis.DecompressionStream === 'function') {
+    try {
+      const compressed = await fetchFontBytes(COMMON_FONT_GZIP_URL);
+      const stream = new Blob([compressed]).stream().pipeThrough(new DecompressionStream('gzip'));
+      bytes = new Uint8Array(await new Response(stream).arrayBuffer());
+    } catch {
+      bytes = await fetchFontBytes(COMMON_FONT_URL);
+    }
+  } else {
+    bytes = await fetchFontBytes(COMMON_FONT_URL);
+  }
+  return { bytes, characters: new Set(globalThis.fontkit.create(bytes).characterSet) };
+}
+
+async function loadFontBytes(state, result) {
+  if (!commonFontPromise) {
+    commonFontPromise = loadCommonFont().catch((error) => {
+      commonFontPromise = undefined;
+      throw error;
+    });
+  }
+  let common;
+  try {
+    common = await commonFontPromise;
+  } catch {
+    return loadFullFontBytes();
+  }
+  for (const char of JSON.stringify({ state, result })) {
+    if (!common.characters.has(char.codePointAt(0))) return loadFullFontBytes();
+  }
+  return common.bytes;
 }
 
 export async function buildQuotePdf(state, result) {
@@ -40,7 +81,7 @@ export async function buildQuotePdf(state, result) {
   doc.registerFontkit(globalThis.fontkit);
   const [font, latin, latinBold] = await Promise.all([
     // 此中文字体经 fontkit 子集化会漏字；完整嵌入确保 PDF 实际可见。
-    doc.embedFont(await loadFontBytes(), { subset: false }),
+    doc.embedFont(await loadFontBytes(state, result), { subset: false }),
     doc.embedFont(StandardFonts.Helvetica),
     doc.embedFont(StandardFonts.HelveticaBold),
   ]);
