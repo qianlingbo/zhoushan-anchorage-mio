@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-10-24 16:52:19",
-  "lastChecked": "2026-10-24 16:52:19",
-  "lastSuccessfulFetch": "2026-10-24 16:52:19",
-  "updateWindow": "2026-10-24T15:00+08:00",
-  "publishTime": "2026年10月24日15时",
-  "publishCode": "2026102415",
+  "lastUpdated": "2026-10-24 21:19:34",
+  "lastChecked": "2026-10-24 21:19:34",
+  "lastSuccessfulFetch": "2026-10-24 21:19:34",
+  "updateWindow": "2026-10-24T21:00+08:00",
+  "publishTime": "2026年10月24日21时",
+  "publishCode": "2026102421",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -254,9 +254,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有暴雨。明天阴有中雨转小雨。后天阴有时有阵雨，中午转阴到多云。27日多云到阴。28日多云转阴偶有小雨。<br><br>台风警报：今年第30号台风“蔷琵”（台风级）今天16时位于舟山偏南方向约490公里处，即北纬25.7度，东经123.5度，中心附近最大风力12级，中心最低气压975百帕，以每小时20公里左右的速度向偏北方向移动，强度逐渐减弱，将于25日前后沿浙江东部近海转向东北方向移动，趋向日本西南部沿海。受其影响，我市24日阴有暴雨、局部大暴雨，25日阴有中雨转小雨，舟山沿海24日北到东北风11级、个别12级，25日偏北风10-11级，25日下午起北到西北风10级，半夜减弱到9级，请注意防范。<br><br>",
-      "Time": "2026102415",
-      "PreciseForecastTime": "2026年10月24日15时"
+      "Text": "天气预报：今天阴有暴雨。明天阴有中雨转小雨。后天阴有时有阵雨，中午转阴到多云。27日多云到阴。28日多云转阴偶有小雨。<br><br>台风警报：今年第30号台风“蔷琵”（强热带风暴级）今天17时位于舟山偏南方向约300公里处，即北纬27.4度，东经123.2度，中心附近最大风力10级，中心最低气压982百帕，以每小时15公里左右的速度向北偏东方向移动，强度逐渐减弱，将于25日前后沿浙江东部近海转向东北方向移动，趋向日本西南部沿海。受其影响，我市24日阴有大到暴雨，25日阴有中雨转小雨，舟山沿海24日北到东北风11级、个别12级，25日偏北风11级、个别12级，25日下午起北到西北风10级，半夜减弱到9级，请注意防范。<br><br>",
+      "Time": "2026102421",
+      "PreciseForecastTime": "2026年10月24日21时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -502,9 +502,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有暴雨。明天阴有中雨转小雨。后天阴有时有阵雨，中午转阴到多云。27日多云到阴。28日多云转阴偶有小雨。<br><br>台风警报：今年第30号台风“蔷琵”（台风级）今天16时位于舟山偏南方向约490公里处，即北纬25.7度，东经123.5度，中心附近最大风力12级，中心最低气压975百帕，以每小时20公里左右的速度向偏北方向移动，强度逐渐减弱，将于25日前后沿浙江东部近海转向东北方向移动，趋向日本西南部沿海。受其影响，我市24日阴有暴雨、局部大暴雨，25日阴有中雨转小雨，舟山沿海24日北到东北风11级、个别12级，25日偏北风10-11级，25日下午起北到西北风10级，半夜减弱到9级，请注意防范。<br><br>",
-      "Time": "2026102415",
-      "PreciseForecastTime": "2026年10月24日15时"
+      "Text": "天气预报：今天阴有暴雨。明天阴有中雨转小雨。后天阴有时有阵雨，中午转阴到多云。27日多云到阴。28日多云转阴偶有小雨。<br><br>台风警报：今年第30号台风“蔷琵”（强热带风暴级）今天17时位于舟山偏南方向约300公里处，即北纬27.4度，东经123.2度，中心附近最大风力10级，中心最低气压982百帕，以每小时15公里左右的速度向北偏东方向移动，强度逐渐减弱，将于25日前后沿浙江东部近海转向东北方向移动，趋向日本西南部沿海。受其影响，我市24日阴有大到暴雨，25日阴有中雨转小雨，舟山沿海24日北到东北风11级、个别12级，25日偏北风11级、个别12级，25日下午起北到西北风10级，半夜减弱到9级，请注意防范。<br><br>",
+      "Time": "2026102421",
+      "PreciseForecastTime": "2026年10月24日21时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,17 +750,17 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有暴雨。明天阴有中雨转小雨。后天阴有时有阵雨，中午转阴到多云。27日多云到阴。28日多云转阴偶有小雨。<br><br>台风警报：今年第30号台风“蔷琵”（台风级）今天16时位于舟山偏南方向约490公里处，即北纬25.7度，东经123.5度，中心附近最大风力12级，中心最低气压975百帕，以每小时20公里左右的速度向偏北方向移动，强度逐渐减弱，将于25日前后沿浙江东部近海转向东北方向移动，趋向日本西南部沿海。受其影响，我市24日阴有暴雨、局部大暴雨，25日阴有中雨转小雨，舟山沿海24日北到东北风11级、个别12级，25日偏北风10-11级，25日下午起北到西北风10级，半夜减弱到9级，请注意防范。<br><br>",
-      "Time": "2026102415",
-      "PreciseForecastTime": "2026年10月24日15时"
+      "Text": "天气预报：今天阴有暴雨。明天阴有中雨转小雨。后天阴有时有阵雨，中午转阴到多云。27日多云到阴。28日多云转阴偶有小雨。<br><br>台风警报：今年第30号台风“蔷琵”（强热带风暴级）今天17时位于舟山偏南方向约300公里处，即北纬27.4度，东经123.2度，中心附近最大风力10级，中心最低气压982百帕，以每小时15公里左右的速度向北偏东方向移动，强度逐渐减弱，将于25日前后沿浙江东部近海转向东北方向移动，趋向日本西南部沿海。受其影响，我市24日阴有大到暴雨，25日阴有中雨转小雨，舟山沿海24日北到东北风11级、个别12级，25日偏北风11级、个别12级，25日下午起北到西北风10级，半夜减弱到9级，请注意防范。<br><br>",
+      "Time": "2026102421",
+      "PreciseForecastTime": "2026年10月24日21时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
         {
           "wd_en": "ENE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
           "WindSpeed": 18.5,
           "WindSpeedAvg": "13.9",
           "Time": "24日08时-11时",
@@ -769,8 +769,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
           "WindSpeed": 20.2,
           "WindSpeedAvg": "15.2",
           "Time": "24日11时-14时",
@@ -779,7 +779,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "ENE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "3.0-3.5m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 23.4,
           "WindSpeedAvg": "17.6",
@@ -789,7 +789,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "3.0-3.5m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 22.3,
           "WindSpeedAvg": "16.7",
@@ -799,7 +799,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "ENE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "3.0-3.5m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 21.1,
           "WindSpeedAvg": "15.8",
@@ -809,7 +809,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "ENE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "3.0-3.5m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 23.0,
           "WindSpeedAvg": "17.3",
@@ -819,7 +819,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "ENE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "3.0-3.5m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 23.5,
           "WindSpeedAvg": "17.6",
@@ -829,7 +829,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PPE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "3.0-3.5m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 23.2,
           "WindSpeedAvg": "17.4",
@@ -839,7 +839,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PPE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "3.0-3.5m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 22.5,
           "WindSpeedAvg": "16.9",
@@ -849,7 +849,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "ESE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "3.0-3.5m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 22.0,
           "WindSpeedAvg": "16.5",
@@ -859,7 +859,7 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "3.0-3.5m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 21.5,
           "WindSpeedAvg": "16.1",
@@ -869,8 +869,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
           "WindSpeed": 21.0,
           "WindSpeedAvg": "15.8",
           "Time": "25日17时-20时",
@@ -879,8 +879,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "SSE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
           "WindSpeed": 19.5,
           "WindSpeedAvg": "14.6",
           "Time": "25日20时-26日02时",
@@ -889,8 +889,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
           "WindSpeed": 18.5,
           "WindSpeedAvg": "13.9",
           "Time": "26日02时-08时",
@@ -899,8 +899,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "WNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
           "WindSpeed": 18.1,
           "WindSpeedAvg": "13.6",
           "Time": "26日08时-14时",
@@ -909,8 +909,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
+          "WindWave": "2.0-2.5m",
+          "Riskrating": "1 4 1 1",
           "WindSpeed": 18.0,
           "WindSpeedAvg": "13.5",
           "Time": "26日14时-20时",
@@ -919,8 +919,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
           "WindSpeed": 18.1,
           "WindSpeedAvg": "13.6",
           "Time": "26日20时-27日02时",
@@ -929,8 +929,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
+          "WindWave": "2.0-2.5m",
+          "Riskrating": "1 4 1 1",
           "WindSpeed": 17.9,
           "WindSpeedAvg": "13.4",
           "Time": "27日02时-08时",
@@ -939,8 +939,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
           "WindSpeed": 19.9,
           "WindSpeedAvg": "14.9",
           "Time": "27日08时-14时",
@@ -949,8 +949,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
+          "WindWave": "2.0-2.5m",
+          "Riskrating": "1 4 1 1",
           "WindSpeed": 17.2,
           "WindSpeedAvg": "12.9",
           "Time": "27日14时-20时",
@@ -959,8 +959,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "3 4 1 1",
           "WindSpeed": 13.5,
           "WindSpeedAvg": "10.1",
           "Time": "27日20时-28日02时",
@@ -969,8 +969,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "3 4 1 1",
           "WindSpeed": 11.8,
           "WindSpeedAvg": "8.9",
           "Time": "28日02时-08时",
@@ -979,8 +979,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "ENE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "4 4 2 2",
           "WindSpeed": 7.4,
           "WindSpeedAvg": "5.6",
           "Time": "28日08时-14时",
@@ -989,8 +989,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PSE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "4 4 2 2",
           "WindSpeed": 7.9,
           "WindSpeedAvg": "5.9",
           "Time": "28日14时-20时",
@@ -998,9 +998,9 @@ window.__ANCHOR_DATA__ = {
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有暴雨。明天阴有中雨转小雨。后天阴有时有阵雨，中午转阴到多云。27日多云到阴。28日多云转阴偶有小雨。<br><br>台风警报：今年第30号台风“蔷琵”（台风级）今天16时位于舟山偏南方向约490公里处，即北纬25.7度，东经123.5度，中心附近最大风力12级，中心最低气压975百帕，以每小时20公里左右的速度向偏北方向移动，强度逐渐减弱，将于25日前后沿浙江东部近海转向东北方向移动，趋向日本西南部沿海。受其影响，我市24日阴有暴雨、局部大暴雨，25日阴有中雨转小雨，舟山沿海24日北到东北风11级、个别12级，25日偏北风10-11级，25日下午起北到西北风10级，半夜减弱到9级，请注意防范。<br><br>",
-      "Time": "2026102415",
-      "PreciseForecastTime": "2026年10月24日15时"
+      "Text": "天气预报：今天阴有暴雨。明天阴有中雨转小雨。后天阴有时有阵雨，中午转阴到多云。27日多云到阴。28日多云转阴偶有小雨。<br><br>台风警报：今年第30号台风“蔷琵”（强热带风暴级）今天17时位于舟山偏南方向约300公里处，即北纬27.4度，东经123.2度，中心附近最大风力10级，中心最低气压982百帕，以每小时15公里左右的速度向北偏东方向移动，强度逐渐减弱，将于25日前后沿浙江东部近海转向东北方向移动，趋向日本西南部沿海。受其影响，我市24日阴有大到暴雨，25日阴有中雨转小雨，舟山沿海24日北到东北风11级、个别12级，25日偏北风11级、个别12级，25日下午起北到西北风10级，半夜减弱到9级，请注意防范。<br><br>",
+      "Time": "2026102421",
+      "PreciseForecastTime": "2026年10月24日21时"
     }
   }
 };
