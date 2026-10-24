@@ -85,6 +85,22 @@
               <p class="extra-fee-help">可自由添加费用名称和人民币金额，自动计入报价合计。英文名称用于英文版 PDF。</p>
               <div id="extra-fee-fields" class="extra-fee-fields"></div>
             </section>
+            <section class="panel" id="bank-details-section">
+              <div class="panel-title"><div><span class="section-number">05</span><h2>汇款资料</h2></div><span class="panel-caption">选填 · 显示在报价单末尾</span></div>
+              <p class="bank-help">人民币和美元可分别填写；完全留空的币种不会出现在 PDF。</p>
+              <div class="bank-grid">
+                <div class="bank-card"><h3>人民币 <span>CNY</span></h3>
+                  <label>收款银行<input id="bank-cny-bank" data-bank-currency="cny" data-bank-field="bank" maxlength="160" autocomplete="off" placeholder="银行名称"></label>
+                  <label>银行账号<input id="bank-cny-account" data-bank-currency="cny" data-bank-field="account" maxlength="160" autocomplete="off" placeholder="收款账号"></label>
+                  <label>SWIFT / 交换码<input id="bank-cny-code" data-bank-currency="cny" data-bank-field="code" maxlength="100" autocomplete="off" placeholder="如适用，可填写"></label>
+                </div>
+                <div class="bank-card"><h3>美元 <span>USD</span></h3>
+                  <label>收款银行<input id="bank-usd-bank" data-bank-currency="usd" data-bank-field="bank" maxlength="160" autocomplete="off" placeholder="银行名称"></label>
+                  <label>银行账号<input id="bank-usd-account" data-bank-currency="usd" data-bank-field="account" maxlength="160" autocomplete="off" placeholder="收款账号"></label>
+                  <label>SWIFT / 交换码<input id="bank-usd-code" data-bank-currency="usd" data-bank-field="code" maxlength="100" autocomplete="off" placeholder="如适用，可填写"></label>
+                </div>
+              </div>
+            </section>
           </div>
           <aside class="quote-column" id="estimate">
             <section class="estimate-panel"><div class="estimate-heading"><span class="live-dot"></span>实时报价<span class="currency-label">CNY 人民币</span></div><div class="estimate-vessel"><h2 id="preview-vessel">等待录入船舶</h2><p id="preview-meta">填写上方船舶资料，开始计算</p></div>
@@ -112,7 +128,7 @@
     <article><h3>02 拖轮费</h3><p>采用你提供的《拖轮收费.doc》，按船长、船型、国内/国际航线匹配元/拖轮艘次。费用 = 单价 ×（靠泊艘数 × 作业次数 + 离泊艘数 × 作业次数）。装货默认空载靠、重载离；卸货默认重载靠、空载离；均可调整。</p><div class="source-issue">原件费率区间端点未明确，首版采用“80米及以下首档、其余各档上限包含”。配置表首行“80＜L 不配置”与后文冲突，80米以下暂按0艘。档位边界及实际艘数请核对，系统支持手动修改单价、艘数和次数。</div><div class="table-scroll"><table id="tug-rate-table"><thead><tr><th>船长（米）</th><th>集装箱 / 滚装 / 客船</th><th>油 / 化学 / 液化气</th><th>散货 / 杂货 / 其他</th></tr></thead><tbody></tbody></table></div><small>表格随主页面外贸 / 内贸选项切换；单位：元/拖轮艘次。</small></article>
     <article><h3>03 船舶吨税</h3><p>费率与<a href="https://www.zsagent01.com/dues/" target="_blank" rel="noopener">指定吨税计算器</a>一致，按整船净吨所在档位计算，非累进。支持普通/优惠税率及30、90、365日。国籍输入中文后按参考站名单推荐税率，仍可手动更改。不因切换内贸而自动免税；不需要本次缴纳时，请关闭“计入吨税”。利比里亚优惠来源标注有效至2029年12月10日。</p></article>
     <article><h3>04 靠泊费与汇率</h3><p>靠泊费按你的公式：0.25 × 实际净吨 × 靠泊天数。天数按输入值计费，支持小数，不自动进整。各项金额保留两位小数后相加；汇率为用户输入的“1美元 = 多少人民币”，美元合计 = 人民币合计 ÷ 汇率。系统不获取实时汇率，也不另加未提供的税费或代理费。</p></article>
-    <article><h3>05 其他费用与 PDF</h3><p>可自行添加费用名称与人民币金额，自动计入总额；英文名称用于英文报价单。中文和英文 PDF 均采用表格格式，仅列船舶资料、费用与合计。费率依据和计算说明保留在本页面。</p></article>
+    <article><h3>05 其他费用与 PDF</h3><p>可自行添加费用名称与人民币金额，自动计入总额；英文名称用于英文报价单。中文和英文 PDF 均采用表格格式，仅列船舶资料、费用与合计。人民币和美元的汇款资料可分别填写，完全留空时不显示。费率依据和计算说明保留在本页面。</p></article>
     <article><h3>码头区域资料</h3><p>所提供《引航收费.pdf》实际是《码头统计表（20201118）》，107条北/中/南区域记录已整理为本地参考数据，首版不将2020年名单作为自动映射。后续补充确认后的码头/船厂所属区域即可接入。</p></article>
   </div></dialog>
   <div id="toast" role="status" hidden></div>

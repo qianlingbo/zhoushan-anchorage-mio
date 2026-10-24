@@ -11,6 +11,8 @@ const money = (n) => new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, 
 const number = (n) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(n);
 const booleanFields = ['taxEnabled', 'pilotInNight', 'pilotOutNight', 'pilotInHoliday', 'pilotOutHoliday'];
 const fields = ['vesselName', 'nationality', 'nt', 'length', 'exchangeRate', 'portName', 'shipType', 'operation', 'area', 'berthDays', 'routeId', 'inDistance', 'outDistance', 'pilotInCount', 'pilotOutCount', 'inLoad', 'outLoad', 'tugInCount', 'tugOutCount', 'tugInOps', 'tugOutOps', 'tugRateOverride', 'taxDays', 'taxRegime', 'taxFactor', 'quoteDate', 'quotationNo', 'client', 'notes', ...booleanFields];
+const bankCurrencies = ['cny', 'usd'];
+const bankFields = ['bank', 'account', 'code'];
 const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 const newState = () => ({
   vesselName: '', nationality: '', nt: '', length: '', exchangeRate: '', portName: '',
@@ -20,7 +22,9 @@ const newState = () => ({
   taxEnabled: true, taxDays: '30', taxRegime: 'preferential', taxFactor: '1',
   pilotInNight: false, pilotOutNight: false, pilotInHoliday: false, pilotOutHoliday: false,
   quoteDate: today(), quotationNo: `ZS-${today().replaceAll('-', '')}-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`,
-  client: '', notes: '', extraFees: [], demo: false, manualIn: false, manualOut: false,
+  client: '', notes: '', extraFees: [], bankDetails: {
+    cny: { bank: '', account: '', code: '' }, usd: { bank: '', account: '', code: '' },
+  }, demo: false, manualIn: false, manualOut: false,
 });
 let state = newState();
 let result = null;
@@ -52,6 +56,15 @@ function safeRestore() {
         }));
         continue;
       }
+      if (key === 'bankDetails') {
+        for (const currency of bankCurrencies) {
+          for (const field of bankFields) {
+            const value = saved.data.bankDetails?.[currency]?.[field];
+            state.bankDetails[currency][field] = typeof value === 'string' ? value : '';
+          }
+        }
+        continue;
+      }
       if (typeof saved.data[key] === typeof state[key]) state[key] = saved.data[key];
     }
     $('save-status').textContent = '已恢复此设备上的草稿';
@@ -74,6 +87,9 @@ function save() {
 
 function readForm() {
   for (const key of fields) state[key] = booleanFields.includes(key) ? $(key).checked : $(key).value;
+  for (const currency of bankCurrencies) {
+    for (const field of bankFields) state.bankDetails[currency][field] = $(`bank-${currency}-${field}`).value;
+  }
 }
 
 function writeForm() {
@@ -82,6 +98,9 @@ function writeForm() {
   for (const key of fields) {
     if (booleanFields.includes(key)) $(key).checked = state[key];
     else $(key).value = state[key];
+  }
+  for (const currency of bankCurrencies) {
+    for (const field of bankFields) $(`bank-${currency}-${field}`).value = state.bankDetails[currency][field];
   }
   renderExtraFeeInputs();
   restoring = false;
@@ -304,6 +323,10 @@ for (const terminal of TERMINALS) {
 }
 
 form.addEventListener('input', (event) => {
+  if (bankCurrencies.includes(event.target.dataset.bankCurrency) && bankFields.includes(event.target.dataset.bankField)) {
+    state.bankDetails[event.target.dataset.bankCurrency][event.target.dataset.bankField] = event.target.value;
+    save(); return;
+  }
   if (event.target.dataset.extraField) {
     const fee = state.extraFees[Number(event.target.dataset.index)];
     if (!fee) return;

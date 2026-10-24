@@ -38,6 +38,11 @@ const COPY = {
     total: '费用合计 (CNY)',
     usd: '折合美元 (USD)',
     notes: '备注',
+    bankCny: '人民币汇款信息 (CNY)',
+    bankUsd: '美元汇款信息 (USD)',
+    bank: '收款银行',
+    account: '收款账号',
+    code: 'SWIFT / 交换码',
     page: '第',
     pageOf: '页 / 共',
     pageEnd: '页',
@@ -69,6 +74,11 @@ const COPY = {
     total: 'TOTAL (CNY)',
     usd: 'Equivalent (USD)',
     notes: 'Notes',
+    bankCny: 'CNY REMITTANCE DETAILS',
+    bankUsd: 'USD REMITTANCE DETAILS',
+    bank: 'Bank',
+    account: 'Account No.',
+    code: 'SWIFT / Bank code',
     page: 'Page',
     pageOf: 'of',
     pageEnd: '',
@@ -167,11 +177,20 @@ export async function buildQuotePdf(state, result, language = 'zh') {
     })),
   ];
   const notes = clean(state.notes).trim();
+  const bankDetails = ['cny', 'usd'].map((currency) => ({
+    title: currency === 'cny' ? copy.bankCny : copy.bankUsd,
+    fields: [
+      [copy.bank, state.bankDetails?.[currency]?.bank],
+      [copy.account, state.bankDetails?.[currency]?.account],
+      [copy.code, state.bankDetails?.[currency]?.code],
+    ].map(([label, value]) => [label, clean(value).trim()]).filter(([, value]) => value),
+  })).filter((group) => group.fields.length);
   const visibleText = [
     ...Object.values(copy),
     ...fields.flat(),
     ...fees.map((fee) => fee.name),
     notes,
+    ...bankDetails.flatMap((group) => [group.title, ...group.fields.flat()]),
   ].join('');
 
   const doc = await PDFDocument.create();
@@ -216,9 +235,36 @@ export async function buildQuotePdf(state, result, language = 'zh') {
       char === '\n' || supported.has(char.codePointAt(0)) ? char : '□'
     )).join('');
   }
+  function characterFont(char, selectedFont) {
+    return selectedFont === cjk && /^[\x20-\x7E]$/.test(char) ? latin : selectedFont;
+  }
+  function textWidth(value, size, selectedFont = textFont(value)) {
+    return Array.from(safe(value, selectedFont)).reduce((width, char) =>
+      width + characterFont(char, selectedFont).widthOfTextAtSize(char, size), 0);
+  }
   function draw(value, x, baseline, size = 9, color = palette.ink, selectedFont = textFont(value)) {
     const content = safe(value, selectedFont);
-    if (content) page.drawText(content, { x, y: baseline, size, font: selectedFont, color });
+    if (!content) return;
+    if (selectedFont !== cjk || !/[\x20-\x7E]/.test(content)) {
+      page.drawText(content, { x, y: baseline, size, font: selectedFont, color });
+      return;
+    }
+    let run = '';
+    let runFont;
+    let cursor = x;
+    function flush() {
+      if (!run) return;
+      page.drawText(run, { x: cursor, y: baseline, size, font: runFont, color });
+      cursor += runFont.widthOfTextAtSize(run, size);
+      run = '';
+    }
+    for (const char of content) {
+      const font = characterFont(char, selectedFont);
+      if (runFont && font !== runFont) flush();
+      runFont = font;
+      run += char;
+    }
+    flush();
   }
   function wrap(value, width, size = 9, selectedFont = textFont(value)) {
     const lines = [];
@@ -231,7 +277,7 @@ export async function buildQuotePdf(state, result, language = 'zh') {
         lineWidth = 0;
         continue;
       }
-      const charWidth = selectedFont.widthOfTextAtSize(char, size);
+      const charWidth = characterFont(char, selectedFont).widthOfTextAtSize(char, size);
       if (line && lineWidth + charWidth > width) {
         lines.push(line.trimEnd());
         line = '';
@@ -257,37 +303,70 @@ export async function buildQuotePdf(state, result, language = 'zh') {
     page = doc.addPage([W, H]);
     const title = first ? copy.title : copy.continuation;
     const titleFont = lang === 'zh' ? cjk : latinBold;
-    draw(title, M, H - 44, first ? 16 : 11, palette.dark, titleFont);
-    rule(M, H - 59, W - M, H - 59, 1.2, palette.teal);
-    y = H - 76;
+    draw(title, M, H - 37, first ? 15 : 10.5, palette.dark, titleFont);
+    rule(M, H - 49, W - M, H - 49, 1.2, palette.teal);
+    y = H - 61;
   }
   function ensure(height) {
     if (y - height < BOTTOM) newPage();
   }
-  function fieldRow(label, value, stripe = false) {
-    const LABEL_W = 137;
-    const labelFont = textFont(label);
-    const valueFont = textFont(value);
-    const labelLines = wrap(label, LABEL_W - 14, 8.6, labelFont);
-    const valueLines = wrap(value, CW - LABEL_W - 16, 9.2, valueFont);
-    const height = Math.max(27, Math.max(labelLines.length, valueLines.length) * 12 + 11);
+  function pairedFieldRow(left, right, stripe = false) {
+    const HALF = CW / 2;
+    const LABEL_W = 84;
+    const columns = [left, right].map(([label, value]) => ({
+      labelFont: textFont(label), valueFont: textFont(value),
+      labelLines: wrap(label, LABEL_W - 12, 8),
+      valueLines: wrap(value, HALF - LABEL_W - 14, 8.6),
+    }));
+    const height = Math.max(23, Math.max(...columns.map((column) =>
+      Math.max(column.labelLines.length, column.valueLines.length))) * 11 + 8);
     ensure(height);
     cell(M, y, CW, height, stripe ? palette.stripe : palette.white);
-    rule(M + LABEL_W, y, M + LABEL_W, y - height);
-    labelLines.forEach((line, index) => draw(line, M + 8, y - 17 - index * 12, 8.6, palette.muted, labelFont));
-    valueLines.forEach((line, index) => draw(line, M + LABEL_W + 8, y - 17 - index * 12, 9.2, palette.ink, valueFont));
+    for (let index = 0; index < 2; index += 1) {
+      const x = M + index * HALF;
+      const column = columns[index];
+      rule(x + LABEL_W, y, x + LABEL_W, y - height);
+      if (index) rule(x, y, x, y - height);
+      column.labelLines.forEach((line, lineIndex) =>
+        draw(line, x + 7, y - 15 - lineIndex * 11, 8, palette.muted, column.labelFont));
+      column.valueLines.forEach((line, lineIndex) =>
+        draw(line, x + LABEL_W + 7, y - 15 - lineIndex * 11, 8.6, palette.ink, column.valueFont));
+    }
     y -= height;
   }
+  function fieldRow(label, value, stripe = false) {
+    const LABEL_W = 118;
+    const labelFont = textFont(label);
+    const valueFont = textFont(value);
+    const labelLines = wrap(label, LABEL_W - 14, 8, labelFont);
+    const valueLines = wrap(value, CW - LABEL_W - 15, 8.6, valueFont);
+    const lineCount = Math.max(labelLines.length, valueLines.length);
+    let offset = 0;
+    while (offset < lineCount) {
+      ensure(23);
+      const capacity = Math.max(1, Math.floor((y - BOTTOM - 8) / 11));
+      const take = Math.min(capacity, lineCount - offset);
+      const height = Math.max(23, take * 11 + 8);
+      cell(M, y, CW, height, stripe ? palette.stripe : palette.white);
+      rule(M + LABEL_W, y, M + LABEL_W, y - height);
+      (offset ? [labelLines[0]] : labelLines.slice(0, take)).forEach((line, index) =>
+        draw(line, M + 7, y - 15 - index * 11, 8, palette.muted, labelFont));
+      valueLines.slice(offset, offset + take).forEach((line, index) =>
+        draw(line, M + LABEL_W + 7, y - 15 - index * 11, 8.6, palette.ink, valueFont));
+      y -= height;
+      offset += take;
+    }
+  }
   function feeHeader() {
-    const height = 29;
+    const height = 24;
     ensure(height);
     cell(M, y, CW, height, palette.dark);
     const amountX = W - M - 145;
     rule(M + 43, y, M + 43, y - height, 0.5, palette.grid);
     rule(amountX, y, amountX, y - height, 0.5, palette.grid);
-    draw(copy.feeNo, M + 11, y - 18, 8.5, palette.white, textFont(copy.feeNo));
-    draw(copy.feeName, M + 52, y - 18, 8.5, palette.white, textFont(copy.feeName));
-    draw(copy.amount, amountX + 10, y - 18, 8.5, palette.white, textFont(copy.amount));
+    draw(copy.feeNo, M + 11, y - 16, 8, palette.white, textFont(copy.feeNo));
+    draw(copy.feeName, M + 52, y - 16, 8, palette.white, textFont(copy.feeName));
+    draw(copy.amount, amountX + 10, y - 16, 8, palette.white, textFont(copy.amount));
     y -= height;
   }
   function ensureFee(height) {
@@ -300,57 +379,70 @@ export async function buildQuotePdf(state, result, language = 'zh') {
     const amountX = W - M - 145;
     const name = fee.name || (lang === 'zh' ? '其他费用' : 'Other charge');
     const nameFont = textFont(name);
-    const nameLines = wrap(name, amountX - M - 43 - 17, 9.2, nameFont);
-    const height = Math.max(29, nameLines.length * 12 + 11);
+    const nameLines = wrap(name, amountX - M - 43 - 17, 8.8, nameFont);
+    const height = Math.max(24, nameLines.length * 11 + 8);
     ensureFee(height);
     cell(M, y, CW, height, index % 2 ? palette.stripe : palette.white);
     rule(M + 43, y, M + 43, y - height);
     rule(amountX, y, amountX, y - height);
-    draw(String(index + 1), M + 14, y - 18, 9, palette.muted, latin);
+    draw(String(index + 1), M + 14, y - 16, 8.5, palette.muted, latin);
     nameLines.forEach((line, lineIndex) => {
-      draw(line, M + 52, y - 18 - lineIndex * 12, 9.2, palette.ink, nameFont);
+      draw(line, M + 52, y - 16 - lineIndex * 11, 8.8, palette.ink, nameFont);
     });
     const amount = money(fee.amount);
-    draw(amount, W - M - 10 - latinBold.widthOfTextAtSize(amount, 9.5), y - 18, 9.5, palette.ink, latinBold);
+    draw(amount, W - M - 10 - latinBold.widthOfTextAtSize(amount, 9), y - 16, 9, palette.ink, latinBold);
     y -= height;
   }
   function totalRow(label, amount, primary = false) {
-    const height = primary ? 34 : 31;
+    const height = primary ? 28 : 26;
     ensureFee(height);
     const amountX = W - M - 145;
     cell(M, y, CW, height, primary ? palette.total : palette.white);
     rule(amountX, y, amountX, y - height);
-    draw(label, M + 11, y - 21, primary ? 10 : 9, primary ? palette.dark : palette.muted, textFont(label));
+    draw(label, M + 11, y - 18, primary ? 9.5 : 8.5, primary ? palette.dark : palette.muted, textFont(label));
     const value = money(amount);
-    const size = primary ? 12 : 10;
-    draw(value, W - M - 10 - latinBold.widthOfTextAtSize(value, size), y - 21, size,
+    const size = primary ? 11 : 9.5;
+    draw(value, W - M - 10 - latinBold.widthOfTextAtSize(value, size), y - 18, size,
       primary ? palette.teal : palette.ink, latinBold);
     y -= height;
   }
   function noteRows() {
     if (!notes) return;
     const lines = wrap(notes, CW - 18, 9);
-    ensure(27);
-    cell(M, y, CW, 27, palette.stripe);
-    draw(copy.notes, M + 9, y - 18, 9, palette.dark, textFont(copy.notes));
-    y -= 27;
+    ensure(23);
+    cell(M, y, CW, 23, palette.stripe);
+    draw(copy.notes, M + 8, y - 15, 8.5, palette.dark, textFont(copy.notes));
+    y -= 23;
     for (const line of lines) {
-      ensure(20);
-      cell(M, y, CW, 20);
-      draw(line, M + 9, y - 14, 9);
-      y -= 20;
+      ensure(17);
+      cell(M, y, CW, 17);
+      draw(line, M + 8, y - 12, 8.6);
+      y -= 17;
     }
   }
 
+  function bankSection(group) {
+    y -= 8;
+    ensure(46);
+    cell(M, y, CW, 23, palette.stripe);
+    draw(group.title, M + 8, y - 15, 8.5, palette.dark, textFont(group.title));
+    y -= 23;
+    group.fields.forEach(([label, value], index) => fieldRow(label, value, index % 2 === 1));
+  }
+
   newPage(true);
-  fields.forEach(([label, value], index) => fieldRow(label, value, index % 2 === 1));
-  y -= 16;
+  for (let index = 0; index < 10; index += 2) {
+    pairedFieldRow(fields[index], fields[index + 1], index % 4 === 2);
+  }
+  if (fields.length > 10) fieldRow(...fields[10]);
+  y -= 8;
   feeHeader();
   fees.forEach((fee, index) => feeRow(index, fee));
   totalRow(copy.total, result.total, true);
   totalRow(copy.usd, Number(result.total) / exchangeRate);
-  y -= 13;
+  y -= 8;
   noteRows();
+  bankDetails.forEach(bankSection);
 
   const pages = doc.getPages();
   pages.forEach((current, index) => {
@@ -359,7 +451,7 @@ export async function buildQuotePdf(state, result, language = 'zh') {
     const pageLabel = lang === 'zh'
       ? copy.page + (index + 1) + copy.pageOf + pages.length + copy.pageEnd
       : copy.page + ' ' + (index + 1) + ' ' + copy.pageOf + ' ' + pages.length;
-    draw(pageLabel, W - M - textFont(pageLabel).widthOfTextAtSize(pageLabel, 8), 25, 8, palette.muted);
+    draw(pageLabel, W - M - textWidth(pageLabel, 8), 25, 8, palette.muted);
   });
   return doc.save();
 }
