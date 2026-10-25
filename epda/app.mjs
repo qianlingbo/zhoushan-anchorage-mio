@@ -10,14 +10,14 @@ const storageKey = 'zhoushan-quote-v1';
 const money = (n) => new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
 const number = (n) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(n);
 const booleanFields = ['taxEnabled', 'pilotInNight', 'pilotOutNight', 'pilotInHoliday', 'pilotOutHoliday'];
-const fields = ['vesselName', 'nationality', 'nt', 'length', 'exchangeRate', 'portName', 'shipType', 'operation', 'area', 'berthDays', 'routeId', 'inDistance', 'outDistance', 'pilotInCount', 'pilotOutCount', 'inLoad', 'outLoad', 'tugInCount', 'tugOutCount', 'tugInOps', 'tugOutOps', 'tugRateOverride', 'taxDays', 'taxRegime', 'taxFactor', 'quoteDate', 'quotationNo', 'client', 'notes', ...booleanFields];
+const fields = ['vesselName', 'nationality', 'nt', 'length', 'exchangeRate', 'portName', 'shipType', 'operation', 'area', 'berthDays', 'inRouteId', 'outRouteId', 'pilotInCount', 'pilotOutCount', 'inLoad', 'outLoad', 'tugInCount', 'tugOutCount', 'tugInOps', 'tugOutOps', 'tugRateOverride', 'taxDays', 'taxRegime', 'taxFactor', 'quoteDate', 'quotationNo', 'client', 'notes', ...booleanFields];
 const bankCurrencies = ['cny', 'usd'];
 const bankFields = ['bank', 'account', 'code'];
 const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 const newState = () => ({
   vesselName: '', nationality: '', nt: '', length: '', exchangeRate: '', portName: '',
-  trade: 'foreign', shipType: 'bulk', operation: 'unload', area: '待确认', berthDays: '3', routeId: 'custom',
-  inDistance: '10', outDistance: '10', pilotInCount: '1', pilotOutCount: '1', inLoad: 'laden', outLoad: 'ballast',
+  trade: 'foreign', shipType: 'bulk', operation: 'unload', area: '待确认', berthDays: '3',
+  inRouteId: '', outRouteId: '', pilotInCount: '1', pilotOutCount: '1', inLoad: 'laden', outLoad: 'ballast',
   tugInCount: '0', tugOutCount: '0', tugInOps: '1', tugOutOps: '1', tugRateOverride: '',
   taxEnabled: true, taxDays: '30', taxRegime: 'preferential', taxFactor: '1',
   pilotInNight: false, pilotOutNight: false, pilotInHoliday: false, pilotOutHoliday: false,
@@ -33,6 +33,7 @@ let saveTimer;
 let toastTimer;
 let restoring = false;
 let saveFailed = false;
+let routePortName = '';
 
 function toast(message) {
   $('toast').textContent = message;
@@ -66,6 +67,11 @@ function safeRestore() {
         continue;
       }
       if (typeof saved.data[key] === typeof state[key]) state[key] = saved.data[key];
+    }
+    const oldRouteId = saved.data.routeId;
+    if (ROUTES.some((route) => route.id === oldRouteId)) {
+      if (typeof saved.data.inRouteId !== 'string') state.inRouteId = oldRouteId;
+      if (typeof saved.data.outRouteId !== 'string') state.outRouteId = oldRouteId;
     }
     $('save-status').textContent = '已恢复此设备上的草稿';
   } catch { $('save-status').textContent = '当前浏览器无法恢复草稿'; }
@@ -103,6 +109,7 @@ function writeForm() {
     for (const field of bankFields) $(`bank-${currency}-${field}`).value = state.bankDetails[currency][field];
   }
   renderExtraFeeInputs();
+  routePortName = state.portName.trim();
   restoring = false;
   updateTrade();
 }
@@ -140,61 +147,50 @@ function recommendTax() {
   $('taxRegime').value = state.taxRegime;
 }
 
-function routeInfo() {
-  const route = ROUTES.find((row) => row.id === state.routeId);
-  if (!route) return { routeName: '自定义引航距离', inBoarding: '', outBoarding: '' };
-  return {
-    routeName: `${route.port} / ${route.workArea}`,
-    inBoarding: route.boarding,
-    outBoarding: route.boarding,
-  };
-}
-
 function selectedTerminal() {
   return TERMINALS.find((item) => item.name === state.portName.trim());
+}
+
+function selectedRoute(id) {
+  const route = ROUTES.find((row) => row.id === id);
+  const terminal = selectedTerminal();
+  return route && (!terminal || terminal.routeIds.includes(route.id)) ? route : null;
 }
 
 function rebuildRouteOptions() {
   const terminal = selectedTerminal();
   const allowed = terminal ? new Set(terminal.routeIds) : null;
-  const select = $('routeId');
-  const custom = document.createElement('option'); custom.value = 'custom'; custom.textContent = '自定义引航距离';
-  select.replaceChildren(custom);
-  const groups = new Map();
-  for (const route of ROUTES) {
-    if (allowed && !allowed.has(route.id)) continue;
-    if (!groups.has(route.port)) {
-      const group = document.createElement('optgroup'); group.label = route.port; groups.set(route.port, group); select.append(group);
+  for (const [field, placeholder] of [['inRouteId', '请选择进港引水登轮点'], ['outRouteId', '请选择出港引水离轮点']]) {
+    const select = $(field);
+    const empty = document.createElement('option'); empty.value = ''; empty.textContent = placeholder;
+    select.replaceChildren(empty);
+    const groups = new Map();
+    for (const route of ROUTES) {
+      if (allowed && !allowed.has(route.id)) continue;
+      if (!groups.has(route.port)) {
+        const group = document.createElement('optgroup'); group.label = route.port; groups.set(route.port, group); select.append(group);
+      }
+      const option = document.createElement('option'); option.value = route.id;
+      const ambiguous = ROUTES.some((other) => other.id !== route.id && other.port === route.port && other.workArea === route.workArea && other.boarding === route.boarding && other.sites !== route.sites);
+      option.textContent = `${route.port} / ${route.workArea}${ambiguous ? ` / ${route.sites}` : ''} · ${route.boarding} · ${number(route.distance)} 海里`;
+      groups.get(route.port).append(option);
     }
-    const option = document.createElement('option'); option.value = route.id;
-    option.textContent = `${route.workArea} ← ${route.boarding} · ${number(route.distance)} 海里`;
-    const ambiguous = ROUTES.some((other) => other.id !== route.id && other.port === route.port && other.workArea === route.workArea && other.boarding === route.boarding && other.sites !== route.sites);
-    if (ambiguous) option.textContent = `${route.workArea} · ${route.sites} ← ${route.boarding} · ${number(route.distance)} 海里`;
-    groups.get(route.port).append(option);
+    if (!selectedRoute(state[field])) state[field] = '';
+    select.value = state[field];
   }
-  if (allowed && state.routeId !== 'custom' && !allowed.has(state.routeId)) {
-    state.routeId = 'custom';
-    state.inDistance = state.outDistance = '';
-  }
-  select.value = state.routeId;
 }
 
 function useTerminalSelection() {
-  const terminal = selectedTerminal();
-  let autoRoute = false;
-  if (terminal && !terminal.routeIds.includes(state.routeId)) {
-    state.routeId = terminal.routeIds.length === 1 ? terminal.routeIds[0] : 'custom';
-    autoRoute = state.routeId !== 'custom';
-    if (!autoRoute) state.inDistance = state.outDistance = '';
-  } else if (!terminal && state.routeId !== 'custom') {
-    state.routeId = 'custom';
-    state.inDistance = state.outDistance = '';
+  const portName = state.portName.trim();
+  if (portName !== routePortName) {
+    state.inRouteId = state.outRouteId = '';
+    routePortName = portName;
+    const terminal = selectedTerminal();
+    if (terminal?.routeIds.length === 1) {
+      state.inRouteId = state.outRouteId = terminal.routeIds[0];
+    }
   }
   rebuildRouteOptions();
-  const route = ROUTES.find((row) => row.id === state.routeId);
-  if (autoRoute && route) state.inDistance = state.outDistance = String(route.distance);
-  $('inDistance').value = state.inDistance;
-  $('outDistance').value = state.outDistance;
 }
 
 function renderExtraFeeInputs() {
@@ -236,7 +232,19 @@ function renderExtraFeePreview(fees) {
 }
 
 function calculationState() {
-  return { ...state, ...routeInfo(), tugRateOverride: state.tugRateOverride.trim() === '' ? null : state.tugRateOverride };
+  const inRoute = selectedRoute(state.inRouteId);
+  const outRoute = selectedRoute(state.outRouteId);
+  if (!inRoute) throw new Error('请选择进港引水登轮点。');
+  if (!outRoute) throw new Error('请选择出港引水离轮点。');
+  const routeName = inRoute.port === outRoute.port && inRoute.workArea === outRoute.workArea
+    ? `${inRoute.port} / ${inRoute.workArea}`
+    : `进港 ${inRoute.port} / ${inRoute.workArea}；出港 ${outRoute.port} / ${outRoute.workArea}`;
+  return {
+    ...state, routeName,
+    inDistance: inRoute.distance, outDistance: outRoute.distance,
+    inBoarding: inRoute.boarding, outBoarding: outRoute.boarding,
+    tugRateOverride: state.tugRateOverride.trim() === '' ? null : state.tugRateOverride,
+  };
 }
 
 function clearResult() {
@@ -257,19 +265,25 @@ function render() {
   $('preview-meta').textContent = [state.trade === 'foreign' ? '外贸航线' : '内贸航线', state.nationality, state.nt ? `${number(state.nt)} NT` : '', state.length ? `${number(state.length)} m` : '', state.portName].filter(Boolean).join(' · ');
   const rate = Number(state.exchangeRate);
   $('fx-label').textContent = state.exchangeRate && Number.isFinite(rate) && rate > 0 ? `1 USD = ${number(rate)} CNY` : '请填写汇率';
-  const route = ROUTES.find((row) => row.id === state.routeId);
   const terminal = selectedTerminal();
+  const inRoute = selectedRoute(state.inRouteId);
+  const outRoute = selectedRoute(state.outRouteId);
   $('port-hint').textContent = terminal ? `官网名单：${terminal.port} / ${terminal.workArea}；请核对引航登离轮点` : '可从官网码头 / 船厂名单选择，也可自行输入';
-  $('route-hint').textContent = route ? `${route.sites}；登离轮点：${route.boarding}，官网距离 ${number(route.distance)} 海里。实际进出港距离可修改。${route.note ? ` ${route.note}` : ''}` : terminal ? `该码头 / 船厂对应 ${terminal.routeIds.length} 条官网路线，请选择登离轮点和距离。` : '可选择官网路线带入距离，也可分别修改进出港距离。区域不会自动决定距离。';
+  for (const [field, route, direction] of [['in-route-hint', inRoute, '进港'], ['out-route-hint', outRoute, '出港']]) {
+    $(field).textContent = route
+      ? `${route.boarding} · 官网里程 ${number(route.distance)} 海里${route.note ? `；${route.note}` : ''}`
+      : terminal ? `${terminal.routeIds.length} 条官网路线可选，请选择${direction}登离轮点。` : `自填码头请从官网路线中选择${direction}登离轮点。`;
+  }
   const countries = [...CHINA_ALIASES, ...PREFERENTIAL_COUNTRIES];
   $('tax-country-hint').textContent = state.nationality ? `${countries.includes(state.nationality.trim()) ? '该船籍在参考站优惠名单' : '该船籍不在参考站优惠名单'}；当前按${state.taxRegime === 'preferential' ? '优惠' : '普通'}税率` : '按船籍推荐，可手动调整';
   ['taxDays', 'taxRegime', 'taxFactor'].forEach((id) => { $(id).disabled = !state.taxEnabled; });
   try {
-    result = calculateQuote(calculationState());
+    const quoteState = calculationState();
+    result = calculateQuote(quoteState);
     lastError = '';
     for (const key of ['pilot', 'tug', 'tax', 'berth']) $(`${key}-amount`).textContent = money(result[key].amount);
     renderExtraFeePreview(result.extraFees || []);
-    $('pilot-detail').textContent = `进 ${number(state.inDistance)} / 出 ${number(state.outDistance)} 海里 · ${state.pilotInCount}+${state.pilotOutCount} 次`;
+    $('pilot-detail').textContent = `进 ${number(quoteState.inDistance)} / 出 ${number(quoteState.outDistance)} 海里 · ${state.pilotInCount}+${state.pilotOutCount} 次`;
     $('tug-detail').textContent = `${number(result.tug.rate)} 元/艘次 · 靠${state.tugInCount} / 离${state.tugOutCount}艘${state.tugRateOverride ? ' · 手动单价' : ''}`;
     $('tax-detail').textContent = state.taxEnabled ? `${state.taxDays}日 · ${state.taxRegime === 'preferential' ? '优惠' : '普通'} · ${result.tax.rate}元/净吨${Number(state.taxFactor) === .5 ? ' · 50%' : ''}` : '本航次不计入吨税';
     $('berth-detail').textContent = `0.25 × ${number(state.nt)} NT × ${number(state.berthDays)} 天`;
@@ -279,8 +293,7 @@ function render() {
     $('usd-amount').textContent = Number.isFinite(rate) && rate > 0 && Number.isFinite(result.total / rate) ? `USD ${money(result.total / rate)}` : '—';
     const warnings = [...result.warnings];
     if (state.manualIn || state.manualOut) warnings.push('拖轮艘数已手动调整，以当前输入计费。');
-    if (state.area === '待确认') warnings.push('码头所属区域尚待确认；引航按当前距离计算。');
-    if (terminal && state.routeId === 'custom') warnings.push('所选码头 / 船厂有官网路线，请核对登离轮点及进出港距离。');
+    if (state.area === '待确认') warnings.push('码头所属区域尚待确认；引航按所选登离轮点的官网里程计算。');
     if (state.demo) warnings.push('当前为示例船舶和示例汇率，请替换为实际资料。');
     if (state.nationality === '利比里亚' && state.quoteDate > '2029-12-10') warnings.push('利比里亚已超出参考站标注优惠有效期，请核实适用税率。');
     result.warnings = warnings;
@@ -292,7 +305,7 @@ function render() {
     clearResult();
   }
   const missing = ['vesselName', 'nationality', 'nt', 'length', 'exchangeRate', 'portName'].some((key) => !String(state[key]).trim());
-  $('validation-message').textContent = missing ? '填写船名、国籍、净吨、船长、汇率与码头后即可导出。' : lastError || '报价已更新，可以导出 PDF。';
+  $('validation-message').textContent = missing ? '填写船名、国籍、净吨、船长、汇率与码头，并选择进出港登离轮点。' : lastError || '报价已更新，可以导出 PDF。';
   $('validation-message').classList.toggle('error', !missing && !!lastError);
   if (!missing && !lastError && (!Number.isFinite(rate) || rate <= 0)) {
     $('validation-message').textContent = '汇率必须为大于 0 的有效数字。';
@@ -349,18 +362,12 @@ form.addEventListener('input', (event) => {
     suggestTugs();
   }
   if (event.target.id === 'nationality') recommendTax();
+  if (event.target.id === 'portName') useTerminalSelection();
   if (event.target.id === 'operation') {
     if (state.operation !== 'custom') {
       state.inLoad = state.operation === 'unload' ? 'laden' : 'ballast';
       state.outLoad = state.operation === 'unload' ? 'ballast' : 'laden';
       $('inLoad').value = state.inLoad; $('outLoad').value = state.outLoad; suggestTugs(true);
-    }
-  }
-  if (event.target.id === 'routeId') {
-    const route = ROUTES.find((row) => row.id === state.routeId);
-    if (route) {
-      state.inDistance = String(route.distance); state.outDistance = String(route.distance);
-      $('inDistance').value = state.inDistance; $('outDistance').value = state.outDistance;
     }
   }
   render(); save();
@@ -391,7 +398,7 @@ $('auto-tugs').addEventListener('click', () => { readForm(); suggestTugs(true); 
 $('example').addEventListener('click', () => {
   state = { ...newState(), vesselName: 'OCEAN EXAMPLE / 示例轮', nationality: '新加坡', nt: '18000', length: '200', exchangeRate: '7.20', portName: '老塘山散货码头（示例）', area: '中部港区', demo: true, notes: '此为示例报价，船舶参数、汇率和区域仅供试算。' };
   const sampleRoute = ROUTES.find((route) => route.workArea === '老塘山作业区' && route.distance === 14);
-  if (sampleRoute) { state.routeId = sampleRoute.id; state.inDistance = '14'; state.outDistance = '14'; }
+  if (sampleRoute) { state.inRouteId = sampleRoute.id; state.outRouteId = sampleRoute.id; }
   writeForm(); suggestTugs(true); render(); save(); toast('已载入示例；船舶、汇率与区域请按实际修改');
 });
 $('reset').addEventListener('click', () => { state = newState(); writeForm(); render(); save(); form.querySelectorAll('.invalid').forEach((input) => input.classList.remove('invalid')); toast('已清空并新建报价'); });

@@ -26,6 +26,9 @@ const COPY = {
     client: '客户',
     trade: '贸易类型',
     berthDays: '靠泊天数',
+    boarding: '引水登离轮点',
+    boardingIn: '进港',
+    boardingOut: '出港',
     foreign: '外贸',
     domestic: '内贸',
     feeNo: '序号',
@@ -62,6 +65,9 @@ const COPY = {
     client: 'Client',
     trade: 'Trade',
     berthDays: 'Berth days',
+    boarding: 'Pilot boarding / leaving points',
+    boardingIn: 'Arrival',
+    boardingOut: 'Departure',
     foreign: 'International',
     domestic: 'Domestic',
     feeNo: 'No.',
@@ -166,6 +172,14 @@ export async function buildQuotePdf(state, result, language = 'zh') {
     [copy.berthDays, number(state.berthDays) + (lang === 'zh' ? ' 天' : ' days')],
   ];
   if (String(state.client || '').trim()) fields.push([copy.client, state.client]);
+  const inBoarding = clean(state.inBoarding).trim();
+  const outBoarding = clean(state.outBoarding).trim();
+  if (inBoarding || outBoarding) {
+    const boarding = inBoarding && inBoarding === outBoarding
+      ? inBoarding
+      : `${copy.boardingIn}: ${inBoarding || '—'}${lang === 'zh' ? '；' : '; '}${copy.boardingOut}: ${outBoarding || '—'}`;
+    fields.push([copy.boarding, boarding]);
+  }
   const fees = [
     { name: copy.pilot, amount: result.pilot.amount },
     { name: copy.tug, amount: result.tug.amount },
@@ -434,7 +448,7 @@ export async function buildQuotePdf(state, result, language = 'zh') {
   for (let index = 0; index < 10; index += 2) {
     pairedFieldRow(fields[index], fields[index + 1], index % 4 === 2);
   }
-  if (fields.length > 10) fieldRow(...fields[10]);
+  for (const [label, value] of fields.slice(10)) fieldRow(label, value);
   y -= 8;
   feeHeader();
   fees.forEach((fee, index) => feeRow(index, fee));

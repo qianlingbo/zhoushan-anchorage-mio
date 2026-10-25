@@ -5,7 +5,7 @@
   <meta name="description" content="舟山船舶港口费用报价：引航、拖轮、吨税、靠泊与自定义费用自动汇总，导出中英文 PDF。">
   <meta name="theme-color" content="#142d38"><title>舟港 · 船舶自动报价</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23142d38'/%3E%3Cpath d='M16 37h32l-5 11H22zM28 18h9v19M22 29h21M15 52q8 5 16 0 8 5 17 0' stroke='%237edbc5' stroke-width='3' fill='none'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20261025-bank-layout">
+  <link rel="stylesheet" href="styles.css?v=20261025-boarding">
   <script defer src="assets/pdf-lib.min.js"></script><script defer src="assets/fontkit.umd.min.js"></script>
   <script type="module" src="app.mjs"></script>
 </head>
@@ -46,18 +46,17 @@
                 <label>作业类型<select name="operation" id="operation"><option value="unload">卸货 · 重载靠泊，空载离泊</option><option value="load">装货 · 空载靠泊，重载离泊</option><option value="custom">自定义靠离泊载况</option></select></label>
                 <label>所属区域<select name="area" id="area"><option value="待确认">待确认 / 尚未配置</option><option>北部港区</option><option>中部港区</option><option>南部港区</option></select><small>区域暂手选，后续可补充码头映射</small></label>
                 <label>靠泊天数<div class="input-unit"><input name="berthDays" id="berthDays" type="number" min="0.01" step="any" required><span>天</span></div><small>靠泊费 = 0.25 × 净吨 × 天数</small></label>
-                <label class="full">引航路线参考<select name="routeId" id="routeId"><option value="custom">自定义引航距离</option></select><small id="route-hint">可选择官网路线带入距离，也可分别修改进出港距离。区域不会自动决定距离。</small></label>
               </div>
               <div class="direction-grid">
                 <div class="direction-card"><h3><span class="direction-dot in"></span>进港 / 靠泊<span>ARRIVAL</span></h3><div class="field-grid compact">
-                  <label>引航距离<div class="input-unit"><input name="inDistance" id="inDistance" type="number" min="0" step="any" required><span>海里</span></div></label>
+                  <label class="full route-choice">引水登轮点 <span class="required">*</span><select name="inRouteId" id="inRouteId" required><option value="">请选择进港引水登轮点</option></select><small id="in-route-hint">先选择码头或船厂，再选择进港登轮点。</small></label>
                   <label>引航次数<div class="input-unit"><input name="pilotInCount" id="pilotInCount" type="number" min="0" step="1" required><span>次</span></div></label>
                   <label>靠泊载况<select name="inLoad" id="inLoad"><option value="laden">重载</option><option value="half">半载</option><option value="ballast">空载</option></select></label>
                   <label>拖轮艘数<div class="input-unit"><input name="tugInCount" id="tugInCount" type="number" min="0" step="1" required><span>艘</span></div></label>
                   <label class="full">拖轮作业次数<div class="input-unit"><input name="tugInOps" id="tugInOps" type="number" min="0" step="1" required><span>次</span></div></label>
                 </div><div class="check-line"><label><input type="checkbox" name="pilotInNight" id="pilotInNight">符合夜班附加条件</label><label><input type="checkbox" name="pilotInHoliday" id="pilotInHoliday">节假日</label></div></div>
                 <div class="direction-card"><h3><span class="direction-dot out"></span>出港 / 离泊<span>DEPARTURE</span></h3><div class="field-grid compact">
-                  <label>引航距离<div class="input-unit"><input name="outDistance" id="outDistance" type="number" min="0" step="any" required><span>海里</span></div></label>
+                  <label class="full route-choice">引水离轮点 <span class="required">*</span><select name="outRouteId" id="outRouteId" required><option value="">请选择出港引水离轮点</option></select><small id="out-route-hint">先选择码头或船厂，再选择出港离轮点。</small></label>
                   <label>引航次数<div class="input-unit"><input name="pilotOutCount" id="pilotOutCount" type="number" min="0" step="1" required><span>次</span></div></label>
                   <label>离泊载况<select name="outLoad" id="outLoad"><option value="laden">重载</option><option value="half">半载</option><option value="ballast">空载</option></select></label>
                   <label>拖轮艘数<div class="input-unit"><input name="tugOutCount" id="tugOutCount" type="number" min="0" step="1" required><span>艘</span></div></label>
@@ -112,7 +111,7 @@
                 <div id="extra-fee-preview"></div>
               </div>
               <div class="total-block"><div><span>费用合计</span><span class="total-currency">CNY</span></div><strong id="total-amount">—<small>.—</small></strong><div class="usd-line"><span>折合美元 <b id="usd-amount">—</b></span><span id="fx-label">请填写汇率</span></div></div>
-              <p class="validation-message" id="validation-message" aria-live="polite">填写船名、国籍、净吨、船长、汇率与码头后即可导出。</p>
+              <p class="validation-message" id="validation-message" aria-live="polite">填写船名、国籍、净吨、船长、汇率与码头，并选择进出港登离轮点。</p>
               <div id="quote-warnings" class="quote-warnings" hidden></div>
               <div class="export-actions"><button id="export-zh" type="submit" data-export-language="zh" class="button primary">↓ 导出中文 PDF</button><button id="export-en" type="submit" data-export-language="en" class="button secondary">↓ Export English PDF</button></div><p class="export-caption">表格报价单 · 费率说明仅在网页查看</p>
             </section>
@@ -124,7 +123,7 @@
     </div>
   </main>
   <dialog id="rates-dialog"><div class="dialog-header"><div><div class="eyebrow">RATE REFERENCES</div><h2>费率与计算口径</h2></div><button type="button" id="close-rates" class="button icon-button" aria-label="关闭费率说明">×</button></div><div class="dialog-body">
-    <article><h3>01 引航费</h3><p>按<a href="https://www.zspilot.com.cn/news_viewn.asp?newsid=603&LM=150" target="_blank" rel="noopener">指定的舟山引航站费率表（2023年9月实行）</a>设置基础费率与75条常规路线；夜班及节假日参考<a href="https://www.zspilot.com.cn/news_viewn.asp?newsid=2362&lm=150" target="_blank" rel="noopener">2024年官网补充表</a>。</p><p>外贸基本费分段：前40,000净吨 × 0.405，次40,000 × 0.36，再40,000 × 0.3375；基本费最高44,100元。另加非基本港附加0.27 × 计费净吨，以及超出10海里部分 × 0.004 × 计费净吨。内贸：计费净吨 × [0.18 + 超出10海里部分 × 0.0018]。</p><p>按<a href="https://zj.singlewindow.cn/pen-portal/guide/announce/hz/admiralty.jspa" target="_blank" rel="noopener">舟山收费公示</a>及<a href="https://jtyst.fj.gov.cn/mzwgk/zcfg/gz/201910/t20191021_5071052.htm" target="_blank" rel="noopener">港口收费计费办法</a>，引航净吨与海里向上进整，外贸最低2,000计费吨、国内沿海最低500计费吨。首次进港与最后出港分别计算。夜班或节假日达到作业时间一半，或达0.5小时，才勾选附加；国际航线每项加45%，两项合计90%，非基本港0.27附加不参加加成。</p><p>首版覆盖常规进出港引航，不包含移泊、超范围引航及其他未列项目。所属北/中/南区域由用户手选，不直接推断引航距离。</p></article>
+    <article><h3>01 引航费</h3><p>按<a href="https://www.zspilot.com.cn/news_viewn.asp?newsid=603&LM=150" target="_blank" rel="noopener">指定的舟山引航站费率表（2023年9月实行）</a>设置基础费率与75条常规路线；夜班及节假日参考<a href="https://www.zspilot.com.cn/news_viewn.asp?newsid=2362&lm=150" target="_blank" rel="noopener">2024年官网补充表</a>。</p><p>外贸基本费分段：前40,000净吨 × 0.405，次40,000 × 0.36，再40,000 × 0.3375；基本费最高44,100元。另加非基本港附加0.27 × 计费净吨，以及超出10海里部分 × 0.004 × 计费净吨。内贸：计费净吨 × [0.18 + 超出10海里部分 × 0.0018]。</p><p>按<a href="https://zj.singlewindow.cn/pen-portal/guide/announce/hz/admiralty.jspa" target="_blank" rel="noopener">舟山收费公示</a>及<a href="https://jtyst.fj.gov.cn/mzwgk/zcfg/gz/201910/t20191021_5071052.htm" target="_blank" rel="noopener">港口收费计费办法</a>，引航净吨与海里向上进整，外贸最低2,000计费吨、国内沿海最低500计费吨。首次进港与最后出港分别计算。夜班或节假日达到作业时间一半，或达0.5小时，才勾选附加；国际航线每项加45%，两项合计90%，非基本港0.27附加不参加加成。</p><p>首版覆盖常规进出港引航，不包含移泊、超范围引航及其他未列项目。所属北/中/南区域由用户手选；进出港分别选择官网引水登离轮点，自动采用对应里程。</p></article>
     <article><h3>02 拖轮费</h3><p>采用你提供的《拖轮收费.doc》，按船长、船型、国内/国际航线匹配元/拖轮艘次。费用 = 单价 ×（靠泊艘数 × 作业次数 + 离泊艘数 × 作业次数）。装货默认空载靠、重载离；卸货默认重载靠、空载离；均可调整。</p><div class="source-issue">原件费率区间端点未明确，首版采用“80米及以下首档、其余各档上限包含”。配置表首行“80＜L 不配置”与后文冲突，80米以下暂按0艘。档位边界及实际艘数请核对，系统支持手动修改单价、艘数和次数。</div><div class="table-scroll"><table id="tug-rate-table"><thead><tr><th>船长（米）</th><th>集装箱 / 滚装 / 客船</th><th>油 / 化学 / 液化气</th><th>散货 / 杂货 / 其他</th></tr></thead><tbody></tbody></table></div><small>表格随主页面外贸 / 内贸选项切换；单位：元/拖轮艘次。</small></article>
     <article><h3>03 船舶吨税</h3><p>费率与<a href="https://www.zsagent01.com/dues/" target="_blank" rel="noopener">指定吨税计算器</a>一致，按整船净吨所在档位计算，非累进。支持普通/优惠税率及30、90、365日。国籍输入中文后按参考站名单推荐税率，仍可手动更改。不因切换内贸而自动免税；不需要本次缴纳时，请关闭“计入吨税”。利比里亚优惠来源标注有效至2029年12月10日。</p></article>
     <article><h3>04 靠泊费与汇率</h3><p>靠泊费按你的公式：0.25 × 实际净吨 × 靠泊天数。天数按输入值计费，支持小数，不自动进整。各项金额保留两位小数后相加；汇率为用户输入的“1美元 = 多少人民币”，美元合计 = 人民币合计 ÷ 汇率。系统不获取实时汇率，也不另加未提供的税费或代理费。</p></article>

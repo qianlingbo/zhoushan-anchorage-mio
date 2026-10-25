@@ -10,3 +10,4 @@
 @media(max-width:420px){.export-actions{grid-template-columns:1fr}.extra-fee-entry{grid-template-columns:1fr}.extra-fee-entry label:nth-child(3),.extra-fee-remove{grid-column:auto}.extra-fee-remove{justify-self:stretch}}
 .bank-help{margin:-8px 0 14px;color:#84968d;font-size:10px;line-height:1.6}.bank-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.bank-card{min-width:0;padding:13px;background:#f8faf6;border:1px solid #e5ebe3;border-radius:6px}.bank-card h3{margin:0 0 11px;color:var(--ink);font-size:12px;font-weight:600}.bank-card h3 span{margin-left:4px;color:#86a092;font-size:9px;font-weight:400}.bank-card label+label{margin-top:9px}.bank-card input{height:36px;margin-top:5px;background:white}
 @media(max-width:1180px){.bank-grid{grid-template-columns:1fr}}
+.direction-card{min-width:0}.direction-card .compact .route-choice{grid-column:1/-1;min-width:0}
