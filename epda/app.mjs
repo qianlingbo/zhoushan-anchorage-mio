@@ -3,6 +3,7 @@ import { PREFERENTIAL_COUNTRIES, CHINA_ALIASES, TUG_RATE_BANDS } from './rates-d
 import { ROUTES } from './routes.mjs';
 import { TERMINALS } from './terminal-data.mjs';
 import { downloadQuotePdf } from './pdf-export.mjs';
+import { downloadQuoteXlsx } from './xlsx-export.mjs';
 
 const $ = (id) => document.getElementById(id);
 const form = $('quote-form');
@@ -410,6 +411,7 @@ $('rates-dialog').addEventListener('click', (event) => { if (event.target === $(
 form.addEventListener('submit', async (event) => {
   event.preventDefault(); readForm(); render();
   const language = event.submitter?.dataset.exportLanguage === 'en' ? 'en' : 'zh';
+  const format = event.submitter?.dataset.exportFormat === 'xlsx' ? 'xlsx' : 'pdf';
   const blankText = ['vesselName', 'nationality', 'portName', 'quotationNo'].find((key) => !state[key].trim());
   if (blankText) { $(blankText).classList.add('invalid'); $(blankText).focus(); toast('船名、国籍、码头和报价编号不得为空'); return; }
   const inputs = [...form.querySelectorAll('input,select,textarea')].filter((input) => !input.disabled);
@@ -422,11 +424,13 @@ form.addEventListener('submit', async (event) => {
   const buttons = [...form.querySelectorAll('[data-export-language]')];
   const labels = buttons.map((button) => button.textContent);
   buttons.forEach((button) => { button.disabled = true; });
-  const button = event.submitter || $('export-zh'); button.textContent = '正在生成 PDF…';
+  const button = event.submitter || $('export-zh'); button.textContent = `正在生成 ${format === 'xlsx' ? 'Excel' : 'PDF'}…`;
   try {
-    await downloadQuotePdf(calculationState(), result, language);
-    toast(`${language === 'en' ? '英文' : '中文'} PDF 报价单已生成并下载`);
-  } catch (error) { toast(`PDF 生成失败：${error.message}`); }
+    const quoteState = calculationState();
+    if (format === 'xlsx') await downloadQuoteXlsx(quoteState, result, language);
+    else await downloadQuotePdf(quoteState, result, language);
+    toast(`${language === 'en' ? '英文' : '中文'} ${format === 'xlsx' ? 'Excel' : 'PDF'} 报价单已生成并下载`);
+  } catch (error) { toast(`${format === 'xlsx' ? 'Excel' : 'PDF'} 生成失败：${error.message}`); }
   finally {
     buttons.forEach((item, index) => { item.disabled = false; item.textContent = labels[index]; });
   }
