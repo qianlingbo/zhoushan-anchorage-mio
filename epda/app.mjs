@@ -4,22 +4,21 @@ import { ROUTES } from './routes.mjs';
 import { TERMINALS } from './terminal-data.mjs';
 
 const $ = (id) => document.getElementById(id);
-const libraryLoads = new Map();
+let jsZipLoad;
 
-function loadLibrary(path, globalName) {
-  if (globalThis[globalName]) return Promise.resolve();
-  if (!libraryLoads.has(path)) {
-    const load = new Promise((resolve, reject) => {
+function loadExcelLibrary() {
+  if (globalThis.JSZip) return Promise.resolve();
+  if (!jsZipLoad) {
+    jsZipLoad = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = path;
+      script.src = 'assets/jszip.min.js';
       script.async = true;
-      script.onload = () => globalThis[globalName] ? resolve() : reject(new Error(`${globalName} 组件加载失败`));
-      script.onerror = () => reject(new Error(`${globalName} 组件加载失败`));
+      script.onload = () => globalThis.JSZip ? resolve() : reject(new Error('Excel 组件加载失败'));
+      script.onerror = () => reject(new Error('Excel 组件加载失败'));
       document.head.append(script);
-    }).catch((error) => { libraryLoads.delete(path); throw error; });
-    libraryLoads.set(path, load);
+    }).catch((error) => { jsZipLoad = null; throw error; });
   }
-  return libraryLoads.get(path);
+  return jsZipLoad;
 }
 
 const form = $('quote-form');
@@ -448,7 +447,6 @@ $('rates-dialog').addEventListener('click', (event) => { if (event.target === $(
 form.addEventListener('submit', async (event) => {
   event.preventDefault(); readForm(); render();
   const language = event.submitter?.dataset.exportLanguage === 'en' ? 'en' : 'zh';
-  const format = event.submitter?.dataset.exportFormat === 'xlsx' ? 'xlsx' : 'pdf';
   const blankText = ['vesselName', 'nationality', 'portName', 'quotationNo'].find((key) => !state[key].trim());
   if (blankText) { focusField($(blankText)); toast('船名、国籍、码头和报价编号不得为空'); return; }
   const inputs = [...form.querySelectorAll('input,select,textarea')].filter((input) => !input.disabled);
@@ -461,24 +459,15 @@ form.addEventListener('submit', async (event) => {
   const buttons = [...form.querySelectorAll('[data-export-language]')];
   const labels = buttons.map((button) => button.textContent);
   buttons.forEach((button) => { button.disabled = true; });
-  const button = event.submitter || $('export-zh'); button.textContent = `正在生成 ${format === 'xlsx' ? 'Excel' : 'PDF'}…`;
+  const button = event.submitter || $('export-xlsx-zh'); button.textContent = '正在生成 Excel…';
   try {
     const quoteState = calculationState();
-    if (format === 'xlsx') {
-      const [{ downloadQuoteXlsx }] = await Promise.all([
-        import('./xlsx-export.mjs'), loadLibrary('assets/jszip.min.js', 'JSZip'),
-      ]);
-      await downloadQuoteXlsx(quoteState, result, language);
-    } else {
-      const [{ downloadQuotePdf }] = await Promise.all([
-        import('./pdf-export.mjs'),
-        loadLibrary('assets/pdf-lib.min.js', 'PDFLib'),
-        loadLibrary('assets/fontkit.umd.min.js', 'fontkit'),
-      ]);
-      await downloadQuotePdf(quoteState, result, language);
-    }
-    toast(`${language === 'en' ? '英文' : '中文'} ${format === 'xlsx' ? 'Excel' : 'PDF'} 报价单已生成并下载`);
-  } catch (error) { toast(`${format === 'xlsx' ? 'Excel' : 'PDF'} 生成失败：${error.message}`); }
+    const [{ downloadQuoteXlsx }] = await Promise.all([
+      import('./xlsx-export.mjs'), loadExcelLibrary(),
+    ]);
+    await downloadQuoteXlsx(quoteState, result, language);
+    toast(`${language === 'en' ? '英文' : '中文'} Excel 报价单已生成并下载`);
+  } catch (error) { toast(`Excel 生成失败：${error.message}`); }
   finally {
     buttons.forEach((item, index) => { item.disabled = false; item.textContent = labels[index]; });
   }
