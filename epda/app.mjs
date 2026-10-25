@@ -2,10 +2,26 @@ import { calculateQuote, getTugCount } from './calculator.mjs';
 import { PREFERENTIAL_COUNTRIES, CHINA_ALIASES, TUG_RATE_BANDS } from './rates-data.mjs';
 import { ROUTES } from './routes.mjs';
 import { TERMINALS } from './terminal-data.mjs';
-import { downloadQuotePdf } from './pdf-export.mjs';
-import { downloadQuoteXlsx } from './xlsx-export.mjs';
 
 const $ = (id) => document.getElementById(id);
+const libraryLoads = new Map();
+
+function loadLibrary(path, globalName) {
+  if (globalThis[globalName]) return Promise.resolve();
+  if (!libraryLoads.has(path)) {
+    const load = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = path;
+      script.async = true;
+      script.onload = () => globalThis[globalName] ? resolve() : reject(new Error(`${globalName} 组件加载失败`));
+      script.onerror = () => reject(new Error(`${globalName} 组件加载失败`));
+      document.head.append(script);
+    }).catch((error) => { libraryLoads.delete(path); throw error; });
+    libraryLoads.set(path, load);
+  }
+  return libraryLoads.get(path);
+}
+
 const form = $('quote-form');
 const storageKey = 'zhoushan-quote-v1';
 const money = (n) => new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
@@ -448,8 +464,19 @@ form.addEventListener('submit', async (event) => {
   const button = event.submitter || $('export-zh'); button.textContent = `正在生成 ${format === 'xlsx' ? 'Excel' : 'PDF'}…`;
   try {
     const quoteState = calculationState();
-    if (format === 'xlsx') await downloadQuoteXlsx(quoteState, result, language);
-    else await downloadQuotePdf(quoteState, result, language);
+    if (format === 'xlsx') {
+      const [{ downloadQuoteXlsx }] = await Promise.all([
+        import('./xlsx-export.mjs'), loadLibrary('assets/jszip.min.js', 'JSZip'),
+      ]);
+      await downloadQuoteXlsx(quoteState, result, language);
+    } else {
+      const [{ downloadQuotePdf }] = await Promise.all([
+        import('./pdf-export.mjs'),
+        loadLibrary('assets/pdf-lib.min.js', 'PDFLib'),
+        loadLibrary('assets/fontkit.umd.min.js', 'fontkit'),
+      ]);
+      await downloadQuotePdf(quoteState, result, language);
+    }
     toast(`${language === 'en' ? '英文' : '中文'} ${format === 'xlsx' ? 'Excel' : 'PDF'} 报价单已生成并下载`);
   } catch (error) { toast(`${format === 'xlsx' ? 'Excel' : 'PDF'} 生成失败：${error.message}`); }
   finally {
