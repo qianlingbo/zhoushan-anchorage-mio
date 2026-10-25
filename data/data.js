@@ -1,232 +1,192 @@
 window.__ANCHOR_DATA__ = {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-10-25 09:17:55",
-  "lastChecked": "2026-10-25 09:17:55",
-  "lastSuccessfulFetch": "2026-10-24 21:19:34",
-  "updateWindow": "2026-10-25T09:00+08:00",
-  "publishTime": "2026年10月24日21时",
-  "publishCode": "2026102421",
+  "status": "更新完成",
+  "lastUpdated": "2026-10-25 14:04:36",
+  "lastChecked": "2026-10-25 14:04:36",
+  "lastSuccessfulFetch": "2026-10-25 14:04:36",
+  "updateWindow": "2026-10-25T12:00+08:00",
+  "publishTime": "2026年10月25日07时",
+  "publishCode": "2026102507",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
         {
-          "wd_en": "PNE",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 24.0,
-          "WindSpeedAvg": "18.0",
-          "Time": "24日08时-11时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "PNE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 24.2,
-          "WindSpeedAvg": "18.2",
-          "Time": "24日11时-14时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "PNE",
-          "Vis": ">1000m",
-          "WindWave": "3.5-4.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 25.6,
-          "WindSpeedAvg": "19.2",
-          "Time": "24日14时-17时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "PNE",
-          "Vis": ">1000m",
-          "WindWave": "3.5-4.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 26.0,
-          "WindSpeedAvg": "19.5",
-          "Time": "24日17时-20时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "ENE",
-          "Vis": ">1000m",
-          "WindWave": "3.5-4.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 25.8,
-          "WindSpeedAvg": "19.4",
-          "Time": "24日20时-23时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "ENE",
-          "Vis": ">1000m",
-          "WindWave": "3.5-4.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 25.5,
-          "WindSpeedAvg": "19.1",
-          "Time": "24日23时-25日02时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "PPE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 24.5,
-          "WindSpeedAvg": "18.4",
-          "Time": "25日02时-05时",
-          "WindDirect": "偏东风"
-        },
-        {
-          "wd_en": "PPE",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 24.0,
-          "WindSpeedAvg": "18.0",
-          "Time": "25日05时-08时",
-          "WindDirect": "偏东风"
-        },
-        {
-          "wd_en": "ESE",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 23.0,
-          "WindSpeedAvg": "17.3",
-          "Time": "25日08时-11时",
-          "WindDirect": "东到东南风"
-        },
-        {
-          "wd_en": "ESE",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 21.8,
-          "WindSpeedAvg": "16.4",
-          "Time": "25日11时-14时",
-          "WindDirect": "东到东南风"
-        },
-        {
-          "wd_en": "PSE",
-          "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 21.1,
-          "WindSpeedAvg": "15.8",
-          "Time": "25日14时-17时",
-          "WindDirect": "东南风"
-        },
-        {
-          "wd_en": "PSE",
-          "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 20.8,
-          "WindSpeedAvg": "15.6",
-          "Time": "25日17时-20时",
-          "WindDirect": "东南风"
-        },
-        {
-          "wd_en": "SSE",
-          "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.0,
-          "WindSpeedAvg": "13.5",
-          "Time": "25日20时-26日02时",
-          "WindDirect": "南到东南风"
-        },
-        {
-          "wd_en": "WSW",
-          "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 17.5,
-          "WindSpeedAvg": "13.1",
-          "Time": "26日02时-08时",
-          "WindDirect": "西到西南风"
-        },
-        {
-          "wd_en": "WNW",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 18.5,
-          "WindSpeedAvg": "13.9",
-          "Time": "26日08时-14时",
-          "WindDirect": "西到西北风"
-        },
-        {
-          "wd_en": "PNW",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 17.8,
-          "WindSpeedAvg": "13.4",
-          "Time": "26日14时-20时",
-          "WindDirect": "西北风"
-        },
-        {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "3.5-4.0m",
           "Riskrating": "1 4 1 1",
-          "WindSpeed": 17.5,
-          "WindSpeedAvg": "13.1",
-          "Time": "26日20时-27日02时",
+          "WindSpeed": 22.1,
+          "WindSpeedAvg": "16.6",
+          "Time": "25日08时-11时",
           "WindDirect": "北到西北风"
         },
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "3.5-4.0m",
           "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.4,
-          "WindSpeedAvg": "13.8",
+          "WindSpeed": 22.3,
+          "WindSpeedAvg": "16.7",
+          "Time": "25日11时-14时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "3.0-3.5m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 22.2,
+          "WindSpeedAvg": "16.7",
+          "Time": "25日14时-17时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "3.0-3.5m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 19.0,
+          "WindSpeedAvg": "14.3",
+          "Time": "25日17时-20时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 18.5,
+          "WindSpeedAvg": "13.9",
+          "Time": "25日20时-23时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 17.4,
+          "WindSpeedAvg": "13.1",
+          "Time": "25日23时-26日02时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 17.0,
+          "WindSpeedAvg": "12.8",
+          "Time": "26日02时-05时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 15.5,
+          "WindSpeedAvg": "11.6",
+          "Time": "26日05时-08时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 15.7,
+          "WindSpeedAvg": "11.8",
+          "Time": "26日08时-11时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 16.5,
+          "WindSpeedAvg": "12.4",
+          "Time": "26日11时-14时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.0-2.5m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 14.2,
+          "WindSpeedAvg": "10.7",
+          "Time": "26日14时-17时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "PPN",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "3 4 1 1",
+          "WindSpeed": 13.4,
+          "WindSpeedAvg": "10.1",
+          "Time": "26日17时-20时",
+          "WindDirect": "偏北风"
+        },
+        {
+          "wd_en": "PPN",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 14.5,
+          "WindSpeedAvg": "10.9",
+          "Time": "26日20时-27日02时",
+          "WindDirect": "偏北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 15.0,
+          "WindSpeedAvg": "11.3",
           "Time": "27日02时-08时",
           "WindDirect": "北到西北风"
         },
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "2.5-3.0m",
           "Riskrating": "1 4 1 1",
-          "WindSpeed": 20.0,
-          "WindSpeedAvg": "15.0",
+          "WindSpeed": 17.5,
+          "WindSpeedAvg": "13.1",
           "Time": "27日08时-14时",
+          "WindDirect": "偏北风"
+        },
+        {
+          "wd_en": "PPN",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 18.5,
+          "WindSpeedAvg": "13.9",
+          "Time": "27日14时-20时",
           "WindDirect": "偏北风"
         },
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 17.6,
-          "WindSpeedAvg": "13.2",
-          "Time": "27日14时-20时",
-          "WindDirect": "北到东北风"
-        },
-        {
-          "wd_en": "NNE",
-          "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "2.5-3.0m",
           "Riskrating": "2 4 1 1",
-          "WindSpeed": 14.6,
-          "WindSpeedAvg": "11.0",
+          "WindSpeed": 15.3,
+          "WindSpeedAvg": "11.5",
           "Time": "27日20时-28日02时",
           "WindDirect": "北到东北风"
         },
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
+          "WindWave": "2.0-2.5m",
+          "Riskrating": "3 4 1 1",
           "WindSpeed": 12.4,
           "WindSpeedAvg": "9.3",
           "Time": "28日02时-08时",
@@ -235,447 +195,347 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
-          "WindSpeed": 8.7,
-          "WindSpeedAvg": "6.5",
+          "WindWave": "2.0-2.5m",
+          "Riskrating": "4 4 1 1",
+          "WindSpeed": 10.7,
+          "WindSpeedAvg": "8.0",
           "Time": "28日08时-14时",
           "WindDirect": "东北风"
         },
         {
-          "wd_en": "ESE",
+          "wd_en": "PPE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
-          "WindSpeed": 7.2,
-          "WindSpeedAvg": "5.4",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "4 4 1 1",
+          "WindSpeed": 8.7,
+          "WindSpeedAvg": "6.5",
           "Time": "28日14时-20时",
-          "WindDirect": "东到东南风"
+          "WindDirect": "偏东风"
+        },
+        {
+          "wd_en": "PPS",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "4 4 1 1",
+          "WindSpeed": 9.8,
+          "WindSpeedAvg": "7.4",
+          "Time": "28日20时-29日02时",
+          "WindDirect": "偏南风"
+        },
+        {
+          "wd_en": "SSW",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "4 4 1 1",
+          "WindSpeed": 7.6,
+          "WindSpeedAvg": "5.7",
+          "Time": "29日02时-08时",
+          "WindDirect": "南到西南风"
+        },
+        {
+          "wd_en": "PPS",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "4 4 1 1",
+          "WindSpeed": 9.5,
+          "WindSpeedAvg": "7.1",
+          "Time": "29日08时-14时",
+          "WindDirect": "偏南风"
+        },
+        {
+          "wd_en": "SSW",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "4 4 1 1",
+          "WindSpeed": 6.6,
+          "WindSpeedAvg": "5.0",
+          "Time": "29日14时-20时",
+          "WindDirect": "南到西南风"
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有暴雨。明天阴有中雨转小雨。后天阴有时有阵雨，中午转阴到多云。27日多云到阴。28日多云转阴偶有小雨。<br><br>台风警报：今年第30号台风“蔷琵”（强热带风暴级）今天17时位于舟山偏南方向约300公里处，即北纬27.4度，东经123.2度，中心附近最大风力10级，中心最低气压982百帕，以每小时15公里左右的速度向北偏东方向移动，强度逐渐减弱，将于25日前后沿浙江东部近海转向东北方向移动，趋向日本西南部沿海。受其影响，我市24日阴有大到暴雨，25日阴有中雨转小雨，舟山沿海24日北到东北风11级、个别12级，25日偏北风11级、个别12级，25日下午起北到西北风10级，半夜减弱到9级，请注意防范。<br><br>",
-      "Time": "2026102421",
-      "PreciseForecastTime": "2026年10月24日21时"
+      "Text": "天气预报：今天阴有小雨。明天阴有时有小雨，下午起阴到多云。后天阴到多云，局部小雨。28日多云转阴偶有小雨。29日阴偶有小雨转阴到多云。<br><br>台风警报：今年第30号台风“蔷琵”（热带风暴级）今天11时位于舟山东南方向约274公里处，即北纬29.5度，东经125.0度，中心附近最大风力9级，中心最低气压990百帕，以每小时20-25公里的速度向东北方向移动，强度逐渐减弱，请注意防范。<br><br>",
+      "Time": "2026102507",
+      "PreciseForecastTime": "2026年10月25日07时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
         {
-          "wd_en": "PNE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 24.6,
-          "WindSpeedAvg": "18.5",
-          "Time": "24日08时-11时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "PNE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 24.9,
-          "WindSpeedAvg": "18.7",
-          "Time": "24日11时-14时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "PNE",
-          "Vis": ">1000m",
-          "WindWave": "4.0-4.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 26.6,
-          "WindSpeedAvg": "20.0",
-          "Time": "24日14时-17时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "ENE",
-          "Vis": ">1000m",
-          "WindWave": "4.0-4.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 26.0,
-          "WindSpeedAvg": "19.5",
-          "Time": "24日17时-20时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "ENE",
-          "Vis": ">1000m",
-          "WindWave": "4.0-4.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 25.5,
-          "WindSpeedAvg": "19.1",
-          "Time": "24日20时-23时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "ENE",
+          "wd_en": "NNW",
           "Vis": ">1000m",
           "WindWave": "3.5-4.0m",
           "Riskrating": "1 4 1 1",
-          "WindSpeed": 25.1,
-          "WindSpeedAvg": "18.8",
-          "Time": "24日23时-25日02时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "PPE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 24.9,
-          "WindSpeedAvg": "18.7",
-          "Time": "25日02时-05时",
-          "WindDirect": "偏东风"
-        },
-        {
-          "wd_en": "PPE",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 24.0,
-          "WindSpeedAvg": "18.0",
-          "Time": "25日05时-08时",
-          "WindDirect": "偏东风"
-        },
-        {
-          "wd_en": "ESE",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 23.5,
-          "WindSpeedAvg": "17.6",
+          "WindSpeed": 22.9,
+          "WindSpeedAvg": "17.2",
           "Time": "25日08时-11时",
-          "WindDirect": "东到东南风"
-        },
-        {
-          "wd_en": "ESE",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 21.8,
-          "WindSpeedAvg": "16.4",
-          "Time": "25日11时-14时",
-          "WindDirect": "东到东南风"
-        },
-        {
-          "wd_en": "PSE",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 21.0,
-          "WindSpeedAvg": "15.8",
-          "Time": "25日14时-17时",
-          "WindDirect": "东南风"
-        },
-        {
-          "wd_en": "PSE",
-          "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 20.8,
-          "WindSpeedAvg": "15.6",
-          "Time": "25日17时-20时",
-          "WindDirect": "东南风"
-        },
-        {
-          "wd_en": "SSE",
-          "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.1,
-          "WindSpeedAvg": "13.6",
-          "Time": "25日20时-26日02时",
-          "WindDirect": "南到东南风"
-        },
-        {
-          "wd_en": "PSW",
-          "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 17.7,
-          "WindSpeedAvg": "13.3",
-          "Time": "26日02时-08时",
-          "WindDirect": "西南风"
-        },
-        {
-          "wd_en": "WNW",
-          "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.3,
-          "WindSpeedAvg": "13.7",
-          "Time": "26日08时-14时",
-          "WindDirect": "西到西北风"
-        },
-        {
-          "wd_en": "PNW",
-          "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.0,
-          "WindSpeedAvg": "13.5",
-          "Time": "26日14时-20时",
-          "WindDirect": "西北风"
+          "WindDirect": "北到西北风"
         },
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "3.5-4.0m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 23.2,
+          "WindSpeedAvg": "17.4",
+          "Time": "25日11时-14时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "3.0-3.5m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 22.7,
+          "WindSpeedAvg": "17.0",
+          "Time": "25日14时-17时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "3.0-3.5m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 19.1,
+          "WindSpeedAvg": "14.3",
+          "Time": "25日17时-20时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 17.8,
+          "WindSpeedAvg": "13.4",
+          "Time": "25日20时-23时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
           "Riskrating": "2 4 1 1",
-          "WindSpeed": 17.0,
-          "WindSpeedAvg": "12.8",
-          "Time": "26日20时-27日02时",
+          "WindSpeed": 16.7,
+          "WindSpeedAvg": "12.5",
+          "Time": "25日23时-26日02时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 16.5,
+          "WindSpeedAvg": "12.4",
+          "Time": "26日02时-05时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 15.0,
+          "WindSpeedAvg": "11.3",
+          "Time": "26日05时-08时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 14.9,
+          "WindSpeedAvg": "11.2",
+          "Time": "26日08时-11时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 16.3,
+          "WindSpeedAvg": "12.2",
+          "Time": "26日11时-14时",
           "WindDirect": "北到西北风"
         },
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
           "WindWave": "2.0-2.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.2,
-          "WindSpeedAvg": "13.7",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 14.0,
+          "WindSpeedAvg": "10.5",
+          "Time": "26日14时-17时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "PPN",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 14.1,
+          "WindSpeedAvg": "10.6",
+          "Time": "26日17时-20时",
+          "WindDirect": "偏北风"
+        },
+        {
+          "wd_en": "PPN",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 14.5,
+          "WindSpeedAvg": "10.9",
+          "Time": "26日20时-27日02时",
+          "WindDirect": "偏北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 14.9,
+          "WindSpeedAvg": "11.2",
           "Time": "27日02时-08时",
           "WindDirect": "北到西北风"
         },
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
+          "WindWave": "2.5-3.0m",
           "Riskrating": "1 4 1 1",
-          "WindSpeed": 20.5,
-          "WindSpeedAvg": "15.4",
+          "WindSpeed": 18.0,
+          "WindSpeedAvg": "13.5",
           "Time": "27日08时-14时",
+          "WindDirect": "偏北风"
+        },
+        {
+          "wd_en": "PPN",
+          "Vis": ">1000m",
+          "WindWave": "2.5-3.0m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 19.1,
+          "WindSpeedAvg": "14.3",
+          "Time": "27日14时-20时",
           "WindDirect": "偏北风"
         },
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 17.9,
-          "WindSpeedAvg": "13.4",
-          "Time": "27日14时-20时",
-          "WindDirect": "北到东北风"
-        },
-        {
-          "wd_en": "NNE",
-          "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
+          "WindWave": "2.5-3.0m",
           "Riskrating": "2 4 1 1",
-          "WindSpeed": 14.7,
-          "WindSpeedAvg": "11.0",
+          "WindSpeed": 15.6,
+          "WindSpeedAvg": "11.7",
           "Time": "27日20时-28日02时",
           "WindDirect": "北到东北风"
         },
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "3 4 2 2",
-          "WindSpeed": 12.8,
-          "WindSpeedAvg": "9.6",
+          "WindWave": "2.0-2.5m",
+          "Riskrating": "3 4 1 1",
+          "WindSpeed": 13.4,
+          "WindSpeedAvg": "10.1",
           "Time": "28日02时-08时",
           "WindDirect": "东北风"
         },
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
-          "WindSpeed": 8.7,
-          "WindSpeedAvg": "6.5",
+          "WindWave": "2.0-2.5m",
+          "Riskrating": "4 4 1 1",
+          "WindSpeed": 10.5,
+          "WindSpeedAvg": "7.9",
           "Time": "28日08时-14时",
           "WindDirect": "东北风"
         },
         {
-          "wd_en": "ESE",
+          "wd_en": "PPE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
-          "WindSpeed": 7.9,
-          "WindSpeedAvg": "5.9",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "4 4 1 1",
+          "WindSpeed": 8.6,
+          "WindSpeedAvg": "6.5",
           "Time": "28日14时-20时",
-          "WindDirect": "东到东南风"
+          "WindDirect": "偏东风"
+        },
+        {
+          "wd_en": "PPS",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "4 4 1 1",
+          "WindSpeed": 9.6,
+          "WindSpeedAvg": "7.2",
+          "Time": "28日20时-29日02时",
+          "WindDirect": "偏南风"
+        },
+        {
+          "wd_en": "PPS",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "4 4 1 1",
+          "WindSpeed": 8.3,
+          "WindSpeedAvg": "6.2",
+          "Time": "29日02时-08时",
+          "WindDirect": "偏南风"
+        },
+        {
+          "wd_en": "PPS",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "4 4 1 1",
+          "WindSpeed": 8.6,
+          "WindSpeedAvg": "6.5",
+          "Time": "29日08时-14时",
+          "WindDirect": "偏南风"
+        },
+        {
+          "wd_en": "PSW",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "4 4 1 1",
+          "WindSpeed": 6.4,
+          "WindSpeedAvg": "4.8",
+          "Time": "29日14时-20时",
+          "WindDirect": "西南风"
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有暴雨。明天阴有中雨转小雨。后天阴有时有阵雨，中午转阴到多云。27日多云到阴。28日多云转阴偶有小雨。<br><br>台风警报：今年第30号台风“蔷琵”（强热带风暴级）今天17时位于舟山偏南方向约300公里处，即北纬27.4度，东经123.2度，中心附近最大风力10级，中心最低气压982百帕，以每小时15公里左右的速度向北偏东方向移动，强度逐渐减弱，将于25日前后沿浙江东部近海转向东北方向移动，趋向日本西南部沿海。受其影响，我市24日阴有大到暴雨，25日阴有中雨转小雨，舟山沿海24日北到东北风11级、个别12级，25日偏北风11级、个别12级，25日下午起北到西北风10级，半夜减弱到9级，请注意防范。<br><br>",
-      "Time": "2026102421",
-      "PreciseForecastTime": "2026年10月24日21时"
+      "Text": "天气预报：今天阴有小雨。明天阴有时有小雨，下午起阴到多云。后天阴到多云，局部小雨。28日多云转阴偶有小雨。29日阴有时有小雨转阴到多云。<br><br>台风警报：今年第30号台风“蔷琵”（热带风暴级）今天11时位于舟山东南方向约274公里处，即北纬29.5度，东经125.0度，中心附近最大风力9级，中心最低气压990百帕，以每小时20-25公里的速度向东北方向移动，强度逐渐减弱，请注意防范。<br><br>",
+      "Time": "2026102507",
+      "PreciseForecastTime": "2026年10月25日07时"
     },
     "马峙锚地": {
       "PreciseForecast": [
         {
-          "wd_en": "PNE",
+          "wd_en": "NNW",
           "Vis": ">1000m",
           "WindWave": "0.5-1.0m",
           "Riskrating": "1 4 4 1",
-          "WindSpeed": 20.5,
-          "WindSpeedAvg": "15.4",
-          "Time": "24日08时-11时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "PNE",
-          "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "1 4 4 1",
-          "WindSpeed": 20.0,
-          "WindSpeedAvg": "15.0",
-          "Time": "24日11时-14时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "PNE",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 21.1,
-          "WindSpeedAvg": "15.8",
-          "Time": "24日14时-17时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "PNE",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 21.8,
-          "WindSpeedAvg": "16.4",
-          "Time": "24日17时-20时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "ENE",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 22.0,
-          "WindSpeedAvg": "16.5",
-          "Time": "24日20时-23时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "ENE",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 21.0,
-          "WindSpeedAvg": "15.8",
-          "Time": "24日23时-25日02时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "ENE",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 20.5,
-          "WindSpeedAvg": "15.4",
-          "Time": "25日02时-05时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "PPE",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 21.5,
-          "WindSpeedAvg": "16.1",
-          "Time": "25日05时-08时",
-          "WindDirect": "偏东风"
-        },
-        {
-          "wd_en": "ESE",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 21.2,
-          "WindSpeedAvg": "15.9",
+          "WindSpeed": 17.6,
+          "WindSpeedAvg": "13.2",
           "Time": "25日08时-11时",
-          "WindDirect": "东到东南风"
-        },
-        {
-          "wd_en": "ESE",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 20.0,
-          "WindSpeedAvg": "15.0",
-          "Time": "25日11时-14时",
-          "WindDirect": "东到东南风"
-        },
-        {
-          "wd_en": "PSE",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 19.1,
-          "WindSpeedAvg": "14.3",
-          "Time": "25日14时-17时",
-          "WindDirect": "东南风"
-        },
-        {
-          "wd_en": "PSE",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 18.8,
-          "WindSpeedAvg": "14.1",
-          "Time": "25日17时-20时",
-          "WindDirect": "东南风"
-        },
-        {
-          "wd_en": "SSE",
-          "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
-          "WindSpeed": 18.3,
-          "WindSpeedAvg": "13.7",
-          "Time": "25日20时-26日02时",
-          "WindDirect": "南到东南风"
-        },
-        {
-          "wd_en": "WSW",
-          "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "1 4 4 1",
-          "WindSpeed": 17.9,
-          "WindSpeedAvg": "13.4",
-          "Time": "26日02时-08时",
-          "WindDirect": "西到西南风"
-        },
-        {
-          "wd_en": "WNW",
-          "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "1 4 4 1",
-          "WindSpeed": 17.4,
-          "WindSpeedAvg": "13.1",
-          "Time": "26日08时-14时",
-          "WindDirect": "西到西北风"
-        },
-        {
-          "wd_en": "PNW",
-          "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "2 4 4 2",
-          "WindSpeed": 14.9,
-          "WindSpeedAvg": "11.2",
-          "Time": "26日14时-20时",
-          "WindDirect": "西北风"
+          "WindDirect": "北到西北风"
         },
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
           "WindWave": "0.5-1.0m",
-          "Riskrating": "2 4 4 2",
-          "WindSpeed": 14.2,
-          "WindSpeedAvg": "10.7",
-          "Time": "26日20时-27日02时",
+          "Riskrating": "1 4 4 1",
+          "WindSpeed": 17.9,
+          "WindSpeedAvg": "13.4",
+          "Time": "25日11时-14时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "1 4 4 1",
+          "WindSpeed": 17.8,
+          "WindSpeedAvg": "13.4",
+          "Time": "25日14时-17时",
           "WindDirect": "北到西北风"
         },
         {
@@ -685,23 +545,123 @@ window.__ANCHOR_DATA__ = {
           "Riskrating": "2 4 4 2",
           "WindSpeed": 15.4,
           "WindSpeedAvg": "11.6",
+          "Time": "25日17时-20时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "2 4 4 2",
+          "WindSpeed": 14.2,
+          "WindSpeedAvg": "10.7",
+          "Time": "25日20时-23时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
+          "WindSpeed": 13.5,
+          "WindSpeedAvg": "10.1",
+          "Time": "25日23时-26日02时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
+          "WindSpeed": 12.9,
+          "WindSpeedAvg": "9.7",
+          "Time": "26日02时-05时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
+          "WindSpeed": 12.7,
+          "WindSpeedAvg": "9.5",
+          "Time": "26日05时-08时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "3 4 4 3",
+          "WindSpeed": 12.3,
+          "WindSpeedAvg": "9.2",
+          "Time": "26日08时-11时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "<0.5m",
+          "Riskrating": "3 4 4 3",
+          "WindSpeed": 12.9,
+          "WindSpeedAvg": "9.7",
+          "Time": "26日11时-14时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "<0.5m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 9.9,
+          "WindSpeedAvg": "7.4",
+          "Time": "26日14时-17时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "PPN",
+          "Vis": ">1000m",
+          "WindWave": "<0.5m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 10.6,
+          "WindSpeedAvg": "8.0",
+          "Time": "26日17时-20时",
+          "WindDirect": "偏北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "<0.5m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 10.6,
+          "WindSpeedAvg": "8.0",
+          "Time": "26日20时-27日02时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "<0.5m",
+          "Riskrating": "3 4 4 3",
+          "WindSpeed": 12.2,
+          "WindSpeedAvg": "9.2",
           "Time": "27日02时-08时",
           "WindDirect": "北到西北风"
         },
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
+          "WindWave": "<0.5m",
           "Riskrating": "2 4 4 2",
-          "WindSpeed": 16.8,
-          "WindSpeedAvg": "12.6",
+          "WindSpeed": 14.7,
+          "WindSpeedAvg": "11.0",
           "Time": "27日08时-14时",
           "WindDirect": "偏北风"
         },
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
+          "WindWave": "<0.5m",
           "Riskrating": "2 4 4 2",
           "WindSpeed": 13.9,
           "WindSpeedAvg": "10.4",
@@ -711,299 +671,336 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
+          "WindWave": "<0.5m",
           "Riskrating": "3 4 4 3",
-          "WindSpeed": 11.2,
-          "WindSpeedAvg": "8.4",
+          "WindSpeed": 10.9,
+          "WindSpeedAvg": "8.2",
           "Time": "27日20时-28日02时",
+          "WindDirect": "北到东北风"
+        },
+        {
+          "wd_en": "NNE",
+          "Vis": ">1000m",
+          "WindWave": "<0.5m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 8.7,
+          "WindSpeedAvg": "6.5",
+          "Time": "28日02时-08时",
           "WindDirect": "北到东北风"
         },
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
+          "WindWave": "<0.5m",
           "Riskrating": "4 4 4 4",
-          "WindSpeed": 10.4,
-          "WindSpeedAvg": "7.8",
-          "Time": "28日02时-08时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "ENE",
-          "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "4 4 4 4",
-          "WindSpeed": 7.2,
-          "WindSpeedAvg": "5.4",
+          "WindSpeed": 8.9,
+          "WindSpeedAvg": "6.7",
           "Time": "28日08时-14时",
-          "WindDirect": "东到东北风"
+          "WindDirect": "东北风"
         },
         {
           "wd_en": "ESE",
           "Vis": ">1000m",
           "WindWave": "<0.5m",
           "Riskrating": "4 4 4 4",
-          "WindSpeed": 4.6,
-          "WindSpeedAvg": "3.5",
+          "WindSpeed": 7.2,
+          "WindSpeedAvg": "5.4",
           "Time": "28日14时-20时",
           "WindDirect": "东到东南风"
+        },
+        {
+          "wd_en": "PPS",
+          "Vis": ">1000m",
+          "WindWave": "<0.5m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 8.0,
+          "WindSpeedAvg": "6.0",
+          "Time": "28日20时-29日02时",
+          "WindDirect": "偏南风"
+        },
+        {
+          "wd_en": "SSW",
+          "Vis": ">1000m",
+          "WindWave": "<0.5m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 6.1,
+          "WindSpeedAvg": "4.6",
+          "Time": "29日02时-08时",
+          "WindDirect": "南到西南风"
+        },
+        {
+          "wd_en": "PPS",
+          "Vis": ">1000m",
+          "WindWave": "<0.5m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 8.4,
+          "WindSpeedAvg": "6.3",
+          "Time": "29日08时-14时",
+          "WindDirect": "偏南风"
+        },
+        {
+          "wd_en": "PPW",
+          "Vis": ">1000m",
+          "WindWave": "<0.5m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 4.1,
+          "WindSpeedAvg": "3.1",
+          "Time": "29日14时-20时",
+          "WindDirect": "偏西风"
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有暴雨。明天阴有中雨转小雨。后天阴有时有阵雨，中午转阴到多云。27日多云到阴。28日多云转阴偶有小雨。<br><br>台风警报：今年第30号台风“蔷琵”（强热带风暴级）今天17时位于舟山偏南方向约300公里处，即北纬27.4度，东经123.2度，中心附近最大风力10级，中心最低气压982百帕，以每小时15公里左右的速度向北偏东方向移动，强度逐渐减弱，将于25日前后沿浙江东部近海转向东北方向移动，趋向日本西南部沿海。受其影响，我市24日阴有大到暴雨，25日阴有中雨转小雨，舟山沿海24日北到东北风11级、个别12级，25日偏北风11级、个别12级，25日下午起北到西北风10级，半夜减弱到9级，请注意防范。<br><br>",
-      "Time": "2026102421",
-      "PreciseForecastTime": "2026年10月24日21时"
+      "Text": "天气预报：今天阴有小到中雨，夜里转小雨。明天阴有时有小雨，下午起阴到多云。后天阴到多云，局部小雨。28日多云转阴偶有小雨。29日阴偶有小雨转阴到多云。<br><br>台风警报：今年第30号台风“蔷琵”（热带风暴级）今天11时位于舟山东南方向约274公里处，即北纬29.5度，东经125.0度，中心附近最大风力9级，中心最低气压990百帕，以每小时20-25公里的速度向东北方向移动，强度逐渐减弱，请注意防范。<br><br>",
+      "Time": "2026102507",
+      "PreciseForecastTime": "2026年10月25日07时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
         {
-          "wd_en": "ENE",
+          "wd_en": "NNE",
           "Vis": ">1000m",
           "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.5,
-          "WindSpeedAvg": "13.9",
-          "Time": "24日08时-11时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "PNE",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 20.2,
-          "WindSpeedAvg": "15.2",
-          "Time": "24日11时-14时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "ENE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 23.4,
-          "WindSpeedAvg": "17.6",
-          "Time": "24日14时-17时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "PNE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 22.3,
-          "WindSpeedAvg": "16.7",
-          "Time": "24日17时-20时",
-          "WindDirect": "东北风"
-        },
-        {
-          "wd_en": "ENE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 21.1,
-          "WindSpeedAvg": "15.8",
-          "Time": "24日20时-23时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "ENE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 23.0,
-          "WindSpeedAvg": "17.3",
-          "Time": "24日23时-25日02时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "ENE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 23.5,
-          "WindSpeedAvg": "17.6",
-          "Time": "25日02时-05时",
-          "WindDirect": "东到东北风"
-        },
-        {
-          "wd_en": "PPE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 23.2,
-          "WindSpeedAvg": "17.4",
-          "Time": "25日05时-08时",
-          "WindDirect": "偏东风"
-        },
-        {
-          "wd_en": "PPE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 22.5,
           "WindSpeedAvg": "16.9",
           "Time": "25日08时-11时",
-          "WindDirect": "偏东风"
-        },
-        {
-          "wd_en": "ESE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 22.0,
-          "WindSpeedAvg": "16.5",
-          "Time": "25日11时-14时",
-          "WindDirect": "东到东南风"
-        },
-        {
-          "wd_en": "PSE",
-          "Vis": ">1000m",
-          "WindWave": "3.0-3.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 21.5,
-          "WindSpeedAvg": "16.1",
-          "Time": "25日14时-17时",
-          "WindDirect": "东南风"
-        },
-        {
-          "wd_en": "PSE",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 21.0,
-          "WindSpeedAvg": "15.8",
-          "Time": "25日17时-20时",
-          "WindDirect": "东南风"
-        },
-        {
-          "wd_en": "SSE",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 19.5,
-          "WindSpeedAvg": "14.6",
-          "Time": "25日20时-26日02时",
-          "WindDirect": "南到东南风"
-        },
-        {
-          "wd_en": "PSW",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.5,
-          "WindSpeedAvg": "13.9",
-          "Time": "26日02时-08时",
-          "WindDirect": "西南风"
-        },
-        {
-          "wd_en": "WNW",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.1,
-          "WindSpeedAvg": "13.6",
-          "Time": "26日08时-14时",
-          "WindDirect": "西到西北风"
-        },
-        {
-          "wd_en": "PNW",
-          "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.0,
-          "WindSpeedAvg": "13.5",
-          "Time": "26日14时-20时",
-          "WindDirect": "西北风"
-        },
-        {
-          "wd_en": "NNW",
-          "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 18.1,
-          "WindSpeedAvg": "13.6",
-          "Time": "26日20时-27日02时",
-          "WindDirect": "北到西北风"
-        },
-        {
-          "wd_en": "NNW",
-          "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 17.9,
-          "WindSpeedAvg": "13.4",
-          "Time": "27日02时-08时",
-          "WindDirect": "北到西北风"
+          "WindDirect": "北到东北风"
         },
         {
           "wd_en": "PPN",
           "Vis": ">1000m",
           "WindWave": "2.5-3.0m",
           "Riskrating": "1 4 1 1",
-          "WindSpeed": 19.9,
-          "WindSpeedAvg": "14.9",
+          "WindSpeed": 23.0,
+          "WindSpeedAvg": "17.3",
+          "Time": "25日11时-14时",
+          "WindDirect": "偏北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.0-2.5m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 21.3,
+          "WindSpeedAvg": "16.0",
+          "Time": "25日14时-17时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "2.0-2.5m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 19.7,
+          "WindSpeedAvg": "14.8",
+          "Time": "25日17时-20时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "1 4 1 1",
+          "WindSpeed": 17.7,
+          "WindSpeedAvg": "13.3",
+          "Time": "25日20时-23时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 16.9,
+          "WindSpeedAvg": "12.7",
+          "Time": "25日23时-26日02时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 16.6,
+          "WindSpeedAvg": "12.5",
+          "Time": "26日02时-05时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 15.0,
+          "WindSpeedAvg": "11.3",
+          "Time": "26日05时-08时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "PNW",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 14.2,
+          "WindSpeedAvg": "10.7",
+          "Time": "26日08时-11时",
+          "WindDirect": "西北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "2 4 2 2",
+          "WindSpeed": 14.0,
+          "WindSpeedAvg": "10.5",
+          "Time": "26日11时-14时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "PPN",
+          "Vis": ">1000m",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "3 4 2 2",
+          "WindSpeed": 13.4,
+          "WindSpeedAvg": "10.1",
+          "Time": "26日14时-17时",
+          "WindDirect": "偏北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 14.5,
+          "WindSpeedAvg": "10.9",
+          "Time": "26日17时-20时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "PPN",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 14.4,
+          "WindSpeedAvg": "10.8",
+          "Time": "26日20时-27日02时",
+          "WindDirect": "偏北风"
+        },
+        {
+          "wd_en": "NNW",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 15.2,
+          "WindSpeedAvg": "11.4",
+          "Time": "27日02时-08时",
+          "WindDirect": "北到西北风"
+        },
+        {
+          "wd_en": "PPN",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 16.9,
+          "WindSpeedAvg": "12.7",
           "Time": "27日08时-14时",
+          "WindDirect": "偏北风"
+        },
+        {
+          "wd_en": "PPN",
+          "Vis": ">1000m",
+          "WindWave": "1.5-2.0m",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 17.0,
+          "WindSpeedAvg": "12.8",
+          "Time": "27日14时-20时",
           "WindDirect": "偏北风"
         },
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
-          "Riskrating": "1 4 1 1",
-          "WindSpeed": 17.2,
-          "WindSpeedAvg": "12.9",
-          "Time": "27日14时-20时",
-          "WindDirect": "北到东北风"
-        },
-        {
-          "wd_en": "NNE",
-          "Vis": ">1000m",
           "WindWave": "1.5-2.0m",
-          "Riskrating": "3 4 1 1",
-          "WindSpeed": 13.5,
-          "WindSpeedAvg": "10.1",
+          "Riskrating": "2 4 1 1",
+          "WindSpeed": 14.1,
+          "WindSpeedAvg": "10.6",
           "Time": "27日20时-28日02时",
           "WindDirect": "北到东北风"
         },
         {
           "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
-          "Riskrating": "3 4 1 1",
-          "WindSpeed": 11.8,
-          "WindSpeedAvg": "8.9",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "3 4 2 2",
+          "WindSpeed": 12.6,
+          "WindSpeedAvg": "9.5",
           "Time": "28日02时-08时",
           "WindDirect": "东北风"
         },
         {
-          "wd_en": "ENE",
+          "wd_en": "PNE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "4 4 2 2",
-          "WindSpeed": 7.4,
-          "WindSpeedAvg": "5.6",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 9.5,
+          "WindSpeedAvg": "7.1",
           "Time": "28日08时-14时",
-          "WindDirect": "东到东北风"
+          "WindDirect": "东北风"
         },
         {
-          "wd_en": "PSE",
+          "wd_en": "ESE",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "4 4 2 2",
-          "WindSpeed": 7.9,
-          "WindSpeedAvg": "5.9",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 9.1,
+          "WindSpeedAvg": "6.8",
           "Time": "28日14时-20时",
-          "WindDirect": "东南风"
+          "WindDirect": "东到东南风"
+        },
+        {
+          "wd_en": "PPS",
+          "Vis": ">1000m",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 7.2,
+          "WindSpeedAvg": "5.4",
+          "Time": "28日20时-29日02时",
+          "WindDirect": "偏南风"
+        },
+        {
+          "wd_en": "PPS",
+          "Vis": ">1000m",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 6.2,
+          "WindSpeedAvg": "4.7",
+          "Time": "29日02时-08时",
+          "WindDirect": "偏南风"
+        },
+        {
+          "wd_en": "PPS",
+          "Vis": ">1000m",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 8.6,
+          "WindSpeedAvg": "6.5",
+          "Time": "29日08时-14时",
+          "WindDirect": "偏南风"
+        },
+        {
+          "wd_en": "PNW",
+          "Vis": ">1000m",
+          "WindWave": "0.5-1.0m",
+          "Riskrating": "4 4 4 4",
+          "WindSpeed": 5.9,
+          "WindSpeedAvg": "4.4",
+          "Time": "29日14时-20时",
+          "WindDirect": "西北风"
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有暴雨。明天阴有中雨转小雨。后天阴有时有阵雨，中午转阴到多云。27日多云到阴。28日多云转阴偶有小雨。<br><br>台风警报：今年第30号台风“蔷琵”（强热带风暴级）今天17时位于舟山偏南方向约300公里处，即北纬27.4度，东经123.2度，中心附近最大风力10级，中心最低气压982百帕，以每小时15公里左右的速度向北偏东方向移动，强度逐渐减弱，将于25日前后沿浙江东部近海转向东北方向移动，趋向日本西南部沿海。受其影响，我市24日阴有大到暴雨，25日阴有中雨转小雨，舟山沿海24日北到东北风11级、个别12级，25日偏北风11级、个别12级，25日下午起北到西北风10级，半夜减弱到9级，请注意防范。<br><br>",
-      "Time": "2026102421",
-      "PreciseForecastTime": "2026年10月24日21时"
+      "Text": "天气预报：今天阴有小雨，夜里转阴局部小雨。明天阴有时有小雨，下午起阴到多云。后天阴到多云，局部小雨。28日多云转阴偶有小雨。29日阴有小雨转阴到多云。<br><br>台风警报：今年第30号台风“蔷琵”（热带风暴级）今天11时位于舟山东南方向约274公里处，即北纬29.5度，东经125.0度，中心附近最大风力9级，中心最低气压990百帕，以每小时20-25公里的速度向东北方向移动，强度逐渐减弱，请注意防范。<br><br>",
+      "Time": "2026102507",
+      "PreciseForecastTime": "2026年10月25日07时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 };
