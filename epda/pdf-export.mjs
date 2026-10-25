@@ -65,7 +65,7 @@ const COPY = {
     client: 'Client',
     trade: 'Trade',
     berthDays: 'Berth days',
-    boarding: 'Pilot boarding / leaving points',
+    boarding: 'Pilot boarding / leaving',
     boardingIn: 'Arrival',
     boardingOut: 'Departure',
     foreign: 'International',
