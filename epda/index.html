@@ -47,7 +47,7 @@
               <p class="quick-note">默认外贸、散货/杂货船、卸货和30日吨税；靠泊天数可改，拖轮与吨税自动计算。特殊航次再展开调整。</p>
             </section>
             <details id="advanced-settings" class="advanced-settings">
-              <summary>特殊情况调整（可选）<span>船型、航线、装卸或出港点位不同默认情况时再打开；也可添加费用或汇款资料</span></summary>
+              <summary>特殊情况调整（可选）<span>船型、航线、装卸或出港点位不同默认情况时再打开；汇款资料也在这里填写</span></summary>
               <div class="advanced-stack">
             <section class="panel" id="voyage-advanced">
               <div class="panel-title"><div><h2>计费调整</h2></div><div class="trade-switch" role="group" aria-label="贸易类型"><button type="button" data-trade="foreign" class="selected" aria-pressed="true">外贸</button><button type="button" data-trade="domestic" aria-pressed="false">内贸</button></div></div>
@@ -88,11 +88,6 @@
                 <label class="full">报价备注（选填）<textarea name="notes" id="notes" maxlength="2000" rows="3" placeholder="补充本次报价的约定与说明"></textarea></label>
               </div>
             </section>
-            <section class="panel" id="extra-fees-section">
-              <div class="panel-title"><div><span class="section-number">04</span><h2>其他费用</h2></div><button type="button" id="add-extra-fee" class="button secondary">＋ 添加费用</button></div>
-              <p class="extra-fee-help">可自由添加费用名称和人民币金额，自动计入报价合计。英文名称用于英文报价单。</p>
-              <div id="extra-fee-fields" class="extra-fee-fields"></div>
-            </section>
             <section class="panel" id="bank-details-section">
               <div class="panel-title"><div><span class="section-number">05</span><h2>汇款资料</h2></div><span class="panel-caption">选填 · 显示在报价单末尾</span></div>
               <p class="bank-help">人民币和美元可分别填写；完全留空的币种不会出现在导出文件中。</p>
@@ -109,6 +104,16 @@
                 </div>
               </div>
             </section>
+              </div>
+            </details>
+            <details id="extra-fees-settings" class="advanced-settings">
+              <summary>其他费用（可选）<span>添加代理费等其他费用，自动计入报价合计</span></summary>
+              <div class="advanced-stack">
+                <section class="panel" id="extra-fees-section">
+                  <div class="panel-title"><div><span class="section-number">04</span><h2>其他费用</h2></div><button type="button" id="add-extra-fee" class="button secondary">＋ 添加费用</button></div>
+                  <p class="extra-fee-help">可自由添加费用名称和人民币金额，自动计入报价合计。英文名称用于英文报价单。</p>
+                  <div id="extra-fee-fields" class="extra-fee-fields"></div>
+                </section>
               </div>
             </details>
           </div>
