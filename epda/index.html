@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#142d38"><title>舟港 · 船舶自动报价</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23142d38'/%3E%3Cpath d='M16 37h32l-5 11H22zM28 18h9v19M22 29h21M15 52q8 5 16 0 8 5 17 0' stroke='%237edbc5' stroke-width='3' fill='none'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css?v=20261025-simple">
-  <script type="module" src="app.mjs?v=20261025-excel-only"></script>
+  <script type="module" src="app.mjs?v=20261025-quote2"></script>
 </head>
 <body>
   <aside class="sidebar">
@@ -83,6 +83,7 @@
               </div>
               <div class="form-divider"></div><div class="field-grid">
                 <label>报价日期<input name="quoteDate" id="quoteDate" type="date" required></label><label>报价编号<input name="quotationNo" id="quotationNo" maxlength="60" required></label>
+                <label>报价有效期（选填）<input name="validUntil" id="validUntil" type="date"></label>
                 <label class="full">客户 / 委托方（选填）<input name="client" id="client" maxlength="120" placeholder="客户或公司名称"></label>
                 <label class="full">报价备注（选填）<textarea name="notes" id="notes" maxlength="2000" rows="3" placeholder="补充本次报价的约定与说明"></textarea></label>
               </div>

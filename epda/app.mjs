@@ -26,7 +26,7 @@ const storageKey = 'zhoushan-quote-v1';
 const money = (n) => new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
 const number = (n) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(n);
 const booleanFields = ['taxEnabled', 'pilotInNight', 'pilotOutNight', 'pilotInHoliday', 'pilotOutHoliday'];
-const fields = ['vesselName', 'nationality', 'nt', 'length', 'exchangeRate', 'portName', 'shipType', 'operation', 'area', 'berthDays', 'inRouteId', 'outRouteId', 'pilotInCount', 'pilotOutCount', 'inLoad', 'outLoad', 'tugInCount', 'tugOutCount', 'tugInOps', 'tugOutOps', 'tugRateOverride', 'taxDays', 'taxRegime', 'taxFactor', 'quoteDate', 'quotationNo', 'client', 'notes', ...booleanFields];
+const fields = ['vesselName', 'nationality', 'nt', 'length', 'exchangeRate', 'portName', 'shipType', 'operation', 'area', 'berthDays', 'inRouteId', 'outRouteId', 'pilotInCount', 'pilotOutCount', 'inLoad', 'outLoad', 'tugInCount', 'tugOutCount', 'tugInOps', 'tugOutOps', 'tugRateOverride', 'taxDays', 'taxRegime', 'taxFactor', 'quoteDate', 'validUntil', 'quotationNo', 'client', 'notes', ...booleanFields];
 const bankCurrencies = ['cny', 'usd'];
 const bankFields = ['bank', 'account', 'code'];
 const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
@@ -37,7 +37,7 @@ const newState = () => ({
   tugInCount: '0', tugOutCount: '0', tugInOps: '1', tugOutOps: '1', tugRateOverride: '',
   taxEnabled: true, taxDays: '30', taxRegime: 'preferential', taxFactor: '1',
   pilotInNight: false, pilotOutNight: false, pilotInHoliday: false, pilotOutHoliday: false,
-  quoteDate: today(), quotationNo: `ZS-${today().replaceAll('-', '')}-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`,
+  quoteDate: today(), validUntil: '', quotationNo: `ZS-${today().replaceAll('-', '')}-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`,
   client: '', notes: '', extraFees: [], bankDetails: {
     cny: { bank: '', account: '', code: '' }, usd: { bank: '', account: '', code: '' },
   }, demo: false, manualIn: false, manualOut: false,
@@ -449,6 +449,9 @@ form.addEventListener('submit', async (event) => {
   const language = event.submitter?.dataset.exportLanguage === 'en' ? 'en' : 'zh';
   const blankText = ['vesselName', 'nationality', 'portName', 'quotationNo'].find((key) => !state[key].trim());
   if (blankText) { focusField($(blankText)); toast('船名、国籍、码头和报价编号不得为空'); return; }
+  if (state.validUntil && state.validUntil < state.quoteDate) {
+    focusField($('validUntil')); toast('报价有效期不能早于报价日期'); return;
+  }
   const inputs = [...form.querySelectorAll('input,select,textarea')].filter((input) => !input.disabled);
   const invalid = inputs.find((input) => !input.checkValidity());
   if (invalid) {
@@ -463,7 +466,7 @@ form.addEventListener('submit', async (event) => {
   try {
     const quoteState = calculationState();
     const [{ downloadQuoteXlsx }] = await Promise.all([
-      import('./xlsx-export.mjs'), loadExcelLibrary(),
+      import('./xlsx-export.mjs?v=20261025-quote2'), loadExcelLibrary(),
     ]);
     await downloadQuoteXlsx(quoteState, result, language);
     toast(`${language === 'en' ? '英文' : '中文'} Excel 报价单已生成并下载`);

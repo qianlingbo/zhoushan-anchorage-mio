@@ -6,7 +6,7 @@ const COPY = {
   zh: {
     sheet: '报价', title: '船舶港口费用报价单', vessel: '船名', nationality: '国籍',
     nt: '净吨 (NT)', length: '船长 (m)', exchange: '汇率 (CNY/USD)', terminal: '码头或船厂',
-    number: '报价编号', date: '报价日期', trade: '贸易类型', berthDays: '靠泊天数',
+    number: '报价编号', date: '报价日期', validUntil: '报价有效期', trade: '贸易类型', berthDays: '靠泊天数',
     foreign: '外贸', domestic: '内贸', client: '客户 / 委托方',
     inPoint: '进港引水登轮点', outPoint: '出港引水离轮点',
     itemNo: '序号', item: '费用项目', amount: '金额 (CNY)',
@@ -18,7 +18,7 @@ const COPY = {
   en: {
     sheet: 'Quotation', title: 'PORT DISBURSEMENT ESTIMATE', vessel: 'Vessel', nationality: 'Flag',
     nt: 'Net tonnage (NT)', length: 'Length (m)', exchange: 'Exchange (CNY/USD)', terminal: 'Terminal / yard',
-    number: 'Quotation no.', date: 'Date', trade: 'Trade', berthDays: 'Berth days',
+    number: 'Quotation no.', date: 'Date', validUntil: 'Valid until', trade: 'Trade', berthDays: 'Berth days',
     foreign: 'Foreign', domestic: 'Domestic', client: 'Client',
     inPoint: 'Arrival pilot point', outPoint: 'Departure pilot point',
     itemNo: 'No.', item: 'Charge', amount: 'Amount (CNY)',
@@ -148,6 +148,14 @@ export async function buildQuoteXlsx(state, result, language = 'zh') {
   pair(copy.nt, state.nt, copy.length, state.length, 'number', 'number');
   pair(copy.exchange, rate, copy.terminal, state.portName || '—', 'number');
   pair(copy.number, state.quotationNo || '—', copy.date, state.quoteDate || '—', 'text', 'date');
+  const validUntil = String(state.validUntil || '').trim();
+  if (validUntil) {
+    const validSerial = dateSerial(validUntil);
+    if (validSerial === null || (dateSerial(state.quoteDate) !== null && validSerial < dateSerial(state.quoteDate))) {
+      throw new Error('报价有效期必须是报价日期当天或之后的有效日期');
+    }
+    add((r) => cell(`A${r}`, copy.validUntil, 3) + numeric(`B${r}`, validSerial, 11) + cell(`C${r}`, '') + cell(`D${r}`, ''), 29);
+  }
   pair(copy.trade, state.trade === 'domestic' ? copy.domestic : copy.foreign, copy.berthDays, state.berthDays, 'text', 'number');
   if (String(state.client || '').trim()) full(copy.client, state.client);
   full(copy.inPoint, state.inBoarding || '—', 34);
@@ -200,6 +208,8 @@ export async function buildQuoteXlsx(state, result, language = 'zh') {
     for (const [label, value] of present) full(label, String(value).trim(), 32, label === copy.account ? 13 : 4);
   }
 
+  const quotationNo = String(state.quotationNo || '—').replaceAll('&', '&&');
+  const footer = lang === 'zh' ? `&L报价编号 ${quotationNo}&R第&P页 / 共&N页` : `&LQuotation ${quotationNo}&RPage &P of &N`;
   const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n` +
     `<worksheet xmlns="${NS}"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>` +
     '<sheetViews><sheetView workbookViewId="0" showGridLines="0"/></sheetViews>' +
@@ -209,7 +219,7 @@ export async function buildQuoteXlsx(state, result, language = 'zh') {
     `</cols><sheetData>${rows.join('')}</sheetData>` +
     `<mergeCells count="${merges.length}">${merges.map((range) => `<mergeCell ref="${range}"/>`).join('')}</mergeCells>` +
     '<printOptions horizontalCentered="1"/><pageMargins left="0.3" right="0.3" top="0.4" bottom="0.4" header="0.2" footer="0.2"/>' +
-    '<pageSetup paperSize="9" orientation="portrait" fitToWidth="1" fitToHeight="0"/></worksheet>';
+    `<pageSetup paperSize="9" orientation="portrait" fitToWidth="1" fitToHeight="0"/><headerFooter><oddFooter>${xml(footer)}</oddFooter></headerFooter></worksheet>`;
   const zip = new globalThis.JSZip();
   zip.file('[Content_Types].xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`);
   zip.file('_rels/.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${REL_NS}/officeDocument" Target="xl/workbook.xml"/></Relationships>`);
@@ -228,9 +238,11 @@ export async function downloadQuoteXlsx(state, result, language = 'zh') {
   const anchor = document.createElement('a');
   const vessel = String(state.vesselName || COPY[lang].untitled)
     .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_').slice(0, 80);
+  const quotationNo = String(state.quotationNo || '')
+    .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_').slice(0, 60);
   const suffix = lang === 'zh' ? '港口费用报价_中文' : 'Port_Quotation_English';
   anchor.href = url;
-  anchor.download = `${vessel}_${suffix}_${String(state.quoteDate || '').replace(/[^0-9-]/g, '')}.xlsx`;
+  anchor.download = `${vessel}_${quotationNo ? `${quotationNo}_` : ''}${suffix}_${String(state.quoteDate || '').replace(/[^0-9-]/g, '')}.xlsx`;
   document.body.append(anchor);
   anchor.click();
   anchor.remove();
