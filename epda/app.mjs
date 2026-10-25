@@ -43,6 +43,15 @@ function toast(message) {
   toastTimer = setTimeout(() => { $('toast').hidden = true; }, 4000);
 }
 
+function focusField(input) {
+  for (let parent = input.parentElement; parent; parent = parent.parentElement) {
+    if (parent.tagName === 'DETAILS') parent.open = true;
+  }
+  input.classList.add('invalid');
+  input.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  input.focus();
+}
+
 function safeRestore() {
   try {
     const raw = localStorage.getItem(storageKey);
@@ -161,7 +170,7 @@ function selectedRoute(id) {
 function rebuildRouteOptions() {
   const terminal = selectedTerminal();
   const allowed = terminal ? new Set(terminal.routeIds) : null;
-  for (const [field, placeholder] of [['inRouteId', '请选择进港引水登轮点'], ['outRouteId', '请选择出港引水离轮点']]) {
+  for (const [field, placeholder] of [['inRouteId', '请选择引水登离轮点'], ['outRouteId', '请选择出港引水离轮点']]) {
     const select = $(field);
     const empty = document.createElement('option'); empty.value = ''; empty.textContent = placeholder;
     select.replaceChildren(empty);
@@ -173,11 +182,15 @@ function rebuildRouteOptions() {
       }
       const option = document.createElement('option'); option.value = route.id;
       const ambiguous = ROUTES.some((other) => other.id !== route.id && other.port === route.port && other.workArea === route.workArea && other.boarding === route.boarding && other.sites !== route.sites);
-      option.textContent = `${route.port} / ${route.workArea}${ambiguous ? ` / ${route.sites}` : ''} · ${route.boarding} · ${number(route.distance)} 海里`;
+      option.textContent = `${terminal ? '' : `${route.port} / ${route.workArea}${ambiguous ? ` / ${route.sites}` : ''} · `}${route.boarding} · ${number(route.distance)} 海里`;
       groups.get(route.port).append(option);
     }
     if (!selectedRoute(state[field])) state[field] = '';
     select.value = state[field];
+  }
+  if (state.inRouteId && !state.outRouteId) {
+    state.outRouteId = state.inRouteId;
+    $('outRouteId').value = state.outRouteId;
   }
 }
 
@@ -235,7 +248,7 @@ function renderExtraFeePreview(fees) {
 function calculationState() {
   const inRoute = selectedRoute(state.inRouteId);
   const outRoute = selectedRoute(state.outRouteId);
-  if (!inRoute) throw new Error('请选择进港引水登轮点。');
+  if (!inRoute) throw new Error('请选择引水登离轮点。');
   if (!outRoute) throw new Error('请选择出港引水离轮点。');
   const routeName = inRoute.port === outRoute.port && inRoute.workArea === outRoute.workArea
     ? `${inRoute.port} / ${inRoute.workArea}`
@@ -270,11 +283,15 @@ function render() {
   const inRoute = selectedRoute(state.inRouteId);
   const outRoute = selectedRoute(state.outRouteId);
   $('port-hint').textContent = terminal ? `官网名单：${terminal.port} / ${terminal.workArea}；请核对引航登离轮点` : '可从官网码头 / 船厂名单选择，也可自行输入';
-  for (const [field, route, direction] of [['in-route-hint', inRoute, '进港'], ['out-route-hint', outRoute, '出港']]) {
-    $(field).textContent = route
-      ? `${route.boarding} · 官网里程 ${number(route.distance)} 海里${route.note ? `；${route.note}` : ''}`
-      : terminal ? `${terminal.routeIds.length} 条官网路线可选，请选择${direction}登离轮点。` : `自填码头请从官网路线中选择${direction}登离轮点。`;
-  }
+  $('in-route-hint').textContent = inRoute
+    ? `${inRoute.boarding} · 官网里程 ${number(inRoute.distance)} 海里${inRoute.note ? `；${inRoute.note}` : ''}`
+    : !state.portName.trim() ? '先选择码头或船厂。' : terminal ? `${terminal.routeIds.length} 条官网路线可选，请选择引水点。` : '自填码头请从官网路线中选择引水点。';
+  $('out-route-hint').textContent = outRoute
+    ? `${outRoute.boarding} · 官网里程 ${number(outRoute.distance)} 海里${outRoute.note ? `；${outRoute.note}` : ''}`
+    : terminal ? `${terminal.routeIds.length} 条官网路线可选，请选择出港离轮点。` : '自填码头请从官网路线中选择出港离轮点。';
+  document.querySelector('.route-default-note').textContent = inRoute && outRoute && inRoute.id !== outRoute.id
+    ? `当前出港点位：${outRoute.boarding}（${number(outRoute.distance)} 海里）；可在特殊情况中调整。`
+    : '进出港默认同一点位；出港不同可在特殊情况中调整。';
   const countries = [...CHINA_ALIASES, ...PREFERENTIAL_COUNTRIES];
   $('tax-country-hint').textContent = state.nationality ? `${countries.includes(state.nationality.trim()) ? '该船籍在参考站优惠名单' : '该船籍不在参考站优惠名单'}；当前按${state.taxRegime === 'preferential' ? '优惠' : '普通'}税率` : '按船籍推荐，可手动调整';
   ['taxDays', 'taxRegime', 'taxFactor'].forEach((id) => { $(id).disabled = !state.taxEnabled; });
@@ -294,7 +311,6 @@ function render() {
     $('usd-amount').textContent = Number.isFinite(rate) && rate > 0 && Number.isFinite(result.total / rate) ? `USD ${money(result.total / rate)}` : '—';
     const warnings = [...result.warnings];
     if (state.manualIn || state.manualOut) warnings.push('拖轮艘数已手动调整，以当前输入计费。');
-    if (state.area === '待确认') warnings.push('码头所属区域尚待确认；引航按所选登离轮点的官网里程计算。');
     if (state.demo) warnings.push('当前为示例船舶和示例汇率，请替换为实际资料。');
     if (state.nationality === '利比里亚' && state.quoteDate > '2029-12-10') warnings.push('利比里亚已超出参考站标注优惠有效期，请核实适用税率。');
     result.warnings = warnings;
@@ -306,7 +322,7 @@ function render() {
     clearResult();
   }
   const missing = ['vesselName', 'nationality', 'nt', 'length', 'exchangeRate', 'portName'].some((key) => !String(state[key]).trim());
-  $('validation-message').textContent = missing ? '填写船名、国籍、净吨、船长、汇率与码头，并选择进出港登离轮点。' : lastError || '报价已更新，可以导出 PDF。';
+  $('validation-message').textContent = missing ? '填写船舶资料并选择引水点后，费用自动计算。' : lastError || '费用已自动计算，可导出报价。';
   $('validation-message').classList.toggle('error', !missing && !!lastError);
   if (!missing && !lastError && (!Number.isFinite(rate) || rate <= 0)) {
     $('validation-message').textContent = '汇率必须为大于 0 的有效数字。';
@@ -349,11 +365,16 @@ form.addEventListener('input', (event) => {
     render(); save(); return;
   }
   if (restoring || !fields.includes(event.target.id)) return;
+  const previousInRouteId = state.inRouteId;
   readForm();
   event.target.classList.remove('invalid');
+  if (event.target.id === 'inRouteId' && (!state.outRouteId || state.outRouteId === previousInRouteId)) {
+    state.outRouteId = state.inRouteId;
+    $('outRouteId').value = state.outRouteId;
+  }
   if (event.target.id === 'vesselName' && !/示例|EXAMPLE/i.test(state.vesselName)) {
     state.demo = false;
-    if (state.notes === '此为示例报价，船舶参数、汇率和区域仅供试算。') { state.notes = ''; $('notes').value = ''; }
+    if (['此为示例报价，船舶参数和汇率仅供试算。', '此为示例报价，船舶参数、汇率和区域仅供试算。'].includes(state.notes)) { state.notes = ''; $('notes').value = ''; }
   }
   if (event.target.id === 'tugInCount') state.manualIn = true;
   if (event.target.id === 'tugOutCount') state.manualOut = true;
@@ -397,10 +418,10 @@ document.querySelectorAll('[data-trade]').forEach((button) => button.addEventLis
 }));
 $('auto-tugs').addEventListener('click', () => { readForm(); suggestTugs(true); render(); save(); toast('已恢复按船长和载况建议的拖轮艘数'); });
 $('example').addEventListener('click', () => {
-  state = { ...newState(), vesselName: 'OCEAN EXAMPLE / 示例轮', nationality: '新加坡', nt: '18000', length: '200', exchangeRate: '7.20', portName: '老塘山散货码头（示例）', area: '中部港区', demo: true, notes: '此为示例报价，船舶参数、汇率和区域仅供试算。' };
+  state = { ...newState(), vesselName: 'OCEAN EXAMPLE / 示例轮', nationality: '新加坡', nt: '18000', length: '200', exchangeRate: '7.20', portName: '老塘山散货码头（示例）', area: '中部港区', demo: true, notes: '此为示例报价，船舶参数和汇率仅供试算。' };
   const sampleRoute = ROUTES.find((route) => route.workArea === '老塘山作业区' && route.distance === 14);
   if (sampleRoute) { state.inRouteId = sampleRoute.id; state.outRouteId = sampleRoute.id; }
-  writeForm(); suggestTugs(true); render(); save(); toast('已载入示例；船舶、汇率与区域请按实际修改');
+  writeForm(); suggestTugs(true); render(); save(); toast('已载入示例；船舶资料和汇率请按实际修改');
 });
 $('reset').addEventListener('click', () => { state = newState(); writeForm(); render(); save(); form.querySelectorAll('.invalid').forEach((input) => input.classList.remove('invalid')); toast('已清空并新建报价'); });
 
@@ -413,11 +434,11 @@ form.addEventListener('submit', async (event) => {
   const language = event.submitter?.dataset.exportLanguage === 'en' ? 'en' : 'zh';
   const format = event.submitter?.dataset.exportFormat === 'xlsx' ? 'xlsx' : 'pdf';
   const blankText = ['vesselName', 'nationality', 'portName', 'quotationNo'].find((key) => !state[key].trim());
-  if (blankText) { $(blankText).classList.add('invalid'); $(blankText).focus(); toast('船名、国籍、码头和报价编号不得为空'); return; }
+  if (blankText) { focusField($(blankText)); toast('船名、国籍、码头和报价编号不得为空'); return; }
   const inputs = [...form.querySelectorAll('input,select,textarea')].filter((input) => !input.disabled);
   const invalid = inputs.find((input) => !input.checkValidity());
   if (invalid) {
-    invalid.classList.add('invalid'); invalid.scrollIntoView({ block: 'center', behavior: 'smooth' }); invalid.focus(); invalid.reportValidity(); toast('请检查必填项及输入数值'); return;
+    focusField(invalid); invalid.reportValidity(); toast('请检查必填项及输入数值'); return;
   }
   const fx = Number(state.exchangeRate);
   if (!result || !Number.isFinite(fx) || fx <= 0 || !Number.isFinite(result.total / fx)) { toast(lastError || '请检查汇率和报价参数'); return; }

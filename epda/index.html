@@ -5,9 +5,9 @@
   <meta name="description" content="舟山船舶港口费用报价：引航、拖轮、吨税、靠泊与自定义费用自动汇总，导出中英文 PDF 和 Excel。">
   <meta name="theme-color" content="#142d38"><title>舟港 · 船舶自动报价</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23142d38'/%3E%3Cpath d='M16 37h32l-5 11H22zM28 18h9v19M22 29h21M15 52q8 5 16 0 8 5 17 0' stroke='%237edbc5' stroke-width='3' fill='none'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20261025-boarding">
+  <link rel="stylesheet" href="styles.css?v=20261025-simple">
   <script defer src="assets/pdf-lib.min.js"></script><script defer src="assets/fontkit.umd.min.js"></script><script defer src="assets/jszip.min.js"></script>
-  <script type="module" src="app.mjs?v=20261025-excel"></script>
+  <script type="module" src="app.mjs?v=20261025-simple"></script>
 </head>
 <body>
   <aside class="sidebar">
@@ -15,7 +15,7 @@
     <div class="nav-label">业务工作台</div>
     <nav aria-label="页面导航">
       <a class="nav-item active" href="#top"><span>▤</span> 船舶报价 <span class="nav-dot"></span></a>
-      <a class="nav-item" href="#voyage"><span>⚑</span> 航次与作业</a>
+      <a class="nav-item" href="#voyage"><span>⚑</span> 报价条件</a>
       <button class="nav-item" type="button" data-open-rates><span>≡</span> 费率与计算口径</button>
     </nav>
     <div class="sidebar-bottom"><div class="mini-compass">N<span>✦</span></div><div class="port-location">舟山港 · ZHOUSHAN</div><p>从船舶资料到费用报价<br>让每笔费用都有依据。</p><span class="version">首版工作台 <b>V1.0</b></span></div>
@@ -23,10 +23,10 @@
   <main id="top">
     <header class="topbar"><span>业务工具 <span class="slash">/</span> <b>船舶报价</b></span><span class="device-save" id="save-status">数据仅保存在当前设备</span></header>
     <div class="workspace">
-      <div class="page-heading"><div><div class="eyebrow">VESSEL DISBURSEMENT ESTIMATE</div><h1>船舶港口费用报价<span class="edition">试用版</span></h1><p>录入船舶资料，自动汇总费用，导出中英文表格报价单。</p></div><div class="heading-actions"><button id="example" type="button" class="button secondary">载入示例 <span>↗</span></button><button type="button" class="button icon-button" id="reset" aria-label="清空报价" title="清空报价">↺</button></div></div>
+      <div class="page-heading"><div><div class="eyebrow">VESSEL DISBURSEMENT ESTIMATE</div><h1>船舶港口费用报价<span class="edition">试用版</span></h1><p>填写船舶资料和引水点，费用自动计算。</p></div><div class="heading-actions"><button id="example" type="button" class="button secondary">载入示例 <span>↗</span></button><button type="button" class="button icon-button" id="reset" aria-label="清空报价" title="清空报价">↺</button></div></div>
       <form id="quote-form" novalidate>
         <section class="panel vessel-panel" id="vessel">
-          <div class="panel-title"><div><span class="section-number">01</span><h2>船舶资料</h2></div><div class="trade-switch" role="group" aria-label="贸易类型"><button type="button" data-trade="foreign" class="selected" aria-pressed="true">外贸</button><button type="button" data-trade="domestic" aria-pressed="false">内贸</button></div></div>
+          <div class="panel-title"><div><span class="section-number">01</span><h2>船舶资料</h2></div></div>
           <div class="vessel-grid">
             <label>船名 <span class="required">*</span><input name="vesselName" id="vesselName" required maxlength="100" autocomplete="off" placeholder="输入中英文船名"></label>
             <label>国籍 / 船籍 <span class="required">*</span><input name="nationality" id="nationality" required list="nationalities" maxlength="60" placeholder="如：新加坡"><datalist id="nationalities"></datalist></label>
@@ -35,21 +35,30 @@
             <label>汇率 <span class="required">*</span><div class="input-unit"><input name="exchangeRate" id="exchangeRate" type="number" required min="0.000001" step="any" inputmode="decimal" placeholder="1 USD = ?"><span>CNY</span></div><small>1 美元折合人民币，手动录入</small></label>
             <label>码头或船厂 <span class="required">*</span><input name="portName" id="portName" required list="terminals" maxlength="150" autocomplete="off" placeholder="输入或选择官网列出的码头 / 船厂"><datalist id="terminals"></datalist><small id="port-hint">可从官网码头 / 船厂名单选择，也可自行输入</small></label>
           </div>
-          <div class="vessel-footer"><span class="tiny-anchor">⚓</span><span>默认按外贸航线报价；船长用于匹配拖轮单价与建议艘数。</span><span id="demo-badge" class="demo-badge" hidden>当前为示例数据</span></div>
+          <div class="vessel-footer"><span class="tiny-anchor">⚓</span><span>填完资料并选择引水点后，报价自动显示。</span><span id="demo-badge" class="demo-badge" hidden>当前为示例数据</span></div>
         </section>
         <div class="working-grid">
           <div class="form-stack">
-            <section class="panel" id="voyage">
-              <div class="panel-title"><div><span class="section-number">02</span><h2>航次与作业</h2></div><span class="panel-caption">作业参数</span></div>
+            <section class="panel quick-panel" id="voyage">
+              <div class="panel-title"><div><span class="section-number">02</span><h2>报价条件</h2></div><span class="panel-caption">填写即自动计算</span></div>
+              <div class="quick-grid">
+                <label>靠泊天数 <span class="required">*</span><div class="input-unit"><input name="berthDays" id="berthDays" type="number" min="0.01" step="any" required><span>天</span></div></label>
+                <label class="quick-route">引水登离轮点 <span class="required">*</span><select name="inRouteId" id="inRouteId" required><option value="">请选择引水登离轮点</option></select><small id="in-route-hint">选择码头后，选一个引水点即可计算。</small><small class="route-default-note">进出港默认同一点位；出港不同可在特殊情况中调整。</small></label>
+              </div>
+              <p class="quick-note">默认外贸、散货/杂货船、卸货和30日吨税；靠泊天数可改，拖轮与吨税自动计算。特殊航次再展开调整。</p>
+            </section>
+            <details id="advanced-settings" class="advanced-settings">
+              <summary>特殊情况调整（可选）<span>船型、航线、装卸或出港点位不同默认情况时再打开；也可添加费用或汇款资料</span></summary>
+              <div class="advanced-stack">
+            <section class="panel" id="voyage-advanced">
+              <div class="panel-title"><div><h2>计费调整</h2></div><div class="trade-switch" role="group" aria-label="贸易类型"><button type="button" data-trade="foreign" class="selected" aria-pressed="true">外贸</button><button type="button" data-trade="domestic" aria-pressed="false">内贸</button></div></div>
               <div class="field-grid">
                 <label>船型<select name="shipType" id="shipType"><option value="bulk">散货船 / 杂货船 / 其他</option><option value="tanker">油船 / 化学品船 / 液化气体船</option><option value="container">集装箱船 / 滚装船 / 客船</option></select></label>
                 <label>作业类型<select name="operation" id="operation"><option value="unload">卸货 · 重载靠泊，空载离泊</option><option value="load">装货 · 空载靠泊，重载离泊</option><option value="custom">自定义靠离泊载况</option></select></label>
                 <label>所属区域<select name="area" id="area"><option value="待确认">待确认 / 尚未配置</option><option>北部港区</option><option>中部港区</option><option>南部港区</option></select><small>区域暂手选，后续可补充码头映射</small></label>
-                <label>靠泊天数<div class="input-unit"><input name="berthDays" id="berthDays" type="number" min="0.01" step="any" required><span>天</span></div><small>靠泊费 = 0.25 × 净吨 × 天数</small></label>
               </div>
               <div class="direction-grid">
                 <div class="direction-card"><h3><span class="direction-dot in"></span>进港 / 靠泊<span>ARRIVAL</span></h3><div class="field-grid compact">
-                  <label class="full route-choice">引水登轮点 <span class="required">*</span><select name="inRouteId" id="inRouteId" required><option value="">请选择进港引水登轮点</option></select><small id="in-route-hint">先选择码头或船厂，再选择进港登轮点。</small></label>
                   <label>引航次数<div class="input-unit"><input name="pilotInCount" id="pilotInCount" type="number" min="0" step="1" required><span>次</span></div></label>
                   <label>靠泊载况<select name="inLoad" id="inLoad"><option value="laden">重载</option><option value="half">半载</option><option value="ballast">空载</option></select></label>
                   <label>拖轮艘数<div class="input-unit"><input name="tugInCount" id="tugInCount" type="number" min="0" step="1" required><span>艘</span></div></label>
@@ -100,6 +109,8 @@
                 </div>
               </div>
             </section>
+              </div>
+            </details>
           </div>
           <aside class="quote-column" id="estimate">
             <section class="estimate-panel"><div class="estimate-heading"><span class="live-dot"></span>实时报价<span class="currency-label">CNY 人民币</span></div><div class="estimate-vessel"><h2 id="preview-vessel">等待录入船舶</h2><p id="preview-meta">填写上方船舶资料，开始计算</p></div>
@@ -111,7 +122,7 @@
                 <div id="extra-fee-preview"></div>
               </div>
               <div class="total-block"><div><span>费用合计</span><span class="total-currency">CNY</span></div><strong id="total-amount">—<small>.—</small></strong><div class="usd-line"><span>折合美元 <b id="usd-amount">—</b></span><span id="fx-label">请填写汇率</span></div></div>
-              <p class="validation-message" id="validation-message" aria-live="polite">填写船名、国籍、净吨、船长、汇率与码头，并选择进出港登离轮点。</p>
+              <p class="validation-message" id="validation-message" aria-live="polite">填写船舶资料和引水点后自动计算。</p>
               <div id="quote-warnings" class="quote-warnings" hidden></div>
               <div class="export-actions"><button id="export-zh" type="submit" data-export-language="zh" data-export-format="pdf" class="button primary">↓ 导出中文 PDF</button><button id="export-en" type="submit" data-export-language="en" data-export-format="pdf" class="button secondary">↓ Export English PDF</button><button id="export-xlsx-zh" type="submit" data-export-language="zh" data-export-format="xlsx" class="button secondary">↓ 导出中文 Excel</button><button id="export-xlsx-en" type="submit" data-export-language="en" data-export-format="xlsx" class="button secondary">↓ Export English Excel</button></div><p class="export-caption">表格报价单 · 费率说明仅在网页查看</p>
             </section>
