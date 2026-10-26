@@ -10,7 +10,7 @@ const COPY = {
     foreign: '外贸', domestic: '内贸', client: '客户 / 委托方',
     inPoint: '进港引水登轮点', outPoint: '出港引水离轮点',
     itemNo: '序号', item: '费用项目', amount: '金额 (CNY)',
-    pilot: '引航费', tug: '拖轮费', tax: '船舶吨税', berth: '码头靠泊费',
+    pilot: '引航费', pilotOvertime: '出港引航加班费', tug: '拖轮费', tax: '船舶吨税', berth: '码头靠泊费',
     total: '费用合计 (CNY)', usd: '折合美元 (USD)', notes: '备注',
     cnyBank: '人民币汇款信息 (CNY)', usdBank: '美元汇款信息 (USD)',
     bank: '收款银行', account: '收款账号', code: 'SWIFT / 交换码', untitled: '未命名船舶',
@@ -22,7 +22,7 @@ const COPY = {
     foreign: 'Foreign', domestic: 'Domestic', client: 'Client',
     inPoint: 'Arrival pilot point', outPoint: 'Departure pilot point',
     itemNo: 'No.', item: 'Charge', amount: 'Amount (CNY)',
-    pilot: 'Pilotage', tug: 'Towage', tax: 'Tonnage dues', berth: 'Berthage',
+    pilot: 'Pilotage', pilotOvertime: 'Departure pilotage overtime', tug: 'Towage', tax: 'Tonnage dues', berth: 'Berthage',
     total: 'Total (CNY)', usd: 'Equivalent (USD)', notes: 'Notes',
     cnyBank: 'CNY remittance details', usdBank: 'USD remittance details',
     bank: 'Bank', account: 'Account no.', code: 'SWIFT / clearing code', untitled: 'Unnamed vessel',
@@ -165,7 +165,9 @@ export async function buildQuoteXlsx(state, result, language = 'zh') {
   const header = add((r) => cell(`A${r}`, copy.itemNo, 8) + cell(`B${r}`, copy.item, 8) + cell(`C${r}`, '', 8) + cell(`D${r}`, copy.amount, 8), 25);
   merges.push(`B${header}:C${header}`);
   const feeItems = [
-    [copy.pilot, result.pilot.amount], [copy.tug, result.tug.amount],
+    [copy.pilot, result.pilot.regularAmount],
+    ...(result.pilot.outOvertimeAmount ? [[copy.pilotOvertime, result.pilot.outOvertimeAmount]] : []),
+    [copy.tug, result.tug.amount],
     [copy.tax, result.tax.amount], [copy.berth, result.berth.amount],
     ...(result.extraFees || []).map((fee) => [lang === 'en' ? fee.nameEn || fee.nameZh : fee.nameZh || fee.nameEn, fee.amount]),
   ];

@@ -25,7 +25,7 @@ const form = $('quote-form');
 const storageKey = 'zhoushan-quote-v1';
 const money = (n) => new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
 const number = (n) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(n);
-const booleanFields = ['taxEnabled', 'pilotInNight', 'pilotOutNight', 'pilotInHoliday', 'pilotOutHoliday'];
+const booleanFields = ['taxEnabled', 'pilotInNight', 'pilotOutNight', 'pilotInHoliday', 'pilotOutHoliday', 'pilotOutOvertime'];
 const fields = ['vesselName', 'nationality', 'nt', 'length', 'exchangeRate', 'portName', 'shipType', 'operation', 'area', 'berthDays', 'inRouteId', 'outRouteId', 'pilotInCount', 'pilotOutCount', 'inLoad', 'outLoad', 'tugInCount', 'tugOutCount', 'tugInOps', 'tugOutOps', 'tugRateOverride', 'taxDays', 'taxRegime', 'taxFactor', 'quoteDate', 'validUntil', 'quotationNo', 'client', 'notes', ...booleanFields];
 const bankCurrencies = ['cny', 'usd'];
 const bankFields = ['bank', 'account', 'code'];
@@ -36,7 +36,7 @@ const newState = () => ({
   inRouteId: '', outRouteId: '', pilotInCount: '1', pilotOutCount: '1', inLoad: 'laden', outLoad: 'ballast',
   tugInCount: '0', tugOutCount: '0', tugInOps: '1', tugOutOps: '1', tugRateOverride: '',
   taxEnabled: true, taxDays: '30', taxRegime: 'preferential', taxFactor: '1',
-  pilotInNight: false, pilotOutNight: false, pilotInHoliday: false, pilotOutHoliday: false,
+  pilotInNight: false, pilotOutNight: false, pilotInHoliday: false, pilotOutHoliday: false, pilotOutOvertime: true,
   quoteDate: today(), validUntil: '', quotationNo: `ZS-${today().replaceAll('-', '')}-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`,
   client: '', notes: '', extraFees: [], bankDetails: {
     cny: { bank: '', account: '', code: '' }, usd: { bank: '', account: '', code: '' },
@@ -145,10 +145,11 @@ function updateTrade() {
     button.classList.toggle('selected', selected);
     button.setAttribute('aria-pressed', String(selected));
   });
-  for (const key of booleanFields.filter((key) => key.startsWith('pilot'))) {
+  for (const key of ['pilotInNight', 'pilotOutNight', 'pilotInHoliday', 'pilotOutHoliday']) {
     $(key).disabled = state.trade === 'domestic';
     if (state.trade === 'domestic') { state[key] = false; $(key).checked = false; }
   }
+  if (state.pilotOutOvertime) { state.pilotOutNight = false; $('pilotOutNight').checked = false; $('pilotOutNight').disabled = true; }
 }
 
 function suggestTugs(force = false) {
@@ -278,7 +279,10 @@ function calculationState() {
 
 function clearResult() {
   ['pilot', 'tug', 'tax', 'berth'].forEach((key) => { $(`${key}-amount`).textContent = '—'; });
+  $('pilot-overtime-amount').textContent = '—';
+  $('pilot-overtime-row').hidden = !state.pilotOutOvertime;
   $('pilot-detail').textContent = '进港 + 出港引航';
+  $('pilot-overtime-detail').textContent = '出港原金额 × 45%';
   $('tug-detail').textContent = '按船长与载况计算';
   $('tax-detail').textContent = '按净吨、税率与期限计算';
   $('berth-detail').textContent = '0.25 × 净吨 × 天数';
@@ -314,7 +318,11 @@ function render() {
     const quoteState = calculationState();
     result = calculateQuote(quoteState);
     lastError = '';
-    for (const key of ['pilot', 'tug', 'tax', 'berth']) $(`${key}-amount`).textContent = money(result[key].amount);
+    for (const key of ['tug', 'tax', 'berth']) $(`${key}-amount`).textContent = money(result[key].amount);
+    $('pilot-amount').textContent = money(result.pilot.regularAmount);
+    $('pilot-overtime-row').hidden = !result.pilot.outOvertimeEnabled || !Number(state.pilotOutCount);
+    $('pilot-overtime-amount').textContent = money(result.pilot.outOvertimeAmount);
+    $('pilot-overtime-detail').textContent = `出港 ${state.pilotOutCount} 次原金额 ${money(result.pilot.outOvertimeBaseAmount)} × 45%`;
     renderExtraFeePreview(result.extraFees || []);
     $('pilot-detail').textContent = `进 ${number(quoteState.inDistance)} / 出 ${number(quoteState.outDistance)} 海里 · ${state.pilotInCount}+${state.pilotOutCount} 次`;
     $('tug-detail').textContent = `${number(result.tug.rate)} 元/艘次 · 靠${state.tugInCount} / 离${state.tugOutCount}艘${state.tugRateOverride ? ' · 手动单价' : ''}`;
@@ -382,6 +390,7 @@ form.addEventListener('input', (event) => {
   if (restoring || !fields.includes(event.target.id)) return;
   const previousInRouteId = state.inRouteId;
   readForm();
+  if (event.target.id === 'pilotOutOvertime') updateTrade();
   event.target.classList.remove('invalid');
   if (event.target.id === 'inRouteId' && (!state.outRouteId || state.outRouteId === previousInRouteId)) {
     state.outRouteId = state.inRouteId;
@@ -466,7 +475,7 @@ form.addEventListener('submit', async (event) => {
   try {
     const quoteState = calculationState();
     const [{ downloadQuoteXlsx }] = await Promise.all([
-      import('./xlsx-export.mjs?v=20261025-quote2'), loadExcelLibrary(),
+      import('./xlsx-export.mjs?v=20261026-pilot-overtime'), loadExcelLibrary(),
     ]);
     await downloadQuoteXlsx(quoteState, result, language);
     toast(`${language === 'en' ? '英文' : '中文'} Excel 报价单已生成并下载`);

@@ -60,11 +60,12 @@ export function calculateQuote(state) {
   const outDistance = numeric(state.outDistance, '出港引航距离');
   const pilotInCount = numeric(state.pilotInCount, '进港引航次数', { integer: true });
   const pilotOutCount = numeric(state.pilotOutCount, '出港引航次数', { integer: true });
-  for (const field of ['pilotInNight', 'pilotOutNight', 'pilotInHoliday', 'pilotOutHoliday']) {
-    if (state[field] !== undefined && typeof state[field] !== 'boolean') throw new Error('引航夜班及节假日选项必须为明确的开关状态。');
+  for (const field of ['pilotInNight', 'pilotOutNight', 'pilotInHoliday', 'pilotOutHoliday', 'pilotOutOvertime']) {
+    if (state[field] !== undefined && typeof state[field] !== 'boolean') throw new Error('引航附加选项必须为明确的开关状态。');
   }
+  const outOvertimeEnabled = state.pilotOutOvertime !== false;
   const inSurchargeRate = trade === 'foreign' ? (state.pilotInNight ? PILOT_RULES.nightSurcharge : 0) + (state.pilotInHoliday ? PILOT_RULES.holidaySurcharge : 0) : 0;
-  const outSurchargeRate = trade === 'foreign' ? (state.pilotOutNight ? PILOT_RULES.nightSurcharge : 0) + (state.pilotOutHoliday ? PILOT_RULES.holidaySurcharge : 0) : 0;
+  const outSurchargeRate = trade === 'foreign' ? (state.pilotOutNight && !outOvertimeEnabled ? PILOT_RULES.nightSurcharge : 0) + (state.pilotOutHoliday ? PILOT_RULES.holidaySurcharge : 0) : 0;
   const tugInCount = numeric(state.tugInCount, '靠泊拖轮艘数', { integer: true });
   const tugOutCount = numeric(state.tugOutCount, '离泊拖轮艘数', { integer: true });
   const tugInOps = numeric(state.tugInOps, '靠泊拖轮作业次数', { integer: true });
@@ -103,7 +104,10 @@ export function calculateQuote(state) {
   const outSurcharge = round2((baseFee + outDistanceFee) * outSurchargeRate * pilotOutCount);
   const pilotInAmount = round2(((baseFee + inDistanceFee) * (1 + inSurchargeRate) + portSurcharge) * pilotInCount);
   const pilotOutAmount = round2(((baseFee + outDistanceFee) * (1 + outSurchargeRate) + portSurcharge) * pilotOutCount);
-  const pilotAmount = round2(pilotInAmount + pilotOutAmount);
+  const outOvertimeBaseAmount = round2((baseFee + outDistanceFee + portSurcharge) * pilotOutCount);
+  const outOvertimeAmount = outOvertimeEnabled ? round2(outOvertimeBaseAmount * 0.45) : 0;
+  const pilotRegularAmount = round2(pilotInAmount + pilotOutAmount);
+  const pilotAmount = round2(pilotRegularAmount + outOvertimeAmount);
   const tugAmount = round2(tugRate * (tugInCount * tugInOps + tugOutCount * tugOutOps));
   const taxAmount = state.taxEnabled ? round2(nt * taxRate * taxFactor) : 0;
   const berthAmount = round2(0.25 * nt * berthDays);
@@ -130,12 +134,13 @@ export function calculateQuote(state) {
   }
   return {
     pilot: {
-      amount: pilotAmount, inAmount: pilotInAmount, outAmount: pilotOutAmount,
+      amount: pilotAmount, regularAmount: pilotRegularAmount, inAmount: pilotInAmount, outAmount: pilotOutAmount,
+      outOvertimeAmount, outOvertimeBaseAmount, outOvertimeEnabled,
       inSurcharge, outSurcharge, inSurchargeRate, outSurchargeRate,
       billingTonnage, billingInDistance, billingOutDistance, baseFee: round2(baseFee),
       portSurcharge: round2(portSurcharge), inDistanceFee: round2(inDistanceFee), outDistanceFee: round2(outDistanceFee),
       segments: segments.map((segment) => ({ ...segment, inAmount: round2(segment.inAmount), outAmount: round2(segment.outAmount) })),
-      description: `${trade === 'foreign' ? '外贸引航' : '内贸引航'}计费 ${fmt(billingTonnage)} 净吨（净吨进整，最低 ${PILOT_RULES[trade].minimumTonnage}）；计费进港 ${fmt(billingInDistance)} 海里 × ${pilotInCount} 次，出港 ${fmt(billingOutDistance)} 海里 × ${pilotOutCount} 次（距离进整，10海里起）。${trade === 'foreign' ? '分档基本费每次最高44,100元；0.27元/净吨非基本港附加与超程费仍按全部计费吨位计算。' : ''}${inSurchargeRate || outSurchargeRate ? `夜班/节假日附加仅乘基本费及超程费：进港 ${fmt(inSurchargeRate * 100)}%，出港 ${fmt(outSurchargeRate * 100)}%。` : ''}`,
+      description: `${trade === 'foreign' ? '外贸引航' : '内贸引航'}计费 ${fmt(billingTonnage)} 净吨（净吨进整，最低 ${PILOT_RULES[trade].minimumTonnage}）；计费进港 ${fmt(billingInDistance)} 海里 × ${pilotInCount} 次，出港 ${fmt(billingOutDistance)} 海里 × ${pilotOutCount} 次（距离进整，10海里起）。${trade === 'foreign' ? '分档基本费每次最高44,100元；0.27元/净吨非基本港附加与超程费仍按全部计费吨位计算。' : ''}${inSurchargeRate || outSurchargeRate ? `夜班/节假日附加仅乘基本费及超程费：进港 ${fmt(inSurchargeRate * 100)}%，出港 ${fmt(outSurchargeRate * 100)}%。` : ''}${outOvertimeEnabled ? `按本报价默认口径，出港原金额 ${fmt(outOvertimeBaseAmount)} 元另加45%加班费 ${fmt(outOvertimeAmount)} 元，不重复计出港夜班附加。` : ''}`,
     },
     tug: {
       amount: tugAmount, rate: tugRate, inCount: tugInCount, outCount: tugOutCount,
