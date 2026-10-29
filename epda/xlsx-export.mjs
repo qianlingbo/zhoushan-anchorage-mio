@@ -7,7 +7,7 @@ const COPY = {
     sheet: '报价', title: '船舶港口费用报价单', vessel: '船名', nationality: '国籍',
     nt: '净吨 (NT)', length: '船长 (m)', exchange: '汇率 (CNY/USD)', terminal: '码头或船厂',
     number: '报价编号', date: '报价日期', validUntil: '报价有效期', trade: '贸易类型', berthDays: '靠泊天数',
-    foreign: '外贸', domestic: '内贸', client: '客户 / 委托方',
+    foreign: '外贸', domestic: '内贸', company: '报价公司', client: '客户 / 委托方',
     inPoint: '进港引水登轮点', outPoint: '出港引水离轮点',
     itemNo: '序号', item: '费用项目', amount: '金额 (CNY)',
     pilot: '引航费', pilotOvertime: '出港引航加班费', tug: '拖轮费', tax: '船舶吨税', berth: '码头靠泊费',
@@ -19,7 +19,7 @@ const COPY = {
     sheet: 'Quotation', title: 'PORT DISBURSEMENT ESTIMATE', vessel: 'Vessel', nationality: 'Flag',
     nt: 'Net tonnage (NT)', length: 'Length (m)', exchange: 'Exchange (CNY/USD)', terminal: 'Terminal / yard',
     number: 'Quotation no.', date: 'Date', validUntil: 'Valid until', trade: 'Trade', berthDays: 'Berth days',
-    foreign: 'Foreign', domestic: 'Domestic', client: 'Client',
+    foreign: 'Foreign', domestic: 'Domestic', company: 'Prepared by', client: 'Client',
     inPoint: 'Arrival pilot point', outPoint: 'Departure pilot point',
     itemNo: 'No.', item: 'Charge', amount: 'Amount (CNY)',
     pilot: 'Pilotage', pilotOvertime: 'Departure pilotage overtime', tug: 'Towage', tax: 'Tonnage dues', berth: 'Berthage',
@@ -157,18 +157,25 @@ export async function buildQuoteXlsx(state, result, language = 'zh') {
     add((r) => cell(`A${r}`, copy.validUntil, 3) + numeric(`B${r}`, validSerial, 11) + cell(`C${r}`, '') + cell(`D${r}`, ''), 29);
   }
   pair(copy.trade, state.trade === 'domestic' ? copy.domestic : copy.foreign, copy.berthDays, state.berthDays, 'text', 'number');
+  if (String(state.companyName || '').trim()) full(copy.company, state.companyName);
   if (String(state.client || '').trim()) full(copy.client, state.client);
-  full(copy.inPoint, state.inBoarding || '—', 34);
-  full(copy.outPoint, state.outBoarding || '—', 34);
+  const modules = result.modules || {};
+  if (modules.pilot !== false) {
+    full(copy.inPoint, state.inBoarding || '—', 34);
+    full(copy.outPoint, state.outBoarding || '—', 34);
+  }
   add(() => '', 8);
 
   const header = add((r) => cell(`A${r}`, copy.itemNo, 8) + cell(`B${r}`, copy.item, 8) + cell(`C${r}`, '', 8) + cell(`D${r}`, copy.amount, 8), 25);
   merges.push(`B${header}:C${header}`);
   const feeItems = [
-    [copy.pilot, result.pilot.regularAmount],
-    ...(result.pilot.outOvertimeAmount ? [[copy.pilotOvertime, result.pilot.outOvertimeAmount]] : []),
-    [copy.tug, result.tug.amount],
-    [copy.tax, result.tax.amount], [copy.berth, result.berth.amount],
+    ...(modules.pilot === false ? [] : [
+      [copy.pilot, result.pilot.regularAmount],
+      ...(result.pilot.outOvertimeAmount ? [[copy.pilotOvertime, result.pilot.outOvertimeAmount]] : []),
+    ]),
+    ...(modules.tug === false ? [] : [[copy.tug, result.tug.amount]]),
+    ...(modules.tax === false ? [] : [[copy.tax, result.tax.amount]]),
+    ...(modules.berth === false ? [] : [[copy.berth, result.berth.amount]]),
     ...(result.extraFees || []).map((fee) => [lang === 'en' ? fee.nameEn || fee.nameZh : fee.nameZh || fee.nameEn, fee.amount]),
   ];
   const firstFee = rowNo + 1;
@@ -183,7 +190,7 @@ export async function buildQuoteXlsx(state, result, language = 'zh') {
   });
   const lastFee = rowNo;
   const totalRow = add((r) => cell(`A${r}`, copy.total, 6) + cell(`B${r}`, '', 6) + cell(`C${r}`, '', 6) +
-    formula(`D${r}`, `ROUND(SUM(D${firstFee}:D${lastFee}),2)`, total), 30);
+    formula(`D${r}`, feeItems.length ? `ROUND(SUM(D${firstFee}:D${lastFee}),2)` : 'ROUND(0,2)', total), 30);
   merges.push(`A${totalRow}:C${totalRow}`);
   const usdRow = add((r) => cell(`A${r}`, copy.usd, 6) + cell(`B${r}`, '', 6) + cell(`C${r}`, '', 6) +
     formula(`D${r}`, `ROUND(D${totalRow}/B5,2)`, Math.round(total / rate * 100) / 100), 29);

@@ -5,8 +5,8 @@
   <meta name="description" content="舟山船舶港口费用报价：引航、拖轮、吨税、靠泊与自定义费用自动汇总，导出中英文 Excel。">
   <meta name="theme-color" content="#142d38"><title>舟港 · 船舶自动报价</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23142d38'/%3E%3Cpath d='M16 37h32l-5 11H22zM28 18h9v19M22 29h21M15 52q8 5 16 0 8 5 17 0' stroke='%237edbc5' stroke-width='3' fill='none'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20261025-simple">
-  <script type="module" src="app.mjs?v=20261026-pilot-overtime"></script>
+  <link rel="stylesheet" href="styles.css?v=20261029-company-config">
+  <script type="module" src="app.mjs?v=20261029-company-config"></script>
 </head>
 <body>
   <aside class="sidebar">
@@ -22,7 +22,11 @@
   <main id="top">
     <header class="topbar"><span>业务工具 <span class="slash">/</span> <b>船舶报价</b></span><span class="device-save" id="save-status">数据仅保存在当前设备</span></header>
     <div class="workspace">
-      <div class="page-heading"><div><div class="eyebrow">VESSEL DISBURSEMENT ESTIMATE</div><h1>船舶港口费用报价<span class="edition">试用版</span></h1><p>填写船舶资料和引水点，费用自动计算。</p></div><div class="heading-actions"><button id="example" type="button" class="button secondary">载入示例 <span>↗</span></button><button type="button" class="button icon-button" id="reset" aria-label="清空报价" title="清空报价">↺</button></div></div>
+      <div class="page-heading"><div><div class="eyebrow">VESSEL DISBURSEMENT ESTIMATE</div><h1>船舶港口费用报价<span class="edition">试用版</span></h1><p id="heading-help">填写船舶资料和引水点，费用自动计算。</p></div><div class="heading-actions"><button id="example" type="button" class="button secondary">载入示例 <span>↗</span></button><button type="button" class="button icon-button" id="reset" aria-label="清空报价" title="清空报价">↺</button></div></div>
+      <section class="company-bar" aria-label="报价单位">
+        <div class="company-identity"><span class="company-eyebrow">当前报价单位</span><select id="company-select" aria-label="选择报价单位"><option value="default">默认公司</option></select><span id="company-status" class="company-status">配置已锁定</span></div>
+        <div class="company-bar-actions"><button id="add-company" type="button" class="button secondary">＋ 新增单位</button><button id="open-company-settings" type="button" class="button secondary">⚙ 单位配置</button></div>
+      </section>
       <form id="quote-form" novalidate>
         <section class="panel vessel-panel" id="vessel">
           <div class="panel-title"><div><span class="section-number">01</span><h2>船舶资料</h2></div></div>
@@ -34,7 +38,7 @@
             <label>汇率 <span class="required">*</span><div class="input-unit"><input name="exchangeRate" id="exchangeRate" type="number" required min="0.000001" step="any" inputmode="decimal" placeholder="1 USD = ?"><span>CNY</span></div><small>1 美元折合人民币，手动录入</small></label>
             <label>码头或船厂 <span class="required">*</span><input name="portName" id="portName" required list="terminals" maxlength="150" autocomplete="off" placeholder="输入或选择官网列出的码头 / 船厂"><datalist id="terminals"></datalist><small id="port-hint">可从官网码头 / 船厂名单选择，也可自行输入</small></label>
           </div>
-          <div class="vessel-footer"><span class="tiny-anchor">⚓</span><span>填完资料并选择引水点后，报价自动显示。</span><span id="demo-badge" class="demo-badge" hidden>当前为示例数据</span></div>
+          <div class="vessel-footer"><span class="tiny-anchor">⚓</span><span id="vessel-help">填完资料并选择引水点后，报价自动显示。</span><span id="demo-badge" class="demo-badge" hidden>当前为示例数据</span></div>
         </section>
         <div class="working-grid">
           <div class="form-stack">
@@ -44,10 +48,10 @@
                 <label>靠泊天数 <span class="required">*</span><div class="input-unit"><input name="berthDays" id="berthDays" type="number" min="0.01" step="any" required><span>天</span></div></label>
                 <label class="quick-route">引水登离轮点 <span class="required">*</span><select name="inRouteId" id="inRouteId" required><option value="">请选择引水登离轮点</option></select><small id="in-route-hint">选择码头后，选一个引水点即可计算。</small><small class="route-default-note">进出港默认同一点位；出港不同可在特殊情况中调整。</small></label>
               </div>
-              <p class="quick-note">默认外贸、散货/杂货船、卸货和30日吨税；靠泊天数可改，拖轮与吨税自动计算。特殊航次再展开调整。</p>
+              <p class="quick-note" id="quick-note">默认外贸、散货/杂货船、卸货和30日吨税；靠泊天数可改，拖轮与吨税自动计算。特殊航次再展开调整。</p>
             </section>
             <details id="advanced-settings" class="advanced-settings">
-              <summary>特殊情况调整（可选）<span>船型、航线、装卸或出港点位不同默认情况时再打开；汇款资料也在这里填写</span></summary>
+              <summary>特殊情况调整（可选）<span>船型、航线、装卸或出港点位不同默认情况时再打开</span></summary>
               <div class="advanced-stack">
             <section class="panel" id="voyage-advanced">
               <div class="panel-title"><div><h2>计费调整</h2></div><div class="trade-switch" role="group" aria-label="贸易类型"><button type="button" data-trade="foreign" class="selected" aria-pressed="true">外贸</button><button type="button" data-trade="domestic" aria-pressed="false">内贸</button></div></div>
@@ -69,10 +73,10 @@
                   <label>离泊载况<select name="outLoad" id="outLoad"><option value="laden">重载</option><option value="half">半载</option><option value="ballast">空载</option></select></label>
                   <label>拖轮艘数<div class="input-unit"><input name="tugOutCount" id="tugOutCount" type="number" min="0" step="1" required><span>艘</span></div></label>
                   <label class="full">拖轮作业次数<div class="input-unit"><input name="tugOutOps" id="tugOutOps" type="number" min="0" step="1" required><span>次</span></div></label>
-                </div><div class="check-line"><label><input type="checkbox" name="pilotOutOvertime" id="pilotOutOvertime">出港加班费 +45%（默认）</label><label><input type="checkbox" name="pilotOutNight" id="pilotOutNight">夜班附加（关闭默认加班后可选）</label><label><input type="checkbox" name="pilotOutHoliday" id="pilotOutHoliday">节假日</label></div></div>
+                </div><div class="check-line"><label><input type="checkbox" name="pilotOutOvertime" id="pilotOutOvertime"><span id="pilot-overtime-toggle-label">出港加班费 +45%（默认）</span></label><label><input type="checkbox" name="pilotOutNight" id="pilotOutNight">夜班附加（关闭默认加班后可选）</label><label><input type="checkbox" name="pilotOutHoliday" id="pilotOutHoliday">节假日</label></div></div>
               </div>
               <div class="inline-note"><span>ⓘ</span><p id="tug-suggestion">填写船长后自动建议拖轮艘数；可手动修改。</p><button type="button" id="auto-tugs" class="text-button">恢复建议</button></div>
-              <details class="advanced"><summary>调整拖轮单价 / 查看夜班口径 <span>＋</span></summary><div class="field-grid"><label>手动拖轮单价（选填）<div class="input-unit"><input name="tugRateOverride" id="tugRateOverride" type="number" min="0" step="0.01" placeholder="留空则按船长与船型匹配"><span>元/艘次</span></div></label><p class="help-text">按本报价默认口径，出港完整原金额另加 45% 加班费，与出港夜班附加不叠加；可关闭后单独选择夜班。官网夜班口径仅对国际航线的基本费及超程费加 45%，非基本港附加不参与；节假日可另选。<button type="button" data-open-rates class="text-button">查看依据</button></p></div></details>
+              <details class="advanced"><summary>调整拖轮单价 / 查看夜班口径 <span>＋</span></summary><div class="field-grid"><label>手动拖轮单价（选填）<div class="input-unit"><input name="tugRateOverride" id="tugRateOverride" type="number" min="0" step="0.01" placeholder="留空则按船长与船型匹配"><span>元/艘次</span></div></label><p class="help-text">出港完整原金额按当前单位配置的比例计算加班费，与出港夜班附加不叠加；可关闭后单独选择夜班。官网夜班口径仅对国际航线的基本费及超程费加 45%，非基本港附加不参与；节假日可另选。<button type="button" data-open-rates class="text-button">查看依据</button></p></div></details>
             </section>
             <section class="panel" id="tax-section">
               <div class="panel-title"><div><span class="section-number">03</span><h2>吨税与报价信息</h2></div><label class="switch-label"><input name="taxEnabled" id="taxEnabled" type="checkbox"><span class="switch-track"></span>计入吨税</label></div>
@@ -86,22 +90,6 @@
                 <label>报价有效期（选填）<input name="validUntil" id="validUntil" type="date"></label>
                 <label class="full">客户 / 委托方（选填）<input name="client" id="client" maxlength="120" placeholder="客户或公司名称"></label>
                 <label class="full">报价备注（选填）<textarea name="notes" id="notes" maxlength="2000" rows="3" placeholder="补充本次报价的约定与说明"></textarea></label>
-              </div>
-            </section>
-            <section class="panel" id="bank-details-section">
-              <div class="panel-title"><div><span class="section-number">05</span><h2>汇款资料</h2></div><span class="panel-caption">选填 · 显示在报价单末尾</span></div>
-              <p class="bank-help">人民币和美元可分别填写；完全留空的币种不会出现在导出文件中。</p>
-              <div class="bank-grid">
-                <div class="bank-card"><h3>人民币 <span>CNY</span></h3>
-                  <label>收款银行<input id="bank-cny-bank" data-bank-currency="cny" data-bank-field="bank" maxlength="160" autocomplete="off" placeholder="银行名称"></label>
-                  <label>银行账号<input id="bank-cny-account" data-bank-currency="cny" data-bank-field="account" maxlength="160" autocomplete="off" placeholder="收款账号"></label>
-                  <label>SWIFT / 交换码<input id="bank-cny-code" data-bank-currency="cny" data-bank-field="code" maxlength="100" autocomplete="off" placeholder="如适用，可填写"></label>
-                </div>
-                <div class="bank-card"><h3>美元 <span>USD</span></h3>
-                  <label>收款银行<input id="bank-usd-bank" data-bank-currency="usd" data-bank-field="bank" maxlength="160" autocomplete="off" placeholder="银行名称"></label>
-                  <label>银行账号<input id="bank-usd-account" data-bank-currency="usd" data-bank-field="account" maxlength="160" autocomplete="off" placeholder="收款账号"></label>
-                  <label>SWIFT / 交换码<input id="bank-usd-code" data-bank-currency="usd" data-bank-field="code" maxlength="100" autocomplete="off" placeholder="如适用，可填写"></label>
-                </div>
               </div>
             </section>
               </div>
@@ -120,11 +108,11 @@
           <aside class="quote-column" id="estimate">
             <section class="estimate-panel"><div class="estimate-heading"><span class="live-dot"></span>实时报价<span class="currency-label">CNY 人民币</span></div><div class="estimate-vessel"><h2 id="preview-vessel">等待录入船舶</h2><p id="preview-meta">填写上方船舶资料，开始计算</p></div>
               <div class="fee-list">
-                <div class="fee-row"><span class="fee-icon">引</span><div><h3>引航费<span>PILOTAGE</span></h3><p id="pilot-detail">进港 + 出港引航</p></div><strong id="pilot-amount">—</strong></div>
+                <div class="fee-row" id="pilot-row"><span class="fee-icon">引</span><div><h3>引航费<span>PILOTAGE</span></h3><p id="pilot-detail">进港 + 出港引航</p></div><strong id="pilot-amount">—</strong></div>
                 <div class="fee-row" id="pilot-overtime-row"><span class="fee-icon">加</span><div><h3>出港引航加班费<span>DEPARTURE OVERTIME</span></h3><p id="pilot-overtime-detail">出港原金额 × 45%</p></div><strong id="pilot-overtime-amount">—</strong></div>
-                <div class="fee-row"><span class="fee-icon">拖</span><div><h3>拖轮费<span>TOWAGE</span></h3><p id="tug-detail">按船长与载况计算</p></div><strong id="tug-amount">—</strong></div>
-                <div class="fee-row"><span class="fee-icon">税</span><div><h3>船舶吨税<span>TONNAGE DUES</span></h3><p id="tax-detail">按净吨、税率与期限计算</p></div><strong id="tax-amount">—</strong></div>
-                <div class="fee-row"><span class="fee-icon">泊</span><div><h3>靠泊费<span>BERTHAGE</span></h3><p id="berth-detail">0.25 × 净吨 × 天数</p></div><strong id="berth-amount">—</strong></div>
+                <div class="fee-row" id="tug-row"><span class="fee-icon">拖</span><div><h3>拖轮费<span>TOWAGE</span></h3><p id="tug-detail">按船长与载况计算</p></div><strong id="tug-amount">—</strong></div>
+                <div class="fee-row" id="tax-row"><span class="fee-icon">税</span><div><h3>船舶吨税<span>TONNAGE DUES</span></h3><p id="tax-detail">按净吨、税率与期限计算</p></div><strong id="tax-amount">—</strong></div>
+                <div class="fee-row" id="berth-row"><span class="fee-icon">泊</span><div><h3>靠泊费<span>BERTHAGE</span></h3><p id="berth-detail">0.25 × 净吨 × 天数</p></div><strong id="berth-amount">—</strong></div>
                 <div id="extra-fee-preview"></div>
               </div>
               <div class="total-block"><div><span>费用合计</span><span class="total-currency">CNY</span></div><strong id="total-amount">—<small>.—</small></strong><div class="usd-line"><span>折合美元 <b id="usd-amount">—</b></span><span id="fx-label">请填写汇率</span></div></div>
@@ -132,14 +120,70 @@
               <div id="quote-warnings" class="quote-warnings" hidden></div>
               <div class="export-actions"><button id="export-xlsx-zh" type="submit" data-export-language="zh" class="button primary">↓ 导出中文 Excel</button><button id="export-xlsx-en" type="submit" data-export-language="en" class="button secondary">↓ Export English Excel</button></div><p class="export-caption">可编辑表格报价单 · 费率说明仅在网页查看</p>
             </section>
-            <div class="basis-note"><span>⌁</span><div><h3>每笔费用，均可追溯</h3><p>引航官网费率 · 拖轮收费资料<br>吨税参考站 · 自定义靠泊天数</p><button type="button" class="text-button" data-open-rates>查看费率与计算口径 <span>↗</span></button></div></div>
+            <div class="basis-note"><span>⌁</span><div><h3>每笔费用，均可追溯</h3><p>当前单位费率与费用模块<br>参考数据和计算口径</p><button type="button" class="text-button" data-open-rates>查看费率与计算口径 <span>↗</span></button></div></div>
           </aside>
         </div>
       </form>
       <footer class="page-footer"><span>舟港报价工作台</span><span>币种：人民币 / 美元折算 · 费用按输入条件估算</span></footer>
     </div>
   </main>
-  <dialog id="rates-dialog"><div class="dialog-header"><div><div class="eyebrow">RATE REFERENCES</div><h2>费率与计算口径</h2></div><button type="button" id="close-rates" class="button icon-button" aria-label="关闭费率说明">×</button></div><div class="dialog-body">
+  <dialog id="company-dialog" aria-labelledby="company-dialog-title">
+    <div class="dialog-header"><div><div class="eyebrow">COMPANY SETTINGS</div><h2 id="company-dialog-title">报价单位配置</h2></div><button id="company-cancel" type="button" class="button icon-button" aria-label="关闭单位配置">×</button></div>
+    <form id="company-form" novalidate>
+      <div class="company-setup-head"><p>设置好费率、费用模块与汇款资料后保存并锁定。日常报价只需填写本次船舶信息。</p><button id="company-lock-toggle" type="button" class="button secondary">解锁修改</button></div>
+      <p id="company-locked-note" class="company-locked-note">当前配置已锁定，报价时不会更改。需要调整时点击“解锁修改”。</p>
+      <label class="company-name-field">单位名称 <span class="required">*</span><input id="company-name" maxlength="80" required placeholder="输入公司或单位名称"></label>
+
+      <fieldset class="company-module-list"><legend>启用的费用模块</legend>
+        <label><input id="company-module-pilot" type="checkbox"> 引航费</label>
+        <label><input id="company-module-tug" type="checkbox"> 拖轮费</label>
+        <label><input id="company-module-tax" type="checkbox"> 船舶吨税</label>
+        <label><input id="company-module-berth" type="checkbox"> 码头靠泊费</label>
+      </fieldset>
+
+      <details class="company-rate-group"><summary><span>引航与靠泊费率</span><small>外贸分段、内贸费率、出港加班费和靠泊单价</small></summary>
+        <div class="company-field-grid">
+          <label>外贸前 40,000 净吨基本费率<input id="company-pilot-foreign-0" type="number" min="0" step="any" required></label>
+          <label>外贸 40,001–80,000 净吨基本费率<input id="company-pilot-foreign-1" type="number" min="0" step="any" required></label>
+          <label>外贸 80,001–120,000 净吨基本费率<input id="company-pilot-foreign-2" type="number" min="0" step="any" required></label>
+          <label>外贸非基本港附加 / 净吨<input id="company-pilot-additional" type="number" min="0" step="any" required></label>
+          <label>外贸超 10 海里每海里 / 净吨<input id="company-pilot-distance" type="number" min="0" step="any" required></label>
+          <label>内贸基本费率 / 净吨<input id="company-pilot-domestic" type="number" min="0" step="any" required></label>
+          <label>内贸超 10 海里每海里 / 净吨<input id="company-pilot-domestic-distance" type="number" min="0" step="any" required></label>
+          <label>出港引航加班比例（如 0.45）<input id="company-overtime-rate" type="number" min="0" step="any" required></label>
+          <label>靠泊费 / 净吨·天<input id="company-berth-rate" type="number" min="0" step="any" required></label>
+        </div>
+        <p class="company-rate-note">计费吨位档位、10 海里起计距离与登离轮点沿用当前舟山费率口径；此处调整的是各档价格。</p>
+      </details>
+
+      <details class="company-rate-group"><summary><span>拖轮单价表</span><small>按船长、船型、内外贸分别设置</small></summary>
+        <div class="table-scroll"><table class="company-rate-table"><thead><tr><th rowspan="2">船长（米）</th><th colspan="3">外贸 元/艘次</th><th colspan="3">内贸 元/艘次</th></tr><tr><th>集装箱</th><th>油轮</th><th>散杂货</th><th>集装箱</th><th>油轮</th><th>散杂货</th></tr></thead><tbody id="company-tug-rates"></tbody></table></div>
+      </details>
+
+      <details class="company-rate-group"><summary><span>吨税费率表</span><small>按净吨档位、税率类型与期限分别设置</small></summary>
+        <div class="table-scroll"><table class="company-rate-table"><thead><tr><th rowspan="2">净吨档位</th><th colspan="3">普通税率 元/净吨</th><th colspan="3">优惠税率 元/净吨</th></tr><tr><th>30 日</th><th>90 日</th><th>365 日</th><th>30 日</th><th>90 日</th><th>365 日</th></tr></thead><tbody id="company-tax-rates"></tbody></table></div>
+      </details>
+
+      <section class="company-config-section"><div class="company-config-heading"><div><h3>固定其他费用</h3><p>每份报价自动带入，可在本次报价的“其他费用”中继续添加临时项目。</p></div><button id="company-add-fixed-fee" type="button" class="button secondary">＋ 添加固定费用</button></div><div id="company-fixed-fees" class="extra-fee-fields"></div></section>
+
+      <section class="company-config-section"><div class="company-config-heading"><div><h3>汇款资料</h3><p>按单位保存，导出的中文和英文 Excel 会自动带入已填写的人民币、美元账户。</p></div></div>
+        <div class="bank-grid">
+          <div class="bank-card"><h3>人民币 <span>CNY</span></h3>
+            <label>收款银行<input id="company-bank-cny-bank" maxlength="160" autocomplete="off" placeholder="银行名称"></label>
+            <label>银行账号<input id="company-bank-cny-account" maxlength="160" autocomplete="off" placeholder="收款账号"></label>
+            <label>SWIFT / 交换码<input id="company-bank-cny-code" maxlength="100" autocomplete="off" placeholder="如适用，可填写"></label>
+          </div>
+          <div class="bank-card"><h3>美元 <span>USD</span></h3>
+            <label>收款银行<input id="company-bank-usd-bank" maxlength="160" autocomplete="off" placeholder="银行名称"></label>
+            <label>银行账号<input id="company-bank-usd-account" maxlength="160" autocomplete="off" placeholder="收款账号"></label>
+            <label>SWIFT / 交换码<input id="company-bank-usd-code" maxlength="100" autocomplete="off" placeholder="如适用，可填写"></label>
+          </div>
+        </div>
+      </section>
+      <div class="company-dialog-footer"><span>配置仅存于当前浏览器；锁定用于防误改，不是登录权限。</span><button id="company-save" type="submit" class="button primary">保存并锁定</button></div>
+    </form>
+  </dialog>
+  <dialog id="rates-dialog"><div class="dialog-header"><div><div class="eyebrow">RATE REFERENCES</div><h2>费率与计算口径</h2></div><button type="button" id="close-rates" class="button icon-button" aria-label="关闭费率说明">×</button></div><div class="dialog-body"><p class="source-issue">以下是系统初始参考费率及计算口径；当前报价金额按页面顶部所选单位的配置计算。拖轮表显示当前单位费率。</p>
     <article><h3>01 引航费</h3><p>按<a href="https://www.zspilot.com.cn/news_viewn.asp?newsid=603&LM=150" target="_blank" rel="noopener">指定的舟山引航站费率表（2023年9月实行）</a>设置基础费率与75条常规路线；夜班及节假日参考<a href="https://www.zspilot.com.cn/news_viewn.asp?newsid=2362&lm=150" target="_blank" rel="noopener">2024年官网补充表</a>。</p><p>外贸基本费分段：前40,000净吨 × 0.405，次40,000 × 0.36，再40,000 × 0.3375；基本费最高44,100元。另加非基本港附加0.27 × 计费净吨，以及超出10海里部分 × 0.004 × 计费净吨。内贸：计费净吨 × [0.18 + 超出10海里部分 × 0.0018]。</p><p>按<a href="https://zj.singlewindow.cn/pen-portal/guide/announce/hz/admiralty.jspa" target="_blank" rel="noopener">舟山收费公示</a>及<a href="https://jtyst.fj.gov.cn/mzwgk/zcfg/gz/201910/t20191021_5071052.htm" target="_blank" rel="noopener">港口收费计费办法</a>，引航净吨与海里向上进整，外贸最低2,000计费吨、国内沿海最低500计费吨。首次进港与最后出港分别计算。夜班或节假日达到作业时间一半，或达0.5小时，才勾选附加；国际航线每项加45%，两项合计90%，非基本港0.27附加不参加加成。</p><p>按本报价指定的默认口径，出港完整原金额（含非基本港附加）另外计算 45% 加班费；进港原价、出港原价及这笔加班费相加。此为报价业务规则，与官网夜班附加的计费基数不同；两者不重复计算。特殊航次可关闭默认出港加班费，再单独选出港夜班。节假日按勾选另计。</p><p>首版覆盖常规进出港引航，不包含移泊、超范围引航及其他未列项目。所属北/中/南区域由用户手选；进出港分别选择官网引水登离轮点，自动采用对应里程。</p></article>
     <article><h3>02 拖轮费</h3><p>采用你提供的《拖轮收费.doc》，按船长、船型、国内/国际航线匹配元/拖轮艘次。费用 = 单价 ×（靠泊艘数 × 作业次数 + 离泊艘数 × 作业次数）。装货默认空载靠、重载离；卸货默认重载靠、空载离；均可调整。</p><div class="source-issue">原件费率区间端点未明确，首版采用“80米及以下首档、其余各档上限包含”。配置表首行“80＜L 不配置”与后文冲突，80米以下暂按0艘。档位边界及实际艘数请核对，系统支持手动修改单价、艘数和次数。</div><div class="table-scroll"><table id="tug-rate-table"><thead><tr><th>船长（米）</th><th>集装箱 / 滚装 / 客船</th><th>油 / 化学 / 液化气</th><th>散货 / 杂货 / 其他</th></tr></thead><tbody></tbody></table></div><small>表格随主页面外贸 / 内贸选项切换；单位：元/拖轮艘次。</small></article>
     <article><h3>03 船舶吨税</h3><p>费率与<a href="https://www.zsagent01.com/dues/" target="_blank" rel="noopener">指定吨税计算器</a>一致，按整船净吨所在档位计算，非累进。支持普通/优惠税率及30、90、365日。国籍输入中文后按参考站名单推荐税率，仍可手动更改。不因切换内贸而自动免税；不需要本次缴纳时，请关闭“计入吨税”。利比里亚优惠来源标注有效至2029年12月10日。</p></article>
