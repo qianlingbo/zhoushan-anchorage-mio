@@ -27,7 +27,8 @@ body.tool-page :is(.workspace,.details-grid,.form-row,.below-grid) > * { min-wid
 
 .tool-page .tool-site-nav {
   box-sizing:border-box;
-  display:flex;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
   align-items:center;
   justify-content:space-between;
   flex-wrap:wrap;
@@ -49,6 +50,8 @@ body.tool-page :is(.workspace,.details-grid,.form-row,.below-grid) > * { min-wid
   text-decoration:none;
 }
 .tool-page .tool-site-home span { margin-top:3px; color:var(--tool-muted); font-size:12px; font-weight:400; }
+.tool-page .tool-site-contact { display:flex; flex-direction:column; justify-self:center; gap:4px; margin:0; color:var(--tool-muted); font-size:12px; line-height:1.6; }
+.tool-page .tool-site-contact span:first-child { color:var(--tool-text); font-weight:600; }
 .tool-page .tool-site-links { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px 22px; }
 .tool-page .tool-site-links a {
   display:inline-flex;
@@ -76,6 +79,7 @@ body.tool-page :is(.workspace,.details-grid,.form-row,.below-grid) > * { min-wid
 .tool-page :is(.agent-skill-card>code,.install-command) { white-space:normal; overflow-wrap:anywhere; }
 .tool-page :is(.skill-panel,.hero-stamp) { box-shadow:none; transform:none; }
 .tool-page :is(.contact-float,.contact-corner,.contact-card) {
+  display:none;
   position:static;
   inset:auto;
   float:none;
@@ -134,7 +138,7 @@ body.tool-page :is(.workspace,.details-grid,.form-row,.below-grid) > * { min-wid
   :root:not([data-theme]) .tool-page[data-tool="kaobo"] { --tool-text:#e1ebe7; --tool-muted:#b1c4bd; --tool-accent:#81cfb7; --tool-line:#40514a; }
 }
 @media (max-width:900px) {
-  .tool-page .tool-site-nav { width:calc(100% - 32px); justify-content:center; text-align:center; gap:8px; }
+  .tool-page .tool-site-nav { display:flex; width:calc(100% - 32px); justify-content:center; text-align:center; gap:8px 24px; }
   .tool-page .tool-site-links { gap:6px 16px; }
   .tool-page[data-tool="dues"] :is(.workspace,.details-grid) { grid-template-columns:minmax(0,1fr); }
 }

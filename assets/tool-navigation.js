@@ -21,6 +21,16 @@
   home.append(back);
   navigation.append(home);
 
+  const contact = document.createElement('aside');
+  contact.className = 'tool-site-contact';
+  contact.setAttribute('aria-label', '公众号与个人微信联系方式');
+  for (const text of ['公众号：舟山船舶代理笔记', '个人微信号：zsagent01']) {
+    const line = document.createElement('span');
+    line.textContent = text;
+    contact.append(line);
+  }
+  navigation.append(contact);
+
   const links = document.createElement('div');
   links.className = 'tool-site-links';
   for (const [route, title] of tools) {
