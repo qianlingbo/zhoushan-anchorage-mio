@@ -1,0 +1,143 @@
+/* Shared desktop hierarchy and navigation; calculation views retain their own data styles. */
+body.tool-page {
+  --tool-text:#20383c;
+  --tool-muted:#53696c;
+  --tool-accent:#166760;
+  --tool-line:#ccd8d4;
+  background:var(--background,#f5f6f2);
+  background-image:none;
+  font-family:"Avenir Next","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+body.tool-page::before { display:none; }
+body.tool-page ::selection { background:#cbe2db; color:#173b37; }
+body.tool-page :is(a,button,input,select,summary):focus-visible {
+  outline:2px solid var(--tool-accent);
+  outline-offset:4px;
+}
+body.tool-page :is(button,input,select) { font-family:inherit; }
+body.tool-page :is(button,input:not([type="radio"]):not([type="checkbox"]),select) { min-height:42px; }
+body.tool-page :is(button,a) { transition:background-color 160ms ease,color 160ms ease,border-color 160ms ease; }
+body.tool-page button:disabled { cursor:not-allowed; opacity:.55; }
+body.tool-page :is(input,select) { caret-color:var(--tool-accent); font-variant-numeric:tabular-nums; }
+body.tool-page :is(.page-shell,.app-shell,.shell,.dashboard) { max-width:1440px; margin-left:auto; margin-right:auto; }
+body.tool-page :is(.workspace,.details-grid,.form-row,.below-grid) > * { min-width:0; }
+
+.tool-page .tool-site-nav {
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:16px 32px;
+  width:calc(100% - 64px);
+  max-width:1440px;
+  margin:0 auto 24px;
+  padding:22px 0 18px;
+  border-bottom:1px solid var(--tool-line);
+  color:var(--tool-text);
+  line-height:1.5;
+}
+.tool-page .tool-site-home {
+  display:flex;
+  flex-direction:column;
+  color:inherit;
+  font-size:17px;
+  font-weight:700;
+  text-decoration:none;
+}
+.tool-page .tool-site-home span { margin-top:3px; color:var(--tool-muted); font-size:12px; font-weight:400; }
+.tool-page .tool-site-links { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px 22px; }
+.tool-page .tool-site-links a {
+  display:inline-flex;
+  align-items:center;
+  min-height:42px;
+  padding:4px 2px;
+  border-bottom:2px solid transparent;
+  color:var(--tool-muted);
+  font-size:14px;
+  font-weight:500;
+  text-decoration:none;
+}
+.tool-page .tool-site-links a:hover { color:var(--tool-accent); border-bottom-color:var(--tool-line); }
+.tool-page .tool-site-links a[aria-current="page"] { color:var(--tool-accent); border-bottom-color:var(--tool-accent); font-weight:700; }
+.tool-page :is(.hero h1,.topbar h1) { font-family:inherit; font-size:2rem; font-weight:650; line-height:1.3; letter-spacing:-.025em; }
+.tool-page .hero { padding-top:28px; padding-bottom:32px; }
+.tool-page .hero h1 em { font-style:normal; }
+.tool-page :is(.hero-lede,.hero-note,.subtitle,.intro) { font-size:16px; line-height:1.8; }
+.tool-page :is(.hero .eyebrow,.step-label) { display:none; }
+.tool-page :is(.field-hint,.source-note,.table-note,.country-intro,.card-note,.hero-method,.rule-foot,.result-disclaimer) { font-size:12px; line-height:1.7; }
+.tool-page :is(.card-heading h2,.panel-heading h2,.section-heading h2) { font-family:inherit; font-size:21px; font-weight:650; letter-spacing:-.02em; }
+.tool-page :is(.field-block label,.duration-block legend,.meta-label) { font-size:14px; }
+.tool-page :is(.calculator-card,.panel,.timeline-card,.windows-card,.sun-card,.year-card,.control-panel,.agent-skill-card) { box-shadow:none; border-radius:12px; }
+.tool-page :is(.field-hint,.source-note,.table-note,.country-intro,.card-note,.rule-foot) { color:var(--tool-muted); }
+.tool-page :is(.agent-skill-card>code,.install-command) { white-space:normal; overflow-wrap:anywhere; }
+.tool-page :is(.skill-panel,.hero-stamp) { box-shadow:none; transform:none; }
+.tool-page :is(.contact-float,.contact-corner,.contact-card) {
+  position:static;
+  inset:auto;
+  float:none;
+  width:fit-content;
+  min-width:0;
+  max-width:100%;
+  margin:28px auto;
+  box-shadow:none;
+}
+.tool-page :is(.contact-float,.contact-corner,.contact-card) :is(strong,b) { font-size:13px; white-space:normal; }
+.tool-page :is(.contact-float,.contact-corner,.contact-card) :is(small,.contact-label) { font-size:12px; }
+
+/* Tax rates scroll inside their own panel, never widen the page. */
+.tool-page[data-tool="dues"] .page-shell { max-width:1280px; }
+.tool-page[data-tool="dues"] .hero { gap:32px; align-items:center; }
+.tool-page[data-tool="dues"] .topbar { display:none; }
+.tool-page[data-tool="dues"] .hero-copy { min-width:0; }
+.tool-page[data-tool="dues"] .hero h1 { margin-top:0; font-size:2.5rem; }
+.tool-page[data-tool="dues"] .workspace { grid-template-columns:minmax(0,1.45fr) minmax(320px,.85fr); }
+.tool-page[data-tool="dues"] .details-grid { grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); }
+.tool-page[data-tool="dues"] .rate-table-wrap { max-width:100%; overflow-x:auto; }
+.tool-page[data-tool="dues"] .amount-line { padding:16px 0; border-radius:0; border:0; border-top:1px solid #5a7e86; border-bottom:1px solid #5a7e86; background:none; box-shadow:none; }
+.tool-page[data-tool="dues"] .amount-line strong { color:#fffdf5; font-size:42px; line-height:1.2; letter-spacing:-.03em; white-space:normal; overflow-wrap:anywhere; }
+.tool-page[data-tool="dues"] .amount-line .currency-symbol { color:#cce3dd; font-size:26px; }
+.tool-page[data-tool="dues"] .amount-line .currency-unit { color:#cce3dd; }
+.tool-page[data-tool="dues"] .result-card::after { display:none; }
+.tool-page[data-tool="dues"] .result-disclaimer { color:#c0d4d4; }
+.tool-page[data-tool="dues"] .amount-uppercase { background:none; border:0; padding:0; }
+.tool-page[data-tool="dues"] .result-breakdown :is(span,small),
+.tool-page[data-tool="dues"] .result-formula { color:#c0d4d4; font-size:12px; }
+.tool-page[data-tool="dues"] .field-hint { flex-wrap:wrap; }
+.tool-page[data-tool="dues"] .duration-option:has(input:focus-visible) { outline:2px solid var(--tool-accent); outline-offset:4px; }
+.tool-page[data-tool="dues"] .country-chips { max-height:230px; overflow-y:auto; }
+.tool-page[data-tool="dues"] .country-chip { font-size:12px; }
+.tool-page[data-tool="dues"] .hero-stamp { border-radius:12px; background:#eef3ed; }
+.tool-page[data-tool="guanmen"] .app-shell { padding:0 32px; }
+.tool-page[data-tool="guanmen"] .hero::after { display:none; }
+.tool-page[data-tool="guanmen"] .hero h1 { font-size:36px; }
+.tool-page[data-tool="guanmen"] .hero-aside { width:360px; max-width:100%; }
+.tool-page[data-tool="guanmen"] .topbar { height:auto; min-height:60px; gap:24px; flex-wrap:wrap; }
+.tool-page[data-tool="guanmen"] :is(.legend,.window-time small,.window-direction,.topbar-right) { font-size:12px; }
+.tool-page[data-tool="weather"] .skill-banner { position:static; transform:none; width:fit-content; margin:24px auto; background:#1b5d69; border-radius:8px; box-shadow:none; }
+.tool-page[data-tool="weather"] .meta-card { box-shadow:none; }
+.tool-page[data-tool="kaobo"] .topbar { position:static; box-shadow:none; background:var(--surface); backdrop-filter:none; }
+.tool-page[data-tool="kaobo"] .topbar h1 { font-size:24px; max-width:32em; }
+.tool-page[data-tool="tide"] .hero { box-shadow:none; background:#fff; }
+.tool-page[data-tool="tide"] .hero h1 { font-size:30px; }
+.tool-page[data-tool="tide"] .shell { padding-top:0; }
+.tool-page[data-tool="tide"] .floating-tools { position:static; inset:auto; width:fit-content; max-width:100%; margin:24px auto; display:flex; flex-direction:column; align-items:center; gap:12px; }
+.tool-page[data-tool="tide"] .floating-tools .contact-float { margin:0; }
+.tool-page[data-tool="tide"] :is(.compact-control small,.window-row span,.section-title>span) { font-size:12px; line-height:1.6; }
+.tool-page .contact-close { position:static; align-self:flex-end; }
+
+:root[data-theme="dark"] .tool-page { --tool-text:#e1ebe7; --tool-muted:#b1c4bd; --tool-accent:#81cfb7; --tool-line:#40514a; }
+@media (prefers-color-scheme:dark) {
+  :root:not([data-theme]) .tool-page[data-tool="kaobo"] { --tool-text:#e1ebe7; --tool-muted:#b1c4bd; --tool-accent:#81cfb7; --tool-line:#40514a; }
+}
+@media (max-width:900px) {
+  .tool-page .tool-site-nav { width:calc(100% - 32px); justify-content:center; text-align:center; gap:8px; }
+  .tool-page .tool-site-links { gap:6px 16px; }
+  .tool-page[data-tool="dues"] :is(.workspace,.details-grid) { grid-template-columns:minmax(0,1fr); }
+}
+@media (prefers-reduced-motion:reduce) {
+  body.tool-page :is(a,button) { transition:none; }
+}
