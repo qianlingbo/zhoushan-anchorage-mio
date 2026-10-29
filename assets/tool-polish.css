@@ -52,6 +52,10 @@ body.tool-page :is(.workspace,.details-grid,.form-row,.below-grid) > * { min-wid
 .tool-page .tool-site-home span { margin-top:3px; color:var(--tool-muted); font-size:12px; font-weight:400; }
 .tool-page .tool-site-contact { display:flex; flex-direction:column; justify-self:center; gap:4px; margin:0; color:var(--tool-muted); font-size:12px; line-height:1.6; }
 .tool-page .tool-site-contact span:first-child { color:var(--tool-text); font-weight:600; }
+.tool-page .tool-site-language { display:flex; justify-content:center; gap:4px; margin-top:8px; }
+.tool-page .tool-site-language button { min-height:36px; padding:5px 16px; border:1px solid var(--tool-line); border-radius:6px; background:transparent; color:var(--tool-muted); font-size:13px; font-weight:600; cursor:pointer; }
+.tool-page .tool-site-language button:hover { border-color:var(--tool-accent); color:var(--tool-accent); }
+.tool-page .tool-site-language button[aria-pressed="true"] { background:var(--tool-accent); border-color:var(--tool-accent); color:#fff; }
 .tool-page .tool-site-links { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px 22px; }
 .tool-page .tool-site-links a {
   display:inline-flex;
@@ -128,7 +132,7 @@ body.tool-page :is(.workspace,.details-grid,.form-row,.below-grid) > * { min-wid
 .tool-page[data-tool="tide"] .hero { box-shadow:none; background:#fff; }
 .tool-page[data-tool="tide"] .hero h1 { font-size:30px; }
 .tool-page[data-tool="tide"] .shell { padding-top:0; }
-.tool-page[data-tool="tide"] .floating-tools { position:static; inset:auto; width:fit-content; max-width:100%; margin:24px auto; display:flex; flex-direction:column; align-items:center; gap:12px; }
+.tool-page[data-tool="tide"] .floating-tools { display:none; }
 .tool-page[data-tool="tide"] .floating-tools .contact-float { margin:0; }
 .tool-page[data-tool="tide"] :is(.compact-control small,.window-row span,.section-title>span) { font-size:12px; line-height:1.6; }
 .tool-page .contact-close { position:static; align-self:flex-end; }

@@ -29,6 +29,26 @@
     line.textContent = text;
     contact.append(line);
   }
+  let languageButtons = [];
+  if (current === 'tide') {
+    const languages = document.createElement('div');
+    languages.className = 'tool-site-language';
+    languages.setAttribute('role', 'group');
+    languages.setAttribute('aria-label', '语言 / Language');
+    languageButtons = ['中文', 'EN'].map((title, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = title;
+      button.setAttribute('aria-pressed', 'false');
+      button.disabled = true;
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.floating-tools .language-switch button')[index]?.click();
+      });
+      languages.append(button);
+      return button;
+    });
+    contact.append(languages);
+  }
   navigation.append(contact);
 
   const links = document.createElement('div');
@@ -52,9 +72,21 @@
 
   // The exported tide app hydrates the document and can replace head/body nodes.
   if (current === 'tide') {
+    // Keep the app-owned controls in place; relay selection through its existing handlers.
+    const syncLanguage = () => {
+      const originals = document.querySelectorAll('.floating-tools .language-switch button');
+      languageButtons.forEach((button, index) => {
+        const original = originals[index];
+        button.disabled = !original;
+        const selected = String(!!original?.classList.contains('active'));
+        if (button.getAttribute('aria-pressed') !== selected) button.setAttribute('aria-pressed', selected);
+      });
+    };
     const observer = new MutationObserver(() => {
       if (!navigation.isConnected || (stylesheet && !stylesheet.isConnected)) mount();
+      syncLanguage();
     });
-    observer.observe(document.documentElement, { childList:true, subtree:true });
+    observer.observe(document.documentElement, { childList:true, subtree:true, attributes:true, attributeFilter:['class'] });
+    syncLanguage();
   }
 })();
