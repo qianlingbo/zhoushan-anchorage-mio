@@ -445,7 +445,7 @@ function renderCompanySelector() {
   });
   $('company-select').replaceChildren(...options);
   $('company-select').value = activeCompanyId;
-  $('company-status').textContent = `${activeCompany().locked ? '配置已锁定' : '配置待锁定'} · 仅当前浏览器`;
+  $('company-status').textContent = '配置可编辑 · 仅当前浏览器';
 }
 
 function companyRateInput(value, kind, row, group, column) {
@@ -515,21 +515,10 @@ function renderCompanyFixedFees(fees) {
   $('company-fixed-fees').replaceChildren(...rows);
 }
 
-function setCompanyEditable(editable) {
-  $('company-form').querySelectorAll('input').forEach((input) => { input.disabled = !editable; });
-  $('company-add-fixed-fee').disabled = !editable;
-  $('company-fixed-fees').querySelectorAll('button').forEach((button) => { button.disabled = !editable; });
-  $('company-save').disabled = !editable;
-  $('company-lock-toggle').hidden = editable;
-  $('company-locked-note').textContent = editable
-    ? '修改后点击“保存并锁定”，新报价将按该单位的配置计算。'
-    : '当前配置已锁定，报价时不会更改。需要调整时点击“解锁修改”。';
-}
-
 function openCompanySettings(newCompany = false) {
   addingCompany = newCompany;
   companyDraft = newCompany
-    ? { ...createDefaultCompanyConfig(`company-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`, '新单位'), locked: false }
+    ? createDefaultCompanyConfig(`company-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`, '新单位')
     : structuredClone(activeCompany());
   $('company-name').value = companyDraft.name;
   for (const key of ['pilot', 'tug', 'tax', 'berth']) $(`company-module-${key}`).checked = companyDraft.modules[key];
@@ -545,7 +534,6 @@ function openCompanySettings(newCompany = false) {
   renderCompanyRateTables(companyDraft);
   renderCompanyFixedFees(companyDraft.fixedFees);
   for (const currency of bankCurrencies) for (const field of bankFields) $(`company-bank-${currency}-${field}`).value = companyDraft.bankDetails[currency][field];
-  setCompanyEditable(!companyDraft.locked);
   $('company-dialog').showModal();
 }
 
@@ -555,7 +543,7 @@ function companyRateValue(kind, row, group, column) {
 
 function readCompanySettings() {
   return validateCompanyConfig({
-    ...companyDraft, name: $('company-name').value, locked: true,
+    ...companyDraft, name: $('company-name').value,
     modules: Object.fromEntries(['pilot', 'tug', 'tax', 'berth'].map((key) => [key, $(`company-module-${key}`).checked])),
     pilot: {
       foreignBands: [0, 1, 2].map((index) => $(`company-pilot-foreign-${index}`).value),
@@ -599,23 +587,22 @@ $('company-select').addEventListener('change', (event) => {
 $('add-company').addEventListener('click', () => openCompanySettings(true));
 $('open-company-settings').addEventListener('click', () => openCompanySettings());
 $('company-cancel').addEventListener('click', () => $('company-dialog').close());
-$('company-lock-toggle').addEventListener('click', () => { companyDraft.locked = false; setCompanyEditable(true); $('company-name').focus(); });
 $('company-add-fixed-fee').addEventListener('click', () => {
   const fees = companyFixedFeeValues();
   fees.push({ nameZh: '', nameEn: '', amount: '' });
-  renderCompanyFixedFees(fees); setCompanyEditable(true);
+  renderCompanyFixedFees(fees);
   $('company-fixed-fees').querySelectorAll('[data-company-fixed="nameZh"]')[fees.length - 1]?.focus();
 });
 $('company-fixed-fees').addEventListener('click', (event) => {
   const button = event.target.closest('[data-company-remove-fixed]');
   if (!button) return;
   const fees = companyFixedFeeValues(); fees.splice(Number(button.dataset.companyRemoveFixed), 1);
-  renderCompanyFixedFees(fees); setCompanyEditable(true);
+  renderCompanyFixedFees(fees);
 });
 $('company-form').addEventListener('submit', (event) => {
   event.preventDefault();
-  if (!companyDraft || companyDraft.locked) return;
-  const invalid = [...$('company-form').querySelectorAll('input')].find((input) => !input.disabled && !input.checkValidity());
+  if (!companyDraft) return;
+  const invalid = [...$('company-form').querySelectorAll('input')].find((input) => !input.checkValidity());
   if (invalid) { focusField(invalid); invalid.reportValidity(); toast('请检查单位名称和各项费率'); return; }
   let saved;
   try { saved = readCompanySettings(); }
@@ -635,7 +622,7 @@ $('company-form').addEventListener('submit', (event) => {
   }
   renderCompanySelector(); render(); save();
   $('company-dialog').close();
-  toast(`“${saved.name}”的报价配置已保存并锁定`);
+  toast(`“${saved.name}”的报价配置已保存至当前浏览器`);
 });
 
 form.addEventListener('input', (event) => {

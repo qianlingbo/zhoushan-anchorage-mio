@@ -19,7 +19,7 @@ const bankDetails = () => ({
 
 export function createDefaultCompanyConfig(id = 'default', name = '默认公司') {
   return {
-    version: 1, id, name, locked: true,
+    version: 1, id, name,
     modules: { pilot: true, tug: true, tax: true, berth: true },
     pilot: {
       foreignBands: PILOT_RULES.foreign.bands.map((band) => band.rate),
@@ -44,7 +44,6 @@ export function validateCompanyConfig(input) {
   if (!/^[a-z0-9][a-z0-9_-]*$/i.test(id)) throw new Error('公司标识格式无效。');
   const name = text(input.name, '公司名称', 80);
   if (!name) throw new Error('请填写公司名称。');
-  if (typeof input.locked !== 'boolean') throw new Error('公司配置锁定状态无效。');
   if (!input.modules || typeof input.modules !== 'object') throw new Error('费用模块配置无效。');
   const modules = {};
   for (const key of ['pilot', 'tug', 'tax', 'berth']) {
@@ -97,5 +96,5 @@ export function validateCompanyConfig(input) {
       banks[currency][field] = text(input.bankDetails?.[currency]?.[field], `${currency}汇款资料`, field === 'code' ? 100 : 160);
     }
   }
-  return { version: 1, id, name, locked: input.locked, modules, pilot, tugRates, taxRates, berthRate, fixedFees, bankDetails: banks };
+  return { version: 1, id, name, modules, pilot, tugRates, taxRates, berthRate, fixedFees, bankDetails: banks };
 }

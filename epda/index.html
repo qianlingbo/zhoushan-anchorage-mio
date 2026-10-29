@@ -5,8 +5,8 @@
   <meta name="description" content="舟山船舶港口费用报价：引航、拖轮、吨税、靠泊与自定义费用自动汇总，导出中英文 Excel。">
   <meta name="theme-color" content="#142d38"><title>舟港 · 船舶自动报价</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23142d38'/%3E%3Cpath d='M16 37h32l-5 11H22zM28 18h9v19M22 29h21M15 52q8 5 16 0 8 5 17 0' stroke='%237edbc5' stroke-width='3' fill='none'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20261029-company-config">
-  <script type="module" src="app.mjs?v=20261029-company-config"></script>
+  <link rel="stylesheet" href="styles.css?v=20261029-open-config">
+  <script type="module" src="app.mjs?v=20261029-open-config"></script>
 </head>
 <body>
   <aside class="sidebar">
@@ -24,7 +24,7 @@
     <div class="workspace">
       <div class="page-heading"><div><div class="eyebrow">VESSEL DISBURSEMENT ESTIMATE</div><h1>船舶港口费用报价<span class="edition">试用版</span></h1><p id="heading-help">填写船舶资料和引水点，费用自动计算。</p></div><div class="heading-actions"><button id="example" type="button" class="button secondary">载入示例 <span>↗</span></button><button type="button" class="button icon-button" id="reset" aria-label="清空报价" title="清空报价">↺</button></div></div>
       <section class="company-bar" aria-label="报价单位">
-        <div class="company-identity"><span class="company-eyebrow">当前报价单位</span><select id="company-select" aria-label="选择报价单位"><option value="default">默认公司</option></select><span id="company-status" class="company-status">配置已锁定</span></div>
+        <div class="company-identity"><span class="company-eyebrow">当前报价单位</span><select id="company-select" aria-label="选择报价单位"><option value="default">默认公司</option></select><span id="company-status" class="company-status">配置可编辑 · 仅当前浏览器</span></div>
         <div class="company-bar-actions"><button id="add-company" type="button" class="button secondary">＋ 新增单位</button><button id="open-company-settings" type="button" class="button secondary">⚙ 单位配置</button></div>
       </section>
       <form id="quote-form" novalidate>
@@ -130,8 +130,7 @@
   <dialog id="company-dialog" aria-labelledby="company-dialog-title">
     <div class="dialog-header"><div><div class="eyebrow">COMPANY SETTINGS</div><h2 id="company-dialog-title">报价单位配置</h2></div><button id="company-cancel" type="button" class="button icon-button" aria-label="关闭单位配置">×</button></div>
     <form id="company-form" novalidate>
-      <div class="company-setup-head"><p>设置好费率、费用模块与汇款资料后保存并锁定。日常报价只需填写本次船舶信息。</p><button id="company-lock-toggle" type="button" class="button secondary">解锁修改</button></div>
-      <p id="company-locked-note" class="company-locked-note">当前配置已锁定，报价时不会更改。需要调整时点击“解锁修改”。</p>
+      <div class="company-setup-head"><p>所有使用者均可直接修改费率、费用模块与汇款资料；保存后，此浏览器会沿用这套配置。</p></div>
       <label class="company-name-field">单位名称 <span class="required">*</span><input id="company-name" maxlength="80" required placeholder="输入公司或单位名称"></label>
 
       <fieldset class="company-module-list"><legend>启用的费用模块</legend>
@@ -180,7 +179,7 @@
           </div>
         </div>
       </section>
-      <div class="company-dialog-footer"><span>配置仅存于当前浏览器；锁定用于防误改，不是登录权限。</span><button id="company-save" type="submit" class="button primary">保存并锁定</button></div>
+      <div class="company-dialog-footer"><span>当前单位的配置和报价草稿仅存于此浏览器，重新打开网站会自动恢复。</span><button id="company-save" type="submit" class="button primary">保存配置</button></div>
     </form>
   </dialog>
   <dialog id="rates-dialog"><div class="dialog-header"><div><div class="eyebrow">RATE REFERENCES</div><h2>费率与计算口径</h2></div><button type="button" id="close-rates" class="button icon-button" aria-label="关闭费率说明">×</button></div><div class="dialog-body"><p class="source-issue">以下是系统初始参考费率及计算口径；当前报价金额按页面顶部所选单位的配置计算。拖轮表显示当前单位费率。</p>
