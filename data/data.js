@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-10-30 10:35:38",
-  "lastChecked": "2026-10-30 10:35:38",
-  "lastSuccessfulFetch": "2026-10-30 10:35:38",
-  "updateWindow": "2026-10-30T09:00+08:00",
-  "publishTime": "2026年10月30日07时",
-  "publishCode": "2026103007",
+  "lastUpdated": "2026-10-30 15:04:13",
+  "lastChecked": "2026-10-30 15:04:13",
+  "lastSuccessfulFetch": "2026-10-30 15:04:13",
+  "updateWindow": "2026-10-30T15:00+08:00",
+  "publishTime": "2026年10月30日10时",
+  "publishCode": "2026103010",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云，夜里转晴到多云。明天晴到多云。后天晴到多云，夜里转阴有小雨。2日阴有时有小雨转阴到多云。3日阴到多云转阴有小雨。<br><br>",
-      "Time": "2026103007",
-      "PreciseForecastTime": "2026年10月30日07时"
+      "Time": "2026103010",
+      "PreciseForecastTime": "2026年10月30日10时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云，夜里转晴到多云。明天晴到多云。后天晴到多云，夜里转阴有小雨。2日阴有时有小雨转阴到多云。3日阴到多云转阴有小雨。<br><br>",
-      "Time": "2026103007",
-      "PreciseForecastTime": "2026年10月30日07时"
+      "Time": "2026103010",
+      "PreciseForecastTime": "2026年10月30日10时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云，夜里转晴到多云。明天晴到多云。后天晴到多云，夜里转阴有小雨。2日阴有时有小雨转阴到多云。3日阴到多云转阴有小雨。<br><br>",
-      "Time": "2026103007",
-      "PreciseForecastTime": "2026年10月30日07时"
+      "Time": "2026103010",
+      "PreciseForecastTime": "2026年10月30日10时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云，夜里转晴到多云。明天晴到多云。后天晴到多云，夜里转阴有小雨。2日阴有时有小雨转阴到多云。3日阴到多云转阴有小雨。<br><br>",
-      "Time": "2026103007",
-      "PreciseForecastTime": "2026年10月30日07时"
+      "Time": "2026103010",
+      "PreciseForecastTime": "2026年10月30日10时"
     }
   }
 };
