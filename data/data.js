@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-10-31 18:23:06",
-  "lastChecked": "2026-10-31 18:23:06",
-  "lastSuccessfulFetch": "2026-10-31 18:23:06",
-  "updateWindow": "2026-10-31T18:00+08:00",
-  "publishTime": "2026年10月31日15时",
-  "publishCode": "2026103115",
+  "lastUpdated": "2026-10-31 23:43:11",
+  "lastChecked": "2026-10-31 23:43:11",
+  "lastSuccessfulFetch": "2026-10-31 23:43:11",
+  "updateWindow": "2026-10-31T21:00+08:00",
+  "publishTime": "2026年10月31日20时",
+  "publishCode": "2026103120",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天晴到多云。明天晴到多云，傍晚转阴有小雨。后天阴局部小雨，上午转阴到多云。3日多云到阴，下午转阴有小雨。4日阴有阵雨，雨量中等。<br><br>",
-      "Time": "2026103115",
-      "PreciseForecastTime": "2026年10月31日15时"
+      "Time": "2026103120",
+      "PreciseForecastTime": "2026年10月31日20时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天晴到多云。明天晴到多云，傍晚转阴有小雨。后天阴局部小雨，上午转阴到多云。3日多云到阴，下午转阴有小雨。4日阴有阵雨，雨量中等。<br><br>",
-      "Time": "2026103115",
-      "PreciseForecastTime": "2026年10月31日15时"
+      "Time": "2026103120",
+      "PreciseForecastTime": "2026年10月31日20时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天晴到多云。明天晴到多云，傍晚转阴有小雨。后天阴局部小雨，上午转阴到多云。3日多云到阴，下午转阴有小雨。4日阴有阵雨，雨量中等。<br><br>",
-      "Time": "2026103115",
-      "PreciseForecastTime": "2026年10月31日15时"
+      "Time": "2026103120",
+      "PreciseForecastTime": "2026年10月31日20时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天晴到多云。明天晴到多云，傍晚转阴有小雨。后天阴局部小雨，上午转阴到多云。3日多云到阴，下午转阴有小雨。4日阴有阵雨，雨量中等。<br><br>",
-      "Time": "2026103115",
-      "PreciseForecastTime": "2026年10月31日15时"
+      "Time": "2026103120",
+      "PreciseForecastTime": "2026年10月31日20时"
     }
   }
 };
