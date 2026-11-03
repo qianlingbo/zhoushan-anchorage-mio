@@ -2,13 +2,14 @@
 set -euo pipefail
 
 SKILL_NAME="chinese-tonnage-dues"
+SKILL_VERSION="20261103"
 BASE_URL="${CHINESE_TONNAGE_DUES_SKILL_BASE_URL:-https://www.zsagent01.com/dues}"
 TMP_DIR="$(mktemp -d)"
 
 cleanup() { rm -rf "$TMP_DIR"; }
 trap cleanup EXIT
 
-curl -fsSL "$BASE_URL/$SKILL_NAME.zip" -o "$TMP_DIR/$SKILL_NAME.zip"
+curl -fsSL "$BASE_URL/$SKILL_NAME.zip?v=$SKILL_VERSION" -o "$TMP_DIR/$SKILL_NAME.zip"
 unzip -oq "$TMP_DIR/$SKILL_NAME.zip" -d "$TMP_DIR/package"
 
 if [ -n "${AGENT_SKILLS_DIR:-}" ]; then
