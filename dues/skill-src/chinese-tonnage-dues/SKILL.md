@@ -25,7 +25,7 @@ Use the bundled deterministic calculator so the rate table and the website stay 
 - Net-tonnage brackets are: ≤2,000; >2,000–≤10,000; >10,000–≤50,000; >50,000.
 - Ordinary rates by bracket are `[1 year, 90 days, 30 days]`: `[12.6, 4.2, 2.1]`, `[24, 8, 4]`, `[27.6, 9.2, 4.6]`, `[31.8, 10.6, 5.3]` yuan/NT.
 - Preferential rates by bracket are `[9, 3, 1.5]`, `[17.4, 5.8, 2.9]`, `[19.8, 6.6, 3.3]`, `[22.8, 7.6, 3.8]` yuan/NT.
-- China aliases (`中国`, `中国大陆`, `中华人民共和国`) and the countries in `references/tonnage-dues-data.json` use preferential rates. Panama is intentionally not in that list and therefore uses ordinary rates.
+- China aliases (`中国`, `中国大陆`, `中华人民共和国`) plus Hong Kong/Macau variants (`中国香港`, `中国澳门`, `香港特别行政区`, `澳门特别行政区`, and their `中国…特别行政区` forms) and the countries in `references/tonnage-dues-data.json` use preferential rates. Panama is intentionally not in that list and therefore uses ordinary rates.
 - Amount = net tonnage × selected rate × vessel factor. Round the final amount half-up to 0.01 yuan.
 
 ## Output modes
