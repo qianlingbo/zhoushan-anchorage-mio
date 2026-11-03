@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-11-03 15:53:44",
-  "lastChecked": "2026-11-03 15:53:44",
-  "lastSuccessfulFetch": "2026-11-03 15:53:44",
-  "updateWindow": "2026-11-03T15:00+08:00",
-  "publishTime": "2026年11月03日14时",
-  "publishCode": "2026110314",
+  "lastUpdated": "2026-11-04 01:49:29",
+  "lastChecked": "2026-11-04 01:49:29",
+  "lastSuccessfulFetch": "2026-11-04 01:49:29",
+  "updateWindow": "2026-11-04T00:00+08:00",
+  "publishTime": "2026年11月03日20时",
+  "publishCode": "2026110320",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -254,9 +254,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴，局部阵雨，傍晚转阴有阵雨。明天阴有阵雨，局部雨量中等。后天雨渐止转多云。6日多云。7日多云到阴转阴有小雨。<br><br>",
-      "Time": "2026110314",
-      "PreciseForecastTime": "2026年11月03日14时"
+      "Text": "天气预报：今天阴有阵雨。明天阴有阵雨，局部雨量中等。后天雨渐止转多云。6日多云。7日多云到阴转阴有小雨。<br><br>",
+      "Time": "2026110320",
+      "PreciseForecastTime": "2026年11月03日20时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -502,9 +502,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴，局部阵雨，傍晚转阴有阵雨。明天阴有阵雨，局部雨量中等。后天雨渐止转多云。6日多云。7日多云到阴转阴有小雨。<br><br>",
-      "Time": "2026110314",
-      "PreciseForecastTime": "2026年11月03日14时"
+      "Text": "天气预报：今天阴有阵雨。明天阴有阵雨，局部雨量中等。后天雨渐止转多云。6日多云。7日多云到阴转阴有小雨。<br><br>",
+      "Time": "2026110320",
+      "PreciseForecastTime": "2026年11月03日20时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有阵雨。明天阴有阵雨，局部雨量中等。后天雨渐止转多云。6日多云。7日多云到阴转阴有小雨。<br><br>",
-      "Time": "2026110314",
-      "PreciseForecastTime": "2026年11月03日14时"
+      "Time": "2026110320",
+      "PreciseForecastTime": "2026年11月03日20时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -998,9 +998,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有时有阵雨，傍晚转阴有阵雨。明天阴有阵雨，局部雨量中等。后天雨渐止转多云。6日多云。7日多云到阴转阴有小雨。<br><br>",
-      "Time": "2026110314",
-      "PreciseForecastTime": "2026年11月03日14时"
+      "Text": "天气预报：今天阴有阵雨。明天阴有阵雨，局部雨量中等。后天雨渐止转多云。6日多云。7日多云到阴转阴有小雨。<br><br>",
+      "Time": "2026110320",
+      "PreciseForecastTime": "2026年11月03日20时"
     }
   }
 }
