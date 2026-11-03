@@ -21,4 +21,4 @@ python3 -m http.server 4173
 
 ## 2027 航海曙暮光预留数据
 
-`data/ningbo-nautical-twilight-2027.json` 保存宁波 2027 年 365 天的航海曙光始与暮光终时间。该文件由 `scripts/build_sun_data_2027.cjs` 使用当前网站一致的 NOAA 太阳位置算法生成，暂不接入现有 2026 通航判定；计划在 2026 年 12 月对照 timeanddate 月表复核后，再用于 2027 年页面和 Agent API。
+`data/ningbo-nautical-twilight-2027.json` 保存宁波 2027 年 365 天的航海曙光始与暮光终时间。该文件由 `scripts/build_sun_data_2027.py` 使用 PyEphem 4.2.1 高精度星历生成，并按 timeanddate 的分钟显示口径校准：用户提供截图中可见的 2027 年 1 月 1–23 日为 23/23 一致，另以 2026 年 1、6、10、12 月跨季样本复核为 6/6 一致。运行命令：`uv run --with ephem==4.2.1 python scripts/build_sun_data_2027.py`。该数据暂不接入现有 2026 通航判定。

@@ -2,33 +2,37 @@
   "metadata": {
     "location": "Ningbo, China",
     "coordinates": {
-      "latitude": 29.87,
+      "latitude": 29.866667,
       "longitude": 121.55
     },
+    "elevationMeters": 18,
     "timezone": "Asia/Shanghai",
     "year": 2027,
-    "definition": "Nautical twilight: solar center at -12° altitude (zenith 102°).",
+    "definition": "Nautical twilight: solar center at -12° altitude.",
     "fields": {
       "nauticalDawn": "航海曙光始 / sunrise start",
       "nauticalDusk": "航海暮光终 / sunset end"
     },
-    "status": "provisional_calculation_pending_timeanddate_review",
-    "method": "NOAA sunrise/sunset approximation, rounded to the nearest minute.",
+    "status": "corrected_timeanddate_calibrated_calculation",
+    "method": "PyEphem 4.2.1 high-precision ephemeris, displayed to Timeanddate's minute convention.",
     "referenceUrlTemplate": "https://www.timeanddate.com/sun/china/ningbo?month={MM}&year=2027",
-    "plannedSourceReview": "2026-12",
-    "note": "timeanddate returned a Cloudflare verification page on 2026-11-03. Keep this dataset isolated from production passage calculations until the December source review."
+    "validation": {
+      "timeanddateScreenshot2027JanuaryVisibleRows": "23/23 matched",
+      "timeanddateCrossSeason2026ReferenceSamples": "6/6 matched"
+    },
+    "note": "All 365 days were rebuilt with the calibrated ephemeris; the former simplified NOAA approximation is no longer used for this file."
   },
   "days": {
     "2027-01-01": {
       "nauticalDawn": "05:53",
-      "nauticalDusk": "18:01"
+      "nauticalDusk": "18:00"
     },
     "2027-01-02": {
-      "nauticalDawn": "05:54",
-      "nauticalDusk": "18:02"
+      "nauticalDawn": "05:53",
+      "nauticalDusk": "18:01"
     },
     "2027-01-03": {
-      "nauticalDawn": "05:54",
+      "nauticalDawn": "05:53",
       "nauticalDusk": "18:02"
     },
     "2027-01-04": {
@@ -37,26 +41,26 @@
     },
     "2027-01-05": {
       "nauticalDawn": "05:54",
-      "nauticalDusk": "18:04"
+      "nauticalDusk": "18:03"
     },
     "2027-01-06": {
-      "nauticalDawn": "05:55",
-      "nauticalDusk": "18:05"
+      "nauticalDawn": "05:54",
+      "nauticalDusk": "18:04"
     },
     "2027-01-07": {
-      "nauticalDawn": "05:55",
+      "nauticalDawn": "05:54",
       "nauticalDusk": "18:05"
     },
     "2027-01-08": {
-      "nauticalDawn": "05:55",
-      "nauticalDusk": "18:06"
+      "nauticalDawn": "05:54",
+      "nauticalDusk": "18:05"
     },
     "2027-01-09": {
-      "nauticalDawn": "05:55",
-      "nauticalDusk": "18:07"
+      "nauticalDawn": "05:54",
+      "nauticalDusk": "18:06"
     },
     "2027-01-10": {
-      "nauticalDawn": "05:55",
+      "nauticalDawn": "05:54",
       "nauticalDusk": "18:07"
     },
     "2027-01-11": {
@@ -65,11 +69,11 @@
     },
     "2027-01-12": {
       "nauticalDawn": "05:55",
-      "nauticalDusk": "18:09"
+      "nauticalDusk": "18:08"
     },
     "2027-01-13": {
       "nauticalDawn": "05:55",
-      "nauticalDusk": "18:10"
+      "nauticalDusk": "18:09"
     },
     "2027-01-14": {
       "nauticalDawn": "05:55",
@@ -81,70 +85,70 @@
     },
     "2027-01-16": {
       "nauticalDawn": "05:55",
-      "nauticalDusk": "18:12"
+      "nauticalDusk": "18:11"
     },
     "2027-01-17": {
-      "nauticalDawn": "05:55",
-      "nauticalDusk": "18:13"
+      "nauticalDawn": "05:54",
+      "nauticalDusk": "18:12"
     },
     "2027-01-18": {
-      "nauticalDawn": "05:55",
-      "nauticalDusk": "18:14"
+      "nauticalDawn": "05:54",
+      "nauticalDusk": "18:13"
     },
     "2027-01-19": {
-      "nauticalDawn": "05:55",
+      "nauticalDawn": "05:54",
       "nauticalDusk": "18:14"
     },
     "2027-01-20": {
-      "nauticalDawn": "05:55",
-      "nauticalDusk": "18:15"
+      "nauticalDawn": "05:54",
+      "nauticalDusk": "18:14"
     },
     "2027-01-21": {
       "nauticalDawn": "05:54",
-      "nauticalDusk": "18:16"
+      "nauticalDusk": "18:15"
     },
     "2027-01-22": {
       "nauticalDawn": "05:54",
-      "nauticalDusk": "18:17"
+      "nauticalDusk": "18:16"
     },
     "2027-01-23": {
-      "nauticalDawn": "05:54",
+      "nauticalDawn": "05:53",
       "nauticalDusk": "18:17"
     },
     "2027-01-24": {
-      "nauticalDawn": "05:54",
+      "nauticalDawn": "05:53",
       "nauticalDusk": "18:18"
     },
     "2027-01-25": {
       "nauticalDawn": "05:53",
-      "nauticalDusk": "18:19"
+      "nauticalDusk": "18:18"
     },
     "2027-01-26": {
-      "nauticalDawn": "05:53",
-      "nauticalDusk": "18:20"
+      "nauticalDawn": "05:52",
+      "nauticalDusk": "18:19"
     },
     "2027-01-27": {
-      "nauticalDawn": "05:53",
-      "nauticalDusk": "18:21"
+      "nauticalDawn": "05:52",
+      "nauticalDusk": "18:20"
     },
     "2027-01-28": {
       "nauticalDawn": "05:52",
       "nauticalDusk": "18:21"
     },
     "2027-01-29": {
-      "nauticalDawn": "05:52",
-      "nauticalDusk": "18:22"
+      "nauticalDawn": "05:51",
+      "nauticalDusk": "18:21"
     },
     "2027-01-30": {
-      "nauticalDawn": "05:52",
-      "nauticalDusk": "18:23"
+      "nauticalDawn": "05:51",
+      "nauticalDusk": "18:22"
     },
     "2027-01-31": {
       "nauticalDawn": "05:51",
-      "nauticalDusk": "18:24"
+      "nauticalDusk": "18:23"
     },
     "2027-02-01": {
-      "nauticalDawn": "05:51",
+      "nauticalDawn": "05:50",
       "nauticalDusk": "18:24"
     },
     "2027-02-02": {
@@ -152,31 +156,31 @@
       "nauticalDusk": "18:25"
     },
     "2027-02-03": {
-      "nauticalDawn": "05:50",
-      "nauticalDusk": "18:26"
+      "nauticalDawn": "05:49",
+      "nauticalDusk": "18:25"
     },
     "2027-02-04": {
-      "nauticalDawn": "05:49",
-      "nauticalDusk": "18:27"
+      "nauticalDawn": "05:48",
+      "nauticalDusk": "18:26"
     },
     "2027-02-05": {
-      "nauticalDawn": "05:49",
+      "nauticalDawn": "05:48",
       "nauticalDusk": "18:27"
     },
     "2027-02-06": {
-      "nauticalDawn": "05:48",
+      "nauticalDawn": "05:47",
       "nauticalDusk": "18:28"
     },
     "2027-02-07": {
       "nauticalDawn": "05:47",
-      "nauticalDusk": "18:29"
+      "nauticalDusk": "18:28"
     },
     "2027-02-08": {
-      "nauticalDawn": "05:47",
-      "nauticalDusk": "18:30"
+      "nauticalDawn": "05:46",
+      "nauticalDusk": "18:29"
     },
     "2027-02-09": {
-      "nauticalDawn": "05:46",
+      "nauticalDawn": "05:45",
       "nauticalDusk": "18:30"
     },
     "2027-02-10": {
@@ -184,100 +188,100 @@
       "nauticalDusk": "18:31"
     },
     "2027-02-11": {
-      "nauticalDawn": "05:45",
-      "nauticalDusk": "18:32"
+      "nauticalDawn": "05:44",
+      "nauticalDusk": "18:31"
     },
     "2027-02-12": {
-      "nauticalDawn": "05:44",
-      "nauticalDusk": "18:33"
+      "nauticalDawn": "05:43",
+      "nauticalDusk": "18:32"
     },
     "2027-02-13": {
       "nauticalDawn": "05:43",
       "nauticalDusk": "18:33"
     },
     "2027-02-14": {
-      "nauticalDawn": "05:43",
-      "nauticalDusk": "18:34"
+      "nauticalDawn": "05:42",
+      "nauticalDusk": "18:33"
     },
     "2027-02-15": {
-      "nauticalDawn": "05:42",
-      "nauticalDusk": "18:35"
+      "nauticalDawn": "05:41",
+      "nauticalDusk": "18:34"
     },
     "2027-02-16": {
-      "nauticalDawn": "05:41",
+      "nauticalDawn": "05:40",
       "nauticalDusk": "18:35"
     },
     "2027-02-17": {
-      "nauticalDawn": "05:40",
+      "nauticalDawn": "05:39",
       "nauticalDusk": "18:36"
     },
     "2027-02-18": {
       "nauticalDawn": "05:39",
-      "nauticalDusk": "18:37"
+      "nauticalDusk": "18:36"
     },
     "2027-02-19": {
       "nauticalDawn": "05:38",
-      "nauticalDusk": "18:38"
+      "nauticalDusk": "18:37"
     },
     "2027-02-20": {
-      "nauticalDawn": "05:38",
+      "nauticalDawn": "05:37",
       "nauticalDusk": "18:38"
     },
     "2027-02-21": {
-      "nauticalDawn": "05:37",
-      "nauticalDusk": "18:39"
+      "nauticalDawn": "05:36",
+      "nauticalDusk": "18:38"
     },
     "2027-02-22": {
-      "nauticalDawn": "05:36",
-      "nauticalDusk": "18:40"
+      "nauticalDawn": "05:35",
+      "nauticalDusk": "18:39"
     },
     "2027-02-23": {
-      "nauticalDawn": "05:35",
+      "nauticalDawn": "05:34",
       "nauticalDusk": "18:40"
     },
     "2027-02-24": {
-      "nauticalDawn": "05:34",
-      "nauticalDusk": "18:41"
+      "nauticalDawn": "05:33",
+      "nauticalDusk": "18:40"
     },
     "2027-02-25": {
-      "nauticalDawn": "05:33",
-      "nauticalDusk": "18:42"
+      "nauticalDawn": "05:32",
+      "nauticalDusk": "18:41"
     },
     "2027-02-26": {
-      "nauticalDawn": "05:32",
+      "nauticalDawn": "05:31",
       "nauticalDusk": "18:42"
     },
     "2027-02-27": {
-      "nauticalDawn": "05:31",
-      "nauticalDusk": "18:43"
+      "nauticalDawn": "05:30",
+      "nauticalDusk": "18:42"
     },
     "2027-02-28": {
-      "nauticalDawn": "05:30",
-      "nauticalDusk": "18:44"
+      "nauticalDawn": "05:29",
+      "nauticalDusk": "18:43"
     },
     "2027-03-01": {
-      "nauticalDawn": "05:29",
+      "nauticalDawn": "05:28",
       "nauticalDusk": "18:44"
     },
     "2027-03-02": {
-      "nauticalDawn": "05:28",
-      "nauticalDusk": "18:45"
+      "nauticalDawn": "05:27",
+      "nauticalDusk": "18:44"
     },
     "2027-03-03": {
-      "nauticalDawn": "05:27",
-      "nauticalDusk": "18:46"
+      "nauticalDawn": "05:26",
+      "nauticalDusk": "18:45"
     },
     "2027-03-04": {
-      "nauticalDawn": "05:26",
+      "nauticalDawn": "05:25",
       "nauticalDusk": "18:46"
     },
     "2027-03-05": {
-      "nauticalDawn": "05:25",
-      "nauticalDusk": "18:47"
+      "nauticalDawn": "05:24",
+      "nauticalDusk": "18:46"
     },
     "2027-03-06": {
       "nauticalDawn": "05:23",
-      "nauticalDusk": "18:48"
+      "nauticalDusk": "18:47"
     },
     "2027-03-07": {
       "nauticalDawn": "05:22",
@@ -285,182 +289,182 @@
     },
     "2027-03-08": {
       "nauticalDawn": "05:21",
-      "nauticalDusk": "18:49"
+      "nauticalDusk": "18:48"
     },
     "2027-03-09": {
-      "nauticalDawn": "05:20",
+      "nauticalDawn": "05:19",
       "nauticalDusk": "18:49"
     },
     "2027-03-10": {
-      "nauticalDawn": "05:19",
+      "nauticalDawn": "05:18",
       "nauticalDusk": "18:50"
     },
     "2027-03-11": {
-      "nauticalDawn": "05:18",
-      "nauticalDusk": "18:51"
+      "nauticalDawn": "05:17",
+      "nauticalDusk": "18:50"
     },
     "2027-03-12": {
-      "nauticalDawn": "05:17",
+      "nauticalDawn": "05:16",
       "nauticalDusk": "18:51"
     },
     "2027-03-13": {
       "nauticalDawn": "05:15",
-      "nauticalDusk": "18:52"
+      "nauticalDusk": "18:51"
     },
     "2027-03-14": {
       "nauticalDawn": "05:14",
-      "nauticalDusk": "18:53"
+      "nauticalDusk": "18:52"
     },
     "2027-03-15": {
-      "nauticalDawn": "05:13",
+      "nauticalDawn": "05:12",
       "nauticalDusk": "18:53"
     },
     "2027-03-16": {
-      "nauticalDawn": "05:12",
-      "nauticalDusk": "18:54"
+      "nauticalDawn": "05:11",
+      "nauticalDusk": "18:53"
     },
     "2027-03-17": {
-      "nauticalDawn": "05:11",
-      "nauticalDusk": "18:55"
+      "nauticalDawn": "05:10",
+      "nauticalDusk": "18:54"
     },
     "2027-03-18": {
-      "nauticalDawn": "05:10",
+      "nauticalDawn": "05:09",
       "nauticalDusk": "18:55"
     },
     "2027-03-19": {
       "nauticalDawn": "05:08",
-      "nauticalDusk": "18:56"
+      "nauticalDusk": "18:55"
     },
     "2027-03-20": {
-      "nauticalDawn": "05:07",
+      "nauticalDawn": "05:06",
       "nauticalDusk": "18:56"
     },
     "2027-03-21": {
-      "nauticalDawn": "05:06",
+      "nauticalDawn": "05:05",
       "nauticalDusk": "18:57"
     },
     "2027-03-22": {
-      "nauticalDawn": "05:05",
-      "nauticalDusk": "18:58"
+      "nauticalDawn": "05:04",
+      "nauticalDusk": "18:57"
     },
     "2027-03-23": {
       "nauticalDawn": "05:03",
       "nauticalDusk": "18:58"
     },
     "2027-03-24": {
-      "nauticalDawn": "05:02",
-      "nauticalDusk": "18:59"
+      "nauticalDawn": "05:01",
+      "nauticalDusk": "18:58"
     },
     "2027-03-25": {
-      "nauticalDawn": "05:01",
-      "nauticalDusk": "19:00"
+      "nauticalDawn": "05:00",
+      "nauticalDusk": "18:59"
     },
     "2027-03-26": {
-      "nauticalDawn": "05:00",
+      "nauticalDawn": "04:59",
       "nauticalDusk": "19:00"
     },
     "2027-03-27": {
       "nauticalDawn": "04:58",
-      "nauticalDusk": "19:01"
+      "nauticalDusk": "19:00"
     },
     "2027-03-28": {
-      "nauticalDawn": "04:57",
-      "nauticalDusk": "19:02"
+      "nauticalDawn": "04:56",
+      "nauticalDusk": "19:01"
     },
     "2027-03-29": {
-      "nauticalDawn": "04:56",
+      "nauticalDawn": "04:55",
       "nauticalDusk": "19:02"
     },
     "2027-03-30": {
-      "nauticalDawn": "04:55",
-      "nauticalDusk": "19:03"
+      "nauticalDawn": "04:54",
+      "nauticalDusk": "19:02"
     },
     "2027-03-31": {
       "nauticalDawn": "04:53",
-      "nauticalDusk": "19:04"
+      "nauticalDusk": "19:03"
     },
     "2027-04-01": {
-      "nauticalDawn": "04:52",
+      "nauticalDawn": "04:51",
       "nauticalDusk": "19:04"
     },
     "2027-04-02": {
-      "nauticalDawn": "04:51",
-      "nauticalDusk": "19:05"
+      "nauticalDawn": "04:50",
+      "nauticalDusk": "19:04"
     },
     "2027-04-03": {
-      "nauticalDawn": "04:50",
-      "nauticalDusk": "19:06"
+      "nauticalDawn": "04:49",
+      "nauticalDusk": "19:05"
     },
     "2027-04-04": {
       "nauticalDawn": "04:48",
       "nauticalDusk": "19:06"
     },
     "2027-04-05": {
-      "nauticalDawn": "04:47",
-      "nauticalDusk": "19:07"
+      "nauticalDawn": "04:46",
+      "nauticalDusk": "19:06"
     },
     "2027-04-06": {
-      "nauticalDawn": "04:46",
-      "nauticalDusk": "19:08"
+      "nauticalDawn": "04:45",
+      "nauticalDusk": "19:07"
     },
     "2027-04-07": {
-      "nauticalDawn": "04:45",
+      "nauticalDawn": "04:44",
       "nauticalDusk": "19:08"
     },
     "2027-04-08": {
       "nauticalDawn": "04:43",
-      "nauticalDusk": "19:09"
+      "nauticalDusk": "19:08"
     },
     "2027-04-09": {
-      "nauticalDawn": "04:42",
-      "nauticalDusk": "19:10"
+      "nauticalDawn": "04:41",
+      "nauticalDusk": "19:09"
     },
     "2027-04-10": {
-      "nauticalDawn": "04:41",
+      "nauticalDawn": "04:40",
       "nauticalDusk": "19:10"
     },
     "2027-04-11": {
-      "nauticalDawn": "04:40",
+      "nauticalDawn": "04:39",
       "nauticalDusk": "19:11"
     },
     "2027-04-12": {
       "nauticalDawn": "04:38",
-      "nauticalDusk": "19:12"
+      "nauticalDusk": "19:11"
     },
     "2027-04-13": {
       "nauticalDawn": "04:37",
       "nauticalDusk": "19:12"
     },
     "2027-04-14": {
-      "nauticalDawn": "04:36",
+      "nauticalDawn": "04:35",
       "nauticalDusk": "19:13"
     },
     "2027-04-15": {
-      "nauticalDawn": "04:35",
-      "nauticalDusk": "19:14"
+      "nauticalDawn": "04:34",
+      "nauticalDusk": "19:13"
     },
     "2027-04-16": {
       "nauticalDawn": "04:33",
-      "nauticalDusk": "19:15"
+      "nauticalDusk": "19:14"
     },
     "2027-04-17": {
       "nauticalDawn": "04:32",
       "nauticalDusk": "19:15"
     },
     "2027-04-18": {
-      "nauticalDawn": "04:31",
+      "nauticalDawn": "04:30",
       "nauticalDusk": "19:16"
     },
     "2027-04-19": {
-      "nauticalDawn": "04:30",
-      "nauticalDusk": "19:17"
+      "nauticalDawn": "04:29",
+      "nauticalDusk": "19:16"
     },
     "2027-04-20": {
-      "nauticalDawn": "04:29",
-      "nauticalDusk": "19:18"
+      "nauticalDawn": "04:28",
+      "nauticalDusk": "19:17"
     },
     "2027-04-21": {
-      "nauticalDawn": "04:28",
+      "nauticalDawn": "04:27",
       "nauticalDusk": "19:18"
     },
     "2027-04-22": {
@@ -469,43 +473,43 @@
     },
     "2027-04-23": {
       "nauticalDawn": "04:25",
-      "nauticalDusk": "19:20"
+      "nauticalDusk": "19:19"
     },
     "2027-04-24": {
       "nauticalDawn": "04:24",
-      "nauticalDusk": "19:21"
+      "nauticalDusk": "19:20"
     },
     "2027-04-25": {
-      "nauticalDawn": "04:23",
+      "nauticalDawn": "04:22",
       "nauticalDusk": "19:21"
     },
     "2027-04-26": {
-      "nauticalDawn": "04:22",
+      "nauticalDawn": "04:21",
       "nauticalDusk": "19:22"
     },
     "2027-04-27": {
-      "nauticalDawn": "04:21",
-      "nauticalDusk": "19:23"
+      "nauticalDawn": "04:20",
+      "nauticalDusk": "19:22"
     },
     "2027-04-28": {
-      "nauticalDawn": "04:20",
-      "nauticalDusk": "19:24"
+      "nauticalDawn": "04:19",
+      "nauticalDusk": "19:23"
     },
     "2027-04-29": {
-      "nauticalDawn": "04:19",
+      "nauticalDawn": "04:18",
       "nauticalDusk": "19:24"
     },
     "2027-04-30": {
-      "nauticalDawn": "04:18",
+      "nauticalDawn": "04:17",
       "nauticalDusk": "19:25"
     },
     "2027-05-01": {
-      "nauticalDawn": "04:17",
-      "nauticalDusk": "19:26"
+      "nauticalDawn": "04:16",
+      "nauticalDusk": "19:25"
     },
     "2027-05-02": {
-      "nauticalDawn": "04:16",
-      "nauticalDusk": "19:27"
+      "nauticalDawn": "04:15",
+      "nauticalDusk": "19:26"
     },
     "2027-05-03": {
       "nauticalDawn": "04:14",
@@ -516,75 +520,75 @@
       "nauticalDusk": "19:28"
     },
     "2027-05-05": {
-      "nauticalDawn": "04:13",
+      "nauticalDawn": "04:12",
       "nauticalDusk": "19:29"
     },
     "2027-05-06": {
-      "nauticalDawn": "04:12",
-      "nauticalDusk": "19:30"
+      "nauticalDawn": "04:11",
+      "nauticalDusk": "19:29"
     },
     "2027-05-07": {
-      "nauticalDawn": "04:11",
-      "nauticalDusk": "19:31"
+      "nauticalDawn": "04:10",
+      "nauticalDusk": "19:30"
     },
     "2027-05-08": {
-      "nauticalDawn": "04:10",
+      "nauticalDawn": "04:09",
       "nauticalDusk": "19:31"
     },
     "2027-05-09": {
-      "nauticalDawn": "04:09",
+      "nauticalDawn": "04:08",
       "nauticalDusk": "19:32"
     },
     "2027-05-10": {
-      "nauticalDawn": "04:08",
+      "nauticalDawn": "04:07",
       "nauticalDusk": "19:33"
     },
     "2027-05-11": {
       "nauticalDawn": "04:07",
-      "nauticalDusk": "19:34"
+      "nauticalDusk": "19:33"
     },
     "2027-05-12": {
       "nauticalDawn": "04:06",
-      "nauticalDusk": "19:35"
+      "nauticalDusk": "19:34"
     },
     "2027-05-13": {
       "nauticalDawn": "04:05",
       "nauticalDusk": "19:35"
     },
     "2027-05-14": {
-      "nauticalDawn": "04:05",
+      "nauticalDawn": "04:04",
       "nauticalDusk": "19:36"
     },
     "2027-05-15": {
-      "nauticalDawn": "04:04",
+      "nauticalDawn": "04:03",
       "nauticalDusk": "19:37"
     },
     "2027-05-16": {
-      "nauticalDawn": "04:03",
-      "nauticalDusk": "19:38"
+      "nauticalDawn": "04:02",
+      "nauticalDusk": "19:37"
     },
     "2027-05-17": {
       "nauticalDawn": "04:02",
       "nauticalDusk": "19:38"
     },
     "2027-05-18": {
-      "nauticalDawn": "04:02",
+      "nauticalDawn": "04:01",
       "nauticalDusk": "19:39"
     },
     "2027-05-19": {
-      "nauticalDawn": "04:01",
+      "nauticalDawn": "04:00",
       "nauticalDusk": "19:40"
     },
     "2027-05-20": {
       "nauticalDawn": "04:00",
-      "nauticalDusk": "19:41"
+      "nauticalDusk": "19:40"
     },
     "2027-05-21": {
-      "nauticalDawn": "04:00",
-      "nauticalDusk": "19:42"
+      "nauticalDawn": "03:59",
+      "nauticalDusk": "19:41"
     },
     "2027-05-22": {
-      "nauticalDawn": "03:59",
+      "nauticalDawn": "03:58",
       "nauticalDusk": "19:42"
     },
     "2027-05-23": {
@@ -592,44 +596,44 @@
       "nauticalDusk": "19:43"
     },
     "2027-05-24": {
-      "nauticalDawn": "03:58",
-      "nauticalDusk": "19:44"
+      "nauticalDawn": "03:57",
+      "nauticalDusk": "19:43"
     },
     "2027-05-25": {
       "nauticalDawn": "03:57",
       "nauticalDusk": "19:44"
     },
     "2027-05-26": {
-      "nauticalDawn": "03:57",
+      "nauticalDawn": "03:56",
       "nauticalDusk": "19:45"
     },
     "2027-05-27": {
       "nauticalDawn": "03:56",
-      "nauticalDusk": "19:46"
+      "nauticalDusk": "19:45"
     },
     "2027-05-28": {
-      "nauticalDawn": "03:56",
-      "nauticalDusk": "19:47"
+      "nauticalDawn": "03:55",
+      "nauticalDusk": "19:46"
     },
     "2027-05-29": {
       "nauticalDawn": "03:55",
       "nauticalDusk": "19:47"
     },
     "2027-05-30": {
-      "nauticalDawn": "03:55",
+      "nauticalDawn": "03:54",
       "nauticalDusk": "19:48"
     },
     "2027-05-31": {
       "nauticalDawn": "03:54",
-      "nauticalDusk": "19:49"
+      "nauticalDusk": "19:48"
     },
     "2027-06-01": {
       "nauticalDawn": "03:54",
       "nauticalDusk": "19:49"
     },
     "2027-06-02": {
-      "nauticalDawn": "03:54",
-      "nauticalDusk": "19:50"
+      "nauticalDawn": "03:53",
+      "nauticalDusk": "19:49"
     },
     "2027-06-03": {
       "nauticalDawn": "03:53",
@@ -640,16 +644,16 @@
       "nauticalDusk": "19:51"
     },
     "2027-06-05": {
-      "nauticalDawn": "03:53",
-      "nauticalDusk": "19:52"
+      "nauticalDawn": "03:52",
+      "nauticalDusk": "19:51"
     },
     "2027-06-06": {
-      "nauticalDawn": "03:53",
+      "nauticalDawn": "03:52",
       "nauticalDusk": "19:52"
     },
     "2027-06-07": {
       "nauticalDawn": "03:52",
-      "nauticalDusk": "19:53"
+      "nauticalDusk": "19:52"
     },
     "2027-06-08": {
       "nauticalDawn": "03:52",
@@ -657,7 +661,7 @@
     },
     "2027-06-09": {
       "nauticalDawn": "03:52",
-      "nauticalDusk": "19:54"
+      "nauticalDusk": "19:53"
     },
     "2027-06-10": {
       "nauticalDawn": "03:52",
@@ -665,27 +669,27 @@
     },
     "2027-06-11": {
       "nauticalDawn": "03:52",
-      "nauticalDusk": "19:55"
+      "nauticalDusk": "19:54"
     },
     "2027-06-12": {
-      "nauticalDawn": "03:52",
+      "nauticalDawn": "03:51",
       "nauticalDusk": "19:55"
     },
     "2027-06-13": {
-      "nauticalDawn": "03:52",
-      "nauticalDusk": "19:56"
+      "nauticalDawn": "03:51",
+      "nauticalDusk": "19:55"
     },
     "2027-06-14": {
-      "nauticalDawn": "03:52",
+      "nauticalDawn": "03:51",
       "nauticalDusk": "19:56"
     },
     "2027-06-15": {
-      "nauticalDawn": "03:52",
+      "nauticalDawn": "03:51",
       "nauticalDusk": "19:56"
     },
     "2027-06-16": {
       "nauticalDawn": "03:52",
-      "nauticalDusk": "19:57"
+      "nauticalDusk": "19:56"
     },
     "2027-06-17": {
       "nauticalDawn": "03:52",
@@ -697,34 +701,34 @@
     },
     "2027-06-19": {
       "nauticalDawn": "03:52",
-      "nauticalDusk": "19:58"
+      "nauticalDusk": "19:57"
     },
     "2027-06-20": {
       "nauticalDawn": "03:52",
       "nauticalDusk": "19:58"
     },
     "2027-06-21": {
-      "nauticalDawn": "03:53",
+      "nauticalDawn": "03:52",
       "nauticalDusk": "19:58"
     },
     "2027-06-22": {
-      "nauticalDawn": "03:53",
+      "nauticalDawn": "03:52",
       "nauticalDusk": "19:58"
     },
     "2027-06-23": {
       "nauticalDawn": "03:53",
-      "nauticalDusk": "19:59"
+      "nauticalDusk": "19:58"
     },
     "2027-06-24": {
       "nauticalDawn": "03:53",
-      "nauticalDusk": "19:59"
+      "nauticalDusk": "19:58"
     },
     "2027-06-25": {
-      "nauticalDawn": "03:54",
-      "nauticalDusk": "19:59"
+      "nauticalDawn": "03:53",
+      "nauticalDusk": "19:58"
     },
     "2027-06-26": {
-      "nauticalDawn": "03:54",
+      "nauticalDawn": "03:53",
       "nauticalDusk": "19:59"
     },
     "2027-06-27": {
@@ -732,7 +736,7 @@
       "nauticalDusk": "19:59"
     },
     "2027-06-28": {
-      "nauticalDawn": "03:55",
+      "nauticalDawn": "03:54",
       "nauticalDusk": "19:59"
     },
     "2027-06-29": {
@@ -744,7 +748,7 @@
       "nauticalDusk": "19:59"
     },
     "2027-07-01": {
-      "nauticalDawn": "03:56",
+      "nauticalDawn": "03:55",
       "nauticalDusk": "19:59"
     },
     "2027-07-02": {
@@ -752,23 +756,23 @@
       "nauticalDusk": "19:59"
     },
     "2027-07-03": {
-      "nauticalDawn": "03:57",
-      "nauticalDusk": "19:59"
+      "nauticalDawn": "03:56",
+      "nauticalDusk": "19:58"
     },
     "2027-07-04": {
       "nauticalDawn": "03:57",
-      "nauticalDusk": "19:59"
+      "nauticalDusk": "19:58"
     },
     "2027-07-05": {
-      "nauticalDawn": "03:58",
-      "nauticalDusk": "19:59"
+      "nauticalDawn": "03:57",
+      "nauticalDusk": "19:58"
     },
     "2027-07-06": {
       "nauticalDawn": "03:58",
       "nauticalDusk": "19:58"
     },
     "2027-07-07": {
-      "nauticalDawn": "03:59",
+      "nauticalDawn": "03:58",
       "nauticalDusk": "19:58"
     },
     "2027-07-08": {
@@ -776,8 +780,8 @@
       "nauticalDusk": "19:58"
     },
     "2027-07-09": {
-      "nauticalDawn": "04:00",
-      "nauticalDusk": "19:58"
+      "nauticalDawn": "03:59",
+      "nauticalDusk": "19:57"
     },
     "2027-07-10": {
       "nauticalDawn": "04:00",
@@ -788,28 +792,28 @@
       "nauticalDusk": "19:57"
     },
     "2027-07-12": {
-      "nauticalDawn": "04:02",
-      "nauticalDusk": "19:57"
+      "nauticalDawn": "04:01",
+      "nauticalDusk": "19:56"
     },
     "2027-07-13": {
       "nauticalDawn": "04:02",
       "nauticalDusk": "19:56"
     },
     "2027-07-14": {
-      "nauticalDawn": "04:03",
-      "nauticalDusk": "19:56"
+      "nauticalDawn": "04:02",
+      "nauticalDusk": "19:55"
     },
     "2027-07-15": {
       "nauticalDawn": "04:03",
-      "nauticalDusk": "19:56"
+      "nauticalDusk": "19:55"
     },
     "2027-07-16": {
       "nauticalDawn": "04:04",
       "nauticalDusk": "19:55"
     },
     "2027-07-17": {
-      "nauticalDawn": "04:05",
-      "nauticalDusk": "19:55"
+      "nauticalDawn": "04:04",
+      "nauticalDusk": "19:54"
     },
     "2027-07-18": {
       "nauticalDawn": "04:05",
@@ -817,11 +821,11 @@
     },
     "2027-07-19": {
       "nauticalDawn": "04:06",
-      "nauticalDusk": "19:54"
+      "nauticalDusk": "19:53"
     },
     "2027-07-20": {
-      "nauticalDawn": "04:07",
-      "nauticalDusk": "19:53"
+      "nauticalDawn": "04:06",
+      "nauticalDusk": "19:52"
     },
     "2027-07-21": {
       "nauticalDawn": "04:07",
@@ -829,42 +833,42 @@
     },
     "2027-07-22": {
       "nauticalDawn": "04:08",
-      "nauticalDusk": "19:52"
+      "nauticalDusk": "19:51"
     },
     "2027-07-23": {
       "nauticalDawn": "04:09",
       "nauticalDusk": "19:51"
     },
     "2027-07-24": {
-      "nauticalDawn": "04:10",
-      "nauticalDusk": "19:51"
+      "nauticalDawn": "04:09",
+      "nauticalDusk": "19:50"
     },
     "2027-07-25": {
       "nauticalDawn": "04:10",
-      "nauticalDusk": "19:50"
+      "nauticalDusk": "19:49"
     },
     "2027-07-26": {
       "nauticalDawn": "04:11",
       "nauticalDusk": "19:49"
     },
     "2027-07-27": {
-      "nauticalDawn": "04:12",
+      "nauticalDawn": "04:11",
       "nauticalDusk": "19:48"
     },
     "2027-07-28": {
-      "nauticalDawn": "04:13",
-      "nauticalDusk": "19:48"
+      "nauticalDawn": "04:12",
+      "nauticalDusk": "19:47"
     },
     "2027-07-29": {
       "nauticalDawn": "04:13",
-      "nauticalDusk": "19:47"
+      "nauticalDusk": "19:46"
     },
     "2027-07-30": {
       "nauticalDawn": "04:14",
-      "nauticalDusk": "19:46"
+      "nauticalDusk": "19:45"
     },
     "2027-07-31": {
-      "nauticalDawn": "04:15",
+      "nauticalDawn": "04:14",
       "nauticalDusk": "19:45"
     },
     "2027-08-01": {
@@ -877,54 +881,54 @@
     },
     "2027-08-03": {
       "nauticalDawn": "04:17",
-      "nauticalDusk": "19:43"
+      "nauticalDusk": "19:42"
     },
     "2027-08-04": {
-      "nauticalDawn": "04:18",
-      "nauticalDusk": "19:42"
+      "nauticalDawn": "04:17",
+      "nauticalDusk": "19:41"
     },
     "2027-08-05": {
       "nauticalDawn": "04:18",
-      "nauticalDusk": "19:41"
+      "nauticalDusk": "19:40"
     },
     "2027-08-06": {
       "nauticalDawn": "04:19",
-      "nauticalDusk": "19:40"
+      "nauticalDusk": "19:39"
     },
     "2027-08-07": {
       "nauticalDawn": "04:20",
-      "nauticalDusk": "19:39"
+      "nauticalDusk": "19:38"
     },
     "2027-08-08": {
-      "nauticalDawn": "04:21",
-      "nauticalDusk": "19:38"
+      "nauticalDawn": "04:20",
+      "nauticalDusk": "19:37"
     },
     "2027-08-09": {
       "nauticalDawn": "04:21",
-      "nauticalDusk": "19:37"
+      "nauticalDusk": "19:36"
     },
     "2027-08-10": {
       "nauticalDawn": "04:22",
-      "nauticalDusk": "19:36"
+      "nauticalDusk": "19:35"
     },
     "2027-08-11": {
       "nauticalDawn": "04:23",
-      "nauticalDusk": "19:35"
+      "nauticalDusk": "19:34"
     },
     "2027-08-12": {
-      "nauticalDawn": "04:24",
-      "nauticalDusk": "19:34"
+      "nauticalDawn": "04:23",
+      "nauticalDusk": "19:33"
     },
     "2027-08-13": {
       "nauticalDawn": "04:24",
-      "nauticalDusk": "19:33"
+      "nauticalDusk": "19:32"
     },
     "2027-08-14": {
       "nauticalDawn": "04:25",
-      "nauticalDusk": "19:32"
+      "nauticalDusk": "19:31"
     },
     "2027-08-15": {
-      "nauticalDawn": "04:26",
+      "nauticalDawn": "04:25",
       "nauticalDusk": "19:30"
     },
     "2027-08-16": {
@@ -937,22 +941,22 @@
     },
     "2027-08-18": {
       "nauticalDawn": "04:28",
-      "nauticalDusk": "19:27"
+      "nauticalDusk": "19:26"
     },
     "2027-08-19": {
-      "nauticalDawn": "04:29",
-      "nauticalDusk": "19:26"
+      "nauticalDawn": "04:28",
+      "nauticalDusk": "19:25"
     },
     "2027-08-20": {
       "nauticalDawn": "04:29",
-      "nauticalDusk": "19:25"
+      "nauticalDusk": "19:24"
     },
     "2027-08-21": {
       "nauticalDawn": "04:30",
-      "nauticalDusk": "19:24"
+      "nauticalDusk": "19:23"
     },
     "2027-08-22": {
-      "nauticalDawn": "04:31",
+      "nauticalDawn": "04:30",
       "nauticalDusk": "19:22"
     },
     "2027-08-23": {
@@ -961,87 +965,87 @@
     },
     "2027-08-24": {
       "nauticalDawn": "04:32",
-      "nauticalDusk": "19:20"
+      "nauticalDusk": "19:19"
     },
     "2027-08-25": {
-      "nauticalDawn": "04:33",
-      "nauticalDusk": "19:19"
+      "nauticalDawn": "04:32",
+      "nauticalDusk": "19:18"
     },
     "2027-08-26": {
       "nauticalDawn": "04:33",
-      "nauticalDusk": "19:18"
+      "nauticalDusk": "19:17"
     },
     "2027-08-27": {
       "nauticalDawn": "04:34",
       "nauticalDusk": "19:16"
     },
     "2027-08-28": {
-      "nauticalDawn": "04:35",
-      "nauticalDusk": "19:15"
+      "nauticalDawn": "04:34",
+      "nauticalDusk": "19:14"
     },
     "2027-08-29": {
       "nauticalDawn": "04:35",
-      "nauticalDusk": "19:14"
+      "nauticalDusk": "19:13"
     },
     "2027-08-30": {
       "nauticalDawn": "04:36",
-      "nauticalDusk": "19:13"
+      "nauticalDusk": "19:12"
     },
     "2027-08-31": {
-      "nauticalDawn": "04:37",
+      "nauticalDawn": "04:36",
       "nauticalDusk": "19:11"
     },
     "2027-09-01": {
       "nauticalDawn": "04:37",
-      "nauticalDusk": "19:10"
+      "nauticalDusk": "19:09"
     },
     "2027-09-02": {
       "nauticalDawn": "04:38",
-      "nauticalDusk": "19:09"
+      "nauticalDusk": "19:08"
     },
     "2027-09-03": {
-      "nauticalDawn": "04:39",
-      "nauticalDusk": "19:08"
+      "nauticalDawn": "04:38",
+      "nauticalDusk": "19:07"
     },
     "2027-09-04": {
       "nauticalDawn": "04:39",
       "nauticalDusk": "19:06"
     },
     "2027-09-05": {
-      "nauticalDawn": "04:40",
-      "nauticalDusk": "19:05"
+      "nauticalDawn": "04:39",
+      "nauticalDusk": "19:04"
     },
     "2027-09-06": {
-      "nauticalDawn": "04:41",
-      "nauticalDusk": "19:04"
+      "nauticalDawn": "04:40",
+      "nauticalDusk": "19:03"
     },
     "2027-09-07": {
       "nauticalDawn": "04:41",
       "nauticalDusk": "19:02"
     },
     "2027-09-08": {
-      "nauticalDawn": "04:42",
-      "nauticalDusk": "19:01"
+      "nauticalDawn": "04:41",
+      "nauticalDusk": "19:00"
     },
     "2027-09-09": {
       "nauticalDawn": "04:42",
-      "nauticalDusk": "19:00"
+      "nauticalDusk": "18:59"
     },
     "2027-09-10": {
       "nauticalDawn": "04:43",
-      "nauticalDusk": "18:59"
+      "nauticalDusk": "18:58"
     },
     "2027-09-11": {
-      "nauticalDawn": "04:44",
+      "nauticalDawn": "04:43",
       "nauticalDusk": "18:57"
     },
     "2027-09-12": {
       "nauticalDawn": "04:44",
-      "nauticalDusk": "18:56"
+      "nauticalDusk": "18:55"
     },
     "2027-09-13": {
-      "nauticalDawn": "04:45",
-      "nauticalDusk": "18:55"
+      "nauticalDawn": "04:44",
+      "nauticalDusk": "18:54"
     },
     "2027-09-14": {
       "nauticalDawn": "04:45",
@@ -1049,27 +1053,27 @@
     },
     "2027-09-15": {
       "nauticalDawn": "04:46",
-      "nauticalDusk": "18:52"
+      "nauticalDusk": "18:51"
     },
     "2027-09-16": {
-      "nauticalDawn": "04:47",
-      "nauticalDusk": "18:51"
+      "nauticalDawn": "04:46",
+      "nauticalDusk": "18:50"
     },
     "2027-09-17": {
       "nauticalDawn": "04:47",
       "nauticalDusk": "18:49"
     },
     "2027-09-18": {
-      "nauticalDawn": "04:48",
-      "nauticalDusk": "18:48"
+      "nauticalDawn": "04:47",
+      "nauticalDusk": "18:47"
     },
     "2027-09-19": {
       "nauticalDawn": "04:48",
-      "nauticalDusk": "18:47"
+      "nauticalDusk": "18:46"
     },
     "2027-09-20": {
-      "nauticalDawn": "04:49",
-      "nauticalDusk": "18:46"
+      "nauticalDawn": "04:48",
+      "nauticalDusk": "18:45"
     },
     "2027-09-21": {
       "nauticalDawn": "04:49",
@@ -1077,27 +1081,27 @@
     },
     "2027-09-22": {
       "nauticalDawn": "04:50",
-      "nauticalDusk": "18:43"
+      "nauticalDusk": "18:42"
     },
     "2027-09-23": {
-      "nauticalDawn": "04:51",
-      "nauticalDusk": "18:42"
+      "nauticalDawn": "04:50",
+      "nauticalDusk": "18:41"
     },
     "2027-09-24": {
       "nauticalDawn": "04:51",
       "nauticalDusk": "18:40"
     },
     "2027-09-25": {
-      "nauticalDawn": "04:52",
+      "nauticalDawn": "04:51",
       "nauticalDusk": "18:39"
     },
     "2027-09-26": {
       "nauticalDawn": "04:52",
-      "nauticalDusk": "18:38"
+      "nauticalDusk": "18:37"
     },
     "2027-09-27": {
-      "nauticalDawn": "04:53",
-      "nauticalDusk": "18:37"
+      "nauticalDawn": "04:52",
+      "nauticalDusk": "18:36"
     },
     "2027-09-28": {
       "nauticalDawn": "04:53",
@@ -1108,43 +1112,43 @@
       "nauticalDusk": "18:34"
     },
     "2027-09-30": {
-      "nauticalDawn": "04:55",
-      "nauticalDusk": "18:33"
+      "nauticalDawn": "04:54",
+      "nauticalDusk": "18:32"
     },
     "2027-10-01": {
       "nauticalDawn": "04:55",
-      "nauticalDusk": "18:32"
+      "nauticalDusk": "18:31"
     },
     "2027-10-02": {
-      "nauticalDawn": "04:56",
-      "nauticalDusk": "18:31"
+      "nauticalDawn": "04:55",
+      "nauticalDusk": "18:30"
     },
     "2027-10-03": {
       "nauticalDawn": "04:56",
       "nauticalDusk": "18:29"
     },
     "2027-10-04": {
-      "nauticalDawn": "04:57",
-      "nauticalDusk": "18:28"
+      "nauticalDawn": "04:56",
+      "nauticalDusk": "18:27"
     },
     "2027-10-05": {
       "nauticalDawn": "04:57",
-      "nauticalDusk": "18:27"
+      "nauticalDusk": "18:26"
     },
     "2027-10-06": {
       "nauticalDawn": "04:58",
-      "nauticalDusk": "18:26"
+      "nauticalDusk": "18:25"
     },
     "2027-10-07": {
-      "nauticalDawn": "04:59",
-      "nauticalDusk": "18:25"
+      "nauticalDawn": "04:58",
+      "nauticalDusk": "18:24"
     },
     "2027-10-08": {
       "nauticalDawn": "04:59",
       "nauticalDusk": "18:23"
     },
     "2027-10-09": {
-      "nauticalDawn": "05:00",
+      "nauticalDawn": "04:59",
       "nauticalDusk": "18:22"
     },
     "2027-10-10": {
@@ -1152,84 +1156,84 @@
       "nauticalDusk": "18:21"
     },
     "2027-10-11": {
-      "nauticalDawn": "05:01",
-      "nauticalDusk": "18:20"
+      "nauticalDawn": "05:00",
+      "nauticalDusk": "18:19"
     },
     "2027-10-12": {
       "nauticalDawn": "05:01",
-      "nauticalDusk": "18:19"
+      "nauticalDusk": "18:18"
     },
     "2027-10-13": {
       "nauticalDawn": "05:02",
-      "nauticalDusk": "18:18"
+      "nauticalDusk": "18:17"
     },
     "2027-10-14": {
-      "nauticalDawn": "05:03",
-      "nauticalDusk": "18:17"
+      "nauticalDawn": "05:02",
+      "nauticalDusk": "18:16"
     },
     "2027-10-15": {
       "nauticalDawn": "05:03",
-      "nauticalDusk": "18:16"
+      "nauticalDusk": "18:15"
     },
     "2027-10-16": {
-      "nauticalDawn": "05:04",
-      "nauticalDusk": "18:15"
+      "nauticalDawn": "05:03",
+      "nauticalDusk": "18:14"
     },
     "2027-10-17": {
       "nauticalDawn": "05:04",
-      "nauticalDusk": "18:14"
+      "nauticalDusk": "18:13"
     },
     "2027-10-18": {
       "nauticalDawn": "05:05",
-      "nauticalDusk": "18:13"
+      "nauticalDusk": "18:12"
     },
     "2027-10-19": {
-      "nauticalDawn": "05:06",
-      "nauticalDusk": "18:12"
+      "nauticalDawn": "05:05",
+      "nauticalDusk": "18:11"
     },
     "2027-10-20": {
       "nauticalDawn": "05:06",
-      "nauticalDusk": "18:11"
-    },
-    "2027-10-21": {
-      "nauticalDawn": "05:07",
       "nauticalDusk": "18:10"
     },
-    "2027-10-22": {
-      "nauticalDawn": "05:08",
+    "2027-10-21": {
+      "nauticalDawn": "05:06",
       "nauticalDusk": "18:09"
+    },
+    "2027-10-22": {
+      "nauticalDawn": "05:07",
+      "nauticalDusk": "18:08"
     },
     "2027-10-23": {
       "nauticalDawn": "05:08",
-      "nauticalDusk": "18:08"
+      "nauticalDusk": "18:07"
     },
     "2027-10-24": {
-      "nauticalDawn": "05:09",
-      "nauticalDusk": "18:07"
+      "nauticalDawn": "05:08",
+      "nauticalDusk": "18:06"
     },
     "2027-10-25": {
       "nauticalDawn": "05:09",
-      "nauticalDusk": "18:06"
+      "nauticalDusk": "18:05"
     },
     "2027-10-26": {
       "nauticalDawn": "05:10",
       "nauticalDusk": "18:05"
     },
     "2027-10-27": {
-      "nauticalDawn": "05:11",
+      "nauticalDawn": "05:10",
       "nauticalDusk": "18:04"
     },
     "2027-10-28": {
       "nauticalDawn": "05:11",
-      "nauticalDusk": "18:04"
+      "nauticalDusk": "18:03"
     },
     "2027-10-29": {
       "nauticalDawn": "05:12",
-      "nauticalDusk": "18:03"
+      "nauticalDusk": "18:02"
     },
     "2027-10-30": {
-      "nauticalDawn": "05:13",
-      "nauticalDusk": "18:02"
+      "nauticalDawn": "05:12",
+      "nauticalDusk": "18:01"
     },
     "2027-10-31": {
       "nauticalDawn": "05:13",
@@ -1240,80 +1244,80 @@
       "nauticalDusk": "18:00"
     },
     "2027-11-02": {
-      "nauticalDawn": "05:15",
-      "nauticalDusk": "18:00"
+      "nauticalDawn": "05:14",
+      "nauticalDusk": "17:59"
     },
     "2027-11-03": {
       "nauticalDawn": "05:15",
-      "nauticalDusk": "17:59"
+      "nauticalDusk": "17:58"
     },
     "2027-11-04": {
       "nauticalDawn": "05:16",
       "nauticalDusk": "17:58"
     },
     "2027-11-05": {
-      "nauticalDawn": "05:17",
-      "nauticalDusk": "17:58"
+      "nauticalDawn": "05:16",
+      "nauticalDusk": "17:57"
     },
     "2027-11-06": {
-      "nauticalDawn": "05:18",
-      "nauticalDusk": "17:57"
+      "nauticalDawn": "05:17",
+      "nauticalDusk": "17:56"
     },
     "2027-11-07": {
       "nauticalDawn": "05:18",
       "nauticalDusk": "17:56"
     },
     "2027-11-08": {
-      "nauticalDawn": "05:19",
-      "nauticalDusk": "17:56"
+      "nauticalDawn": "05:18",
+      "nauticalDusk": "17:55"
     },
     "2027-11-09": {
-      "nauticalDawn": "05:20",
+      "nauticalDawn": "05:19",
       "nauticalDusk": "17:55"
     },
     "2027-11-10": {
       "nauticalDawn": "05:20",
-      "nauticalDusk": "17:55"
+      "nauticalDusk": "17:54"
     },
     "2027-11-11": {
       "nauticalDawn": "05:21",
       "nauticalDusk": "17:54"
     },
     "2027-11-12": {
-      "nauticalDawn": "05:22",
-      "nauticalDusk": "17:54"
+      "nauticalDawn": "05:21",
+      "nauticalDusk": "17:53"
     },
     "2027-11-13": {
-      "nauticalDawn": "05:23",
+      "nauticalDawn": "05:22",
       "nauticalDusk": "17:53"
     },
     "2027-11-14": {
       "nauticalDawn": "05:23",
-      "nauticalDusk": "17:53"
+      "nauticalDusk": "17:52"
     },
     "2027-11-15": {
-      "nauticalDawn": "05:24",
+      "nauticalDawn": "05:23",
       "nauticalDusk": "17:52"
     },
     "2027-11-16": {
-      "nauticalDawn": "05:25",
-      "nauticalDusk": "17:52"
+      "nauticalDawn": "05:24",
+      "nauticalDusk": "17:51"
     },
     "2027-11-17": {
       "nauticalDawn": "05:25",
-      "nauticalDusk": "17:52"
+      "nauticalDusk": "17:51"
     },
     "2027-11-18": {
       "nauticalDawn": "05:26",
       "nauticalDusk": "17:51"
     },
     "2027-11-19": {
-      "nauticalDawn": "05:27",
-      "nauticalDusk": "17:51"
+      "nauticalDawn": "05:26",
+      "nauticalDusk": "17:50"
     },
     "2027-11-20": {
-      "nauticalDawn": "05:28",
-      "nauticalDusk": "17:51"
+      "nauticalDawn": "05:27",
+      "nauticalDusk": "17:50"
     },
     "2027-11-21": {
       "nauticalDawn": "05:28",
@@ -1324,27 +1328,27 @@
       "nauticalDusk": "17:50"
     },
     "2027-11-23": {
-      "nauticalDawn": "05:30",
-      "nauticalDusk": "17:50"
+      "nauticalDawn": "05:29",
+      "nauticalDusk": "17:49"
     },
     "2027-11-24": {
-      "nauticalDawn": "05:31",
-      "nauticalDusk": "17:50"
+      "nauticalDawn": "05:30",
+      "nauticalDusk": "17:49"
     },
     "2027-11-25": {
       "nauticalDawn": "05:31",
-      "nauticalDusk": "17:50"
+      "nauticalDusk": "17:49"
     },
     "2027-11-26": {
       "nauticalDawn": "05:32",
-      "nauticalDusk": "17:50"
+      "nauticalDusk": "17:49"
     },
     "2027-11-27": {
-      "nauticalDawn": "05:33",
+      "nauticalDawn": "05:32",
       "nauticalDusk": "17:49"
     },
     "2027-11-28": {
-      "nauticalDawn": "05:34",
+      "nauticalDawn": "05:33",
       "nauticalDusk": "17:49"
     },
     "2027-11-29": {
@@ -1356,11 +1360,11 @@
       "nauticalDusk": "17:49"
     },
     "2027-12-01": {
-      "nauticalDawn": "05:36",
+      "nauticalDawn": "05:35",
       "nauticalDusk": "17:49"
     },
     "2027-12-02": {
-      "nauticalDawn": "05:37",
+      "nauticalDawn": "05:36",
       "nauticalDusk": "17:49"
     },
     "2027-12-03": {
@@ -1368,24 +1372,24 @@
       "nauticalDusk": "17:49"
     },
     "2027-12-04": {
-      "nauticalDawn": "05:38",
+      "nauticalDawn": "05:37",
       "nauticalDusk": "17:49"
     },
     "2027-12-05": {
-      "nauticalDawn": "05:39",
-      "nauticalDusk": "17:50"
+      "nauticalDawn": "05:38",
+      "nauticalDusk": "17:49"
     },
     "2027-12-06": {
       "nauticalDawn": "05:39",
-      "nauticalDusk": "17:50"
+      "nauticalDusk": "17:49"
     },
     "2027-12-07": {
       "nauticalDawn": "05:40",
-      "nauticalDusk": "17:50"
+      "nauticalDusk": "17:49"
     },
     "2027-12-08": {
-      "nauticalDawn": "05:41",
-      "nauticalDusk": "17:50"
+      "nauticalDawn": "05:40",
+      "nauticalDusk": "17:49"
     },
     "2027-12-09": {
       "nauticalDawn": "05:41",
@@ -1393,90 +1397,90 @@
     },
     "2027-12-10": {
       "nauticalDawn": "05:42",
-      "nauticalDusk": "17:51"
+      "nauticalDusk": "17:50"
     },
     "2027-12-11": {
-      "nauticalDawn": "05:43",
-      "nauticalDusk": "17:51"
+      "nauticalDawn": "05:42",
+      "nauticalDusk": "17:50"
     },
     "2027-12-12": {
       "nauticalDawn": "05:43",
-      "nauticalDusk": "17:51"
+      "nauticalDusk": "17:50"
     },
     "2027-12-13": {
-      "nauticalDawn": "05:44",
+      "nauticalDawn": "05:43",
       "nauticalDusk": "17:51"
     },
     "2027-12-14": {
-      "nauticalDawn": "05:45",
-      "nauticalDusk": "17:52"
+      "nauticalDawn": "05:44",
+      "nauticalDusk": "17:51"
     },
     "2027-12-15": {
       "nauticalDawn": "05:45",
-      "nauticalDusk": "17:52"
+      "nauticalDusk": "17:51"
     },
     "2027-12-16": {
-      "nauticalDawn": "05:46",
+      "nauticalDawn": "05:45",
       "nauticalDusk": "17:52"
     },
     "2027-12-17": {
       "nauticalDawn": "05:46",
-      "nauticalDusk": "17:53"
+      "nauticalDusk": "17:52"
     },
     "2027-12-18": {
-      "nauticalDawn": "05:47",
+      "nauticalDawn": "05:46",
       "nauticalDusk": "17:53"
     },
     "2027-12-19": {
-      "nauticalDawn": "05:48",
-      "nauticalDusk": "17:54"
+      "nauticalDawn": "05:47",
+      "nauticalDusk": "17:53"
     },
     "2027-12-20": {
       "nauticalDawn": "05:48",
       "nauticalDusk": "17:54"
     },
     "2027-12-21": {
-      "nauticalDawn": "05:49",
-      "nauticalDusk": "17:55"
+      "nauticalDawn": "05:48",
+      "nauticalDusk": "17:54"
     },
     "2027-12-22": {
       "nauticalDawn": "05:49",
-      "nauticalDusk": "17:55"
+      "nauticalDusk": "17:54"
     },
     "2027-12-23": {
-      "nauticalDawn": "05:50",
-      "nauticalDusk": "17:56"
+      "nauticalDawn": "05:49",
+      "nauticalDusk": "17:55"
     },
     "2027-12-24": {
       "nauticalDawn": "05:50",
       "nauticalDusk": "17:56"
     },
     "2027-12-25": {
-      "nauticalDawn": "05:51",
-      "nauticalDusk": "17:57"
+      "nauticalDawn": "05:50",
+      "nauticalDusk": "17:56"
     },
     "2027-12-26": {
-      "nauticalDawn": "05:51",
+      "nauticalDawn": "05:50",
       "nauticalDusk": "17:57"
     },
     "2027-12-27": {
       "nauticalDawn": "05:51",
-      "nauticalDusk": "17:58"
+      "nauticalDusk": "17:57"
     },
     "2027-12-28": {
-      "nauticalDawn": "05:52",
+      "nauticalDawn": "05:51",
       "nauticalDusk": "17:58"
     },
     "2027-12-29": {
       "nauticalDawn": "05:52",
-      "nauticalDusk": "17:59"
+      "nauticalDusk": "17:58"
     },
     "2027-12-30": {
-      "nauticalDawn": "05:53",
-      "nauticalDusk": "18:00"
+      "nauticalDawn": "05:52",
+      "nauticalDusk": "17:59"
     },
     "2027-12-31": {
-      "nauticalDawn": "05:53",
+      "nauticalDawn": "05:52",
       "nauticalDusk": "18:00"
     }
   }
