@@ -1,14 +1,14 @@
 {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-11-09 21:00:18",
-  "lastChecked": "2026-11-09 21:00:18",
-  "lastSuccessfulFetch": "2026-11-09 15:55:43",
-  "updateWindow": "2026-11-09T21:00+08:00",
-  "publishTime": "2026年11月09日10时",
-  "publishCode": "2026110910",
+  "status": "更新完成",
+  "lastUpdated": "2026-11-10 04:41:40",
+  "lastChecked": "2026-11-10 04:41:40",
+  "lastSuccessfulFetch": "2026-11-10 04:41:40",
+  "updateWindow": "2026-11-10T03:00+08:00",
+  "publishTime": "2026年11月09日19时",
+  "publishCode": "2026110919",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -35,7 +35,7 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
+          "WindWave": "1.5-2.0m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 25.0,
           "WindSpeedAvg": "18.8",
@@ -45,7 +45,7 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
+          "WindWave": "2.0-2.5m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 24.0,
           "WindSpeedAvg": "18.0",
@@ -254,9 +254,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有小雨，傍晚转阴到多云。明天阴到多云。后天多云。12日多云转阴，夜里起有时有小雨。13日多云到阴，夜里起阴有时有小雨。<br><br>",
-      "Time": "2026110910",
-      "PreciseForecastTime": "2026年11月09日10时"
+      "Text": "天气预报：今天阴到多云。明天阴到多云。后天多云。12日多云转阴，夜里起有时有小雨。13日多云到阴，夜里起阴有时有小雨。<br><br>",
+      "Time": "2026110919",
+      "PreciseForecastTime": "2026年11月09日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -283,7 +283,7 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
+          "WindWave": "1.5-2.0m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 25.0,
           "WindSpeedAvg": "18.8",
@@ -293,7 +293,7 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "2.5-3.0m",
+          "WindWave": "2.0-2.5m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 24.4,
           "WindSpeedAvg": "18.3",
@@ -502,9 +502,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有小雨，傍晚转阴到多云。明天阴到多云。后天多云。12日多云转阴，夜里起有时有小雨。13日多云到阴，夜里起阴有时有小雨。<br><br>",
-      "Time": "2026110910",
-      "PreciseForecastTime": "2026年11月09日10时"
+      "Text": "天气预报：今天阴到多云，局部小雨。明天阴到多云。后天多云。12日多云转阴，夜里起有时有小雨。13日多云到阴，夜里起阴有时有小雨。<br><br>",
+      "Time": "2026110919",
+      "PreciseForecastTime": "2026年11月09日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -541,7 +541,7 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
+          "WindWave": "1.5-2.0m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 22.4,
           "WindSpeedAvg": "16.8",
@@ -750,9 +750,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有小雨，傍晚转阴到多云。明天阴到多云。后天多云。12日多云转阴，夜里起有时有小雨。13日多云到阴，夜里起阴有时有小雨。<br><br>",
-      "Time": "2026110910",
-      "PreciseForecastTime": "2026年11月09日10时"
+      "Text": "天气预报：今天阴到多云。明天阴到多云。后天多云。12日多云转阴，夜里起有时有小雨。13日多云到阴，夜里起阴有时有小雨。<br><br>",
+      "Time": "2026110919",
+      "PreciseForecastTime": "2026年11月09日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -789,7 +789,7 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "2.0-2.5m",
+          "WindWave": "1.5-2.0m",
           "Riskrating": "1 4 1 1",
           "WindSpeed": 24.5,
           "WindSpeedAvg": "18.4",
@@ -998,12 +998,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有小雨，下午转阴到多云。明天阴到多云。后天多云。12日多云转阴，夜里起有时有小雨。13日多云到阴，夜里起阴有时有小雨。<br><br>",
-      "Time": "2026110910",
-      "PreciseForecastTime": "2026年11月09日10时"
+      "Text": "天气预报：今天阴到多云。明天阴到多云。后天多云。12日多云转阴，夜里起有时有小雨。13日多云到阴，夜里起阴有时有小雨。<br><br>",
+      "Time": "2026110919",
+      "PreciseForecastTime": "2026年11月09日19时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 }
