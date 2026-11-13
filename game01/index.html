@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111b35">
+  <meta name="description" content="孙悟空跑南天门，在云海宫阙中集齐四印，完成一艘仙舟的船代委托。">
+  <title>大圣跑关 · 南天门船代记</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='28'%3E✦%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css?v=painted-realms-20261113">
+  <script type="importmap">
+    {"imports":{"./ink-world.mjs":"./ink-world.mjs?v=painted-realms-20261113","./painted-chapters.mjs":"./painted-chapters.mjs?v=painted-realms-20261113","./journey.mjs":"./journey.mjs?v=painted-realms-20261113"}}
+  </script>
+</head>
+<body data-screen="cover">
+  <main>
+    <section id="cover" aria-labelledby="cover-title">
+      <div class="cover-copy">
+        <p class="cover-eyebrow">THE SEVENTY-THIRD TRANSFORMATION</p>
+        <h1 id="cover-title"><span class="cover-name">大圣跑关</span><span class="cover-subtitle">南天门船代记</span></h1>
+        <p class="cover-quote">第七十三变，变得靠谱。</p>
+      </div>
+      <button id="begin" class="begin-button" type="button"><span>踏云 · 入南天门</span><span class="begin-star" aria-hidden="true">✦</span></button>
+      <div id="file-preview-hint" hidden>
+        <p class="file-preview-note">这份绘画探索游戏需要通过网页地址运行。<br><a href="http://localhost:8033/">打开本机预览</a>（本机预览服务运行时可用），或进入在线游戏。</p>
+        <a class="begin-button" href="https://www.zsagent01.com/game01/">打开在线游戏 <span aria-hidden="true">↗</span></a>
+      </div>
+      <footer class="cover-credit">架空西游船代故事 · 非真实办事系统</footer>
+    </section>
+
+    <section id="atlas" aria-labelledby="atlas-title" hidden>
+      <header class="atlas-heading">
+        <button id="back-cover" class="text-button atlas-back" type="button" aria-label="返回封面">← 返回</button>
+        <p class="eyebrow">BEYOND THE CELESTIAL GATE</p>
+        <h2 id="atlas-title">南天门 · 八方往来</h2>
+        <p class="atlas-invitation">八境入画 · 油彩、粉彩、岩彩与水墨间的西游</p>
+        <div id="seal-progress" class="seal-progress" aria-label="四天王印记"></div>
+      </header>
+      <div id="chapter-grid" class="chapter-grid" aria-label="选择自由探访的地点：南天门、关天王、海天王、边天王、交天王、云海锚地、安小王、避台云湾"></div>
+      <div class="chapter-summary">
+        <p id="chapter-progress" class="chapter-progress">四方印记 · 0 / 4</p>
+        <h3 id="chapter-title">南天门 · 大圣接单</h3>
+        <p id="chapter-style" class="chapter-style">金箔油画</p>
+        <p id="chapter-description">一个筋斗能翻十万八千里，一张证却不能少核。</p>
+        <button id="enter-chapter" class="enter-button" type="button">踏入此境 <span aria-hidden="true">→</span></button>
+        <p class="simulation-note">架空职责与模拟情境，不作为实际申报依据</p>
+      </div>
+      <span class="paper-star paper-star-one" aria-hidden="true">✧</span>
+      <span class="paper-star paper-star-two" aria-hidden="true">✦</span>
+    </section>
+
+    <section id="play" aria-label="南天门探索" hidden>
+      <canvas id="ink-world" aria-label="可点击行走、与巡游仙人交谈的八境绘画长卷" tabindex="0"></canvas>
+      <header class="play-heading">
+        <p id="chapter-label" class="chapter-label">南天门 · 大圣接单</p>
+        <p id="goal-text" class="goal-text">先听太白金星把委托说完。</p>
+      </header>
+      <nav class="play-toolbar" aria-label="天宫探索菜单">
+        <button id="open-map" class="hud-button" type="button" aria-label="打开云图"><span aria-hidden="true">✧</span><span>云图</span></button>
+        <button id="open-log" class="hud-button" type="button" aria-label="打开通关簿"><span aria-hidden="true">冊</span><span>通关簿</span></button>
+        <button id="open-settings" class="hud-button" type="button" aria-label="打开设置"><span aria-hidden="true">⚙</span><span>设置</span></button>
+      </nav>
+      <p id="play-hint" class="play-hint">点击画中道路 · 行走 <span>← → · 移动</span><span>靠近巡游仙人 · E 交谈</span><span>空格 · 跳跃</span></p>
+      <button id="interact-button" class="interact-button" type="button" hidden><span class="interact-key" aria-hidden="true">E</span><span id="interaction-label">靠近，了解情况</span></button>
+      <button id="jump-button" class="desktop-jump" type="button" aria-label="跳跃">跳跃</button>
+      <div class="touch-controls" aria-label="触屏行走控制">
+        <div class="touch-directions">
+          <button type="button" data-move="forward" aria-label="向前走">↑</button>
+          <button type="button" data-move="left" aria-label="向左走">←</button>
+          <button type="button" data-move="back" aria-label="向后走">↓</button>
+          <button type="button" data-move="right" aria-label="向右走">→</button>
+        </div>
+        <button id="touch-jump" type="button" aria-label="跳跃">跃</button>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="dialogue" aria-labelledby="dialogue-title" aria-describedby="dialogue-speaker dialogue-text">
+    <button id="dialogue-close" class="dialog-close" type="button" aria-label="结束对话">×</button>
+    <p class="dialogue-flourish" aria-hidden="true">✧</p>
+    <p id="dialogue-speaker"></p>
+    <h2 id="dialogue-title">天宫里的一件事</h2>
+    <p id="dialogue-text"></p>
+    <div id="dialogue-options" aria-label="选择处理方式"></div>
+    <p id="decision-feedback" role="status" aria-live="polite" hidden></p>
+    <button id="dialogue-next" class="text-button dialogue-next" type="button">继续 <span aria-hidden="true">→</span></button>
+  </dialog>
+
+  <dialog id="settings" aria-labelledby="settings-title">
+    <button id="settings-close" class="dialog-close" type="button" aria-label="关闭设置">×</button>
+    <p class="eyebrow">A BREATH BETWEEN THE CLOUDS</p>
+    <h2 id="settings-title">漫游设置</h2>
+    <div class="setting-row"><label for="volume">云海配乐</label><input id="volume" type="range" min="0" max="1" step="0.05" value="0.35"></div>
+    <p class="settings-note">航行日志与设置，仅保存在这台设备的本地浏览器中。</p>
+    <p class="settings-note">八境均为二维绘画探索。四位天王的冠饰、甲胄与法器参考传统造像，人物与场景重新绘制。</p>
+    <button id="reset-progress" class="text-button reset-progress" type="button">重接这一航次</button>
+  </dialog>
+  <dialog id="voyage-dialog" aria-labelledby="voyage-title">
+    <button id="voyage-close" class="dialog-close" type="button" aria-label="合上通关簿">×</button>
+    <p class="eyebrow">THE VOYAGE LEDGER</p>
+    <h2 id="voyage-title">南天门通关簿</h2>
+    <p id="voyage-summary"></p>
+    <ul id="voyage-details"></ul>
+    <p class="ledger-note">筋斗云能跑腿，不能替事实盖章。</p>
+  </dialog>
+  <dialog id="ending" aria-labelledby="ending-title">
+    <p class="eyebrow">THE SEVENTY-THIRD TRANSFORMATION</p>
+    <p class="ending-seal" aria-hidden="true">齐天<br>大代</p>
+    <h2 id="ending-title">第七十三变，变得靠谱。</h2>
+    <p>筋斗云号驶过南天门。大圣收起金箍棒，留下一本每件事都有回音的航行日志。</p>
+    <button id="ending-close" class="enter-button" type="button">继续漫游 <span aria-hidden="true">→</span></button>
+  </dialog>
+  <div id="loading-status" class="loading-status" aria-live="polite" hidden>正在拨开云海……</div>
+  <div id="toast" class="toast" aria-live="polite" hidden></div>
+  <script>
+    if (location.protocol === 'file:') {
+      document.getElementById('begin').hidden = true;
+      document.getElementById('file-preview-hint').hidden = false;
+    }
+  </script>
+  <script type="module" src="./main.js?v=painted-realms-20261113"></script>
+</body>
+</html>
