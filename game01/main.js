@@ -29,6 +29,7 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     catch { toast('浏览器未允许保存；本次南天门委托仍可继续。'); }
   };
   const chapter = () => CHAPTERS.find(item => item.id === state.selected);
+  const focusChapter = () => $('chapter-grid').querySelector(`[data-chapter="${state.selected}"]`)?.focus();
   const activeCanvas = () => $('ink-world');
   const disposeWorld = () => {
     worldGeneration++; world?.dispose(); world = undefined; currentChapter = undefined;
@@ -86,7 +87,11 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     const office = document.createElement('span'); office.className = 'planet-office'; office.textContent = item.name; office.hidden = item.realm.includes(item.name);
     const medium = document.createElement('span'); medium.className = 'chapter-medium'; medium.textContent = PAINTED_CHAPTERS[item.id].style;
     button.append(art, name, office, medium); $('chapter-grid').append(button);
-    on(button, 'click', () => { state = selectChapter(state, item.id); persist(); refreshAtlas(); });
+    on(button, 'click', () => {
+      if (loading || disposed) return;
+      state = selectChapter(state, item.id); persist(); refreshAtlas();
+      void enterChapter();
+    });
   }
 
   const applyReadiness = notice => {
@@ -98,6 +103,7 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     } else {
       showScreen('atlas'); toast(notice.message || '画卷暂未展开，请返回云图后重试。');
       disposeWorld();
+      focusChapter();
     }
   };
   const renderDialogue = () => {
@@ -126,9 +132,9 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     conversation = { id: node.id, page: 1, resolved: false };
     renderDialogue(); $('dialogue').showModal(); syncPause();
   };
-  on($('begin'), 'click', () => { audio.start(); showScreen('atlas'); $('enter-chapter').focus(); });
+  on($('begin'), 'click', () => { audio.start(); showScreen('atlas'); focusChapter(); });
   on($('back-cover'), 'click', () => { showScreen('cover'); $('begin').focus(); });
-  on($('enter-chapter'), 'click', async () => {
+  async function enterChapter() {
     if (loading || disposed) return;
     if (currentChapter !== state.selected) {
       sceneReady = false; $('interact-button').hidden = true;
@@ -136,7 +142,7 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     $('play-hint').textContent = '点击画中道路 · 行走　← → · 移动　靠近巡游仙人 · E 交谈　空格 · 跳跃';
     activeCanvas().setAttribute('aria-label', `可点击行走与交谈的${chapter().realm} · ${PAINTED_CHAPTERS[state.selected].style}画卷`);
     document.body.dataset.realm = state.selected;
-    loading = true; $('enter-chapter').disabled = true; $('loading-status').hidden = false;
+    loading = true; $('loading-status').hidden = false;
     $('loading-status').textContent = `正在展开${chapter().realm} · ${PAINTED_CHAPTERS[state.selected].style}……`; showScreen('play');
     try {
       if (!world) {
@@ -162,9 +168,10 @@ export async function mountJourney({ document = globalThis.document, storage, lo
       disposeWorld();
       showScreen('atlas'); $('loading-status').hidden = true;
       toast(`场景暂未启动：${error.message}`);
-    } finally { loading = false; $('enter-chapter').disabled = false; }
-  });
-  on($('open-map'), 'click', () => { showScreen('atlas'); $('enter-chapter').focus(); });
+      focusChapter();
+    } finally { loading = false; }
+  }
+  on($('open-map'), 'click', () => { showScreen('atlas'); focusChapter(); });
   on($('open-log'), 'click', () => { refreshVoyage(); $('voyage-dialog').showModal(); syncPause(); });
   on($('voyage-close'), 'click', () => $('voyage-dialog').close());
   on($('ending-close'), 'click', () => $('ending').close());
@@ -210,7 +217,7 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     const confirm = confirmReset || (() => view.confirm('确定重接这一航次，清除当前南天门委托进度吗？此操作无法撤回。'));
     if (!confirm()) return;
     state = { ...freshJourney(), settings: state.settings }; persist(); refreshAtlas();
-    $('settings').close(); showScreen('atlas'); $('enter-chapter').focus();
+    $('settings').close(); showScreen('atlas'); focusChapter();
   });
   const sendTouch = () => world?.setMoveInput(Number(touchHeld.has('right')) - Number(touchHeld.has('left')), Number(touchHeld.has('back')) - Number(touchHeld.has('forward')));
   for (const button of document.querySelectorAll('[data-move]')) {
@@ -223,7 +230,7 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     if (['dialogue', 'settings', 'voyage-dialog', 'ending'].some(id => $(id).open)) return;
     if (event.code === 'Escape') { event.preventDefault(); openSettings(); }
     if (event.code === 'KeyE') { event.preventDefault(); world?.interact(); }
-    if (event.code === 'Tab') { event.preventDefault(); showScreen('atlas'); $('enter-chapter').focus(); }
+    if (event.code === 'Tab') { event.preventDefault(); showScreen('atlas'); focusChapter(); }
   });
   on(view, 'blur', () => { touchHeld.clear(); world?.setMoveInput(0, 0); audio.setPaused(true); });
   on(view, 'focus', syncPause); on(document, 'visibilitychange', syncPause);

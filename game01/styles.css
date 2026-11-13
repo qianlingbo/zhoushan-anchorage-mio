@@ -66,9 +66,6 @@ h1 { margin: 0; font-weight: 400; }
 .chapter-progress { margin: 0 0 9px; color: #b1a18a; font-size: 10px; letter-spacing: .15em; }
 .chapter-summary h3 { margin: 0 0 9px; font-size: 19px; font-weight: 400; letter-spacing: .1em; }
 #chapter-description { margin: 0 auto; color: #908b80; max-width: 560px; font-size: 12px; line-height: 1.9; letter-spacing: .05em; }
-.enter-button { min-width: 170px; min-height: 43px; padding: 10px 21px; margin-top: 15px; border: 1px solid rgb(178 150 94 / .55); border-radius: 1px; background: transparent; color: #957947; letter-spacing: .2em; font-size: 12px; transition: background .25s, border-color .25s; }
-.enter-button span { margin-left: 18px; }
-.enter-button:hover { background: rgb(183 151 91 / .08); border-color: #b2965e; }
 .simulation-note { margin: 10px 0 0; font-size: 9px; line-height: 1.6; letter-spacing: .06em; color: #a69b89; }
 .paper-star { position: absolute; z-index: -1; color: #c6b391; opacity: .4; }
 .paper-star-one { left: 9%; top: 43%; font-size: 27px; }
@@ -167,7 +164,6 @@ dialog::backdrop { background: rgb(13 23 40 / .35); backdrop-filter: blur(4px); 
   .chapter-progress { font-size: 9px; margin-bottom: 11px; }
   .chapter-summary h3 { font-size: 18px; }
   #chapter-description { max-width: 325px; font-size: 11px; min-height: 39px; }
-  .enter-button { min-height: 44px; margin-top: 17px; }
   .paper-star-one { left: 5%; top: 64%; }
   .paper-star-two { right: 6%; bottom: 25%; }
   .play-heading { left: 12px; top: max(20px, env(safe-area-inset-top)); max-width: 49%; padding: 9px 10px; }
@@ -202,7 +198,6 @@ dialog::backdrop { background: rgb(13 23 40 / .35); backdrop-filter: blur(4px); 
   .chapter-summary { min-height: 115px; }
   .chapter-summary h3 { margin-bottom: 4px; font-size: 16px; }
   .chapter-progress { margin-bottom: 5px; }
-  .enter-button { margin-top: 9px; min-height: 37px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
