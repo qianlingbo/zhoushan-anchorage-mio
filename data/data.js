@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-11-14 11:13:21",
-  "lastChecked": "2026-11-14 11:13:21",
-  "lastSuccessfulFetch": "2026-11-14 11:13:21",
-  "updateWindow": "2026-11-14T09:00+08:00",
-  "publishTime": "2026年11月14日11时",
-  "publishCode": "2026111411",
+  "lastUpdated": "2026-11-14 15:35:20",
+  "lastChecked": "2026-11-14 15:35:20",
+  "lastSuccessfulFetch": "2026-11-14 15:35:20",
+  "updateWindow": "2026-11-14T15:00+08:00",
+  "publishTime": "2026年11月14日14时",
+  "publishCode": "2026111414",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有阵雨，局部雨量中等，傍晚转阴局部有小雨。明天阴局部有小雨，上午转阴到多云。后天多云转阴。17日阴转阵雨。18日阴有小雨转多云。今天早晨到上午局部有雾。<br><br>",
-      "Time": "2026111411",
-      "PreciseForecastTime": "2026年11月14日11时"
+      "Time": "2026111414",
+      "PreciseForecastTime": "2026年11月14日14时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有阵雨，局部雨量中等，傍晚转阴局部有小雨。明天阴局部有小雨，上午转阴到多云。后天多云转阴。17日阴转阵雨。18日阴有小雨转多云。今天早晨到上午局部有雾。<br><br>",
-      "Time": "2026111411",
-      "PreciseForecastTime": "2026年11月14日11时"
+      "Time": "2026111414",
+      "PreciseForecastTime": "2026年11月14日14时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有阵雨，局部雨量中等，傍晚转阴局部有小雨。明天阴局部有小雨，上午转阴到多云。后天多云转阴。17日阴转阵雨。18日阴有小雨转多云。今天早晨到上午局部有雾。<br><br>",
-      "Time": "2026111411",
-      "PreciseForecastTime": "2026年11月14日11时"
+      "Time": "2026111414",
+      "PreciseForecastTime": "2026年11月14日14时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有阵雨，局部雨量中等，傍晚转阴局部有小雨。明天阴局部有小雨，上午转阴到多云。后天多云转阴。17日阴转阵雨。18日阴有小雨转多云。今天早晨到上午局部有雾。<br><br>",
-      "Time": "2026111411",
-      "PreciseForecastTime": "2026年11月14日11时"
+      "Time": "2026111414",
+      "PreciseForecastTime": "2026年11月14日14时"
     }
   }
 };
