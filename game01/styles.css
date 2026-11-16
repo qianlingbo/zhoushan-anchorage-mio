@@ -49,7 +49,7 @@ h1 { margin: 0; font-weight: 400; }
 .text-button { border: 0; background: transparent; padding: 10px 8px; font-size: 12px; letter-spacing: .12em; color: #9b8154; }
 .text-button:hover { color: #6e552e; }
 .atlas-back { position: absolute; left: 0; top: 2px; }
-.chapter-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 22px; row-gap: 14px; width: min(1050px, 100%); margin: auto; padding: 24px 0; align-content: center; }
+.chapter-grid { display: grid; grid-template-columns: repeat(8, minmax(120px, 1fr)); column-gap: 0; width: 100%; overflow-x: auto; margin: auto; padding: 24px 4px; align-content: center; }
 .chapter-grid button[data-chapter] { position: relative; border: 0; background: transparent; padding: 8px 5px 10px; text-align: center; color: #898982; }
 .planet-art { position: relative; display: block; width: 100%; aspect-ratio: 1.5; margin: 0 auto 10px; background-color: #ddd3bc; background-size: cover; background-position: center; background-repeat: no-repeat; box-shadow: 0 3px 12px rgb(61 45 29 / .09); filter: saturate(.8); opacity: .86; transition: filter .4s, opacity .4s, transform .4s; }
 .planet-art::after { content: ""; position: absolute; inset: -4px; border: 1px solid transparent; transition: border-color .4s; }
@@ -86,6 +86,10 @@ h1 { margin: 0; font-weight: 400; }
 .interact-button { position: absolute; bottom: 69px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 11px; border: 1px solid rgb(224 203 151 / .35); border-radius: 3px; padding: 10px 17px 10px 11px; min-height: 45px; background: rgb(18 28 47 / .56); color: #e9dcbb; font-size: 12px; letter-spacing: .12em; backdrop-filter: blur(8px); }
 .interact-key { border: 1px solid rgb(224 203 151 / .45); padding: 3px 6px; font: 11px Georgia, serif; border-radius: 2px; }
 .desktop-jump { display: none; }
+.spell-controls { position: absolute; right: 24px; bottom: 72px; display: flex; gap: 8px; }
+.spell-controls button { min-height: 44px; padding: 8px 12px; border: 1px solid rgb(216 198 156 / .5); border-radius: 3px; color: #f3e7c8; background: rgb(23 35 47 / .72); font-size: 12px; letter-spacing: .08em; backdrop-filter: blur(6px); }
+.spell-controls button:hover { background: rgb(76 71 46 / .85); }
+.spell-controls kbd { margin-left: 6px; font: 10px Georgia, serif; opacity: .65; }
 .touch-controls { display: none; position: absolute; left: 21px; right: 21px; bottom: max(25px, env(safe-area-inset-bottom)); align-items: end; justify-content: space-between; pointer-events: none; }
 .touch-directions { display: grid; grid-template-columns: repeat(3, 45px); gap: 5px; }
 .touch-controls button { width: 45px; height: 45px; border: 1px solid rgb(235 225 199 / .25); border-radius: 50%; color: rgb(241 233 207 / .8); background: rgb(20 30 46 / .28); font-size: 19px; pointer-events: auto; user-select: none; touch-action: none; }
@@ -155,7 +159,7 @@ dialog::backdrop { background: rgb(13 23 40 / .35); backdrop-filter: blur(4px); 
   .atlas-heading .eyebrow { font-size: 7px; }
   .atlas-back { position: relative; display: block; margin: -12px 0 8px -7px; padding: 9px; font-size: 10px; }
   .atlas-invitation { font-size: 10px; letter-spacing: .04em; margin-top: 11px; }
-  .chapter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 17px; row-gap: 16px; padding: 22px 0; max-width: 480px; }
+  .chapter-grid { grid-template-columns: repeat(8, 125px); padding: 22px 0; }
   .chapter-grid button[data-chapter] { padding: 5px 2px; }
   .planet-art { width: 100%; margin-bottom: 9px; }
   .planet-art::after { inset: -2px; }
@@ -175,6 +179,9 @@ dialog::backdrop { background: rgb(13 23 40 / .35); backdrop-filter: blur(4px); 
   .hud-button > span:last-child { font-size: 8px; }
   .play-hint { display: none; }
   .touch-controls { display: flex; }
+  .spell-controls { right: 17px; bottom: max(94px, calc(env(safe-area-inset-bottom) + 84px)); flex-direction: column; gap: 6px; }
+  .spell-controls button { min-height: 40px; padding: 7px 9px; font-size: 10px; }
+  .spell-controls kbd { display: none; }
   .interact-button { bottom: max(156px, calc(env(safe-area-inset-bottom) + 134px)); padding: 10px 14px; white-space: nowrap; font-size: 11px; }
   .interact-key { display: none; }
   #dialogue { width: calc(100% - 28px); margin-bottom: max(20px, env(safe-area-inset-bottom)); padding: 24px 25px 20px; }

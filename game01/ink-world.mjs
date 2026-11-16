@@ -1,43 +1,21 @@
 import { CHAPTERS } from './journey.mjs';
 import { PAINTED_CHAPTERS } from './painted-chapters.mjs';
+import { REGION_IDS, createScrollState, advanceScrollState, regionAt, nearestNpc, npcEncounter, beginCloud } from './scroll-world.mjs';
 
 // Playable paintings: positions are fractions of each horizontal path.
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 const RIGHT = ['KeyD', 'KeyW', 'ArrowRight', 'ArrowUp'];
 const LEFT = ['KeyA', 'KeyS', 'ArrowLeft', 'ArrowDown'];
 export function createInkState() {
-  return { u: .3, npc: .62, npcDirection: 1, direction: 1, destination: null, height: 0, velocity: 0, distance: 0, npcDistance: 0, moving: false, npcMoving: false, time: 0, caseIndex: 0 };
+  return createScrollState();
 }
 export function advanceInkState(state, dt, { paused = false, axis = 0, run = false, reducedMotion = false } = {}) {
-  if (paused) return state;
-  dt = clamp(Number(dt) || 0, 0, .05); state.time += dt;
-  const before = state.u, speed = run ? .17 : .095;
-  if (axis) { state.destination = null; state.u += clamp(axis, -1, 1) * speed * dt; }
-  else if (state.destination !== null) {
-    const difference = state.destination - state.u;
-    state.u += Math.sign(difference) * Math.min(Math.abs(difference), speed * dt);
-    if (Math.abs(state.destination - state.u) < .001) { state.u = state.destination; state.destination = null; }
-  }
-  state.u = clamp(state.u, .08, .92);
-  const travelled = state.u - before; state.moving = Math.abs(travelled) > .000001;
-  if (state.moving) state.direction = Math.sign(travelled);
-  state.distance += Math.abs(travelled);
-  state.npcMoving = !reducedMotion && Math.abs(state.u - state.npc) > .075;
-  if (state.npcMoving) {
-    const next = clamp(state.npc + state.npcDirection * .009 * dt, .52, .78);
-    state.npcDistance += Math.abs(next - state.npc); state.npc = next;
-    if (next <= .52 || next >= .78) state.npcDirection *= -1;
-  }
-  if (state.height > 0 || state.velocity > 0) {
-    state.velocity -= 2.5 * dt; state.height = Math.max(0, state.height + state.velocity * dt);
-    if (!state.height) state.velocity = 0;
-  }
-  return state;
+  return advanceScrollState(state, dt, { paused, axis, run, reducedMotion });
 }
 
 export class InkWorld {
-  constructor(canvas, { onReady, onNear, onInteract, reducedMotion = false } = {}) {
-    this.canvas = canvas; this.callbacks = { onReady, onNear, onInteract }; this.reducedMotion = reducedMotion;
+  constructor(canvas, { onReady, onNear, onInteract, onRegion, reducedMotion = false, seed } = {}) {
+    this.canvas = canvas; this.callbacks = { onReady, onNear, onInteract, onRegion }; this.reducedMotion = reducedMotion; this.seed = seed;
     this.document = canvas.ownerDocument; this.window = this.document.defaultView; this.state = createInkState();
     this.keys = new Set(); this.input = { x: 0, z: 0, run: false }; this.removers = []; this.paused = true;
     this.ctx = canvas.getContext('2d'); this.ready = false; this.disposed = false; this.near = null; this.generation = 0;
@@ -108,9 +86,12 @@ export class InkWorld {
       if (this.canvas.hasPointerCapture?.(event.pointerId)) this.canvas.releasePointerCapture(event.pointerId);
       if (this.paused || pointer.dragged) return;
       const rect = this.canvas.getBoundingClientRect(), layout = this.layout();
-      let target = clamp((event.clientX - rect.left + layout.camera) / layout.worldWidth, .08, .92);
-      this.approachNpc = Math.abs(target - this.state.npc) < .035;
-      if (this.approachNpc) target = this.state.npc + (this.state.u < this.state.npc ? -.045 : .045);
+      if (this.state.flight) return;
+      const localX = (event.clientX - rect.left) * this.width / (rect.width || this.width);
+      let target = clamp((localX + layout.camera) / layout.segmentWidth, .035, REGION_IDS.length - .035);
+      const npc = this.state.npcs.find(item => Math.abs(target - item.u) < .025);
+      this.approachNpc = npc?.key || false;
+      if (npc) target = npc.u + (this.state.u < npc.u ? -.045 : .045);
       this.state.destination = target; this.draw();
     });
     for (const name of ['pointercancel', 'lostpointercapture']) this.listen(this.canvas, name, () => { this.pointer = null; });
@@ -118,38 +99,42 @@ export class InkWorld {
   layout() {
     const ground = this.art?.ground ?? .79, floor = this.height * (this.art?.floor ?? .79);
     // Align the real path in each painting, covering both edges on any viewport.
-    const worldHeight = Math.max(this.width / 1.5, this.height, floor / ground, (this.height - floor) / (1 - ground));
-    const worldWidth = worldHeight * 1.5, top = floor - worldHeight * ground;
-    const camera = clamp(this.state.u * worldWidth - this.width * .43, 0, worldWidth - this.width);
-    return { worldWidth, worldHeight, floor, top, camera };
+    const segmentWidth = Math.max(this.width * 1.15, this.height * 1.5);
+    const worldHeight = Math.max(segmentWidth / 1.5, this.height, floor / ground, (this.height - floor) / (1 - ground));
+    const worldWidth = segmentWidth * REGION_IDS.length, top = floor - worldHeight * ground;
+    const target = clamp(this.state.u * segmentWidth - this.width * .43, 0, worldWidth - this.width);
+    return { worldWidth, segmentWidth, worldHeight, floor, top, camera: this.camera ?? target, target };
   }
   resize() {
     this.width = this.canvas.clientWidth || this.window.innerWidth || 800; this.height = this.canvas.clientHeight || this.window.innerHeight || 600;
     this.dpr = Math.min(this.window.devicePixelRatio || 1, 2);
     this.canvas.width = Math.round(this.width * this.dpr); this.canvas.height = Math.round(this.height * this.dpr);
-    this.draw();
+    this.panels = null; this.camera = undefined; this.draw();
   }
-  startChapter(id) {
+  startChapter(id) { return this.startJourney(id); }
+  startJourney(id = 'nantian') {
     const chapter = CHAPTERS.find(item => item.id === id), art = PAINTED_CHAPTERS[id];
     if (!chapter || !art) throw new Error(`Unknown painted chapter: ${id}`);
     if (!this.ctx || this.disposed) return;
+    if (this.pendingLoad) return this.pendingLoad;
     const generation = ++this.generation;
-    this.chapter = chapter; this.art = art; this.ready = false; this.failed = false; this.setPaused(true); this.reset();
+    this.chapter = chapter; this.art = art; this.ready = false; this.failed = false; this.setPaused(true); this.state = createScrollState(this.seed, id);
     this.cases = Object.entries(chapter.encounters).map(([caseId, lines]) => ({ id: caseId, label: lines[0] }));
-    this.canvas.setAttribute?.('aria-label', `${chapter.realm} · ${art.style}绘画探索，点击地面行走，靠近${chapter.host}交谈`);
+    this.updateAccessibleLabel();
     // Clear the previous painting while the new one loads; never present stale art as ready.
     this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.pendingLoad = Promise.all([this.common, this.loadImage(art.background), art.guardian === undefined ? null : this.loadImage('./assets/painted/four-kings-cutout.png')]).then(([, landscape, guardians]) => {
+    this.pendingLoad = Promise.all([this.common, ...REGION_IDS.map(region => this.loadImage(PAINTED_CHAPTERS[region].background)), this.loadImage('./assets/painted/four-kings-cutout.png'), this.loadImage('./assets/painted/scroll-visitors-v1.png')]).then(([, ...images]) => {
       if (this.disposed || generation !== this.generation) return;
       if (this.commonError) throw this.commonError;
-      this.landscape = landscape; this.guardians = guardians;
-      this.guardianBounds = guardians ? this.trimGuardian(guardians, art.guardian) : null;
-      this.ready = true; this.lastTime = undefined; this.draw(); this.callbacks.onReady?.({ ok: true, chapter: id });
+      this.landscapes = images.slice(0, 8); this.guardians = images[8]; this.visitors = images[9];
+      this.kingCrops = [0,1,2,3].map(index => this.trimGuardian(this.guardians,index));
+      this.visitorCrops = Array.from({ length: 8 }, (_, index) => this.trimGuardian(this.visitors,index,4,2));
+      this.ready = true; this.lastTime = undefined; this.draw(); this.callbacks.onReady?.({ ok: true, chapter: id }); this.callbacks.onRegion?.({ chapter: id });
     }).catch(error => { if (generation === this.generation) this.fail(error.message); });
   }
-  trimGuardian(image, index) {
-    const sw = image.naturalWidth / 2, sh = image.naturalHeight / 2;
-    const cell = { x: index % 2 * sw, y: Math.floor(index / 2) * sh, width: sw, height: sh };
+  trimGuardian(image, index, columns = 2, rows = 2) {
+    const sw = image.naturalWidth / columns, sh = image.naturalHeight / rows;
+    const cell = { x: index % columns * sw, y: Math.floor(index / columns) * sh, width: sw, height: sh };
     if (!this.document.createElement) return cell;
     const sheet = this.document.createElement('canvas'); sheet.width = sw; sheet.height = sh;
     const ctx = sheet.getContext('2d', { willReadFrequently: true });
@@ -160,66 +145,108 @@ export class InkWorld {
     }
     return right > left ? { x: cell.x + left, y: cell.y + top, width: right - left + 1, height: bottom - top + 1 } : cell;
   }
-  reset() { this.clearInput?.(); this.state = createInkState(); this.pendingEncounter = false; this.near = null; this.callbacks.onNear?.(null); this.draw(); }
+  reset() { this.clearInput?.(); this.state = createScrollState(this.state.seed); this.camera = undefined; this.pendingEncounter = false; this.near = null; this.callbacks.onNear?.(null); this.draw(); }
   setPaused(value) {
     const wasPaused = this.paused; this.paused = !!value;
     if (this.paused) this.clearInput?.();
-    else if (wasPaused && this.pendingEncounter) { this.state.caseIndex = (this.state.caseIndex + 1) % this.cases.length; this.pendingEncounter = false; }
+    else if (wasPaused && this.pendingEncounter) { const npc = this.state.npcs.find(item => item.key === this.pendingEncounter); if (npc) npc.caseIndex = (npc.caseIndex + 1) % Object.keys(CHAPTERS.find(item => item.id === npc.chapter).encounters).length; this.pendingEncounter = false; }
     this.lastTime = undefined; this.draw();
   }
   setView() {}
   setSensitivity() {}
+  updateAccessibleLabel() { this.canvas.setAttribute?.('aria-label', `${this.chapter.realm} · ${this.art.style}连续长卷探索，点击地面行走，靠近来客交谈，空格跳跃，可驾筋斗云往来各境`); }
   setMoveInput(x, z, run = false) { if (!this.paused) this.input = { x: Number(x) || 0, z: Number(z) || 0, run: !!run }; }
-  requestJump() { if (!this.paused && this.ready && !this.state.height && !this.state.velocity) this.state.velocity = .78; }
+  requestJump() { if (!this.paused && this.ready && !this.state.flight && !this.state.height && !this.state.velocity) this.state.velocity = .78; }
+  castCloud(chapter) {
+    if (this.paused || !this.ready || !beginCloud(this.state, chapter)) return false;
+    this.clearInput(); this.near = null; this.callbacks.onNear?.(null); return true;
+  }
+  castFreeze() { if (this.paused || !this.ready) return false; this.state.freeze = 5; return true; }
   interact() {
-    if (this.paused || !this.ready || this.pendingEncounter || Math.abs(this.state.u - this.state.npc) > .065) return;
-    this.state.destination = null; this.approachNpc = false; this.pendingEncounter = true; this.near = null; this.callbacks.onNear?.(null);
-    this.callbacks.onInteract?.({ ...this.cases[this.state.caseIndex] });
+    const npc = nearestNpc(this.state);
+    if (this.paused || !this.ready || this.pendingEncounter || this.state.flight || !npc) return;
+    this.state.destination = null; this.approachNpc = false; this.pendingEncounter = npc.key; this.near = null; this.callbacks.onNear?.(null);
+    this.callbacks.onInteract?.(npcEncounter(npc));
   }
   update(dt) {
     const keyboard = Number(RIGHT.some(key => this.keys.has(key))) - Number(LEFT.some(key => this.keys.has(key)));
     const axis = keyboard || this.input.x - this.input.z;
     if (axis) this.approachNpc = false;
     if (this.approachNpc) {
-      if (Math.abs(this.state.u - this.state.npc) <= .055) { this.approachNpc = false; this.state.destination = null; }
-      else this.state.destination = this.state.npc + (this.state.u < this.state.npc ? -.045 : .045);
+      const npc = this.state.npcs.find(item => item.key === this.approachNpc);
+      if (!npc || Math.abs(this.state.u - npc.u) <= .055) { this.approachNpc = false; this.state.destination = null; }
+      else this.state.destination = npc.u + (this.state.u < npc.u ? -.045 : .045);
     }
     advanceInkState(this.state, dt, { paused: this.paused, axis, run: this.input.run || this.keys.has('ShiftLeft') || this.keys.has('ShiftRight'), reducedMotion: this.reducedMotion });
-    const near = !this.pendingEncounter && Math.abs(this.state.u - this.state.npc) <= .065 ? this.cases[this.state.caseIndex] : null;
-    if (near?.id !== this.near?.id) { this.near = near; this.callbacks.onNear?.(near ? { ...near } : null); }
+    const chapter = CHAPTERS[regionAt(this.state.u)];
+    if (chapter.id !== this.chapter.id) { this.chapter = chapter; this.art = PAINTED_CHAPTERS[chapter.id]; this.updateAccessibleLabel(); this.callbacks.onRegion?.({ chapter: chapter.id }); }
+    const l = this.layout(), cameraSpeed = this.state.flight ? 24 : 7;
+    this.camera = this.reducedMotion || this.camera === undefined ? l.target : this.camera + (l.target - this.camera) * (1 - Math.exp(-Math.min(dt,.05) * cameraSpeed));
+    const npc = !this.pendingEncounter && !this.state.flight ? nearestNpc(this.state) : null, near = npc ? npcEncounter(npc) : null;
+    if (near?.npcId !== this.near?.npcId || near?.id !== this.near?.id) { this.near = near; this.callbacks.onNear?.(near); }
   }
   draw() {
     if (!this.ctx || !this.ready || this.disposed) return;
     const c = this.ctx, s = this.state, l = this.layout(), h = this.height, w = this.width;
     c.setTransform(this.dpr, 0, 0, this.dpr, 0, 0); c.clearRect(0, 0, w, h);
-    c.drawImage(this.landscape, -l.camera, l.top, l.worldWidth, l.worldHeight);
+    this.drawPanorama(c,l);
     if (!this.reducedMotion) this.drawWeather(c, s.time, w, h);
     const sprite = (u, row, moving, distance, direction, jump = 0) => {
-      const x = u * l.worldWidth - l.camera, size = h * .19;
+      const x = u * l.segmentWidth - l.camera, size = h * .15;
       c.save(); c.translate(x, l.floor); c.fillStyle = 'rgba(31,47,39,.22)'; c.beginPath(); c.ellipse(0, 0, size * .19, size * .035, 0, 0, Math.PI * 2); c.fill();
       c.translate(0, -jump * h); c.scale(direction, 1);
       const sw = this.figures.naturalWidth / 4, sh = this.figures.naturalHeight / 2, frame = moving ? 1 + Math.floor(distance / .009) % 3 : 0;
       const crop = this.spriteBounds?.[row] || { x: 0, y: 0, width: sw, height: sh }, width = size * crop.width / crop.height;
       c.drawImage(this.figures, frame * sw + crop.x, row * sh + crop.y, crop.width, crop.height, -width / 2, -size, width, size); c.restore();
     };
-    if (this.guardians) {
-      const crop = this.guardianBounds, size = h * .32, width = size * crop.width / crop.height;
-      const x = s.npc * l.worldWidth - l.camera, hover = this.reducedMotion ? 0 : Math.sin(s.time * 1.7) * h * .004;
-      c.save(); c.translate(x, l.floor + hover);
-      c.fillStyle = this.art.light ? 'rgba(250,246,222,.7)' : 'rgba(206,200,177,.45)';
-      for (let i = -1; i <= 1; i++) { c.beginPath(); c.ellipse(i * size * .12, -2 - Math.abs(i) * 3, size * .18, size * .035, 0, 0, Math.PI * 2); c.fill(); }
-      c.drawImage(this.guardians, crop.x, crop.y, crop.width, crop.height, -width / 2, -size - 5, width, size); c.restore();
-    } else sprite(s.npc, 1, s.npcMoving, s.npcDistance, s.npcMoving ? s.npcDirection : Math.sign(s.u - s.npc) || 1);
-    sprite(s.u, 0, s.moving, s.distance, s.direction, s.height);
+    for (const npc of s.npcs) {
+      const x = npc.u * l.segmentWidth - l.camera;
+      if (x < -100 || x > w + 100) continue;
+      const king = npc.king !== undefined, crop = king ? this.kingCrops[npc.king] : this.visitorCrops[npc.cell], image = king ? this.guardians : this.visitors;
+      const size = h * (king ? .2 : .14), width = size * crop.width / crop.height;
+      const bob = npc.moving && !this.reducedMotion ? Math.sin(npc.distance * 650) * 1.4 : 0;
+      c.save(); c.translate(x,l.floor + bob); c.fillStyle = 'rgba(31,47,39,.2)'; c.beginPath(); c.ellipse(0,0,size * .18,size * .025,0,0,Math.PI * 2); c.fill();
+      c.scale(npc.moving ? npc.direction : Math.sign(s.u - npc.u) || 1,1); c.drawImage(image,crop.x,crop.y,crop.width,crop.height,-width / 2,-size,width,size); c.restore();
+      if (this.near?.npcId === npc.key) {
+        c.textAlign = 'center'; c.font = `${Math.max(12,Math.min(16,h * .019))}px "Songti SC", serif`; c.shadowColor = '#fff4d8'; c.shadowBlur = 8; c.fillStyle = '#283a34';
+        c.fillText(`${npc.speaker} · 可交谈`,x,l.floor - size - 15); c.shadowBlur = 0;
+      }
+    }
+    if (s.flight) {
+      const x = s.u * l.segmentWidth - l.camera;
+      c.save(); c.translate(x,l.floor - s.height * h - 1); c.fillStyle = 'rgba(255,242,208,.92)';
+      for (let i = -2; i <= 2; i++) { c.beginPath(); c.ellipse(i * 13,-Math.abs(i) * 2,23,8,0,0,Math.PI * 2); c.fill(); } c.restore();
+    }
+    sprite(s.u, 0, s.moving && !s.flight, s.distance, s.direction, s.height);
     if (s.destination !== null) {
-      const x = s.destination * l.worldWidth - l.camera;
+      const x = s.destination * l.segmentWidth - l.camera;
       c.strokeStyle = 'rgba(245,226,177,.85)'; c.lineWidth = 1.2; c.beginPath(); c.ellipse(x, l.floor, 6, 2.4, -.1, .15, Math.PI * 1.9); c.stroke();
     }
-    const nx = s.npc * l.worldWidth - l.camera;
-    c.textAlign = 'center'; c.font = `${Math.max(12, Math.min(16, h * .022))}px "Songti SC", serif`;
-    c.shadowColor = this.art.light ? 'rgba(245,245,225,.95)' : 'rgba(12,20,25,.95)'; c.shadowBlur = 7;
-    c.fillStyle = this.art.light ? '#273f3a' : '#f4e5bd';
-    c.fillText(`${this.chapter.host} · ${this.chapter.name}`, nx, l.floor - h * (this.guardians ? .36 : .23)); c.shadowBlur = 0;
+  }
+  drawPanorama(c,l) {
+    // Each source path shares one baseline; overlapping feathered edges join the paintings.
+    const overlap = l.segmentWidth * .09;
+    if (!this.panels && this.document.createElement) {
+      this.panels = this.landscapes.map((image,index) => {
+        const panel = this.document.createElement('canvas'); panel.width = Math.ceil(l.segmentWidth + overlap * 2); panel.height = this.height;
+        const p = panel.getContext('2d'), art = PAINTED_CHAPTERS[REGION_IDS[index]], ground = art.ground;
+        const height = Math.max(panel.width / 1.5,this.height,l.floor / ground,(this.height - l.floor) / (1 - ground));
+        p.drawImage(image,(panel.width - height * 1.5) / 2,l.floor - height * ground,height * 1.5,height);
+        const fade = p.createLinearGradient(0,0,panel.width,0);
+        fade.addColorStop(0,index ? 'rgba(0,0,0,0)' : 'rgba(0,0,0,1)'); fade.addColorStop(overlap * 2 / panel.width,'rgba(0,0,0,1)'); fade.addColorStop(1 - overlap * 2 / panel.width,'rgba(0,0,0,1)'); fade.addColorStop(1,index === 7 ? 'rgba(0,0,0,1)' : 'rgba(0,0,0,0)');
+        p.globalCompositeOperation = 'destination-in'; p.fillStyle = fade; p.fillRect(0,0,panel.width,panel.height); return panel;
+      });
+    }
+    c.fillStyle = '#d8d0b7'; c.fillRect(0,0,this.width,this.height);
+    this.landscapes.forEach((image,index) => {
+      const x = index * l.segmentWidth - l.camera;
+      if (x > this.width + overlap || x + l.segmentWidth < -overlap) return;
+      if (this.panels) c.drawImage(this.panels[index],x - overlap,0);
+      else { const art = PAINTED_CHAPTERS[REGION_IDS[index]], height = Math.max(l.segmentWidth / 1.5,this.height,l.floor / art.ground,(this.height - l.floor) / (1 - art.ground)); c.drawImage(image,x,l.floor - height * art.ground,l.segmentWidth,height); }
+    });
+    // A quiet continuous towpath crosses every realm rather than ending at scene borders.
+    const path = c.createLinearGradient?.(0,l.floor - 3,0,l.floor + 20);
+    if (path?.addColorStop) { path.addColorStop(0,'rgba(220,207,171,0)'); path.addColorStop(.4,'rgba(220,207,171,.24)'); path.addColorStop(1,'rgba(220,207,171,0)'); c.fillStyle = path; c.fillRect(0,l.floor - 3,this.width,23); }
   }
   drawWeather(c, time, w, h) {
     const weather = this.art.weather;

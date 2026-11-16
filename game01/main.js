@@ -89,8 +89,10 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     button.append(art, name, office, medium); $('chapter-grid').append(button);
     on(button, 'click', () => {
       if (loading || disposed) return;
-      state = selectChapter(state, item.id); persist(); refreshAtlas();
-      void enterChapter();
+      if (!world || !sceneReady) { state = selectChapter(state, item.id); persist(); void enterChapter(); return; }
+      showScreen('play');
+      if (world.castCloud(item.id)) toast(`筋斗云起 · 前往${item.realm}`);
+      activeCanvas().focus();
     });
   }
 
@@ -110,7 +112,7 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     const lines = chapter().encounters[conversation.id];
     const decision = chapter().decisions[conversation.id];
     const choosing = conversation.page === lines.length - 1 && !conversation.resolved;
-    $('dialogue-speaker').textContent = `${chapter().host} · ${chapter().name}`;
+    $('dialogue-speaker').textContent = `${conversation.speaker || chapter().host} · ${chapter().name}`;
     $('dialogue-title').textContent = lines[0];
     $('dialogue-text').textContent = lines[conversation.page] + (choosing ? `\n${decision.prompt}` : '');
     $('dialogue-options').replaceChildren(); $('dialogue-options').hidden = !choosing;
@@ -125,25 +127,28 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     $('dialogue-next').textContent = conversation.page === lines.length - 1 ? '记入航行日志 ✦' : '继续 →';
   };
   const beginConversation = node => {
-    if (paused() || !Object.hasOwn(chapter().encounters, node.id)) return;
+    if (paused()) return;
+    const region = CHAPTERS.find(item => item.id === (node.chapter || state.selected));
+    if (!region || !Object.hasOwn(region.encounters, node.id)) return;
+    state = selectChapter(state, region.id); persist(); updateGoal();
     if (state.selected === 'nantian' && node.id === 'departure' && !voyageStatus(state).canDepart) {
       refreshVoyage(); $('voyage-dialog').showModal(); syncPause(); return;
     }
-    conversation = { id: node.id, page: 1, resolved: false };
+    conversation = { id: node.id, speaker: node.speaker, page: 1, resolved: false };
     renderDialogue(); $('dialogue').showModal(); syncPause();
   };
-  on($('begin'), 'click', () => { audio.start(); showScreen('atlas'); focusChapter(); });
-  on($('back-cover'), 'click', () => { showScreen('cover'); $('begin').focus(); });
+  on($('begin'), 'click', () => { audio.start(); void enterChapter(); });
+  on($('back-cover'), 'click', () => { if (world && sceneReady) { showScreen('play'); activeCanvas().focus(); } else { showScreen('cover'); $('begin').focus(); } });
   async function enterChapter() {
     if (loading || disposed) return;
-    if (currentChapter !== state.selected) {
+    if (!currentChapter) {
       sceneReady = false; $('interact-button').hidden = true;
     }
-    $('play-hint').textContent = '点击画中道路 · 行走　← → · 移动　靠近巡游仙人 · E 交谈　空格 · 跳跃';
-    activeCanvas().setAttribute('aria-label', `可点击行走与交谈的${chapter().realm} · ${PAINTED_CHAPTERS[state.selected].style}画卷`);
+    $('play-hint').textContent = '点击画中道路 · 行走　E · 交谈　空格 · 跳跃　Q · 筋斗云　F · 定身术';
+    activeCanvas().setAttribute('aria-label', '可连续行走、驾筋斗云与巡游仙人交谈的西游八境长卷');
     document.body.dataset.realm = state.selected;
-    loading = true; $('loading-status').hidden = false;
-    $('loading-status').textContent = `正在展开${chapter().realm} · ${PAINTED_CHAPTERS[state.selected].style}……`; showScreen('play');
+    loading = true; $('loading-status').hidden = sceneReady;
+    $('loading-status').textContent = '正在展开西游长卷 · 八境相连，众生入画……'; showScreen('play');
     try {
       if (!world) {
         const { InkWorld } = await loadInkWorld();
@@ -153,13 +158,14 @@ export async function mountJourney({ document = globalThis.document, storage, lo
         let initialNotice;
         world = new InkWorld(activeCanvas(), {
           onReady: notice => { if (!current()) return; initialNotice = notice; queueMicrotask(() => { if (current()) applyReadiness(notice); }); },
-          onNear: node => { if (!current()) return; $('interact-button').hidden = !node; if (node) $('interaction-label').textContent = `${chapter().host} · ${node.label}`; },
+          onNear: node => { if (!current()) return; $('interact-button').hidden = !node; if (node) $('interaction-label').textContent = `${node.speaker || chapter().host} · ${node.label}`; },
           onInteract: node => { if (current()) beginConversation(node); },
+          onRegion: node => { if (!current() || !CHAPTERS.some(item => item.id === node.chapter)) return; state = selectChapter(state, node.chapter); document.body.dataset.realm = node.chapter; persist(); updateGoal(); },
           reducedMotion: view.matchMedia?.('(prefers-reduced-motion: reduce)').matches || false,
         });
         if (initialNotice && !initialNotice.ok && !initialNotice.sceneReady) return;
       }
-      if (currentChapter !== state.selected) { world.startChapter(state.selected); currentChapter = state.selected; }
+      if (!currentChapter) { world.startJourney(state.selected); currentChapter = 'scroll'; persist(); }
       world.setSensitivity(state.settings.sensitivity); world.resize();
       if (sceneReady) $('loading-status').hidden = true;
       syncPause();
@@ -177,6 +183,10 @@ export async function mountJourney({ document = globalThis.document, storage, lo
   on($('ending-close'), 'click', () => $('ending').close());
   for (const id of ['voyage-dialog', 'ending']) on($(id), 'close', () => { syncPause(); if (!disposed) activeCanvas().focus(); });
   on($('interact-button'), 'click', () => world?.interact());
+  const castCloud = () => { if (!paused() && world.castCloud()) toast('筋斗云起 · 沿长卷前往下一境'); };
+  const castFreeze = () => { if (!paused() && world.castFreeze()) toast('定身术 · 附近巡游人物暂驻五息，可上前交谈'); };
+  on($('cloud-button'), 'click', castCloud);
+  on($('freeze-button'), 'click', castFreeze);
   for (const id of ['touch-jump', 'jump-button']) on($(id), 'click', () => world?.requestJump());
   on($('dialogue-close'), 'click', () => $('dialogue').close());
   on($('dialogue'), 'close', () => { conversation = null; syncPause(); if (!disposed) activeCanvas().focus(); });
@@ -217,6 +227,7 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     const confirm = confirmReset || (() => view.confirm('确定重接这一航次，清除当前南天门委托进度吗？此操作无法撤回。'));
     if (!confirm()) return;
     state = { ...freshJourney(), settings: state.settings }; persist(); refreshAtlas();
+    disposeWorld();
     $('settings').close(); showScreen('atlas'); focusChapter();
   });
   const sendTouch = () => world?.setMoveInput(Number(touchHeld.has('right')) - Number(touchHeld.has('left')), Number(touchHeld.has('back')) - Number(touchHeld.has('forward')));
@@ -226,10 +237,12 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     on(button, 'pointerup', release); on(button, 'pointercancel', release); on(button, 'lostpointercapture', release);
   }
   on(view, 'keydown', event => {
-    if (event.repeat || /INPUT|TEXTAREA|SELECT/.test(event.target.tagName) || screen !== 'play') return;
+    if (event.repeat || event.metaKey || event.ctrlKey || event.altKey || event.isComposing || event.target.isContentEditable || event.target.closest?.('[contenteditable]:not([contenteditable="false"])') || /INPUT|TEXTAREA|SELECT/.test(event.target.tagName) || screen !== 'play') return;
     if (['dialogue', 'settings', 'voyage-dialog', 'ending'].some(id => $(id).open)) return;
     if (event.code === 'Escape') { event.preventDefault(); openSettings(); }
     if (event.code === 'KeyE') { event.preventDefault(); world?.interact(); }
+    if (event.code === 'KeyQ') { event.preventDefault(); castCloud(); }
+    if (event.code === 'KeyF') { event.preventDefault(); castFreeze(); }
     if (event.code === 'Tab') { event.preventDefault(); showScreen('atlas'); focusChapter(); }
   });
   on(view, 'blur', () => { touchHeld.clear(); world?.setMoveInput(0, 0); audio.setPaused(true); });
