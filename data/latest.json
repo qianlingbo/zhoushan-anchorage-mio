@@ -1,14 +1,14 @@
 {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-11-16 20:53:06",
-  "lastChecked": "2026-11-16 20:53:06",
-  "lastSuccessfulFetch": "2026-11-16 15:57:12",
-  "updateWindow": "2026-11-16T18:00+08:00",
-  "publishTime": "2026年11月16日15时",
-  "publishCode": "2026111615",
+  "status": "更新完成",
+  "lastUpdated": "2026-11-17 04:25:52",
+  "lastChecked": "2026-11-17 04:25:52",
+  "lastSuccessfulFetch": "2026-11-17 04:25:52",
+  "updateWindow": "2026-11-17T03:00+08:00",
+  "publishTime": "2026年11月16日20时",
+  "publishCode": "2026111620",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -255,8 +255,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴，半夜到明天阴局部下雨，明天下午转阴有阵雨，局部雨量中等。后天阴有时有小雨，下午起雨止转多云。19-20日晴到多云。<br><br>",
-      "Time": "2026111615",
-      "PreciseForecastTime": "2026年11月16日15时"
+      "Time": "2026111620",
+      "PreciseForecastTime": "2026年11月16日20时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴，半夜到明天阴局部下雨，明天下午转阴有阵雨，局部雨量中等。后天阴有时有小雨，下午起雨止转多云。19-20日晴到多云。<br><br>",
-      "Time": "2026111615",
-      "PreciseForecastTime": "2026年11月16日15时"
+      "Time": "2026111620",
+      "PreciseForecastTime": "2026年11月16日20时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴，半夜到明天阴局部下雨，明天下午转阴有阵雨，局部雨量中等。后天阴有时有小雨，下午起雨止转多云。19-20日晴到多云。<br><br>",
-      "Time": "2026111615",
-      "PreciseForecastTime": "2026年11月16日15时"
+      "Time": "2026111620",
+      "PreciseForecastTime": "2026年11月16日20时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,11 +999,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天多云到阴，半夜到明天阴局部下雨，明天下午转阴有阵雨，局部雨量中等。后天阴有时有小雨，下午起雨止转多云。19-20日晴到多云。<br><br>",
-      "Time": "2026111615",
-      "PreciseForecastTime": "2026年11月16日15时"
+      "Time": "2026111620",
+      "PreciseForecastTime": "2026年11月16日20时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 }
