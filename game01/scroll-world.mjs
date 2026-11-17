@@ -2,19 +2,17 @@ import { CHAPTERS } from './journey.mjs';
 
 export const REGION_IDS = CHAPTERS.map(chapter => chapter.id);
 export const CAST = ['白衣观音', '莲台菩萨', '牛魔王', '天宫仙官', '桃花仙子', '云游老仙', '花果山小猴', '巡山猴将'];
-const pools = [[3,4,5,0], [3,5,2], [0,1,3], [6,7,2,4], [2,3,5], [5,4,6], [1,5,7], [0,2,3]];
 const clamp = (n,a,b) => Math.max(a,Math.min(b,n));
 export const regionAt = u => Math.min(REGION_IDS.length - 1, Math.max(0, Math.floor(u)));
 function randomFor(seed) { let n = Number(seed) >>> 0; return () => { n += 0x6D2B79F5; let t = Math.imul(n ^ n >>> 15, 1 | n); t ^= t + Math.imul(t ^ t >>> 7, 61 | t); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 export function createScrollState(seed = Math.floor(Math.random() * 4294967296), chapter = 'nantian') {
   const random = randomFor(seed), npcs = [];
+  // Deal each portrait once across the whole scroll, never clone it in another realm.
+  const cast = CAST.map((_, index) => index);
+  for (let i = cast.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [cast[i],cast[j]] = [cast[j],cast[i]]; }
   REGION_IDS.forEach((id, region) => {
-    const cast = [...pools[region]];
-    for (let i = cast.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [cast[i],cast[j]] = [cast[j],cast[i]]; }
-    for (let index = 0; index < 3; index++) {
-      const cell = cast[index], u = region + .19 + index * .27 + random() * .07;
-      npcs.push({ key: `${id}-visitor-${index}`, chapter: id, cell, speaker: CAST[cell], u, home: u, direction: random() < .5 ? -1 : 1, speed: .008 + random() * .009, distance: 0, moving: false, caseIndex: index % Object.keys(CHAPTERS[region].encounters).length });
-    }
+    const cell = cast[region], u = region + .30 + random() * .25;
+    npcs.push({ key: `${id}-visitor`, chapter: id, cell, speaker: CAST[cell], u, home: u, direction: random() < .5 ? -1 : 1, speed: .008 + random() * .009, distance: 0, moving: false, caseIndex: Math.floor(random() * Object.keys(CHAPTERS[region].encounters).length) });
     if (region >= 1 && region <= 4) npcs.push({ key: `${id}-king`, chapter: id, king: region - 1, speaker: CHAPTERS[region].host, u: region + .88, home: region + .88, direction: -1, speed: .006, distance: 0, moving: false, caseIndex: 0 });
   });
   const index = Math.max(0, REGION_IDS.indexOf(chapter));

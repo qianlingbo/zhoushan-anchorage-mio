@@ -112,7 +112,8 @@ export async function mountJourney({ document = globalThis.document, storage, lo
     const lines = chapter().encounters[conversation.id];
     const decision = chapter().decisions[conversation.id];
     const choosing = conversation.page === lines.length - 1 && !conversation.resolved;
-    $('dialogue-speaker').textContent = `${conversation.speaker || chapter().host} · ${chapter().name}`;
+    const speaker = conversation.speaker || chapter().host;
+    $('dialogue-speaker').textContent = speaker === chapter().name ? speaker : `${speaker} · ${chapter().name}`;
     $('dialogue-title').textContent = lines[0];
     $('dialogue-text').textContent = lines[conversation.page] + (choosing ? `\n${decision.prompt}` : '');
     $('dialogue-options').replaceChildren(); $('dialogue-options').hidden = !choosing;

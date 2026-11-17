@@ -6,6 +6,16 @@ import { REGION_IDS, createScrollState, advanceScrollState, regionAt, nearestNpc
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 const RIGHT = ['KeyD', 'KeyW', 'ArrowRight', 'ArrowUp'];
 const LEFT = ['KeyA', 'KeyS', 'ArrowLeft', 'ArrowDown'];
+const TRANSITION_WIDTH = .18;
+export function transitionOpacity(progress) { const t = clamp(progress,0,1); return t * t * (3 - 2 * t); }
+export function sceneBlend(u) {
+  const boundary = Math.round(u);
+  if (boundary > 0 && boundary < REGION_IDS.length && Math.abs(u - boundary) < TRANSITION_WIDTH) {
+    const opacity = transitionOpacity((u - boundary + TRANSITION_WIDTH) / (TRANSITION_WIDTH * 2));
+    return [{ index: boundary - 1,opacity: 1 - opacity },{ index: boundary,opacity }];
+  }
+  return [{ index: regionAt(u),opacity: 1 }];
+}
 export function createInkState() {
   return createScrollState();
 }
@@ -190,7 +200,10 @@ export class InkWorld {
     const c = this.ctx, s = this.state, l = this.layout(), h = this.height, w = this.width;
     c.setTransform(this.dpr, 0, 0, this.dpr, 0, 0); c.clearRect(0, 0, w, h);
     this.drawPanorama(c,l);
-    if (!this.reducedMotion) this.drawWeather(c, s.time, w, h);
+    if (!this.reducedMotion) for (const layer of sceneBlend(s.u)) {
+      c.save(); c.globalAlpha = layer.opacity;
+      this.drawWeather(c, s.time, w, h, PAINTED_CHAPTERS[REGION_IDS[layer.index]].weather); c.restore();
+    }
     const sprite = (u, row, moving, distance, direction, jump = 0) => {
       const x = u * l.segmentWidth - l.camera, size = h * .15;
       c.save(); c.translate(x, l.floor); c.fillStyle = 'rgba(31,47,39,.22)'; c.beginPath(); c.ellipse(0, 0, size * .19, size * .035, 0, 0, Math.PI * 2); c.fill();
@@ -224,8 +237,9 @@ export class InkWorld {
     }
   }
   drawPanorama(c,l) {
-    // Each source path shares one baseline; overlapping feathered edges join the paintings.
-    const overlap = l.segmentWidth * .09;
+    // The outgoing painting stays opaque; only the incoming edge fades over it.
+    // Complementary source-over weights avoid the pale dip caused by two fading edges.
+    const overlap = l.segmentWidth * TRANSITION_WIDTH;
     if (!this.panels && this.document.createElement) {
       this.panels = this.landscapes.map((image,index) => {
         const panel = this.document.createElement('canvas'); panel.width = Math.ceil(l.segmentWidth + overlap * 2); panel.height = this.height;
@@ -233,11 +247,14 @@ export class InkWorld {
         const height = Math.max(panel.width / 1.5,this.height,l.floor / ground,(this.height - l.floor) / (1 - ground));
         p.drawImage(image,(panel.width - height * 1.5) / 2,l.floor - height * ground,height * 1.5,height);
         const fade = p.createLinearGradient(0,0,panel.width,0);
-        fade.addColorStop(0,index ? 'rgba(0,0,0,0)' : 'rgba(0,0,0,1)'); fade.addColorStop(overlap * 2 / panel.width,'rgba(0,0,0,1)'); fade.addColorStop(1 - overlap * 2 / panel.width,'rgba(0,0,0,1)'); fade.addColorStop(1,index === 7 ? 'rgba(0,0,0,1)' : 'rgba(0,0,0,0)');
+        for (let step = 0; step <= 8; step++) {
+          const progress = step / 8, alpha = index ? transitionOpacity(progress) : 1;
+          fade.addColorStop(progress * overlap * 2 / panel.width,`rgba(0,0,0,${alpha})`);
+        }
+        fade.addColorStop(1,'rgba(0,0,0,1)');
         p.globalCompositeOperation = 'destination-in'; p.fillStyle = fade; p.fillRect(0,0,panel.width,panel.height); return panel;
       });
     }
-    c.fillStyle = '#d8d0b7'; c.fillRect(0,0,this.width,this.height);
     this.landscapes.forEach((image,index) => {
       const x = index * l.segmentWidth - l.camera;
       if (x > this.width + overlap || x + l.segmentWidth < -overlap) return;
@@ -248,8 +265,7 @@ export class InkWorld {
     const path = c.createLinearGradient?.(0,l.floor - 3,0,l.floor + 20);
     if (path?.addColorStop) { path.addColorStop(0,'rgba(220,207,171,0)'); path.addColorStop(.4,'rgba(220,207,171,.24)'); path.addColorStop(1,'rgba(220,207,171,0)'); c.fillStyle = path; c.fillRect(0,l.floor - 3,this.width,23); }
   }
-  drawWeather(c, time, w, h) {
-    const weather = this.art.weather;
+  drawWeather(c, time, w, h, weather = this.art.weather) {
     if (weather === 'rain' || weather === 'storm') {
       const storm = weather === 'storm'; c.strokeStyle = storm ? 'rgba(220,232,239,.29)' : 'rgba(239,243,231,.18)'; c.lineWidth = storm ? 1 : .7; c.beginPath();
       for (let i = 0; i < (storm ? 95 : 65); i++) {
