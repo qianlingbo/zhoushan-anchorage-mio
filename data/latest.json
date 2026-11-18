@@ -1,14 +1,14 @@
 {
-  "status": "沿用上次数据",
-  "lastUpdated": "2026-11-18 16:39:07",
-  "lastChecked": "2026-11-18 16:39:07",
-  "lastSuccessfulFetch": "2026-11-18 12:18:43",
-  "updateWindow": "2026-11-18T15:00+08:00",
-  "publishTime": "2026年11月18日10时",
-  "publishCode": "2026111810",
+  "status": "更新完成",
+  "lastUpdated": "2026-11-18 21:01:31",
+  "lastChecked": "2026-11-18 21:01:31",
+  "lastSuccessfulFetch": "2026-11-18 21:01:31",
+  "updateWindow": "2026-11-18T21:00+08:00",
+  "publishTime": "2026年11月18日19时",
+  "publishCode": "2026111819",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
-  "sourceUnavailable": true,
+  "sourceUnavailable": false,
   "anchors": {
     "条帚门锚地": {
       "PreciseForecast": [
@@ -254,9 +254,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有时有小雨，中午雨渐止转阴到多云。明天、后天晴到多云。21日晴到多云。22日多云。<br><br>",
-      "Time": "2026111810",
-      "PreciseForecastTime": "2026年11月18日10时"
+      "Text": "天气预报：今天阴转多云。明天、后天晴到多云。21日晴到多云。22日多云。<br><br>",
+      "Time": "2026111819",
+      "PreciseForecastTime": "2026年11月18日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -502,9 +502,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有时有小雨，中午雨渐止转阴到多云。明天、后天晴到多云。21日晴到多云。22日多云。<br><br>",
-      "Time": "2026111810",
-      "PreciseForecastTime": "2026年11月18日10时"
+      "Text": "天气预报：今天阴转多云。明天、后天晴到多云。21日晴到多云。22日多云。<br><br>",
+      "Time": "2026111819",
+      "PreciseForecastTime": "2026年11月18日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -750,9 +750,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有时有小雨，中午雨渐止转阴到多云。明天、后天晴到多云。21日晴到多云。22日多云。<br><br>",
-      "Time": "2026111810",
-      "PreciseForecastTime": "2026年11月18日10时"
+      "Text": "天气预报：今天阴转多云。明天、后天晴到多云。21日晴到多云。22日多云。<br><br>",
+      "Time": "2026111819",
+      "PreciseForecastTime": "2026年11月18日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -779,8 +779,8 @@
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "1 4 4 1",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "1 4 2 1",
           "WindSpeed": 18.5,
           "WindSpeedAvg": "13.9",
           "Time": "18日14时-17时",
@@ -998,12 +998,9 @@
         }
       ],
       "DEPARTMENT": "舟山市港航气象台",
-      "Text": "天气预报：今天阴有时有小雨，中午雨渐止转阴到多云。明天、后天晴到多云。21日晴到多云。22日多云。<br><br>",
-      "Time": "2026111810",
-      "PreciseForecastTime": "2026年11月18日10时"
+      "Text": "天气预报：今天阴转多云。明天、后天晴到多云。21日晴到多云。22日多云。<br><br>",
+      "Time": "2026111819",
+      "PreciseForecastTime": "2026年11月18日19时"
     }
-  },
-  "errors": [
-    "数据源连续重试失败，沿用上次成功数据。"
-  ]
+  }
 }
