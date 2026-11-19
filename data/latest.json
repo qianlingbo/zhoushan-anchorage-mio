@@ -1,11 +1,11 @@
 {
   "status": "更新完成",
-  "lastUpdated": "2026-11-19 12:11:09",
-  "lastChecked": "2026-11-19 12:11:09",
-  "lastSuccessfulFetch": "2026-11-19 12:11:09",
-  "updateWindow": "2026-11-19T12:00+08:00",
-  "publishTime": "2026年11月19日10时",
-  "publishCode": "2026111910",
+  "lastUpdated": "2026-11-19 16:45:25",
+  "lastChecked": "2026-11-19 16:45:25",
+  "lastSuccessfulFetch": "2026-11-19 16:45:25",
+  "updateWindow": "2026-11-19T15:00+08:00",
+  "publishTime": "2026年11月19日14时",
+  "publishCode": "2026111914",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。22日晴到多云。23日多云转阴有雨。<br><br>",
-      "Time": "2026111910",
-      "PreciseForecastTime": "2026年11月19日10时"
+      "Time": "2026111914",
+      "PreciseForecastTime": "2026年11月19日14时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。22日晴到多云。23日多云转阴有雨。<br><br>",
-      "Time": "2026111910",
-      "PreciseForecastTime": "2026年11月19日10时"
+      "Time": "2026111914",
+      "PreciseForecastTime": "2026年11月19日14时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -521,7 +521,7 @@
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "3 4 4 3",
           "WindSpeed": 11.9,
           "WindSpeedAvg": "8.9",
@@ -531,7 +531,7 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "3 4 4 3",
           "WindSpeed": 11.1,
           "WindSpeedAvg": "8.3",
@@ -541,7 +541,7 @@
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 10.7,
           "WindSpeedAvg": "8.0",
@@ -551,7 +551,7 @@
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "2 4 4 2",
           "WindSpeed": 14.0,
           "WindSpeedAvg": "10.5",
@@ -561,7 +561,7 @@
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "2 4 4 2",
           "WindSpeed": 14.5,
           "WindSpeedAvg": "10.9",
@@ -571,7 +571,7 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "2 4 4 2",
           "WindSpeed": 14.5,
           "WindSpeedAvg": "10.9",
@@ -581,7 +581,7 @@
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "2 4 4 2",
           "WindSpeed": 14.2,
           "WindSpeedAvg": "10.7",
@@ -591,7 +591,7 @@
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "3 4 4 3",
           "WindSpeed": 13.3,
           "WindSpeedAvg": "10.0",
@@ -601,7 +601,7 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "3 4 4 3",
           "WindSpeed": 12.9,
           "WindSpeedAvg": "9.7",
@@ -611,7 +611,7 @@
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 9.8,
           "WindSpeedAvg": "7.4",
@@ -621,7 +621,7 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 7.6,
           "WindSpeedAvg": "5.7",
@@ -631,7 +631,7 @@
         {
           "wd_en": "WNW",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 5.4,
           "WindSpeedAvg": "4.1",
@@ -671,7 +671,7 @@
         {
           "wd_en": "NNE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 6.0,
           "WindSpeedAvg": "4.5",
@@ -691,7 +691,7 @@
         {
           "wd_en": "ESE",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 7.2,
           "WindSpeedAvg": "5.4",
@@ -701,7 +701,7 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 7.0,
           "WindSpeedAvg": "5.3",
@@ -711,7 +711,7 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 7.0,
           "WindSpeedAvg": "5.3",
@@ -721,7 +721,7 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 8.0,
           "WindSpeedAvg": "6.0",
@@ -731,7 +731,7 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 6.5,
           "WindSpeedAvg": "4.9",
@@ -741,7 +741,7 @@
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "<0.5m",
+          "WindWave": "0.5-1.0m",
           "Riskrating": "4 4 4 4",
           "WindSpeed": 6.0,
           "WindSpeedAvg": "4.5",
@@ -751,8 +751,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。22日晴到多云。23日多云转阴有雨。<br><br>",
-      "Time": "2026111910",
-      "PreciseForecastTime": "2026年11月19日10时"
+      "Time": "2026111914",
+      "PreciseForecastTime": "2026年11月19日14时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -779,38 +779,38 @@
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "2 4 4 2",
-          "WindSpeed": 14.0,
-          "WindSpeedAvg": "10.5",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "2 4 2 2",
+          "WindSpeed": 15.4,
+          "WindSpeedAvg": "11.6",
           "Time": "19日14时-17时",
           "WindDirect": "北到西北风"
         },
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "2 4 4 2",
-          "WindSpeed": 14.0,
-          "WindSpeedAvg": "10.5",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "2 4 2 2",
+          "WindSpeed": 15.4,
+          "WindSpeedAvg": "11.6",
           "Time": "19日17时-20时",
           "WindDirect": "西北风"
         },
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "2 4 4 2",
-          "WindSpeed": 15.2,
-          "WindSpeedAvg": "11.4",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "2 4 2 2",
+          "WindSpeed": 16.0,
+          "WindSpeedAvg": "12.0",
           "Time": "19日20时-23时",
           "WindDirect": "西北风"
         },
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "1 4 4 1",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "1 4 2 1",
           "WindSpeed": 17.3,
           "WindSpeedAvg": "13.0",
           "Time": "19日23时-20日02时",
@@ -819,8 +819,8 @@
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "1 4 4 1",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "1 4 2 1",
           "WindSpeed": 17.3,
           "WindSpeedAvg": "13.0",
           "Time": "20日02时-05时",
@@ -829,8 +829,8 @@
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "2 4 4 2",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "2 4 2 2",
           "WindSpeed": 16.4,
           "WindSpeedAvg": "12.3",
           "Time": "20日05时-08时",
@@ -839,8 +839,8 @@
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "1.5-2.0m",
-          "Riskrating": "2 4 1 1",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "2 4 2 2",
           "WindSpeed": 16.6,
           "WindSpeedAvg": "12.5",
           "Time": "20日08时-11时",
@@ -849,8 +849,8 @@
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "2 4 4 2",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "2 4 2 2",
           "WindSpeed": 15.1,
           "WindSpeedAvg": "11.3",
           "Time": "20日11时-14时",
@@ -999,8 +999,8 @@
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。22日晴到多云。23日多云转阴有雨。<br><br>",
-      "Time": "2026111910",
-      "PreciseForecastTime": "2026年11月19日10时"
+      "Time": "2026111914",
+      "PreciseForecastTime": "2026年11月19日14时"
     }
   }
 }
