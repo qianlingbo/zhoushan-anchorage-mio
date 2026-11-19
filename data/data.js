@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-11-19 16:45:25",
-  "lastChecked": "2026-11-19 16:45:25",
-  "lastSuccessfulFetch": "2026-11-19 16:45:25",
-  "updateWindow": "2026-11-19T15:00+08:00",
-  "publishTime": "2026年11月19日14时",
-  "publishCode": "2026111914",
+  "lastUpdated": "2026-11-19 21:04:07",
+  "lastChecked": "2026-11-19 21:04:07",
+  "lastSuccessfulFetch": "2026-11-19 21:04:07",
+  "updateWindow": "2026-11-19T21:00+08:00",
+  "publishTime": "2026年11月19日19时",
+  "publishCode": "2026111919",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -55,8 +55,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "2 4 4 2",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "2 4 2 2",
           "WindSpeed": 14.7,
           "WindSpeedAvg": "11.0",
           "Time": "19日20时-23时",
@@ -65,8 +65,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "2 4 4 2",
+          "WindWave": "1.5-1.7m",
+          "Riskrating": "2 4 1 1",
           "WindSpeed": 15.8,
           "WindSpeedAvg": "11.9",
           "Time": "19日23时-20日02时",
@@ -75,8 +75,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "2 4 2 2",
+          "WindWave": "1.5-1.7m",
+          "Riskrating": "2 4 1 1",
           "WindSpeed": 16.2,
           "WindSpeedAvg": "12.2",
           "Time": "20日02时-05时",
@@ -95,8 +95,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "2 4 4 2",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "2 4 2 2",
           "WindSpeed": 15.5,
           "WindSpeedAvg": "11.6",
           "Time": "20日08时-11时",
@@ -105,8 +105,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "2 4 4 2",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "2 4 2 2",
           "WindSpeed": 15.2,
           "WindSpeedAvg": "11.4",
           "Time": "20日11时-14时",
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。22日晴到多云。23日多云转阴有雨。<br><br>",
-      "Time": "2026111914",
-      "PreciseForecastTime": "2026年11月19日14时"
+      "Time": "2026111919",
+      "PreciseForecastTime": "2026年11月19日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。22日晴到多云。23日多云转阴有雨。<br><br>",
-      "Time": "2026111914",
-      "PreciseForecastTime": "2026年11月19日14时"
+      "Time": "2026111919",
+      "PreciseForecastTime": "2026年11月19日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。22日晴到多云。23日多云转阴有雨。<br><br>",
-      "Time": "2026111914",
-      "PreciseForecastTime": "2026年11月19日14时"
+      "Time": "2026111919",
+      "PreciseForecastTime": "2026年11月19日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -799,8 +799,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "2 4 2 2",
+          "WindWave": "1.5-1.7m",
+          "Riskrating": "2 4 1 1",
           "WindSpeed": 16.0,
           "WindSpeedAvg": "12.0",
           "Time": "19日20时-23时",
@@ -809,8 +809,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "1.0-1.5m",
-          "Riskrating": "1 4 2 1",
+          "WindWave": "1.5-1.7m",
+          "Riskrating": "1 4 1 1",
           "WindSpeed": 17.3,
           "WindSpeedAvg": "13.0",
           "Time": "19日23时-20日02时",
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。22日晴到多云。23日多云转阴有雨。<br><br>",
-      "Time": "2026111914",
-      "PreciseForecastTime": "2026年11月19日14时"
+      "Time": "2026111919",
+      "PreciseForecastTime": "2026年11月19日19时"
     }
   }
 };
