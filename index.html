@@ -1,101 +1,428 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f3efe5" />
+  <meta name="theme-color" content="#F5F2EA" />
+  <meta name="description" content="把分散的舟山港航信息，整理成可以直接使用的工具。为每一次靠泊、通航与判断，省下一点时间。" />
   <title>舟山船舶代理笔记 · 舟山港航工具</title>
-  <meta name="description" content="把分散的舟山港航信息，整理成可以直接使用的工具。" />
-  <link rel="icon" href="/favicon.svg" />
-  <link rel="stylesheet" href="/home.css?v=20261029-polish" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/tokens.css?v=20261122-unified" />
+  <link rel="stylesheet" href="/assets/css/shell.css?v=20261122-unified" />
+  <link rel="stylesheet" href="/assets/css/components.css?v=20261122-unified" />
+  <script src="/assets/tool-navigation.js?v=20261122-unified" defer></script>
+  <style>
+    .home-hero { padding: clamp(36px, 6vw, 68px) 0 40px; }
+    .home-hero__grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: clamp(24px, 4vw, 48px);
+      align-items: center;
+    }
+    .home-hero__kicker {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono); font-size: 11.5px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent-primary); padding: 5px 12px;
+      border-radius: var(--radius-pill); background: var(--accent-primary-soft);
+      border: 1px solid var(--accent-primary-border); margin-bottom: 18px;
+    }
+    .home-hero__title {
+      font-family: var(--font-serif); font-size: clamp(30px, 4.2vw, 46px);
+      font-weight: 700; line-height: 1.24; letter-spacing: -0.02em; margin-bottom: 16px;
+    }
+    .home-hero__lead {
+      font-size: 16.5px; color: var(--ink-secondary); line-height: 1.75;
+      max-width: 540px; margin-bottom: 26px;
+    }
+    .home-hero__cta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+    .ops-card { padding: 22px 24px; border-radius: var(--radius-xl); position: relative; overflow: hidden; }
+    .ops-card::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(circle at 90% 10%, rgba(61, 184, 168, 0.20), transparent 52%);
+      pointer-events: none;
+    }
+    .ops-card__head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding-bottom: 14px; margin-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10); position: relative;
+    }
+    .ops-card__live {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; color: #58CBB9;
+    }
+    .ops-card__dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #45C689;
+      box-shadow: 0 0 0 4px rgba(69, 198, 137, 0.22);
+    }
+    .ops-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 11px 12px; border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 8px; transition: background-color var(--t-fast), border-color var(--t-fast);
+      position: relative;
+    }
+    .ops-row:last-child { margin-bottom: 0; }
+    .ops-row:hover { background: rgba(61, 184, 168, 0.12); border-color: rgba(61, 184, 168, 0.32); }
+    .ops-row__label { font-size: 12.5px; color: var(--ink-inverse-muted); }
+    .ops-row__val { font-family: var(--font-mono); font-size: 13.5px; font-weight: 600; color: #FFFFFF; text-align: right; }
+
+    .manifesto-section { padding: 12px 0 48px; }
+    .manifesto-banner {
+      position: relative; border-radius: var(--radius-xl); overflow: hidden;
+      min-height: clamp(270px, 34vw, 390px); display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center; padding: 40px 24px;
+      background-color: #101C24;
+      background-image:
+        linear-gradient(180deg, rgba(11, 21, 29, 0.56) 0%, rgba(11, 21, 29, 0.72) 100%),
+        url('/assets/wechat-background.jpeg'),
+        radial-gradient(circle at 30% 25%, #233D4D 0%, #0D1922 70%);
+      background-size: cover; background-position: center 32%;
+      box-shadow: var(--shadow-md); border: 1px solid var(--border-default);
+    }
+    .manifesto-badge {
+      display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
+      padding: 8px 18px; border-radius: var(--radius-sm);
+      background: rgba(11, 21, 29, 0.72); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.18); color: #F5F2EA; margin-bottom: 22px;
+    }
+    .manifesto-badge span:first-child { font-size: 11px; letter-spacing: 0.14em; opacity: 0.72; }
+    .manifesto-badge span:last-child { font-size: 14px; font-weight: 600; letter-spacing: 0.04em; }
+    .manifesto-title {
+      font-family: var(--font-serif); font-size: clamp(32px, 5vw, 56px); font-weight: 700;
+      color: #FFFFFF; line-height: 1.22; letter-spacing: 0.02em;
+      text-shadow: 0 8px 28px rgba(0, 0, 0, 0.45); margin-bottom: 12px;
+    }
+    .manifesto-sub { font-family: var(--font-mono); font-size: 13.5px; letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.78); }
+
+    .work-section { padding: 20px 0 48px; }
+    .tool-list {
+      background: var(--bg-surface); border-radius: var(--radius-lg); overflow: hidden;
+      border: 1px solid var(--border-subtle); box-shadow: var(--shadow-xs);
+    }
+    .tool-row {
+      display: grid; grid-template-columns: 72px 1.2fr 1.2fr auto; align-items: center;
+      gap: 20px; padding: 24px 28px; border-bottom: 1px solid var(--border-subtle);
+      transition: background-color var(--t-fast);
+    }
+    .tool-row:last-child { border-bottom: 0; }
+    .tool-row:hover { background: var(--accent-primary-soft); }
+    .tool-row__num { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--accent-editorial); letter-spacing: 0.06em; }
+    .tool-row__title { font-family: var(--font-serif); font-size: 20px; font-weight: 700; color: var(--ink-primary); margin-bottom: 4px; }
+    .tool-row__tags { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-muted); letter-spacing: 0.03em; }
+    .tool-row__desc { font-size: 14px; color: var(--ink-secondary); line-height: 1.6; }
+    .tool-row__right { display: flex; align-items: center; gap: 12px; justify-content: flex-end; }
+    .tool-row__arrow {
+      width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border-default);
+      display: grid; place-items: center; color: var(--ink-secondary);
+      transition: transform var(--t-fast), background-color var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+    }
+    .tool-row:hover .tool-row__arrow {
+      transform: translateX(4px); background: var(--accent-primary); border-color: var(--accent-primary); color: #FFFFFF;
+    }
+
+    .agent-banner {
+      display: grid; grid-template-columns: 1.3fr 1fr; gap: 28px; align-items: center;
+      padding: 28px 32px; border-radius: var(--radius-xl); background: var(--bg-surface);
+      border: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm);
+    }
+
+    .about-section { padding: 52px 0 8px; text-align: center; }
+    .about-box { max-width: 660px; margin: 0 auto; }
+    .about-box__title { font-family: var(--font-serif); font-size: clamp(26px, 3.6vw, 38px); font-weight: 700; line-height: 1.3; margin-bottom: 14px; }
+    .about-box__text { font-size: 15.5px; color: var(--ink-secondary); line-height: 1.85; }
+
+    @media (max-width: 960px) {
+      .home-hero__grid, .agent-banner { grid-template-columns: 1fr; }
+      .tool-row { grid-template-columns: 44px 1fr auto; padding: 18px 20px; }
+      .tool-row__desc { grid-column: 2 / -1; margin-top: -8px; }
+    }
+  </style>
 </head>
-<body id="top">
-  <a class="skip" href="#work">跳到工具列表</a>
-  <header>
-    <a class="brand" href="/" aria-label="返回主页">
-      <span>公众号：舟山船舶代理笔记</span>
-      <span>个人微信号：zsagent01</span>
-    </a>
-    <nav aria-label="主导航">
-      <a href="/weather/">天气</a>
-      <a href="/dues/">吨税计算器</a>
-      <a href="#work">工具</a>
-      <a href="#about">关于</a>
-    </nav>
-  </header>
+<body>
+  <div id="site-header-slot"></div>
 
   <main>
-    <section class="hero">
-      <div class="hero-foot">
-        <p>把分散的港航信息，整理成可以直接使用的工具。为每一次靠泊、通航与判断，省下一点时间。</p>
-        <a href="#work">浏览工具 <svg class="link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6" /></svg></a>
-      </div>
-    </section>
+    <section class="home-hero">
+      <div class="container">
+        <div class="home-hero__grid">
+          <div>
+            <div class="home-hero__kicker">
+              <span>ZHOUSHAN PORT · 2026</span>
+              <span>·</span>
+              <span>持续维护的港航工作桌</span>
+            </div>
+            <h1 class="home-hero__title">把分散的港航信息，整理成可以直接使用的工具。</h1>
+            <p class="home-hero__lead">
+              为每一次靠泊、通航与判断，省下一点时间。覆盖舟山四大锚地 MIO 供油指数、十大码头靠泊窗口、灌门航窗、河泥漕浅滩航道与船舶吨税测算。
+            </p>
+            <div class="home-hero__cta">
+              <a class="btn btn--primary btn--lg" href="#work">浏览五个工具 ↓</a>
+              <a class="btn btn--lg" href="/skills/">Agent Skills 接入 →</a>
+              <a class="btn btn--lg btn--soft" href="/weather/">直达锚地天气</a>
+            </div>
+          </div>
 
-    <section class="manifesto" id="manifesto" aria-labelledby="manifesto-title">
-      <div class="manifesto-background manifesto-background--wide" role="img" aria-label="肖申克的救赎剧照"></div>
-      <div class="manifesto-shade" aria-hidden="true"></div>
-      <div class="manifesto-content">
-        <div class="account-badge">
-          <div><span>微信公众号</span><strong>舟山船舶代理笔记</strong></div>
+          <aside class="card card--dark ops-card" aria-label="今日舟山港航速览">
+            <div class="ops-card__head">
+              <div>
+                <div class="ops-card__live"><span class="ops-card__dot"></span> <span id="snap-date">LIVE SNAPSHOT</span></div>
+                <div style="font-size:15px;font-weight:650;margin-top:4px;color:#FFF;">今日舟山港航速览</div>
+              </div>
+              <span class="mono" style="font-size:11.5px;color:var(--ink-inverse-muted);">CST UTC+8</span>
+            </div>
+
+            <a class="ops-row" href="/weather/">
+              <div>
+                <div style="font-size:13.5px;font-weight:600;color:#FFF;">四大锚地 MIO 供油指数</div>
+                <div class="ops-row__label" id="snap-mio-sub">条帚门 · 虾峙门外 · 马峙 · 秀山东</div>
+              </div>
+              <div class="ops-row__val" id="snap-mio-badge"><span class="badge badge--good"><span class="badge__dot"></span>实时读取中</span></div>
+            </a>
+
+            <a class="ops-row" href="/kaobo/">
+              <div>
+                <div style="font-size:13.5px;font-weight:600;color:#FFF;">舟山港域大型船舶靠泊窗口</div>
+                <div class="ops-row__label">2026 定海潮汐 · 10 大码头 L1/L2 到线</div>
+              </div>
+              <div class="ops-row__val">10 码头<br><span style="font-size:11.5px;color:#58CBB9;">查看今日窗口 →</span></div>
+            </a>
+
+            <a class="ops-row" href="/guanmen/">
+              <div>
+                <div style="font-size:13.5px;font-weight:600;color:#FFF;">灌门水道今日允许航窗</div>
+                <div class="ops-row__label" id="snap-gm-sub">C1 ≤ 1.5kn ∩ 宁波航海曙暮光</div>
+              </div>
+              <div class="ops-row__val" id="snap-gm-val">实时读取中</div>
+            </a>
+
+            <a class="ops-row" href="/tide/">
+              <div>
+                <div style="font-size:13.5px;font-weight:600;color:#FFF;">河泥漕过浅滩 / 过航槽判断</div>
+                <div class="ops-row__label">吃水 &gt; 16m · 逐小时潮高与 1h UKC</div>
+              </div>
+              <div class="ops-row__val">2026 全年<br><span style="font-size:11.5px;color:#58CBB9;">立即测算 →</span></div>
+            </a>
+          </aside>
         </div>
-        <h1 id="manifesto-title">完成比完美<br />更重要。</h1>
-        <p>Done is better than perfect.</p>
       </div>
     </section>
 
-    <section class="work" id="work" aria-labelledby="work-title">
-      <div class="section-head">
-        <h2 id="work-title">五个正在使用的工具</h2>
-        <p class="section-intro">从作业条件到费用测算，选择你现在需要的工具。</p>
-      </div>
-
-      <div class="project-list">
-        <a class="project" href="/weather/">
-          <span class="number">01</span>
-          <div><h3>锚地天气与供油指数</h3><p>Weather · MIO · Anchorage</p></div>
-          <p class="description">查看条帚门、虾峙门外、马峙和秀山东的作业条件。</p>
-          <span class="arrow" aria-hidden="true"><svg class="link-icon" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></span>
-        </a>
-        <a class="project" href="/kaobo/">
-          <span class="number">02</span>
-          <div><h3>大型船舶靠泊时间窗口</h3><p>Berth window · Planning</p></div>
-          <p class="description">把潮汐与船舶条件转化为清晰的靠泊时段。</p>
-          <span class="arrow" aria-hidden="true"><svg class="link-icon" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></span>
-        </a>
-        <a class="project" href="/guanmen/">
-          <span class="number">03</span>
-          <div><h3>灌门航窗</h3><p>Passage · Navigation</p></div>
-          <p class="description">快速判断灌门水道可用航窗，减少反复查询。</p>
-          <span class="arrow" aria-hidden="true"><svg class="link-icon" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></span>
-        </a>
-        <a class="project" href="/tide/">
-          <span class="number">04</span>
-          <div><h3>宁波舟山港过浅滩航道时间判断</h3><p>Tide · Current · Decision</p></div>
-          <p class="description">用更直接的方式阅读潮汐，辅助现场决策。</p>
-          <span class="arrow" aria-hidden="true"><svg class="link-icon" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></span>
-        </a>
-        <a class="project" href="/dues/">
-          <span class="number">05</span>
-          <div><h3>吨税计算器</h3><p>Tax · Calculator</p></div>
-          <p class="description">按船籍国、净吨位和执照期限，计算船舶吨税。</p>
-          <span class="arrow" aria-hidden="true"><svg class="link-icon" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></span>
-        </a>
+    <section class="manifesto-section" id="manifesto">
+      <div class="container">
+        <div class="manifesto-banner" role="img" aria-label="肖申克的救赎剧照：完成比完美更重要">
+          <div class="manifesto-badge">
+            <span>微信公众号</span>
+            <span>舟山船舶代理笔记</span>
+          </div>
+          <h2 class="manifesto-title">完成比完美更重要。</h2>
+          <p class="manifesto-sub">Done is better than perfect.</p>
+        </div>
       </div>
     </section>
 
-    <section class="about" id="about">
-      <div>
-        <h2>少一点噪音，<br />多一点确定性。</h2>
-        <p>这里不是作品陈列柜，而是一张持续维护的工作桌。每个入口都解决一个具体问题，也都来自真实的舟山港航场景。</p>
+    <section class="work-section" id="work">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="section-head__num">01 — 05 · WORKBENCH INDEX</div>
+            <h2 class="section-head__title">五个正在使用的工具</h2>
+          </div>
+          <p style="font-size:14px;color:var(--ink-secondary);">
+            从作业条件到费用测算，选择你现在需要的工具。随时按 <span class="kbd-hint">⌘K</span> 快速跳转。
+          </p>
+        </div>
+
+        <div class="tool-list">
+          <a class="tool-row" href="/weather/">
+            <div class="tool-row__num">01</div>
+            <div>
+              <div class="tool-row__title">锚地天气与供油指数</div>
+              <div class="tool-row__tags">Weather · MIO · Anchorage · 中/EN</div>
+            </div>
+            <div class="tool-row__desc">查看条帚门、虾峙门外、马峙和秀山东的作业条件。</div>
+            <div class="tool-row__right">
+              <span class="badge badge--good" id="idx-mio-pill"><span class="badge__dot"></span>实时更新</span>
+              <span class="tool-row__arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
+
+          <a class="tool-row" href="/kaobo/">
+            <div class="tool-row__num">02</div>
+            <div>
+              <div class="tool-row__title">大型船舶靠泊时间窗口</div>
+              <div class="tool-row__tags">Berth Window · Dinghai Tide · 10 Terminals</div>
+            </div>
+            <div class="tool-row__desc">把潮汐与船舶条件转化为清晰的靠泊时段。</div>
+            <div class="tool-row__right">
+              <span class="badge badge--accent">10 码头</span>
+              <span class="tool-row__arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
+
+          <a class="tool-row" href="/guanmen/">
+            <div class="tool-row__num">03</div>
+            <div>
+              <div class="tool-row__title">灌门航窗</div>
+              <div class="tool-row__tags">Passage · C1 Slack Water · Twilight · API</div>
+            </div>
+            <div class="tool-row__desc">快速判断灌门水道可用航窗，减少反复查询。</div>
+            <div class="tool-row__right">
+              <span class="badge badge--good" id="idx-gm-pill"><span class="badge__dot"></span>2026 航季</span>
+              <span class="tool-row__arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
+
+          <a class="tool-row" href="/tide/">
+            <div class="tool-row__num">04</div>
+            <div>
+              <div class="tool-row__title">宁波舟山港过浅滩航道时间判断</div>
+              <div class="tool-row__tags">Tide · Current · Decision · 中/EN</div>
+            </div>
+            <div class="tool-row__desc">用更直接的方式阅读潮汐，辅助现场决策。</div>
+            <div class="tool-row__right">
+              <span class="badge badge--neutral">吃水 &gt; 16m</span>
+              <span class="tool-row__arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
+
+          <a class="tool-row" href="/dues/">
+            <div class="tool-row__num">05</div>
+            <div>
+              <div class="tool-row__title">吨税计算器</div>
+              <div class="tool-row__tags">Tax · Calculator · 77 Preferential Flags</div>
+            </div>
+            <div class="tool-row__desc">按船籍国、净吨位和执照期限，计算船舶吨税。</div>
+            <div class="tool-row__right">
+              <span class="badge badge--neutral">77 国优惠</span>
+              <span class="tool-row__arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
+        </div>
       </div>
     </section>
 
+    <section class="container">
+      <div class="agent-banner">
+        <div>
+          <div class="section-head__num">AGENT-READY WORKBENCH</div>
+          <h2 class="section-head__title" style="margin-bottom:10px;">全部 5 个工具均支持 AI Agent 直接调用</h2>
+          <p style="font-size:14.5px;color:var(--ink-secondary);line-height:1.75;margin-bottom:18px;">
+            无需打开浏览器，在 Codex、Hermes 或 OpenClaw 中安装 <code class="mono">SKILL.md</code> 即可一句话查询锚地 MIO、靠泊时间窗口、灌门航窗、河泥漕浅滩潮高与船舶吨税。
+          </p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <a class="btn btn--primary" href="/skills/">打开 Agent Skills 安装中心 →</a>
+            <button type="button" class="btn" onclick="window.zsCopy('curl -fsSL https://www.zsagent01.com/kaobo/install-zhoushan-berth-window.sh | bash', '已复制靠泊窗口 Skill 安装命令')">复制一键安装示例</button>
+          </div>
+        </div>
+        <div class="code-block">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:11px;color:#8EA5B5;">
+            <span>SKILL.MD · NO API KEY · CST (UTC+8)</span>
+            <span style="color:#45C689;">● 5 SKILLS LIVE</span>
+          </div>
+<pre># 灌门航窗公开 JSON API
+GET https://www.zsagent01.com/guanmen/api/2026-09-01.json
+
+# 靠泊窗口 Skill 一键安装
+curl -fsSL https://www.zsagent01.com/kaobo/install-zhoushan-berth-window.sh | bash
+
+# 河泥漕潮高 Skill 一键安装
+curl -fsSL https://www.zsagent01.com/tide/install-river-mud-channel-tide.sh | bash</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section" id="about">
+      <div class="container">
+        <div class="about-box">
+          <div class="section-head__num" style="margin-bottom:10px;">WORKBENCH PHILOSOPHY</div>
+          <h2 class="about-box__title">少一点噪音，多一点确定性。</h2>
+          <p class="about-box__text">
+            这里不是作品陈列柜，而是一张持续维护的工作桌。每个入口都解决一个具体问题，也都来自真实的舟山港航场景。
+          </p>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer>
-    <p class="footer-contact"><strong>公众号：舟山船舶代理笔记</strong><span>个人微信号：zsagent01</span></p>
-    <a href="#top">回到顶部 ↑</a>
-  </footer>
+  <div id="site-footer-slot"></div>
+
+  <!-- Live Data Integration: auto-updated MIO data + Guanmen daily JSON API -->
+  <script src="/data/data.js?v=20261122-unified"></script>
+  <script>
+    (function () {
+      // CST Today YYYY-MM-DD
+      const now = new Date();
+      const cst = new Date(now.getTime() + (now.getTimezoneOffset() + 480) * 60000);
+      const yyyy = cst.getFullYear();
+      const mm = String(cst.getMonth() + 1).padStart(2, '0');
+      const dd = String(cst.getDate()).padStart(2, '0');
+      const todayStr = `${yyyy}-${mm}-${dd}`;
+      const snapDate = document.getElementById('snap-date');
+      if (snapDate) snapDate.textContent = `LIVE SNAPSHOT · ${todayStr}`;
+
+      // 1. Live Anchorage MIO Summary from /data/data.js
+      const anchorData = window.__ANCHOR_DATA__;
+      if (anchorData && anchorData.anchors) {
+        const names = Object.keys(anchorData.anchors);
+        let goodCount = 0;
+        let minScore = 4;
+        names.forEach((name) => {
+          const list = anchorData.anchors[name]?.PreciseForecast || [];
+          const first = list[0];
+          if (first && first.Riskrating) {
+            const nums = String(first.Riskrating).trim().split(/\s+/).map(Number).filter((n) => !Number.isNaN(n));
+            const score = nums.length ? Math.min(...nums) : 4;
+            if (score >= 4) goodCount++;
+            if (score < minScore) minScore = score;
+          }
+        });
+        const badgeCls = minScore >= 4 ? 'badge--good' : minScore === 3 ? 'badge--fair' : 'badge--bad';
+        const label = minScore >= 4 ? `${goodCount}/${names.length} 适宜` : `${goodCount}/${names.length} 适宜 · 关注海况`;
+        const mioBadge = document.getElementById('snap-mio-badge');
+        const idxMio = document.getElementById('idx-mio-pill');
+        const mioSub = document.getElementById('snap-mio-sub');
+        if (mioBadge) mioBadge.innerHTML = `<span class="badge ${badgeCls}"><span class="badge__dot"></span>${label}</span>`;
+        if (idxMio) {
+          idxMio.className = `badge ${badgeCls}`;
+          idxMio.innerHTML = `<span class="badge__dot"></span>${label}`;
+        }
+        if (mioSub && anchorData.publishTime) {
+          mioSub.textContent = `预报发布：${anchorData.publishTime}`;
+        }
+      }
+
+      // 2. Live Today's Guanmen Passage Windows from /guanmen/api/YYYY-MM-DD.json
+      fetch(`/guanmen/api/${todayStr}.json`)
+        .then((r) => (r.ok ? r.json() : null))
+        .then((gm) => {
+          const valEl = document.getElementById('snap-gm-val');
+          const subEl = document.getElementById('snap-gm-sub');
+          const pillEl = document.getElementById('idx-gm-pill');
+          if (!gm || !Array.isArray(gm.allowedWindows)) {
+            if (valEl) valEl.innerHTML = '查看 2026 航窗 →';
+            return;
+          }
+          if (gm.light?.nauticalTwilightStart && gm.light?.nauticalTwilightEnd && subEl) {
+            subEl.textContent = `C1 ≤ 1.5kn ∩ 曙暮光 ${gm.light.nauticalTwilightStart}–${gm.light.nauticalTwilightEnd}`;
+          }
+          if (gm.allowedWindows.length && valEl) {
+            const lines = gm.allowedWindows.slice(0, 2).map((w) => `${w.start}–${w.end}`);
+            valEl.innerHTML = lines[0] + (lines[1] ? `<br><span style="font-size:11.5px;color:#58CBB9;">${lines[1]}</span>` : '');
+            if (pillEl) pillEl.innerHTML = `<span class="badge__dot"></span>今日 ${gm.allowedWindows.length} 窗`;
+          } else if (valEl) {
+            valEl.innerHTML = '今日无昼间缓流窗';
+          }
+        })
+        .catch(() => {
+          const valEl = document.getElementById('snap-gm-val');
+          if (valEl) valEl.textContent = '查看今日航窗 →';
+        });
+    })();
+  </script>
 </body>
 </html>

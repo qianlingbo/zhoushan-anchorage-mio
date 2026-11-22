@@ -377,9 +377,13 @@
 
     if (!sentences.length) return "Forecast unavailable.";
 
-    return "Forecast: " + sentences.map(function (sentence) {
+    return ("Forecast: " + sentences.map(function (sentence) {
       return ensureEnglishWeather(translateWeatherSentence(sentence));
-    }).filter(Boolean).join(" ");
+    }).filter(Boolean).join(" "))
+      .replace(/,\s*,+/g, ",")
+      .replace(/\s+,/g, ",")
+      .replace(/\s+/g, " ")
+      .trim();
   }
 
   function translateWeatherSentence(sentence) {
@@ -599,6 +603,7 @@
       ["雨止转", "rain ending and turning "],
       ["有时有阵雨或雷雨", "occasional showers or thunderstorms"],
       ["有时有阵雨", "occasional showers"],
+      ["下午转阴有时有小雨", "turning overcast with occasional light rain in the afternoon"],
       ["阴有阵雨或雷雨", "overcast with showers or thunderstorms"],
       ["阴有阵雨", "overcast with showers"],
       ["阵雨或雷雨", "showers or thunderstorms"],
@@ -633,6 +638,7 @@
       .replace(/(\d{1,2})日/g, function (_, day) {
         return "the " + ordinalDay(parseInt(day, 10));
       })
+      .replace(/,\s*,+/g, ",")
       .replace(/\s+/g, " ")
       .trim();
   }

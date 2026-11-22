@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#F5F2EA" />
+  <title>Agent Skills 接入中心 · 舟山船舶代理笔记</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/tokens.css?v=20261122-unified" />
+  <link rel="stylesheet" href="/assets/css/shell.css?v=20261122-unified" />
+  <link rel="stylesheet" href="/assets/css/components.css?v=20261122-unified" />
+  <script src="/assets/tool-navigation.js?v=20261122-unified" defer></script>
+  <style>
+    .skill-card { scroll-margin-top: 86px; }
+    .skill-header-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .prompt-chip {
+      padding: 10px 14px; border-radius: var(--radius-sm);
+      background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+      font-size: 13.5px; color: var(--ink-primary);
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header-slot"></div>
+
+  <main>
+    <div class="container">
+      <section class="tool-hero">
+        <div class="tool-hero__row">
+          <div>
+            <div class="tool-hero__eyebrow">
+              <span class="idx">API</span>
+              <span>·</span>
+              <span>SKILL.MD STANDARD · NO API KEY · CST (UTC+8)</span>
+            </div>
+            <h1 class="tool-hero__title">舟山港航 Agent Skills 安装中心</h1>
+            <p class="tool-hero__desc">统一整合全部 5 项舟山港航工具的 Skill 安装命令与公开 JSON 接口。接入 Codex、Hermes 或 OpenClaw 后，一句话即可查询锚地 MIO、靠泊窗口、灌门航窗、河泥漕浅滩与船舶吨税。</p>
+          </div>
+          <div class="tool-hero__actions">
+            <div class="segmented" id="client-tabs" role="tablist" aria-label="选择 Agent 客户端">
+              <button type="button" class="segmented__btn is-active" data-client="codex">Codex</button>
+              <button type="button" class="segmented__btn" data-client="hermes">Hermes</button>
+              <button type="button" class="segmented__btn" data-client="openclaw">OpenClaw</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="control-bar" style="margin-bottom:26px;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <a class="btn btn--sm btn--soft" href="#weather">01 锚地 MIO 供油指数</a>
+          <a class="btn btn--sm btn--soft" href="#kaobo">02 靠泊时间窗口</a>
+          <a class="btn btn--sm btn--soft" href="#guanmen">03 灌门航窗 &amp; JSON API</a>
+          <a class="btn btn--sm btn--soft" href="#tide">04 河泥漕过浅滩 / 航槽</a>
+          <a class="btn btn--sm btn--soft" href="#dues">05 中国船舶吨税</a>
+        </div>
+        <span class="badge badge--good"><span class="badge__dot"></span>5 Skills · MIT 开源</span>
+      </div>
+
+      <div class="stack-lg" id="skills-container"></div>
+
+      <section class="card card--subtle mt-32">
+        <div class="card__head" style="margin-bottom:12px;">
+          <div>
+            <div class="card__eyebrow">REFERENCE LEGEND</div>
+            <h2 class="card__title">MIO 评分说明与 Agent 示例提问</h2>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+          <span class="badge badge--good"><span class="badge__dot"></span>适宜（评分 4）</span>
+          <span class="badge badge--fair"><span class="badge__dot"></span>一般（评分 3）</span>
+          <span class="badge badge--poor"><span class="badge__dot"></span>较差（评分 2）</span>
+          <span class="badge badge--bad"><span class="badge__dot"></span>恶劣（评分 1）</span>
+        </div>
+        <div class="grid-3">
+          <div class="prompt-chip">“帮我查今天虾峙门外锚地的 MIO 供油指数和未来 48 小时风浪。”</div>
+          <div class="prompt-chip">“2026年11月22日 舟山武港 10 万吨级以上船舶有哪些合适靠泊窗口？”</div>
+          <div class="prompt-chip">“巴拿马籍 10,000 净吨拖船，办理 30 日中国船舶吨税需要多少钱？”</div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="site-footer-slot"></div>
+  <script>
+    (function () {
+      let activeClient = 'codex';
+      const SKILLS = [
+        {
+          id: 'weather',
+          idx: '01',
+          name: 'zhoushan-anchorage',
+          title: '舟山锚地供油指数查询',
+          desc: '覆盖条帚门、虾峙门外、马峙、秀山东四大锚地，查询 3 小时精细化风向风速、阵风、浪高、能见度及 MIO 1–4 级评分。',
+          tags: ['4 Anchorages', '5-Day MIO', 'Python CLI'],
+          links: [
+            { label: '查看 SKILL.md ↗', href: 'https://raw.githubusercontent.com/qianlingbo/zhoushan-anchorage-skill/main/SKILL.md' },
+            { label: '详细文档 →', href: '/skill.html', internal: true },
+            { label: '打开网页看板 →', href: '/weather/', internal: true }
+          ],
+          cmds: {
+            codex: `mkdir -p ~/.agents/skills/zhoushan-anchorage/scripts\ncurl -fsSL https://raw.githubusercontent.com/qianlingbo/zhoushan-anchorage-skill/main/SKILL.md -o ~/.agents/skills/zhoushan-anchorage/SKILL.md\ncurl -fsSL https://raw.githubusercontent.com/qianlingbo/zhoushan-anchorage-skill/main/scripts/query.py -o ~/.agents/skills/zhoushan-anchorage/scripts/query.py`,
+            hermes: `hermes skills install https://raw.githubusercontent.com/qianlingbo/zhoushan-anchorage-skill/main/SKILL.md --name zhoushan-anchorage`,
+            openclaw: `openclaw skills install https://raw.githubusercontent.com/qianlingbo/zhoushan-anchorage-skill/main/SKILL.md --global`
+          }
+        },
+        {
+          id: 'kaobo',
+          idx: '02',
+          name: 'zhoushan-berth-window',
+          title: '舟山港域大型船舶靠泊时间窗口',
+          desc: '基于 2026 定海潮汐与舟山 10 大码头规则计算靠泊时段与 L1/L2 报告线抵线时间。',
+          tags: ['10 Terminals', '2026 Dinghai Tide', 'Manifest JSON'],
+          links: [
+            { label: '下载 Skill ZIP ↓', href: '/kaobo/zhoushan-berth-window.zip' },
+            { label: 'Manifest JSON ↗', href: '/kaobo/skill-manifest.json' },
+            { label: '打开网页工具 →', href: '/kaobo/', internal: true }
+          ],
+          cmds: {
+            codex: `curl -fsSL https://www.zsagent01.com/kaobo/install-zhoushan-berth-window.sh | bash`,
+            hermes: `curl -fsSL https://www.zsagent01.com/kaobo/install-zhoushan-berth-window.sh | bash`,
+            openclaw: `curl -fsSLO https://www.zsagent01.com/kaobo/zhoushan-berth-window.zip && unzip zhoushan-berth-window.zip && openclaw skills install ./zhoushan-berth-window --global`
+          }
+        },
+        {
+          id: 'guanmen',
+          idx: '03',
+          name: 'guanmen-passage',
+          title: '灌门航窗查询 & 公开 Date API',
+          desc: '按日期读取 2026 年全年大型船舶允许过灌门水道时段（C1 流速 ≤ 1.5 节 ∩ 宁波航海曙暮光），无需 API Key，支持直接 GET JSON。',
+          tags: ['2026 Full Year', 'No API Key', 'JSON API'],
+          links: [
+            { label: '下载 Skill ZIP ↓', href: '/guanmen/skill/guanmen-passage-skill.zip' },
+            { label: 'API 示例 (2026-09-01) ↗', href: '/guanmen/api/2026-09-01.json' },
+            { label: '灌门 Skill 详情 →', href: '/guanmen/skill/', internal: true },
+            { label: '打开网页工具 →', href: '/guanmen/', internal: true }
+          ],
+          cmds: {
+            codex: `mkdir -p ~/.agents/skills/guanmen-passage\ncurl -L https://www.zsagent01.com/guanmen/skill/guanmen-passage/SKILL.md -o ~/.agents/skills/guanmen-passage/SKILL.md\n\n# 或直接调用日期接口\ncurl -s https://www.zsagent01.com/guanmen/api/2026-09-01.json`,
+            hermes: `hermes skills install https://www.zsagent01.com/guanmen/skill/guanmen-passage/SKILL.md --name guanmen-passage`,
+            openclaw: `curl -fsSLO https://www.zsagent01.com/guanmen/skill/guanmen-passage-skill.zip && unzip guanmen-passage-skill.zip && openclaw skills install ./guanmen-passage --global`
+          }
+        },
+        {
+          id: 'tide',
+          idx: '04',
+          name: 'river-mud-channel-tide',
+          title: '河泥漕过浅滩 / 过航槽时间判断',
+          desc: '基于 2026 年河泥漕（虾峙）逐小时潮高与船舶吃水（> 16m），自动输出浅滩/航槽通行窗口及 1 小时富余水深（UKC）。',
+          tags: ['Draft > 16m', 'UKC Calculator', '2026 Tide'],
+          links: [
+            { label: '下载 Skill ZIP ↓', href: '/tide/river-mud-channel-tide.zip' },
+            { label: '打开网页工具 →', href: '/tide/', internal: true }
+          ],
+          cmds: {
+            codex: `curl -fsSL https://www.zsagent01.com/tide/install-river-mud-channel-tide.sh | bash`,
+            hermes: `curl -fsSL https://www.zsagent01.com/tide/install-river-mud-channel-tide.sh | bash`,
+            openclaw: `curl -fsSLO https://www.zsagent01.com/tide/river-mud-channel-tide.zip && unzip river-mud-channel-tide.zip && openclaw skills install ./river-mud-channel-tide --global`
+          }
+        },
+        {
+          id: 'dues',
+          idx: '05',
+          name: 'chinese-tonnage-dues',
+          title: '中国船舶吨税查询计算',
+          desc: '内置 77 个优惠税率国家/地区清单与 4 档净吨位定额税率表，支持 30日 / 90日 / 1年执照与拖船、驳船 50% 计征。',
+          tags: ['77 Preferential Flags', '30d / 90d / 1y', 'Tug & Barge'],
+          links: [
+            { label: '下载 Skill ZIP ↓', href: '/dues/chinese-tonnage-dues.zip' },
+            { label: '打开网页工具 →', href: '/dues/', internal: true }
+          ],
+          cmds: {
+            codex: `curl -fsSL https://www.zsagent01.com/dues/install-chinese-tonnage-dues.sh | bash`,
+            hermes: `curl -fsSL https://www.zsagent01.com/dues/install-chinese-tonnage-dues.sh | bash`,
+            openclaw: `curl -fsSLO https://www.zsagent01.com/dues/chinese-tonnage-dues.zip && unzip chinese-tonnage-dues.zip && openclaw skills install ./chinese-tonnage-dues --global`
+          }
+        }
+      ];
+
+      function render() {
+        const container = document.getElementById('skills-container');
+        container.innerHTML = SKILLS.map((s) => {
+          const cmd = s.cmds[activeClient];
+          return `
+            <article class="card skill-card" id="${s.id}">
+              <div class="card__head">
+                <div>
+                  <div class="card__eyebrow"><span style="color:var(--accent-editorial);">${s.idx}</span> · ${s.name}</div>
+                  <h2 class="card__title" style="font-size:20px;">${s.title}</h2>
+                  <p class="card__subtitle" style="max-width:720px;font-size:14px;margin-top:6px;">${s.desc}</p>
+                </div>
+                <div class="skill-header-tags">
+                  ${s.tags.map((t) => `<span class="badge badge--neutral">${t}</span>`).join('')}
+                </div>
+              </div>
+              <div class="code-block" style="margin-bottom:14px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:11px;color:#8EA5B5;">
+                  <span>INSTALL FOR ${activeClient.toUpperCase()}</span>
+                  <button type="button" class="btn btn--sm btn--primary" data-copy-id="${s.id}">复制命令</button>
+                </div>
+                <pre>${cmd}</pre>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                ${s.links.map((l) => `<a class="btn btn--sm${l.internal ? ' btn--soft' : ''}" href="${l.href}"${l.internal ? '' : ' target="_blank" rel="noopener"'}>${l.label}</a>`).join('')}
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        container.querySelectorAll('[data-copy-id]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const skill = SKILLS.find((x) => x.id === btn.dataset.copyId);
+            if (skill && window.zsCopy) window.zsCopy(skill.cmds[activeClient], `已复制 ${skill.name} (${activeClient}) 安装命令`);
+          });
+        });
+      }
+
+      document.querySelectorAll('#client-tabs button').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeClient = btn.dataset.client;
+          document.querySelectorAll('#client-tabs button').forEach((b) => b.classList.toggle('is-active', b === btn));
+          render();
+        });
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>

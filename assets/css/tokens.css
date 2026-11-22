@@ -1,0 +1,250 @@
+/* ==========================================================================
+   Zhoushan Maritime Workbench — Unified Design Tokens
+   Aesthetic: "海图手账 × 精密港航工作台" (Warm Nautical Editorial + Precision Instrument)
+   Supports: Light ("日间海图") & Dark ("夜航仪表" Night Watch)
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* Typography */
+  --font-serif: 'Noto Serif SC', 'Source Han Serif SC', 'Iowan Old Style', 'Songti SC', Georgia, serif;
+  --font-sans: 'Inter', 'Manrope', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', sans-serif;
+  --font-mono: 'JetBrains Mono', 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+
+  /* Surface & Canvas — Warm Alabaster Chart Paper */
+  --bg-canvas: #F5F2EA;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #FAF8F3;
+  --bg-subtle: #EDE9DE;
+  --bg-inset: #E6E1D4;
+  --bg-header: rgba(245, 242, 234, 0.86);
+  --bg-dark-card: #10222E;
+  --bg-dark-card-2: #172E3E;
+
+  /* Ink Hierarchy */
+  --ink-primary: #10212B;
+  --ink-secondary: #435763;
+  --ink-muted: #6C7F8B;
+  --ink-inverse: #F6F4EE;
+  --ink-inverse-muted: rgba(246, 244, 238, 0.70);
+
+  /* Borders & Dividers */
+  --border-subtle: rgba(16, 33, 43, 0.09);
+  --border-default: rgba(16, 33, 43, 0.14);
+  --border-strong: rgba(16, 33, 43, 0.24);
+  --border-focus: #13635B;
+
+  /* Brand & Maritime Accents */
+  --accent-primary: #13635B;        /* Zhoushan Harbor Teal */
+  --accent-primary-hover: #0D4B45;
+  --accent-primary-soft: rgba(19, 99, 91, 0.10);
+  --accent-primary-border: rgba(19, 99, 91, 0.28);
+
+  --accent-editorial: #A63D2F;      /* Signal Terracotta (preserves homepage 01-05 signature) */
+  --accent-editorial-soft: rgba(166, 61, 47, 0.10);
+
+  --accent-amber: #C48224;          /* Maritime Brass / Daylight */
+  --accent-amber-soft: rgba(196, 130, 36, 0.13);
+
+  --accent-twilight: #396294;       /* Nautical Twilight Blue */
+  --accent-twilight-soft: rgba(57, 98, 148, 0.13);
+
+  /* Unified Semantic Status Colors (MIO / Passage / Shallow / Tax) */
+  --status-good: #147347;
+  --status-good-bg: rgba(20, 115, 71, 0.10);
+  --status-good-border: rgba(20, 115, 71, 0.24);
+
+  --status-fair: #B47412;
+  --status-fair-bg: rgba(180, 116, 18, 0.11);
+  --status-fair-border: rgba(180, 116, 18, 0.26);
+
+  --status-poor: #C85817;
+  --status-poor-bg: rgba(200, 88, 23, 0.11);
+  --status-poor-border: rgba(200, 88, 23, 0.26);
+
+  --status-bad: #B83227;
+  --status-bad-bg: rgba(184, 50, 39, 0.10);
+  --status-bad-border: rgba(184, 50, 39, 0.24);
+
+  /* Layout & Geometry */
+  --container-max: 1200px;
+  --container-narrow: 920px;
+  --header-height: 64px;
+  --gutter: clamp(16px, 3vw, 32px);
+
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Elevation */
+  --shadow-xs: 0 1px 2px rgba(16, 33, 43, 0.04);
+  --shadow-sm: 0 2px 8px rgba(16, 33, 43, 0.05), 0 1px 2px rgba(16, 33, 43, 0.03);
+  --shadow-md: 0 10px 28px rgba(16, 33, 43, 0.07), 0 2px 6px rgba(16, 33, 43, 0.04);
+  --shadow-lg: 0 22px 48px rgba(16, 33, 43, 0.14), 0 4px 12px rgba(16, 33, 43, 0.06);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-fast: 150ms var(--ease-out);
+  --t-base: 240ms var(--ease-out);
+}
+
+/* Night Watch Dark Theme ("夜航仪表") */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg-canvas: #0B151D;
+  --bg-surface: #12202B;
+  --bg-elevated: #162734;
+  --bg-subtle: #1A2D3B;
+  --bg-inset: #0E1B24;
+  --bg-header: rgba(11, 21, 29, 0.86);
+  --bg-dark-card: #081219;
+  --bg-dark-card-2: #0F1E2A;
+
+  --ink-primary: #EDF2F4;
+  --ink-secondary: #A6B9C5;
+  --ink-muted: #768D9C;
+  --ink-inverse: #EDF2F4;
+  --ink-inverse-muted: rgba(237, 242, 244, 0.68);
+
+  --border-subtle: rgba(237, 242, 244, 0.08);
+  --border-default: rgba(237, 242, 244, 0.14);
+  --border-strong: rgba(237, 242, 244, 0.24);
+  --border-focus: #3DB8A8;
+
+  --accent-primary: #3DB8A8;
+  --accent-primary-hover: #58CBB9;
+  --accent-primary-soft: rgba(61, 184, 168, 0.14);
+  --accent-primary-border: rgba(61, 184, 168, 0.34);
+
+  --accent-editorial: #E37361;
+  --accent-editorial-soft: rgba(227, 115, 97, 0.15);
+
+  --accent-amber: #E5A94C;
+  --accent-amber-soft: rgba(229, 169, 76, 0.16);
+
+  --accent-twilight: #6BA1D6;
+  --accent-twilight-soft: rgba(107, 161, 214, 0.16);
+
+  --status-good: #45C689;
+  --status-good-bg: rgba(69, 198, 137, 0.14);
+  --status-good-border: rgba(69, 198, 137, 0.30);
+
+  --status-fair: #E5AE44;
+  --status-fair-bg: rgba(229, 174, 68, 0.15);
+  --status-fair-border: rgba(229, 174, 68, 0.32);
+
+  --status-poor: #EA8846;
+  --status-poor-bg: rgba(234, 136, 70, 0.15);
+  --status-poor-border: rgba(234, 136, 70, 0.32);
+
+  --status-bad: #E86A5F;
+  --status-bad-bg: rgba(232, 106, 95, 0.15);
+  --status-bad-border: rgba(232, 106, 95, 0.32);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.28);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.36);
+  --shadow-lg: 0 24px 54px rgba(0, 0, 0, 0.50);
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-canvas);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  transition: background-color var(--t-base), color var(--t-base);
+}
+
+main {
+  flex: 1;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  color: var(--ink-primary);
+  letter-spacing: -0.015em;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select {
+  font-family: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Tabular Numbers for Maritime Precision */
+.mono,
+.num,
+code,
+pre,
+time {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.serif {
+  font-family: var(--font-serif);
+}
+
+/* Unified Page Container */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.container--narrow {
+  max-width: var(--container-narrow);
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#F5F2EA" />
+  <title>全站统一设计规范 · 舟山船舶代理笔记</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/tokens.css?v=20261122-unified" />
+  <link rel="stylesheet" href="/assets/css/shell.css?v=20261122-unified" />
+  <link rel="stylesheet" href="/assets/css/components.css?v=20261122-unified" />
+  <script src="/assets/tool-navigation.js?v=20261122-unified" defer></script>
+  <style>
+    .swatch-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+    .swatch-card { border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-subtle); background: var(--bg-surface); }
+    .swatch-color { height: 68px; border-bottom: 1px solid var(--border-subtle); }
+    .swatch-meta { padding: 10px 12px; font-size: 12.5px; }
+    @media (max-width: 820px) { .swatch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body>
+  <div id="site-header-slot"></div>
+
+  <main>
+    <div class="container">
+      <section class="tool-hero">
+        <div class="tool-hero__row">
+          <div>
+            <div class="tool-hero__eyebrow">
+              <span class="idx">SPEC</span>
+              <span>·</span>
+              <span>UNIFIED DESIGN SYSTEM · 海图手账 × 精密港航仪表</span>
+            </div>
+            <h1 class="tool-hero__title">全站视觉统一与改良设计规范</h1>
+            <p class="tool-hero__desc">面向 zsagent01.com 全部页面的统一设计语言。参考 Linear、Stripe Docs、Windy 与 Monocle 报刊排版，统一日间海图与夜航仪表双主题，并保留全部真实业务数据与 Agent 生态。</p>
+          </div>
+          <div class="tool-hero__actions">
+            <a class="btn btn--primary" href="/">返回主页 →</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="margin-bottom:24px;">
+        <div class="card__head">
+          <div>
+            <div class="card__eyebrow">01 · COLOR SYSTEM</div>
+            <h2 class="card__title">统一色板（点击右上角“夜航 / 日间”实时预览双主题）</h2>
+            <div class="card__subtitle">海图纸暖白 (#F5F2EA) 融合原主页纸感与子页工具感，并支持全站夜航深色模式。</div>
+          </div>
+        </div>
+        <div class="swatch-grid">
+          <div class="swatch-card"><div class="swatch-color" style="background:var(--bg-canvas);"></div><div class="swatch-meta"><strong>海图纸画布</strong><div class="mono" style="color:var(--ink-muted);">--bg-canvas</div></div></div>
+          <div class="swatch-card"><div class="swatch-color" style="background:var(--ink-primary);"></div><div class="swatch-meta"><strong>深海墨主色</strong><div class="mono" style="color:var(--ink-muted);">--ink-primary</div></div></div>
+          <div class="swatch-card"><div class="swatch-color" style="background:var(--accent-primary);"></div><div class="swatch-meta"><strong>舟山港深青</strong><div class="mono" style="color:var(--ink-muted);">--accent-primary</div></div></div>
+          <div class="swatch-card"><div class="swatch-color" style="background:var(--accent-editorial);"></div><div class="swatch-meta"><strong>赤陶信号红</strong><div class="mono" style="color:var(--ink-muted);">--accent-editorial</div></div></div>
+          <div class="swatch-card"><div class="swatch-color" style="background:var(--accent-amber);"></div><div class="swatch-meta"><strong>航海黄铜金</strong><div class="mono" style="color:var(--ink-muted);">--accent-amber</div></div></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card__head">
+          <div>
+            <div class="card__eyebrow">02 · AUDIT &amp; IMPROVEMENTS</div>
+            <h2 class="card__title">全站统一改良清单</h2>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>模块</th><th>优化前</th><th>优化后（已上线）</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>视觉与主题</strong></td><td>主页暖纸衬线、子页冷灰各异，仅 /kaobo/ 有暗色模式</td><td>统一“海图手账 × 精密港航仪表”设计令牌，全站一键切换日间 / 夜航模式</td></tr>
+              <tr><td><strong>全局导航与快捷入口</strong></td><td>主页仅 4 项漏掉 3 个工具；/guanmen/ 双顶栏；/weather/ 冗余返回链</td><td>全站 64px 玻璃态统一顶栏 + ⌘K 快速跳转 + 一键复制微信号 zsagent01</td></tr>
+              <tr><td><strong>首页实时数据</strong></td><td>纯静态列表，无今日运行态感知</td><td>直连 /data/data.js 与 /guanmen/api/ 当日 JSON，展示实时锚地 MIO 与灌门航窗</td></tr>
+              <tr><td><strong>Agent Skills</strong></td><td>/skill.html 与 /guanmen/skill/ 样式独立且缺少导航页脚</td><td>新增统一 /skills/ 安装中心，同时修复并统一 /skill.html 与 /guanmen/skill/</td></tr>
+              <tr><td><strong>细节缺陷修复</strong></td><td>/dues/ 下拉双箭头；/guanmen/ 日期裁切；/weather/ EN 双逗号；/skill.html 返回链错误</td><td>已全部修复并通过本地与线上验收</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="site-footer-slot"></div>
+</body>
+</html>
