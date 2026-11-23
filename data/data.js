@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-11-23 16:58:40",
-  "lastChecked": "2026-11-23 16:58:40",
-  "lastSuccessfulFetch": "2026-11-23 16:58:40",
-  "updateWindow": "2026-11-23T15:00+08:00",
-  "publishTime": "2026年11月23日14时",
-  "publishCode": "2026112314",
+  "lastUpdated": "2026-11-23 22:37:27",
+  "lastChecked": "2026-11-23 22:37:27",
+  "lastSuccessfulFetch": "2026-11-23 22:37:27",
+  "updateWindow": "2026-11-23T21:00+08:00",
+  "publishTime": "2026年11月23日19时",
+  "publishCode": "2026112319",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有小雨，雨量局部小到中等。明天雨渐止转多云。后天多云到阴，下半夜转阴有时有小雨。26日雨渐止转多云。27日晴到多云。<br><br>",
-      "Time": "2026112314",
-      "PreciseForecastTime": "2026年11月23日14时"
+      "Time": "2026112319",
+      "PreciseForecastTime": "2026年11月23日19时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有小雨，雨量局部小到中等。明天雨渐止转多云。后天多云到阴，下半夜转阴有时有小雨。26日雨渐止转多云。27日晴到多云。<br><br>",
-      "Time": "2026112314",
-      "PreciseForecastTime": "2026年11月23日14时"
+      "Time": "2026112319",
+      "PreciseForecastTime": "2026年11月23日19时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有小雨，雨量局部小到中等。明天雨渐止转多云。后天多云到阴，下半夜转阴有时有小雨。26日雨渐止转多云。27日晴到多云。<br><br>",
-      "Time": "2026112314",
-      "PreciseForecastTime": "2026年11月23日14时"
+      "Time": "2026112319",
+      "PreciseForecastTime": "2026年11月23日19时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天阴有小雨。明天雨渐止转多云。后天多云到阴，下半夜转阴有时有小雨。26日雨渐止转多云。27日晴到多云。<br><br>",
-      "Time": "2026112314",
-      "PreciseForecastTime": "2026年11月23日14时"
+      "Time": "2026112319",
+      "PreciseForecastTime": "2026年11月23日19时"
     }
   }
 };
