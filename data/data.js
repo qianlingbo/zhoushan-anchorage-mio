@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-11-27 17:39:15",
-  "lastChecked": "2026-11-27 17:39:15",
-  "lastSuccessfulFetch": "2026-11-27 17:39:15",
-  "updateWindow": "2026-11-27T15:00+08:00",
-  "publishTime": "2026年11月27日15时",
-  "publishCode": "2026112715",
+  "lastUpdated": "2026-11-27 21:51:16",
+  "lastChecked": "2026-11-27 21:51:16",
+  "lastSuccessfulFetch": "2026-11-27 21:51:16",
+  "updateWindow": "2026-11-27T21:00+08:00",
+  "publishTime": "2026年11月27日20时",
+  "publishCode": "2026112720",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天晴到多云。明天晴到多云。后天晴到多云。30日、12月1日晴到多云。<br><br>",
-      "Time": "2026112715",
-      "PreciseForecastTime": "2026年11月27日15时"
+      "Time": "2026112720",
+      "PreciseForecastTime": "2026年11月27日20时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天晴到多云。明天晴到多云。后天晴到多云。30日、12月1日晴到多云。<br><br>",
-      "Time": "2026112715",
-      "PreciseForecastTime": "2026年11月27日15时"
+      "Time": "2026112720",
+      "PreciseForecastTime": "2026年11月27日20时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天晴到多云。明天晴到多云。后天晴到多云。30日、12月1日晴到多云。<br><br>",
-      "Time": "2026112715",
-      "PreciseForecastTime": "2026年11月27日15时"
+      "Time": "2026112720",
+      "PreciseForecastTime": "2026年11月27日20时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天晴到多云。明天晴到多云。后天晴到多云。30日、12月1日晴到多云。<br><br>",
-      "Time": "2026112715",
-      "PreciseForecastTime": "2026年11月27日15时"
+      "Time": "2026112720",
+      "PreciseForecastTime": "2026年11月27日20时"
     }
   }
 };
