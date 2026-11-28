@@ -1,11 +1,11 @@
 window.__ANCHOR_DATA__ = {
   "status": "更新完成",
-  "lastUpdated": "2026-11-28 12:43:44",
-  "lastChecked": "2026-11-28 12:43:44",
-  "lastSuccessfulFetch": "2026-11-28 12:43:44",
-  "updateWindow": "2026-11-28T12:00+08:00",
-  "publishTime": "2026年11月28日10时",
-  "publishCode": "2026112810",
+  "lastUpdated": "2026-11-28 16:53:45",
+  "lastChecked": "2026-11-28 16:53:45",
+  "lastSuccessfulFetch": "2026-11-28 16:53:45",
+  "updateWindow": "2026-11-28T15:00+08:00",
+  "publishTime": "2026年11月28日15时",
+  "publishCode": "2026112815",
   "source": "https://www.zs121.com.cn/Portarea/Portarea",
   "apiBase": "https://www.zs121.com.cn/gh/SubjectiveForecast/groundAnchorageNew",
   "sourceUnavailable": false,
@@ -255,8 +255,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。12月1日-2日晴到多云。<br><br>",
-      "Time": "2026112810",
-      "PreciseForecastTime": "2026年11月28日10时"
+      "Time": "2026112815",
+      "PreciseForecastTime": "2026年11月28日15时"
     },
     "虾峙门外锚地": {
       "PreciseForecast": [
@@ -503,8 +503,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。12月1日-2日晴到多云。<br><br>",
-      "Time": "2026112810",
-      "PreciseForecastTime": "2026年11月28日10时"
+      "Time": "2026112815",
+      "PreciseForecastTime": "2026年11月28日15时"
     },
     "马峙锚地": {
       "PreciseForecast": [
@@ -751,8 +751,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。12月1日-2日晴到多云。<br><br>",
-      "Time": "2026112810",
-      "PreciseForecastTime": "2026年11月28日10时"
+      "Time": "2026112815",
+      "PreciseForecastTime": "2026年11月28日15时"
     },
     "秀山东锚地": {
       "PreciseForecast": [
@@ -779,8 +779,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "1 4 4 1",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "1 4 2 1",
           "WindSpeed": 17.7,
           "WindSpeedAvg": "13.3",
           "Time": "28日14时-17时",
@@ -789,8 +789,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "NNW",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "2 4 4 2",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "2 4 2 2",
           "WindSpeed": 16.0,
           "WindSpeedAvg": "12.0",
           "Time": "28日17时-20时",
@@ -879,8 +879,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "3 4 4 3",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "3 4 2 2",
           "WindSpeed": 13.0,
           "WindSpeedAvg": "9.8",
           "Time": "29日20时-30日02时",
@@ -889,8 +889,8 @@ window.__ANCHOR_DATA__ = {
         {
           "wd_en": "PPS",
           "Vis": ">1000m",
-          "WindWave": "0.5-1.0m",
-          "Riskrating": "3 4 4 3",
+          "WindWave": "1.0-1.5m",
+          "Riskrating": "3 4 2 2",
           "WindSpeed": 13.7,
           "WindSpeedAvg": "10.3",
           "Time": "30日02时-08时",
@@ -999,8 +999,8 @@ window.__ANCHOR_DATA__ = {
       ],
       "DEPARTMENT": "舟山市港航气象台",
       "Text": "天气预报：今天、明天、后天晴到多云。12月1日-2日晴到多云。<br><br>",
-      "Time": "2026112810",
-      "PreciseForecastTime": "2026年11月28日10时"
+      "Time": "2026112815",
+      "PreciseForecastTime": "2026年11月28日15时"
     }
   }
 };
